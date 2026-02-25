@@ -358,8 +358,8 @@ h1, h2, h3, h4, h5, h6 {
 .what-section { background: linear-gradient(180deg, var(--navy-dark) 0%, var(--navy-mid) 100%); }
 .how-section { background: linear-gradient(180deg, var(--navy-mid) 0%, var(--navy-dark) 100%); }
 .proof-section { background: linear-gradient(180deg, var(--navy-dark) 0%, var(--navy-deep) 100%); }
-.cta-section { background: var(--white); }
-.faq-section { background: linear-gradient(180deg, #f8f9fa 0%, #fff 100%); }
+.cta-section { background: linear-gradient(180deg, var(--navy-deep) 0%, var(--navy-mid) 100%); }
+.faq-section { background: linear-gradient(180deg, var(--navy-mid) 0%, var(--navy-dark) 100%); }
 
 /* Section Header */
 .section-header {
@@ -390,7 +390,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .cta-section .section-title,
 .faq-section .section-title {
-    color: var(--navy-dark);
+    color: var(--white);
 }
 
 .section-subtitle {
@@ -403,7 +403,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .cta-section .section-subtitle,
 .faq-section .section-subtitle {
-    color: #6b7280;
+    color: var(--white-70, rgba(255,255,255,0.7));
 }
 
 /* ================================================
@@ -1016,14 +1016,15 @@ h1, h2, h3, h4, h5, h6 {
 .comparison-cell i { flex-shrink: 0; }
 
 /* ================================================
-   CTA SECTION (WHITE BG)
+   CTA SECTION (DARK THEME)
    ================================================ */
 .cta-section {
-    background: #ffffff;
+    background: linear-gradient(180deg, var(--navy-deep) 0%, var(--navy-mid) 100%);
 }
 
 .implementation-guidance {
-    background: linear-gradient(135deg, #fff5e6 0%, #fffbf5 100%);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212,175,55,0.3);
     border-left: 4px solid var(--gold);
     border-radius: 12px;
     padding: 32px;
@@ -1031,7 +1032,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .implementation-guidance h3 {
-    color: var(--navy-dark);
+    color: var(--white);
     font-size: 1.4rem;
     margin-bottom: 16px;
     display: flex;
@@ -1040,7 +1041,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .implementation-guidance p {
-    color: #374151;
+    color: var(--white-70, rgba(255,255,255,0.7));
     line-height: 1.8;
     margin-bottom: 14px;
     font-size: 0.95rem;
@@ -1061,7 +1062,7 @@ h1, h2, h3, h4, h5, h6 {
 .benefits-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--navy-dark);
+    color: var(--white);
     margin-bottom: 28px;
 }
 
@@ -1073,33 +1074,34 @@ h1, h2, h3, h4, h5, h6 {
 
 .benefit-item {
     padding: 24px;
-    background: #f8f9fa;
+    background: rgba(255,255,255,0.04);
     border-radius: 12px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid rgba(255,255,255,0.08);
     transition: all 0.3s;
 }
 
 .benefit-item:hover {
-    border-color: var(--gold);
-    box-shadow: 0 4px 16px rgba(212,175,55,0.15);
+    border-color: var(--gold-30);
+    background: rgba(255,255,255,0.07);
+    box-shadow: 0 4px 16px rgba(212,175,55,0.12);
 }
 
 .benefit-icon {
     font-size: 1.6rem;
-    color: var(--gold-dark);
+    color: var(--gold);
     margin-bottom: 14px;
 }
 
 .benefit-item h4 {
     font-size: 1rem;
     font-weight: 700;
-    color: var(--navy-dark);
+    color: var(--white);
     margin-bottom: 8px;
 }
 
 .benefit-item p {
     font-size: 0.85rem;
-    color: #6b7280;
+    color: var(--white-60, rgba(255,255,255,0.6));
     line-height: 1.6;
 }
 
@@ -1339,7 +1341,7 @@ h1, h2, h3, h4, h5, h6 {
    FAQ SECTION
    ================================================ */
 .faq-section {
-    background: #f9fafb;
+    background: linear-gradient(180deg, var(--navy-mid) 0%, var(--navy-dark) 100%);
 }
 
 .faq-container { max-width: 900px; margin: 0 auto; }
@@ -1347,36 +1349,36 @@ h1, h2, h3, h4, h5, h6 {
 .faq-category {
     margin: 36px 0 16px;
     padding-bottom: 12px;
-    border-bottom: 2px solid #e5e7eb;
+    border-bottom: 2px solid rgba(212,175,55,0.25);
 }
 
 .faq-category h3 {
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--navy-dark);
+    color: var(--white);
     display: flex;
     align-items: center;
     gap: 10px;
     margin-bottom: 4px;
 }
 
-.faq-category h3 i { color: var(--gold-dark); }
+.faq-category h3 i { color: var(--gold); }
 
 .faq-category p {
     font-size: 0.85rem;
-    color: #6b7280;
+    color: var(--white-60, rgba(255,255,255,0.6));
 }
 
 .faq-item {
-    background: var(--white);
-    border: 1px solid #e5e7eb;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 12px;
     margin-bottom: 12px;
     overflow: hidden;
     transition: all 0.3s;
 }
 
-.faq-item:hover { border-color: var(--gold); }
+.faq-item:hover { border-color: var(--gold-30); background: rgba(255,255,255,0.06); }
 
 .faq-question {
     display: flex;
@@ -1390,12 +1392,12 @@ h1, h2, h3, h4, h5, h6 {
 .faq-question h4 {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--navy-dark);
+    color: var(--white);
     margin: 0;
 }
 
 .faq-question .fa-chevron-down {
-    color: var(--gold-dark);
+    color: var(--gold);
     transition: transform 0.3s;
     flex-shrink: 0;
 }
@@ -1405,11 +1407,11 @@ h1, h2, h3, h4, h5, h6 {
 .faq-answer {
     display: none;
     padding: 0 24px 24px;
-    border-top: 1px solid #f3f4f6;
+    border-top: 1px solid rgba(255,255,255,0.07);
 }
 
 .faq-answer p {
-    color: #374151;
+    color: var(--white-70, rgba(255,255,255,0.7));
     font-size: 0.92rem;
     line-height: 1.8;
     margin-bottom: 12px;
@@ -1422,13 +1424,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .faq-answer li {
-    color: #374151;
+    color: var(--white-70, rgba(255,255,255,0.7));
     font-size: 0.9rem;
     line-height: 1.7;
     margin-bottom: 6px;
 }
 
-.faq-answer strong { color: var(--navy-dark); }
+.faq-answer strong { color: var(--white-90); }
 
 /* ================================================
    DISCLAIMER SECTION
