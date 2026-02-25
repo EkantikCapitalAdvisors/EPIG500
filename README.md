@@ -10,10 +10,10 @@ A professional investment strategy website for **Ekantik Capital Advisors LLC**,
 ## ✅ Completed Features
 
 ### index.html (Main Landing Page)
-- **Revised Performance Mandate** — Updated from "1-2x market returns" to the accurate mandate:
-  - 📈 **Match market performance in UP years** (full S&P 500 participation)
-  - 🛡️ **~0% returns in DOWN years** (move to 100% cash when corrections exceed 10%)
-  - Hypothetical result: **16.1% CAGR vs 13.5% S&P 500** (2015–2026 backtested)
+- **Revised Performance Mandate** — Updated to the new asymmetric target:
+  - 📈 **Beat market by 20% in UP years** (120% of S&P 500 participation)
+  - 🛡️ **~20% of market drawdown in DOWN years** (only 20% of market losses during corrections)
+  - Hypothetical result: **18.1% CAGR vs 13.5% S&P 500** (2015–2026 backtested)
 - **Hero Section** — Visual performance mandate display with UP/DOWN year panels + 16.1% CAGR result box
 - **What Section** — Market phase statistics (70% sideways / 22% up / 8% down), EPIG formula display, $100K wealth calculator sidebar
 - **How It Works** — Year-by-year comparison table (2015–2024) with Market Match / Cash Protection regimes, compounding principle steps
@@ -51,15 +51,17 @@ A professional investment strategy website for **Ekantik Capital Advisors LLC**,
 
 | Metric | Value | Period |
 |--------|-------|--------|
-| Hypothetical CAGR | 16.1% | 2015–2026 |
+| Hypothetical CAGR | 18.1% | 2015–2026 |
 | S&P 500 CAGR | 13.5% | 2015–2026 |
-| Alpha Generated | +2.6% | By avoiding down years |
-| $100K → EPIG | $456,507 | 11 years |
+| Alpha Generated | +4.6% | 120% upside, 20% drawdown |
+| $100K → EPIG | $621,507 | 11 years |
 | $100K → S&P | $351,162 | 11 years |
-| Wealth Advantage | +$105,345 | 11 years |
-| Lost Decade EPIG CAGR | 10.44% | 2000–2010 |
+| Wealth Advantage | +$270,345 | 11 years |
+| Lost Decade EPIG CAGR | 10.42% | 2000–2010 |
 | Lost Decade S&P CAGR | -0.94% | 2000–2010 |
-| Lost Decade Advantage | +$179,208 | 10 years |
+| Lost Decade Advantage | +$178,635 | 10 years |
+| Bull Market EPIG CAGR | 18.40% | 2015–2024 |
+| Bull Market Advantage | +$229,263 | 10 years |
 
 ---
 
