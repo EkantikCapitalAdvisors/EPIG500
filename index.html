@@ -3,1502 +3,622 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ekantik Capital Advisors | EPIG 500 - Managed S&P 500 Strategy for Accredited Investors</title>
-    <meta name="description" content="EPIG 500: Professional managed portfolio service targeting returns 20% above market in positive years and only 20% of market drawdown in corrections. Hypothetical 18.1% CAGR (2015-2026). Active S&P 500 strategy. Accredited investors only.">
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    
-    <!-- CSS -->
+    <title>Ekantik 500 — The S&P 500 Wealth Product Engineered to Compound Disciplined Risk</title>
+    <meta name="description" content="Ekantik 500 is a complete S&P 500 wealth product — a passive equity foundation paired with an active futures overlay, structured inside a single sub-account at Interactive Brokers.">
+
+    <link rel="canonical" href="https://epig500.ekantikcapital.com">
+
+    <meta property="og:title" content="Ekantik 500 — The S&P 500 Wealth Product Engineered to Compound Disciplined Risk">
+    <meta property="og:description" content="A passive equity foundation combined with a disciplined active overlay. The mechanism on top of the wealth you've built.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://epig500.ekantikcapital.com">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="css/style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FinancialService",
+      "name": "Ekantik 500",
+      "provider": {
+        "@type": "Organization",
+        "name": "Ekantik Capital Advisors LLC"
+      },
+      "url": "https://epig500.ekantikcapital.com",
+      "areaServed": "US",
+      "description": "A complete S&P 500 wealth product combining a passive equity foundation with a disciplined active futures overlay, custodied at Interactive Brokers."
+    }
+    </script>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-content">
-                <div class="logo">
-                    <span class="logo-eca">ECA</span>
-                    <span class="logo-divider">|</span>
-                    <span class="logo-text">Ekantik Capital Advisors</span>
-                </div>
-                <div class="nav-links">
-                    <a href="#what" class="nav-link">What</a>
-                    <a href="#how" class="nav-link">How</a>
-                    <a href="#proof" class="nav-link">Proof</a>
-                    <a href="#contact" class="nav-link">Apply</a>
-                </div>
-                <button class="cta-button-nav" onclick="scrollToSubscribe()">Schedule Consultation</button>
-                <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="#what" class="mobile-link" onclick="toggleMobileMenu()">What</a>
-        <a href="#how" class="mobile-link" onclick="toggleMobileMenu()">How</a>
-        <a href="#proof" class="mobile-link" onclick="toggleMobileMenu()">Proof</a>
-        <a href="#subscribe" class="mobile-link" onclick="toggleMobileMenu()">Subscribe</a>
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+    <div class="container nav__inner">
+        <a href="#" class="logo" aria-label="Ekantik Capital Advisors">
+            <span class="logo__mark">E</span>
+            <span class="logo__wordmark">EKANTIK CAPITAL</span>
+            <span class="logo__sublabel">ADVISORS</span>
+        </a>
+        <nav class="nav__links" aria-label="Primary">
+            <a href="#problem">The Problem</a>
+            <a href="#ladder">The Ladder</a>
+            <a href="#how">How It Works</a>
+            <a href="#proof">The Proof</a>
+            <a href="#founding">Founding Members</a>
+            <a href="#faq">FAQ</a>
+        </nav>
+        <a href="#book" class="btn btn--primary btn--sm">Schedule Consultation</a>
+        <button class="nav__menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
     </div>
+    <div class="nav__mobile" id="navMobile">
+        <a href="#problem">The Problem</a>
+        <a href="#ladder">The Ladder</a>
+        <a href="#how">How It Works</a>
+        <a href="#proof">The Proof</a>
+        <a href="#founding">Founding Members</a>
+        <a href="#faq">FAQ</a>
+        <a href="#book" class="btn btn--primary btn--block">Schedule Consultation</a>
+    </div>
+</header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-background"></div>
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Ekantik Capital Advisors | EPIG 500 Strategy</span>
-                </div>
-                <h1 class="hero-title">
-                    📈 Capture Every Bull Market.<br/>
-                    <span class="highlight">🛡️ Skip Every Bear Market.</span>
-                </h1>
-                <p class="hero-subtitle">
-                    While 90%+ of investors underperform the market due to poor timing and unprotected downturns, Ekantik Capital Advisors' EPIG 500 strategy beats market performance by 20% in positive years while limiting losses to only 20% of market drawdowns during corrections. The result: a hypothetical 18.1% CAGR vs. the S&P's 13.5% over 11 years (2015–2026).
-                </p>
-                
-                <!-- Performance Mandate Display -->
-                <div class="performance-target-box" style="background: linear-gradient(135deg, rgba(26,31,46,0.98) 0%, rgba(15,20,25,0.98) 100%); border: 2px solid rgba(212,175,55,0.4); border-radius: 16px; padding: 30px; margin-bottom: 32px;">
-                    <div style="text-align:center; margin-bottom:18px;">
-                        <span style="display:inline-block; padding:6px 20px; background:rgba(212,175,55,0.15); border:1px solid rgba(212,175,55,0.35); border-radius:20px; color:#d4af37; font-size:0.8rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;">Performance Mandate</span>
-                    </div>
-                    <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:20px; align-items:center; margin-bottom:18px;">
-                        <!-- UP Years -->
-                        <div style="background:rgba(0,200,150,0.12); border:2px solid rgba(0,200,150,0.4); border-radius:12px; padding:20px; text-align:center;">
-                            <div style="font-size:2rem; margin-bottom:6px;">📈</div>
-                            <div style="font-size:2rem; font-weight:900; color:#00c896; line-height:1;">~120%</div>
-                            <div style="font-size:0.8rem; font-weight:700; color:#00c896; text-transform:uppercase; letter-spacing:1px; margin:6px 0;">Beat Market +20%</div>
-                            <div style="font-size:0.85rem; color:rgba(255,255,255,0.75); line-height:1.4;">120% of S&amp;P 500 return<br/>in <strong style="color:#fff;">UP years</strong></div>
-                        </div>
-                        <!-- Divider -->
-                        <div style="color:rgba(212,175,55,0.6); font-size:1.5rem; font-weight:300;">+</div>
-                        <!-- DOWN Years -->
-                        <div style="background:rgba(255,71,87,0.12); border:2px solid rgba(255,71,87,0.4); border-radius:12px; padding:20px; text-align:center;">
-                            <div style="font-size:2rem; margin-bottom:6px;">🛡️</div>
-                            <div style="font-size:2rem; font-weight:900; color:#ff4757; line-height:1;">~20%</div>
-                            <div style="font-size:0.8rem; font-weight:700; color:#ff4757; text-transform:uppercase; letter-spacing:1px; margin:6px 0;">Limited Drawdown</div>
-                            <div style="font-size:0.85rem; color:rgba(255,255,255,0.75); line-height:1.4;">Only 20% of market loss<br/>in <strong style="color:#fff;">DOWN years</strong></div>
-                        </div>
-                    </div>
-                    <!-- Equals Result -->
-                    <div style="background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(212,175,55,0.1)); border:2px solid rgba(212,175,55,0.5); border-radius:12px; padding:18px; text-align:center;">
-                        <div style="font-size:0.85rem; color:rgba(255,255,255,0.7); margin-bottom:6px;">= Hypothetical Result (2015–2026)</div>
-                        <div style="display:flex; align-items:center; justify-content:center; gap:20px; flex-wrap:wrap;">
-                            <div>
-                                <span style="font-size:2.2rem; font-weight:900; color:#d4af37;">18.1%</span>
-                                <span style="font-size:1rem; color:rgba(255,255,255,0.8); margin-left:6px;">CAGR</span>
-                            </div>
-                            <div style="color:rgba(255,255,255,0.3); font-size:1.5rem;">vs</div>
-                            <div>
-                                <span style="font-size:1.6rem; font-weight:700; color:rgba(255,255,255,0.6);">13.5%</span>
-                                <span style="font-size:0.9rem; color:rgba(255,255,255,0.5); margin-left:6px;">S&amp;P 500</span>
-                            </div>
-                            <div style="background:rgba(212,175,55,0.25); border-radius:8px; padding:6px 14px;">
-                                <span style="font-size:1rem; font-weight:700; color:#d4af37;">+$270K more on $100K</span>
-                            </div>
-                        </div>
-                        <div style="margin-top:10px; font-size:0.75rem; color:rgba(255,255,255,0.45); font-style:italic;">Backtested hypothetical results. Past performance does not guarantee future results.</div>
-                    </div>
-                </div>
-                
-                <div class="hero-cta">
-                    <button class="cta-button-primary" onclick="scrollToSubscribe()">
-                        <span>Schedule Consultation</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                    <a href="epig-500.html" class="cta-button-secondary" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
-                        <i class="fas fa-chart-line"></i>
-                        <span>View Full Strategy</span>
-                    </a>
-                </div>
+<!-- ============ 1. HERO ============ -->
+<section class="hero">
+    <div class="container hero__inner">
+        <div class="hero__copy">
+            <p class="eyebrow"><span class="diamond">◆</span> Ekantik 500</p>
+            <h1 class="hero__headline">
+                Most investors never double their money more than three times in a lifetime. The ones who do, install a mechanism.
+            </h1>
+            <p class="hero__sub">
+                Ekantik 500 is the mechanism — a complete S&amp;P 500 wealth product engineered to compound disciplined risk into exponential capital, layered on the equity foundation you already own.
+            </p>
+            <div class="hero__cta">
+                <a href="#book" class="btn btn--primary btn--lg">Schedule Your Private Consultation</a>
             </div>
+            <ul class="hero__badges">
+                <li>SEC Registered Investment Advisor</li>
+                <li>Fiduciary First</li>
+                <li>Qualified Custodian: Interactive Brokers</li>
+                <li>100% of Performance Fees → BAPS Endowment</li>
+            </ul>
         </div>
-        <div class="scroll-indicator">
-            <i class="fas fa-chevron-down"></i>
-        </div>
-    </section>
-
-    <!-- W - WHAT Section -->
-    <section id="what" class="section what-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">W • What We Offer</span>
-                <h2 class="section-title">
-                    The Simple Math That Creates Massive Wealth Advantage
-                </h2>
-                <p class="section-subtitle">
-                    Most investors underperform not because they lack knowledge, but because they fail to protect capital during downturns. EPIG 500 solves this with one elegant principle: beat the market by 20% when it rises, and limit losses to just 20% of market drawdowns when it falls.
-                </p>
-            </div>
-
-            <div class="content-grid">
-                <div class="content-main">
-                    <div class="content-card">
-                        <h3 class="card-title">The Market Reality: How Time Is Actually Spent</h3>
-                        <!-- Market Phase Cards -->
-                        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px;">
-                            <div style="text-align:center; padding:16px 10px; background:rgba(0,102,255,0.1); border:2px solid rgba(0,102,255,0.4); border-radius:10px;">
-                                <div style="font-size:2.2rem; font-weight:900; color:#3b82f6;">70%</div>
-                                <div style="font-size:0.75rem; font-weight:700; color:#d4af37; text-transform:uppercase; letter-spacing:0.5px; margin:4px 0;">Sideways</div>
-                                <div style="font-size:0.78rem; color:rgba(255,255,255,0.65);">Consolidation &amp; range-bound</div>
-                            </div>
-                            <div style="text-align:center; padding:16px 10px; background:rgba(0,200,150,0.1); border:2px solid rgba(0,200,150,0.4); border-radius:10px;">
-                                <div style="font-size:2.2rem; font-weight:900; color:#00c896;">22%</div>
-                                <div style="font-size:0.75rem; font-weight:700; color:#d4af37; text-transform:uppercase; letter-spacing:0.5px; margin:4px 0;">Up-Trends</div>
-                                <div style="font-size:0.78rem; color:rgba(255,255,255,0.65);">Bull market phases</div>
-                            </div>
-                            <div style="text-align:center; padding:16px 10px; background:rgba(255,71,87,0.1); border:2px solid rgba(255,71,87,0.4); border-radius:10px;">
-                                <div style="font-size:2.2rem; font-weight:900; color:#ff4757;">8%</div>
-                                <div style="font-size:0.75rem; font-weight:700; color:#d4af37; text-transform:uppercase; letter-spacing:0.5px; margin:4px 0;">Down-Trends</div>
-                                <div style="font-size:0.78rem; color:rgba(255,255,255,0.65);">Bear market phases</div>
-                            </div>
-                        </div>
-                        <p class="card-text">
-                            <strong>The Devastating Math of Losses:</strong> When markets drop 37% (2008), you need a +59% gain just to break even. A 50% loss requires +100% recovery. This compounding asymmetry devastates long-term wealth building—most retail investors average only 4-5% annually vs. the S&P's 13% over 20 years.
-                        </p>
-                        <p class="card-text">
-                            <strong>Why Traditional Approaches Fail:</strong> Over 90% of large-cap mutual funds underperformed the S&P 500 over 20 years. Diversification fails in crises when correlations spike to &gt;0.95—everything falls together. Only 2% of funds sustained top-half performance for two consecutive years.
-                        </p>
-                    </div>
-
-                    <div class="content-card">
-                        <h3 class="card-title">The EPIG 500 Solution</h3>
-                        <p class="card-text">
-                            EPIG 500 (Enduring Principal Protection Income &amp; Growth) is built on one elegant insight: <strong>you can beat the market by 20% in up years while dramatically reducing downside risk.</strong> Capture 120% of gains when it rises, and limit losses to just 20% of drawdowns when it falls. The compounding math creates a massive wealth advantage.
-                        </p>
-                        <!-- The Core Formula -->
-                        <div style="background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(212,175,55,0.05)); border:2px solid rgba(212,175,55,0.4); border-radius:12px; padding:18px; margin:16px 0; text-align:center;">
-                            <div style="font-size:1rem; font-weight:700; color:#d4af37; margin-bottom:10px;">The EPIG 500 Formula</div>
-                            <div style="display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap;">
-                                <span style="background:rgba(0,200,150,0.15); border:1px solid rgba(0,200,150,0.5); color:#00c896; padding:8px 14px; border-radius:8px; font-weight:700; font-size:0.9rem;">📈 Beat Market +20% (UP years)</span>
-                                <span style="color:rgba(255,255,255,0.5); font-size:1.2rem;">+</span>
-                                <span style="background:rgba(255,71,87,0.15); border:1px solid rgba(255,71,87,0.5); color:#ff4757; padding:8px 14px; border-radius:8px; font-weight:700; font-size:0.9rem;">🛡️ 20% Drawdown (DOWN years)</span>
-                                <span style="color:rgba(255,255,255,0.5); font-size:1.2rem;">=</span>
-                                <span style="background:rgba(212,175,55,0.2); border:1px solid rgba(212,175,55,0.6); color:#d4af37; padding:8px 14px; border-radius:8px; font-weight:800; font-size:0.95rem;">18.1% Hypothetical CAGR</span>
-                            </div>
-                        </div>
-                        <ul class="feature-list">
-                            <li><i class="fas fa-check-circle"></i> <strong>Market-Beating Upside:</strong> 120% of S&amp;P 500 participation when markets rise—capturing and exceeding every bull run</li>
-                            <li><i class="fas fa-check-circle"></i> <strong>Minimal Drawdown Target:</strong> Only 20% of market loss during corrections—limiting drawdown to a fraction of normal exposure</li>
-                            <li><i class="fas fa-check-circle"></i> <strong>Cash-Like Liquidity:</strong> Invest in liquid S&amp;P 500 components—no lock-in periods, T+2 settlement</li>
-                            <li><i class="fas fa-check-circle"></i> <strong>P/E Ratio Independence:</strong> Returns not dependent on market entry timing—invest anytime</li>
-                            <li><i class="fas fa-check-circle"></i> <strong>Dynamic Allocation:</strong> 100% stocks in bull markets → 100% cash during corrections</li>
-                            <li><i class="fas fa-check-circle"></i> <strong>Bolt-On Vehicle:</strong> Integrates seamlessly with your existing investment portfolio</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="content-sidebar">
-                    <div class="highlight-box">
-                        <i class="fas fa-lightbulb highlight-icon"></i>
-                        <h4>Why This Works</h4>
-                        <p>Asymmetric compounding is the most powerful offensive wealth strategy. By beating the S&P 500 by 20% in up years and limiting losses to just 20% in down years, EPIG 500 hypothetically turned a <strong>losing decade (2000–2010: -0.94% CAGR) into a 10.4% annual return</strong>—an $178,635 advantage on $100K. Even in the 2015–2024 bull market, this asymmetric approach added +$229,263.</p>
-                    </div>
-                    
-                    <!-- Compounding Wealth Calculator Preview -->
-                    <div style="background:linear-gradient(135deg,rgba(26,31,46,0.98),rgba(15,20,25,0.98)); border:2px solid rgba(212,175,55,0.4); border-radius:12px; padding:20px; margin-top:20px;">
-                        <h4 style="color:#d4af37; font-size:1rem; margin:0 0 14px 0; text-align:center;">📊 $100,000 Invested — 11 Years (2015–2026)</h4>
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-                            <div style="text-align:center; padding:14px; background:rgba(255,71,87,0.12); border:1px solid rgba(255,71,87,0.3); border-radius:8px;">
-                                <div style="font-size:0.7rem; color:rgba(255,255,255,0.6); margin-bottom:4px;">S&P 500 (Buy &amp; Hold)</div>
-                                <div style="font-size:1.5rem; font-weight:800; color:rgba(255,255,255,0.8);">$351,162</div>
-                                <div style="font-size:0.8rem; color:rgba(255,255,255,0.6);">13.5% CAGR</div>
-                            </div>
-                            <div style="text-align:center; padding:14px; background:rgba(0,200,150,0.12); border:1px solid rgba(0,200,150,0.4); border-radius:8px;">
-                                <div style="font-size:0.7rem; color:rgba(255,255,255,0.6); margin-bottom:4px;">EPIG 500 (Hypothetical)</div>
-                                <div style="font-size:1.5rem; font-weight:800; color:#00c896;">$621,507</div>
-                                <div style="font-size:0.8rem; color:#00c896;">18.1% CAGR</div>
-                            </div>
-                        </div>
-                        <div style="text-align:center; margin-top:12px; padding:10px; background:rgba(212,175,55,0.15); border-radius:8px;">
-                            <span style="color:#d4af37; font-weight:700; font-size:0.95rem;">🏆 +$270,345 more wealth (+4.6% alpha)</span>
-                        </div>
-                        <p style="font-size:0.68rem; color:rgba(255,255,255,0.4); text-align:center; margin:8px 0 0; font-style:italic;">Backtested hypothetical. Not a guarantee of future results.</p>
-                    </div>
-                    
-                    <div class="highlight-box accent" style="margin-top:20px;">
-                        <i class="fas fa-target highlight-icon"></i>
-                        <h4>Who This Is For</h4>
-                        <ul class="simple-list">
-                            <li>Investors seeking to <strong>beat the market by 20%</strong> while dramatically reducing downside risk</li>
-                            <li>Those who want <strong>only 20% drawdown exposure</strong> during corrections</li>
-                            <li>High-net-worth individuals wanting <strong>consistent compounding</strong></li>
-                            <li>Anyone tired of the devastating “loss &amp; recover” cycle</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- H - HOW Section -->
-    <section id="how" class="section how-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">H • How It Works</span>
-                <h2 class="section-title">
-                    How Beating + Protecting Creates Exponential Wealth Advantage
-                </h2>
-                <p class="section-subtitle">
-                    EPIG 500 delivers asymmetric results: capture 120% of market gains when it rises and limit losses to just 20% of market drawdowns when it falls—then let compounding do the heavy lifting.
-                </p>
-            </div>
-
-            <div class="how-intro">
-                <div class="intro-card">
-                    <h3 class="card-title">The Core Principle: Asymmetric Compounding</h3>
-                    <p class="card-text">
-                        EPIG 500 solves the three structural problems that cause traditional portfolios to underperform: <strong>(1) P/E Independence</strong> — Our strategy delivers returns regardless of market entry timing; <strong>(2) Correlation Breaking</strong> — We limit market exposure during crises, achieving only 20% correlation to drawdowns when traditional diversification fails; <strong>(3) Eliminating the Volatility Tax</strong> — By limiting losses to 20% of market drawdowns, we preserve the compounding base—far less recovery time wasted.
-                    </p>
-                    <!-- Year-by-Year Comparison Visual -->
-                    <div style="margin-top:20px; overflow-x:auto;">
-                        <table style="width:100%; border-collapse:collapse; font-size:0.88rem;">
-                            <thead>
-                                <tr style="background:rgba(212,175,55,0.15);">
-                                    <th style="padding:10px 12px; color:#d4af37; text-align:left; border-bottom:1px solid rgba(212,175,55,0.2);">Year</th>
-                                    <th style="padding:10px 12px; color:#d4af37; text-align:center; border-bottom:1px solid rgba(212,175,55,0.2);">S&P 500</th>
-                                    <th style="padding:10px 12px; color:#d4af37; text-align:center; border-bottom:1px solid rgba(212,175,55,0.2);">EPIG 500</th>
-                                    <th style="padding:10px 12px; color:#d4af37; text-align:center; border-bottom:1px solid rgba(212,175,55,0.2);">Regime</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                                    <td style="padding:8px 12px; color:#d4af37; font-weight:700;">2015</td>
-                                    <td style="padding:8px 12px; text-align:center; color:rgba(255,255,255,0.8);">+1.4%</td>
-                                    <td style="padding:8px 12px; text-align:center; color:#00c896; font-weight:700;">~+1.7%</td>
-                                    <td style="padding:8px 12px; text-align:center;"><span style="background:rgba(0,200,150,0.15); color:#00c896; padding:2px 8px; border-radius:4px; font-size:0.75rem;">📈 Beat Market +20%</span></td>
-                                </tr>
-                                <tr style="border-bottom:1px solid rgba(255,255,255,0.05); background:rgba(255,255,255,0.02);">
-                                    <td style="padding:8px 12px; color:#d4af37; font-weight:700;">2016</td>
-                                    <td style="padding:8px 12px; text-align:center; color:rgba(255,255,255,0.8);">+12.0%</td>
-                                    <td style="padding:8px 12px; text-align:center; color:#00c896; font-weight:700;">~+14.4%</td>
-                                    <td style="padding:8px 12px; text-align:center;"><span style="background:rgba(0,200,150,0.15); color:#00c896; padding:2px 8px; border-radius:4px; font-size:0.75rem;">📈 Beat Market +20%</span></td>
-                                </tr>
-                                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                                    <td style="padding:8px 12px; color:#d4af37; font-weight:700;">2017</td>
-                                    <td style="padding:8px 12px; text-align:center; color:rgba(255,255,255,0.8);">+21.8%</td>
-                                    <td style="padding:8px 12px; text-align:center; color:#00c896; font-weight:700;">~+26.2%</td>
-                                    <td style="padding:8px 12px; text-align:center;"><span style="background:rgba(0,200,150,0.15); color:#00c896; padding:2px 8px; border-radius:4px; font-size:0.75rem;">📈 Beat Market +20%</span></td>
-                                </tr>
-                                <tr style="border-bottom:1px solid rgba(255,255,255,0.05); background:rgba(255,71,87,0.06);">
-                                    <td style="padding:8px 12px; color:#d4af37; font-weight:700;">2018</td>
-                                    <td style="padding:8px 12px; text-align:center; color:#ff4757; font-weight:700;">-4.4%</td>
-                                    <td style="padding:8px 12px; text-align:center; color:#ffa500; font-weight:800;">~-0.9%</td>
-                                    <td style="padding:8px 12px; text-align:center;"><span style="background:rgba(255,71,87,0.2); color:#ff4757; padding:2px 8px; border-radius:4px; font-size:0.75rem;">🛡️ 20% Drawdown</span></td>
-                                </tr>
-                                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                                    <td style="padding:8px 12px; color:#d4af37; font-weight:700;">2019</td>
-                                    <td style="padding:8px 12px; text-align:center; color:rgba(255,255,255,0.8);">+31.5%</td>
-                                    <td style="padding:8px 12px; text-align:center; color:#00c896; font-weight:700;">~+37.8%</td>
-                                    <td style="padding:8px 12px; text-align:center;"><span style="background:rgba(0,200,150,0.15); color:#00c896; padding:2px 8px; border-radius:4px; font-size:0.75rem;">📈 Beat Market +20%</span></td>
-                                </tr>
-                                <tr style="border-bottom:1px solid rgba(255,255,255,0.05); background:rgba(255,255,255,0.02);">
-                                    <td style="padding:8px 12px; color:#d4af37; font-weight:700;">2020</td>
-                                    <td style="padding:8px 12px; text-align:center; color:rgba(255,255,255,0.8);">+18.4%</td>
-                                    <td style="padding:8px 12px; text-align:center; color:#00c896; font-weight:700;">~+22.1%</td>
-                                    <td style="padding:8px 12px; text-align:center;"><span style="background:rgba(0,200,150,0.15); color:#00c896; padding:2px 8px; border-radius:4px; font-size:0.75rem;">📈 Beat Market +20%</span></td>
-                                </tr>
-                                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                                    <td style="padding:8px 12px; color:#d4af37; font-weight:700;">2021</td>
-                                    <td style="padding:8px 12px; text-align:center; color:rgba(255,255,255,0.8);">+28.7%</td>
-                                    <td style="padding:8px 12px; text-align:center; color:#00c896; font-weight:700;">~+34.4%</td>
-                                    <td style="padding:8px 12px; text-align:center;"><span style="background:rgba(0,200,150,0.15); color:#00c896; padding:2px 8px; border-radius:4px; font-size:0.75rem;">📈 Beat Market +20%</span></td>
-                                </tr>
-                                <tr style="border-bottom:1px solid rgba(255,255,255,0.05); background:rgba(255,71,87,0.06);">
-                                    <td style="padding:8px 12px; color:#d4af37; font-weight:700;">2022</td>
-                                    <td style="padding:8px 12px; text-align:center; color:#ff4757; font-weight:700;">-18.1%</td>
-                                    <td style="padding:8px 12px; text-align:center; color:#ffa500; font-weight:800;">~-3.6%</td>
-                                    <td style="padding:8px 12px; text-align:center;"><span style="background:rgba(255,71,87,0.2); color:#ff4757; padding:2px 8px; border-radius:4px; font-size:0.75rem;">🛡️ 20% Drawdown</span></td>
-                                </tr>
-                                <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-                                    <td style="padding:8px 12px; color:#d4af37; font-weight:700;">2023</td>
-                                    <td style="padding:8px 12px; text-align:center; color:rgba(255,255,255,0.8);">+26.3%</td>
-                                    <td style="padding:8px 12px; text-align:center; color:#00c896; font-weight:700;">~+31.6%</td>
-                                    <td style="padding:8px 12px; text-align:center;"><span style="background:rgba(0,200,150,0.15); color:#00c896; padding:2px 8px; border-radius:4px; font-size:0.75rem;">📈 Beat Market +20%</span></td>
-                                </tr>
-                                <tr style="border-bottom:1px solid rgba(255,255,255,0.05); background:rgba(255,255,255,0.02);">
-                                    <td style="padding:8px 12px; color:#d4af37; font-weight:700;">2024</td>
-                                    <td style="padding:8px 12px; text-align:center; color:rgba(255,255,255,0.8);">+25.0%</td>
-                                    <td style="padding:8px 12px; text-align:center; color:#00c896; font-weight:700;">~+30.0%</td>
-                                    <td style="padding:8px 12px; text-align:center;"><span style="background:rgba(0,200,150,0.15); color:#00c896; padding:2px 8px; border-radius:4px; font-size:0.75rem;">📈 Beat Market +20%</span></td>
-                                </tr>
-                                <tr style="background:rgba(212,175,55,0.08); border-top:2px solid rgba(212,175,55,0.3);">
-                                    <td style="padding:10px 12px; color:#d4af37; font-weight:800;">CAGR</td>
-                                    <td style="padding:10px 12px; text-align:center; color:rgba(255,255,255,0.8); font-weight:700;">13.5%</td>
-                                    <td style="padding:10px 12px; text-align:center; color:#d4af37; font-weight:800;">18.4%</td>
-                                    <td style="padding:10px 12px; text-align:center; color:#d4af37; font-weight:700; font-size:0.85rem;">+4.9% Alpha</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <p style="font-size:0.72rem; color:rgba(255,255,255,0.4); text-align:center; margin:10px 0 0; font-style:italic;">Backtested hypothetical results (2015–2026). Assumes 120% of market return in UP years and 20% of market drawdown in DOWN years. Past performance is not a guarantee of future results.</p>
-                </div>
-            </div>
-
-            <div class="process-steps">
-                <div class="step-item">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h3 class="step-title">The 20% Drawdown Shield: Your Ultimate Alpha Generator</h3>
-                        <p class="step-description">In today's high-valuation environment (CAPE ≈40x vs. historical average of 17x), starting valuations 135% above the norm mathematically compress forward returns. EPIG 500's ~20% drawdown limit in down years becomes a powerful alpha generator—protecting most capital during inevitable P/E compression. By limiting losses to 20% of market drawdowns, we minimize the devastating math where a 37% loss requires +59% just to break even, reducing our exposure to just -7.4% instead.</p>
-                    </div>
-                </div>
-
-                <div class="step-item">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h3 class="step-title">The Correlation Advantage</h3>
-                        <p class="step-description">Traditional diversification fails during market stress when correlations spike to >0.95—everything falls together, rendering diversification useless. EPIG solves the "diworsification" problem through focused concentration: we invest ONLY in S&P 500 + high-quality Blue Chips, then shift to 100% CASH when correlations break down (correlation: 0.00). Our cash rule mechanically breaks the correlation link when traditional funds cannot decouple from the market.</p>
-                    </div>
-                </div>
-
-                <div class="step-item">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h3 class="step-title">Smaller Losses = Exponentially More Wealth</h3>
-                        <p class="step-description">Compounding is geometric; big losses act like a wealth tax. During the 2008 Financial Crisis, the S&P 500 lost -37%, requiring +59% just to break even. If you had limited that to just 20% of the loss (-7.4% instead of -37%), your recovery needs drop from +59% to just +8%. Over 11 years (2015–2026), EPIG 500's hypothetical 20% drawdown limit combined with 120% upside capture added +$270,345 in additional wealth on $100,000—a 77% larger portfolio.</p>
-                    </div>
-                </div>
-
-                <div class="step-item">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h3 class="step-title">Research-Backed Approach</h3>
-                        <p class="step-description">Empirical data confirms a strong inverse correlation between starting P/E ratios and subsequent returns. LSEG/FTSE Russell research (2026) shows higher forward P/E ratios strongly predict lower 10-year returns (R² = 0.39). When CAPE exceeds 25x, markets historically face extended periods of stagnation or mean reversion. EPIG is designed specifically for this reality.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="principles-section">
-                <h3 class="principles-title">Built on Four First Principles of Wealth Protection</h3>
-                <div class="principles-grid">
-                    <div class="principle-card">
-                        <i class="fas fa-shield-alt principle-icon"></i>
-                        <h4>Risk Management</h4>
-                        <p>Implement caps and limits to prevent catastrophic loss. Use stop-losses, diversification, and circuit breakers to ensure survival.</p>
-                    </div>
-                    <div class="principle-card">
-                        <i class="fas fa-chart-line principle-icon"></i>
-                        <h4>Position Sizing</h4>
-                        <p>Never risk too much on any single bet. Size each position proportionally to capital, edge confidence, and potential volatility.</p>
-                    </div>
-                    <div class="principle-card">
-                        <i class="fas fa-balance-scale principle-icon"></i>
-                        <h4>Expected Value</h4>
-                        <p>Ensure positive average return per unit of risk. Calculate EV before every investment and only proceed if genuinely positive.</p>
-                    </div>
-                    <div class="principle-card">
-                        <i class="fas fa-lock principle-icon"></i>
-                        <h4>Positive Expectancy</h4>
-                        <p>Every investment needs a structural edge that tilts odds in your favor. Only trade when you can mathematically prove advantage.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- A - ARE YOU SURE / PROOF Section -->
-    <section id="proof" class="section proof-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">A • Are You Sure?</span>
-                <h2 class="section-title">
-                    Our Systematic Research Framework & Risk Management
-                </h2>
-                <p class="section-subtitle">
-                    EPIG 500 is powered by a disciplined 5-step methodology combining data-driven insights, deep market analysis, and systematic stock selection—backed by a disciplined risk management framework that targets <strong>returns 20% above market</strong> in positive years while limiting drawdowns to <strong>only 20% of market losses</strong> during corrections.
-                </p>
-            </div>
-
-            <div class="proof-content">
-                <div class="proof-intro">
-                    <p class="lead-text">
-                        Our Modus Operandi is a systematic research framework that identifies high-potential opportunities before they become obvious to the market. Combined with mathematically rigorous position sizing and catastrophe-prevention risk management, EPIG 500 eliminates guesswork and emotional decision-making.
-                    </p>
-                </div>
-
-                <!-- Hypothetical Performance Evidence -->
-                <div style="margin:40px 0; padding:35px; background:linear-gradient(135deg,#1a2332 0%,#0f1419 100%); border-radius:16px; border:2px solid rgba(212,175,55,0.5);">
-                    <h3 style="text-align:center; color:#d4af37; font-size:1.75rem; margin-bottom:10px;">
-                        <i class="fas fa-trophy"></i> The Compounding Proof: Beat +20% + Shield 20% = Outperform
-                    </h3>
-                    <div style="text-align:center; padding:10px 0; background:rgba(212,175,55,0.15); border-radius:8px; margin-bottom:30px; border:1px solid rgba(212,175,55,0.3);">
-                        <p style="margin:0; font-weight:700; color:#d4af37; font-size:1rem;">Beat market by 20% in UP years + Only 20% of market loss in DOWN years = Dramatic long-term advantage in every market regime</p>
-                    </div>
-                    
-                    <!-- Two Period Cards -->
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:25px; margin-bottom:30px;">
-                        <!-- Period 1: Lost Decade -->
-                        <div style="background:rgba(255,71,87,0.1); border:2px solid rgba(255,71,87,0.4); border-radius:14px; padding:25px;">
-                            <div style="text-align:center; margin-bottom:18px;">
-                                <i class="fas fa-exclamation-triangle" style="font-size:2rem; color:#ff4757; margin-bottom:8px;"></i>
-                                <h4 style="color:#ff4757; font-size:1.15rem; margin:0 0 5px;">2000–2010: The Lost Decade</h4>
-                                <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin:0;">4 negative years | Dot-com crash + 2008 crisis</p>
-                            </div>
-                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
-                                <div style="text-align:center; padding:14px 10px; background:rgba(255,71,87,0.15); border:1px solid rgba(255,71,87,0.3); border-radius:8px;">
-                                    <div style="font-size:0.7rem; color:rgba(255,255,255,0.6); margin-bottom:4px;">S&amp;P 500 Buy &amp; Hold</div>
-                                    <div style="font-size:1.4rem; font-weight:800; color:#ff4757;">$90,935</div>
-                                    <div style="font-size:0.78rem; color:#ff4757;">-0.94% CAGR</div>
-                                </div>
-                                <div style="text-align:center; padding:14px 10px; background:rgba(0,200,150,0.15); border:1px solid rgba(0,200,150,0.4); border-radius:8px;">
-                                    <div style="font-size:0.7rem; color:rgba(255,255,255,0.6); margin-bottom:4px;">EPIG 500 (Hypothetical)</div>
-                                    <div style="font-size:1.4rem; font-weight:800; color:#00c896;">$269,570</div>
-                                    <div style="font-size:0.78rem; color:#00c896;">+10.42% CAGR</div>
-                                </div>
-                            </div>
-                            <div style="text-align:center; padding:10px; background:rgba(212,175,55,0.15); border-radius:8px;">
-                                <span style="color:#d4af37; font-weight:800; font-size:0.9rem;">🏆 +$178,635 advantage • +11.36% CAGR edge</span>
-                            </div>
-                            <p style="margin:12px 0 0; font-size:0.82rem; color:rgba(255,255,255,0.7); line-height:1.5;">Turning a <strong style="color:#ff4757;">losing decade</strong> into a <strong style="color:#00c896;">winning one</strong>. By capturing 120% of gains in 7 up years and limiting losses to just 20% in 4 down years (2000, 2001, 2002, 2008), $100K hypothetically grew to $270K while the S&P 500 lost money.</p>
-                        </div>
-                        <!-- Period 2: Bull Market -->
-                        <div style="background:rgba(0,200,150,0.1); border:2px solid rgba(0,200,150,0.4); border-radius:14px; padding:25px;">
-                            <div style="text-align:center; margin-bottom:18px;">
-                                <i class="fas fa-chart-line" style="font-size:2rem; color:#00c896; margin-bottom:8px;"></i>
-                                <h4 style="color:#00c896; font-size:1.15rem; margin:0 0 5px;">2015–2024: Bull Market</h4>
-                                <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin:0;">2 negative years | 2018 correction + 2022 bear market</p>
-                            </div>
-                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
-                                <div style="text-align:center; padding:14px 10px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:8px;">
-                                    <div style="font-size:0.7rem; color:rgba(255,255,255,0.6); margin-bottom:4px;">S&amp;P 500 Buy &amp; Hold</div>
-                                    <div style="font-size:1.4rem; font-weight:800; color:rgba(255,255,255,0.8);">$313,064</div>
-                                    <div style="font-size:0.78rem; color:rgba(255,255,255,0.6);">12.10% CAGR</div>
-                                </div>
-                                <div style="text-align:center; padding:14px 10px; background:rgba(0,200,150,0.15); border:1px solid rgba(0,200,150,0.4); border-radius:8px;">
-                                    <div style="font-size:0.7rem; color:rgba(255,255,255,0.6); margin-bottom:4px;">EPIG 500 (Hypothetical)</div>
-                                    <div style="font-size:1.4rem; font-weight:800; color:#00c896;">$542,327</div>
-                                    <div style="font-size:0.78rem; color:#00c896;">+18.4% CAGR</div>
-                                </div>
-                            </div>
-                            <div style="text-align:center; padding:10px; background:rgba(212,175,55,0.15); border-radius:8px;">
-                                <span style="color:#d4af37; font-weight:800; font-size:0.9rem;">🏆 +$229,263 advantage • +6.3% CAGR edge</span>
-                            </div>
-                            <p style="margin:12px 0 0; font-size:0.82rem; color:rgba(255,255,255,0.7); line-height:1.5;">In a <strong style="color:#00c896;">strong bull market</strong>, beating the market by 20% in 8 up years while limiting losses to 20% in 2018 (-0.9% vs -4.4%) and 2022 (-3.6% vs -18.1%) hypothetically added nearly $229,000 in additional wealth.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Combined Wealth Impact -->
-                    <div style="background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(212,175,55,0.1)); border:2px solid rgba(212,175,55,0.5); border-radius:12px; padding:22px;">
-                        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px; max-width:800px; margin:0 auto 16px; text-align:center;">
-                            <div>
-                                <div style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin-bottom:6px;">EPIG 500 (Hypothetical)</div>
-                                <div style="font-size:2.2rem; font-weight:800; color:#00c896;">$621,507</div>
-                                <div style="font-size:0.9rem; color:#00c896;">18.1% CAGR (2015–2026)</div>
-                            </div>
-                            <div>
-                                <div style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin-bottom:6px;">S&P 500 (Buy &amp; Hold)</div>
-                                <div style="font-size:2.2rem; font-weight:800; color:rgba(255,255,255,0.75);">$351,162</div>
-                                <div style="font-size:0.9rem; color:rgba(255,255,255,0.6);">13.5% CAGR (2015–2026)</div>
-                            </div>
-                            <div>
-                                <div style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin-bottom:6px;">Your Advantage</div>
-                                <div style="font-size:2.2rem; font-weight:800; color:#d4af37;">+$270,345</div>
-                                <div style="font-size:0.9rem; color:#d4af37;">+4.6% Alpha</div>
-                            </div>
-                        </div>
-                        <p style="margin:0; font-size:0.92rem; color:rgba(255,255,255,0.85); line-height:1.7; text-align:center;">
-                            <i class="fas fa-lightbulb" style="color:#d4af37; margin-right:6px;"></i>
-                            <strong style="color:#d4af37;">The Secret:</strong> By <strong>beating the upside by 20%</strong> and <strong>limiting the downside to 20%</strong>, EPIG 500 hypothetically compounds to a <strong style="color:#d4af37;">77% larger portfolio</strong> over 11 years
-                        </p>
-                    </div>
-                    <p style="font-size:0.72rem; color:rgba(255,255,255,0.4); text-align:center; margin:14px 0 0; font-style:italic;">Hypothetical backtested analysis using actual S&P 500 annual returns. Assumes 120% of market return in UP years and 20% of market drawdown in DOWN years. Starting capital: $100,000. Does not include transaction costs. Past performance does not guarantee future results.</p>
-                </div>
-
-                <!-- Strategy Secret Sauce and Allocation -->
-                <div style="margin:40px 0; padding:30px; background:linear-gradient(135deg,#1a2332 0%,#0f1419 100%); border-radius:12px; border:2px solid rgba(212,175,55,0.3);">
-                    <h3 style="text-align:center; color:#d4af37; font-size:1.75rem; margin-bottom:10px;">
-                        <i class="fas fa-flask"></i> EPIG 500 Strategy: How the 20% Beat + 20% Shield Works
-                    </h3>
-                    <div style="text-align:center; padding:10px 0; background:rgba(212,175,55,0.15); border-radius:8px; margin-bottom:30px; border:1px solid rgba(212,175,55,0.3);">
-                        <p style="margin:0; font-weight:700; color:#d4af37; font-size:1rem;">MARKET DESIGN: Built for How Markets Actually Behave (70% Sideways, 22% Up, 8% Down)</p>
-                    </div>
-                    </div>
-
-                    <h4 style="color: #d4af37; font-size: 1.25rem; margin: 30px 0 20px 0; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-flask" style="color: #ff9800;"></i> The EPIG Secret Sauce
-                    </h4>
-                    <ul style="list-style: none; padding: 0; margin: 0; line-height: 1.8; color: rgba(255, 255, 255, 0.9);">
-                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(212, 175, 55, 0.2); color: rgba(255, 255, 255, 0.9);"><strong style="color: #ff9800;">Staying flat</strong> when corrections (>10%) potential exists</li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(212, 175, 55, 0.2); color: rgba(255, 255, 255, 0.9);">Investing back in market around market <strong style="color: #ff9800;">bottoms</strong></li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(212, 175, 55, 0.2); color: rgba(255, 255, 255, 0.9);">Opportunistically investing in <strong style="color: #ff9800;">high quality stocks</strong></li>
-                        <li style="padding: 10px 0; border-bottom: 1px solid rgba(212, 175, 55, 0.2); color: rgba(255, 255, 255, 0.9);">Short term bets using <strong style="color: #ff9800;">stocks</strong></li>
-                        <li style="padding: 10px 0; color: rgba(255, 255, 255, 0.9);">This approach allows us to <strong style="color: #ff9800;">beat market taking lower risks</strong></li>
-                    </ul>
-
-                    <h4 style="color: #d4af37; font-size: 1.25rem; margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-flask" style="color: #d4af37;"></i> How EPIG 500 Achieves the 20% Beat + 20% Shield
-                    </h4>
-                    <ul style="list-style: none; padding: 0; margin: 0 0 24px 0; line-height: 1.8; color: rgba(255, 255, 255, 0.9);">
-                        <li style="padding: 10px 14px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); color: rgba(255, 255, 255, 0.9); display:flex; align-items:flex-start; gap:10px;"><span style="color:#d4af37; font-weight:700; min-width:20px;">🛡️</span><span><strong style="color:#d4af37;">Limiting exposure to 20% of market losses</strong> when corrections &gt;10% are anticipated</span></li>
-                        <li style="padding: 10px 14px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); color: rgba(255, 255, 255, 0.9); display:flex; align-items:flex-start; gap:10px;"><span style="color:#00c896; font-weight:700; min-width:20px;">📈</span><span>Re-entering the market at or near <strong style="color:#00c896;">market bottoms</strong></span></li>
-                        <li style="padding: 10px 14px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); color: rgba(255, 255, 255, 0.9); display:flex; align-items:flex-start; gap:10px;"><span style="color:#3b82f6; font-weight:700; min-width:20px;">⭐</span><span>Opportunistically investing in <strong style="color:#3b82f6;">high-quality S&amp;P 500 stocks</strong></span></li>
-                        <li style="padding: 10px 14px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); color: rgba(255, 255, 255, 0.9); display:flex; align-items:flex-start; gap:10px;"><span style="color:#ff9800; font-weight:700; min-width:20px;">⚡</span><span>Tactical short-term positions to <strong style="color:#ff9800;">capture near-term catalysts</strong></span></li>
-                        <li style="padding: 10px 14px; color: rgba(255, 255, 255, 0.9); display:flex; align-items:flex-start; gap:10px;"><span style="color:#d4af37; font-weight:700; min-width:20px;">🏆</span><span>Result: <strong style="color:#d4af37;">Beat market by 20% with only 20% of its drawdown</strong>—alpha from both superior stock selection and disciplined risk management</span></li>
-                    </ul>
-
-                    <h4 style="color: #d4af37; font-size: 1.25rem; margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-chart-pie" style="color: #10b981;"></i> EPIG 500 Dynamic Portfolio Allocation
-                    </h4>
-                    <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px;">Regime-based allocation that shifts from fully invested to fully protected:</p>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                        <div style="padding: 15px; background: rgba(59, 130, 246, 0.15); border-left: 4px solid #3b82f6; border-radius: 6px;">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: #3b82f6; margin-bottom: 5px;">70-100%</div>
-                            <div style="font-weight: 600; color: #d4af37;">SPY (S&P 500)</div>
-                            <div style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7); margin-top: 5px;">Core market exposure</div>
-                        </div>
-                        <div style="padding: 15px; background: rgba(16, 185, 129, 0.15); border-left: 4px solid #10b981; border-radius: 6px;">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: #10b981; margin-bottom: 5px;">0-20%</div>
-                            <div style="font-weight: 600; color: #d4af37;">Long Term Stocks</div>
-                            <div style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7); margin-top: 5px;">High-quality growth</div>
-                        </div>
-                        <div style="padding: 15px; background: rgba(255, 152, 0, 0.15); border-left: 4px solid #ff9800; border-radius: 6px;">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: #ff9800; margin-bottom: 5px;">0-10%</div>
-                            <div style="font-weight: 600; color: #d4af37;">Short Term Bets</div>
-                            <div style="font-size: 0.875rem; color: rgba(255, 255, 255, 0.7); margin-top: 5px;">Tactical opportunities</div>
-                        </div>
-                    </div>
-                    <p style="margin-top: 20px; font-size: 0.875rem; color: rgba(255, 255, 255, 0.6); font-style: italic; text-align: center;"><em>Note: Allocation shifts dynamically based on market regime—from 100% cash during high-risk corrections to 100% SPY during confirmed bull markets, with tactical overlays as opportunities arise.</em></p>
-                </div>
-
-                <h3 style="text-align: center; color: #d4af37; font-size: 1.75rem; margin: 40px 0 30px 0;">
-                    5-Step Systematic Research Framework
-                </h3>
-
-                <div class="evidence-grid">
-                    <div class="evidence-card">
-                        <div class="evidence-icon">
-                            <i class="fas fa-chart-area"></i>
-                        </div>
-                        <h3 class="evidence-title">Step 1: Identify AOMG</h3>
-                        <p class="evidence-text">Analyze macro and sectoral trends to pinpoint the Area(s) of Maximum Growth for the year. Focus on discovering segments with outsized return potential and large Total Addressable Markets (TAM). Identify emerging sectors poised for exponential growth through comprehensive macro trend analysis.</p>
-                    </div>
-
-                    <div class="evidence-card">
-                        <div class="evidence-icon">
-                            <i class="fas fa-rocket"></i>
-                        </div>
-                        <h3 class="evidence-title">Step 2: Track Disruptions</h3>
-                        <p class="evidence-text">Continuously monitor for potential disruptions, breakthrough innovations, and superlative products in the AOMG. Track emerging technologies and business models with potential to reshape markets. Evaluate products with exceptional performance metrics that significantly outperform competitors.</p>
-                    </div>
-
-                    <div class="evidence-card">
-                        <div class="evidence-icon">
-                            <i class="fas fa-building"></i>
-                        </div>
-                        <h3 class="evidence-title">Step 3: Monitor Magnificent 7</h3>
-                        <p class="evidence-text">Track the performance of leading technology companies (Meta, Microsoft, Nvidia, Apple, Tesla, Amazon, Alphabet) shaping the market narrative. Analyze market impact, track technological innovations, evaluate valuation metrics, and assess competitive positioning and market disruption.</p>
-                    </div>
-
-                    <div class="evidence-card">
-                        <div class="evidence-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <h3 class="evidence-title">Step 4: Track Episodic Pivots</h3>
-                        <p class="evidence-text">Identify and analyze episodic pivots across target stocks: turning points triggered by catalysts such as earnings, regulatory changes, M&A, or product launches. Pattern recognition identifies distinctive price and volume patterns that precede significant moves, enabling optimal entry and exit points.</p>
-                    </div>
-
-                    <div class="evidence-card">
-                        <div class="evidence-icon">
-                            <i class="fas fa-brain"></i>
-                        </div>
-                        <h3 class="evidence-title">Step 5: Monitor Bias Factors</h3>
-                        <p class="evidence-text">Systematically evaluate market narratives and sentiment shifts that create or dissolve biases in stock pricing. Identify dominant storylines driving market psychology, track investor sentiment shifts, recognize common cognitive biases (recency, anchoring, herding), and identify extreme consensus positions indicating reversal opportunities.</p>
-                    </div>
-
-                    <div class="evidence-card">
-                        <div class="evidence-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h3 class="evidence-title">Risk Management Framework</h3>
-                        <p class="evidence-text">Market-responsive allocation dynamically adapts to conditions: 100% stocks in bull markets with 10% max VaR, shifting to 30-50% stocks/50-70% cash during corrections with 3-5% VaR. Position sizing is dynamically adjusted using the "Heat Model" — a 10% risk budget ceiling that prevents catastrophic drawdowns even if all positions fail simultaneously. Stocks are selected from liquid S&P 500 components and leading growth companies.</p>
-                    </div>
-                </div>
-
-                <!-- Historical Performance Impact -->
-                <div class="historical-performance-section">
-                    <h3 class="historical-title">The Compounding Power of Capital Preservation</h3>
-                    <p class="historical-subtitle">Real historical analysis: What if you beat the market by 20% in positive years and limited losses to just 20% in negative years?</p>
-                    
-                    <div class="performance-comparison-grid">
-                        <!-- Period 1: 2000-2010 -->
-                        <div class="performance-period">
-                            <div class="period-header">
-                                <h4 class="period-title">2000-2010: The Lost Decade</h4>
-                                <p class="period-description">4 negative years | Dot-com crash + 2008 crisis</p>
-                            </div>
-                            
-                            <div class="performance-charts">
-                                <div class="chart-column">
-                                    <div class="chart-label">S&P 500 Buy & Hold</div>
-                                    <div class="chart-result negative">
-                                        <div class="result-value">$90,935</div>
-                                        <div class="result-label">Ending Value</div>
-                                    </div>
-                                    <div class="chart-metrics">
-                                        <div class="metric-item">
-                                            <span class="metric-label">Total Return:</span>
-                                            <span class="metric-value negative">-9.1%</span>
-                                        </div>
-                                        <div class="metric-item">
-                                            <span class="metric-label">CAGR:</span>
-                                            <span class="metric-value negative">-0.94%/year</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="chart-divider">
-                                    <i class="fas fa-arrow-right"></i>
-                                </div>
-                                
-                                <div class="chart-column highlight">
-                                    <div class="chart-label">EPIG Strategy (120% up / 20% down)</div>
-                                    <div class="chart-result positive">
-                                        <div class="result-value">$269,570</div>
-                                        <div class="result-label">Ending Value</div>
-                                    </div>
-                                    <div class="chart-metrics">
-                                        <div class="metric-item">
-                                            <span class="metric-label">Total Return:</span>
-                                            <span class="metric-value success">+169.6%</span>
-                                        </div>
-                                        <div class="metric-item">
-                                            <span class="metric-label">CAGR:</span>
-                                            <span class="metric-value success">10.42%/year</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="performance-advantage">
-                                <i class="fas fa-trophy"></i>
-                                <strong>Advantage: +$178,635</strong> (196% more wealth)
-                            </div>
-                            <p class="performance-insight">By capturing 120% of gains in up years and limiting losses to 20% in 4 down years, EPIG would have turned a LOSING decade (-0.94% CAGR) into a 10.42% annual return—a difference of +11.36% per year!</p>
-                        </div>
-
-                        <!-- Period 2: 2015-2024 -->
-                        <div class="performance-period">
-                            <div class="period-header">
-                                <h4 class="period-title">2015-2024: Bull Market with Corrections</h4>
-                                <p class="period-description">2 negative years | 2018 correction + 2022 bear market</p>
-                            </div>
-                            
-                            <div class="performance-charts">
-                                <div class="chart-column">
-                                    <div class="chart-label">S&P 500 Buy & Hold</div>
-                                    <div class="chart-result negative">
-                                        <div class="result-value">$313,064</div>
-                                        <div class="result-label">Ending Value</div>
-                                    </div>
-                                    <div class="chart-metrics">
-                                        <div class="metric-item">
-                                            <span class="metric-label">Total Return:</span>
-                                            <span class="metric-value">+213.1%</span>
-                                        </div>
-                                        <div class="metric-item">
-                                            <span class="metric-label">CAGR:</span>
-                                            <span class="metric-value">12.10%/year</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="chart-divider">
-                                    <i class="fas fa-arrow-right"></i>
-                                </div>
-                                
-                                <div class="chart-column highlight">
-                                    <div class="chart-label">EPIG Strategy (120% up / 20% down)</div>
-                                    <div class="chart-result positive">
-                                        <div class="result-value">$542,327</div>
-                                        <div class="result-label">Ending Value</div>
-                                    </div>
-                                    <div class="chart-metrics">
-                                        <div class="metric-item">
-                                            <span class="metric-label">Total Return:</span>
-                                            <span class="metric-value success">+442.3%</span>
-                                        </div>
-                                        <div class="metric-item">
-                                            <span class="metric-label">CAGR:</span>
-                                            <span class="metric-value success">18.40%/year</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="performance-advantage">
-                                <i class="fas fa-trophy"></i>
-                                <strong>Advantage: +$229,263</strong> (73% more wealth)
-                            </div>
-                            <p class="performance-insight">In a strong bull market, beating the market by 20% in 8 up years while limiting losses to just -0.9% in 2018 and -3.6% in 2022 added +6.30% annually—nearly $229,000 additional wealth on $100,000.</p>
-                        </div>
-                    </div>
-
-                    <div class="compounding-callout">
-                        <div class="callout-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="callout-content">
-                            <h4>Why This Works: The Mathematics of Compounding</h4>
-                            <div class="callout-points">
-                                <div class="callout-point">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    <p><strong>Asymmetry of Losses:</strong> A 37% loss requires +59% to recover. A 50% loss needs +100% to break even.</p>
-                                </div>
-                                <div class="callout-point">
-                                    <i class="fas fa-shield-check"></i>
-                                    <p><strong>Power of 0%:</strong> Your base never shrinks. Every gain compounds on a larger base. No time wasted "digging out."</p>
-                                </div>
-                                <div class="callout-point">
-                                    <i class="fas fa-infinity"></i>
-                                    <p><strong>Exponential Impact:</strong> CAGR improvements (-0.94% → +10.42%) turn losing decades into wealth creation. Sustained improvements (+12.10% → +18.40%) in bull markets add hundreds of thousands.</p>
-                                </div>
-                            </div>
-                            <p class="callout-conclusion"><em>Capital preservation isn't defensive—it's the most powerful offensive strategy for long-term wealth creation.</em></p>
-                        </div>
-                    </div>
-
-                    <div class="methodology-note">
-                        <p><strong>Methodology:</strong> Analysis uses actual S&P 500 annual returns (with dividends). EPIG strategy assumes 120% of market returns in positive years and 20% of market drawdown in negative years. Starting capital: $100,000. Does not include transaction costs or taxes. Past performance does not guarantee future results.</p>
-                    </div>
-
-                    <!-- CAGR Summary Table -->
-                    <div class="cagr-summary-table">
-                        <h4 class="cagr-table-title">10-Year CAGR Comparison Summary</h4>
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Period</th>
-                                    <th>Market CAGR</th>
-                                    <th>EPIG CAGR (120% up / 20% down)</th>
-                                    <th>CAGR Difference</th>
-                                    <th>Wealth Gap ($100K)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>2000-2010</strong><br><small>Crisis Decade</small></td>
-                                    <td class="negative">-0.94%</td>
-                                    <td class="positive">+10.42%</td>
-                                    <td class="highlight">+11.36%</td>
-                                    <td class="highlight">+$178,635</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>2015-2024</strong><br><small>Bull Market</small></td>
-                                    <td>+12.10%</td>
-                                    <td class="positive">+18.40%</td>
-                                    <td class="highlight">+6.30%</td>
-                                    <td class="highlight">+$229,263</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <p class="table-insight">
-                            <i class="fas fa-lightbulb"></i>
-                            <strong>Key Insight:</strong> In both crisis periods AND bull markets, beating the market by 20% in up years while limiting losses to 20% in down years dramatically outperforms traditional buy-and-hold strategies—adding a combined <strong>$407,898</strong> in wealth over 20 years (non-overlapping periods).
-                        </p>
-                    </div>
-                </div>
-
-                <div class="comparison-section">
-                    <h3 class="comparison-title">Why EPIG Works When Traditional Approaches Don't</h3>
-                    <div class="comparison-table">
-                        <div class="comparison-row header">
-                            <div class="comparison-cell">Approach</div>
-                            <div class="comparison-cell">Traditional Methods</div>
-                            <div class="comparison-cell highlight">EPIG Strategy</div>
-                        </div>
-                        <div class="comparison-row">
-                            <div class="comparison-cell feature">Market Entry Timing</div>
-                            <div class="comparison-cell negative"><i class="fas fa-times"></i> P/E dependent - suffers at high valuations</div>
-                            <div class="comparison-cell positive"><i class="fas fa-check"></i> P/E independent - 0% downside protection generates alpha</div>
-                        </div>
-                        <div class="comparison-row">
-                            <div class="comparison-cell feature">Portfolio Diversification</div>
-                            <div class="comparison-cell negative"><i class="fas fa-times"></i> Correlations spike to >0.95 in crisis - diversification fails</div>
-                            <div class="comparison-cell positive"><i class="fas fa-check"></i> Shifts to 100% cash (0.00 correlation) breaking the link</div>
-                        </div>
-                        <div class="comparison-row">
-                            <div class="comparison-cell feature">Drawdown Protection</div>
-                            <div class="comparison-cell negative"><i class="fas fa-times"></i> -37% loss requires +59% to recover (2008 reality)</div>
-                            <div class="comparison-cell positive"><i class="fas fa-check"></i> 0% downside preserves compounding base - no recovery needed</div>
-                        </div>
-                        <div class="comparison-row">
-                            <div class="comparison-cell feature">Position Sizing</div>
-                            <div class="comparison-cell negative"><i class="fas fa-times"></i> Static allocation regardless of conditions</div>
-                            <div class="comparison-cell positive"><i class="fas fa-check"></i> Dynamic 100% stocks to 30-50% stocks/cash allocation based on market conditions</div>
-                        </div>
-                        <div class="comparison-row">
-                            <div class="comparison-cell feature">Risk Management</div>
-                            <div class="comparison-cell negative"><i class="fas fa-times"></i> No maximum loss ceiling - unlimited downside</div>
-                            <div class="comparison-cell positive"><i class="fas fa-check"></i> 10% max portfolio heat - catastrophe prevention built-in</div>
-                        </div>
-                        <div class="comparison-row">
-                            <div class="comparison-cell feature">Research Approach</div>
-                            <div class="comparison-cell negative"><i class="fas fa-times"></i> Reactive to market movements and news</div>
-                            <div class="comparison-cell positive"><i class="fas fa-check"></i> Systematic 5-step framework identifies opportunities early</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- C - CAN YOU DO IT / Call to Action Section -->
-    <section id="subscribe" class="section cta-section">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">C • Can You Do It?</span>
-                <h2 class="section-title">
-                    Ready to Beat the Market by 20%—With Only 20% of Its Downside?
-                </h2>
-                <p class="section-subtitle">
-                    Join investors implementing EPIG 500—the strategy that targets 120% of S&P 500 performance when markets rise and limits losses to just 20% of market drawdowns during corrections. Hypothetical result: 18.1% CAGR vs. 13.5% S&P 500 over 11 years.
-                </p>
-            </div>
-
-            <div class="implementation-guidance" style="max-width: 900px; margin: 0 auto 3rem; padding: 2rem;">
-                <h3 style="color: rgba(255,255,255,0.92); font-size: 1.5rem; font-weight: 600; margin: 0 0 1rem 0; display: flex; align-items: center; gap: 0.75rem;">
-                    <i class="fas fa-lightbulb" style="color: #d4af37; font-size: 1.75rem;"></i>
-                    Building Trust in Your Investment System
-                </h3>
-                <p style="color: rgba(255,255,255,0.75); line-height: 1.8; margin-bottom: 1rem;">
-                    <strong>Start with Virtual Trading:</strong> Before committing real capital, we strongly recommend testing EPIG in a virtual/paper trading account for 2-3 months. This allows you to build confidence in the systematic framework, understand the decision-making process, and experience the strategy's mechanics without financial risk. Track the TradingView model portfolio alongside your virtual account to validate the approach works as described.
-                </p>
-                <p style="color: rgba(255,255,255,0.75); line-height: 1.8; margin-bottom: 1rem;">
-                    <strong>Risk Capital Only:</strong> When ready to deploy real capital, use only risk capital—money you can afford to lose without affecting your lifestyle or long-term financial goals. EPIG 500 targets returns 20% above market with only 20% of market drawdown, but no strategy is perfect. Start with a position size that allows you to sleep well at night (typically 10-25% of investable assets), then scale as confidence grows.
-                </p>
-                <p style="color: rgba(255,255,255,0.75); line-height: 1.8; margin-bottom: 1rem;">
-                    <strong>Focus on the End Goal:</strong> Your objective isn't to win every single trade—it's to achieve superior risk-adjusted returns over 3-5+ year periods by systematically capturing market upside while avoiding catastrophic drawdowns. Think in terms of wealth compounding over decades, not short-term wins. The real power of EPIG emerges during the next major correction when capital preservation creates exponential advantage.
-                </p>
-                <p style="color: rgba(255,255,255,0.75); line-height: 1.8; margin-bottom: 0;">
-                    <strong>Embrace Imperfection & Drawdowns:</strong> No investment system achieves 100% winning trades—EPIG will have losing positions and temporary drawdown periods (typically 5-15% from peak). This is normal and expected. What matters is the systematic process, disciplined risk management, and long-term statistical edge. During drawdowns, trust the framework, maintain position sizing discipline, and remember that preservation of capital during major market corrections (2008, 2020, 2022) is where EPIG creates lasting wealth advantage. Building faith in any systematic approach requires experiencing both wins and losses while staying committed to the process.
-                </p>
-            </div>
-
-            <div class="cta-content">
-                <div class="benefits-section">
-                    <h3 class="benefits-title">What You Get as a Member</h3>
-                    <div class="benefits-grid">
-                        <div class="benefit-item">
-                            <i class="fas fa-chart-line benefit-icon"></i>
-                            <h4>Live Model Portfolio Access</h4>
-                            <p>Track our real-time positions and performance on TradingView. See exactly what we're invested in, position sizes, entry points, and ongoing P&L.</p>
-                        </div>
-                        <div class="benefit-item">
-                            <i class="fas fa-bell benefit-icon"></i>
-                            <h4>Real-Time Investment Alerts</h4>
-                            <p>Get instant notifications on our Skool community when we enter or exit positions, adjust stops, or identify new opportunities.</p>
-                        </div>
-                        <div class="benefit-item">
-                            <i class="fas fa-microscope benefit-icon"></i>
-                            <h4>5-Step Research Analysis</h4>
-                            <p>Access detailed breakdowns of our systematic research process: AOMG identification, disruption tracking, Mag 7 monitoring, episodic pivots, and bias analysis.</p>
-                        </div>
-                        <div class="benefit-item">
-                            <i class="fas fa-shield-alt benefit-icon"></i>
-                            <h4>Risk Management Framework</h4>
-                            <p>Learn our position sizing methodology, portfolio heat calculations, and dynamic allocation strategies that protect capital during corrections.</p>
-                        </div>
-                        <div class="benefit-item">
-                            <i class="fas fa-users benefit-icon"></i>
-                            <h4>Exclusive Community Access</h4>
-                            <p>Join a community of serious investors, participate in discussions, ask questions, and learn from peers implementing EPIG strategies.</p>
-                        </div>
-                        <div class="benefit-item">
-                            <i class="fas fa-file-alt benefit-icon"></i>
-                            <h4>Weekly Market Intelligence</h4>
-                            <p>Receive comprehensive weekly reports covering market conditions, sector trends, valuation analysis, and strategic positioning recommendations.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="subscription-form-container">
-                    <div class="form-card">
-                        <div class="form-header">
-                            <h3>Get Started with EPIG Today</h3>
-                            <p>Choose how you'd like to engage with our investment strategy</p>
-                        </div>
-                        
-                        <div class="cta-options">
-                            <div class="cta-option-card">
-                                <div class="cta-icon">
-                                    <i class="fas fa-chart-bar"></i>
-                                </div>
-                                <h4>View Model Portfolio</h4>
-                                <p>Track our live positions and performance on TradingView. See real-time holdings, entry/exit points, and complete transparency.</p>
-                                <a href="https://www.tradingview.com/portfolios/6ac3a3e228d7443ab9885772d66fbc5e/" target="_blank" rel="noopener noreferrer" class="cta-option-button primary">
-                                    <i class="fas fa-external-link-alt"></i>
-                                    <span>View on TradingView</span>
-                                </a>
-                            </div>
-
-                            <div class="cta-option-card featured">
-                                <div class="featured-badge">RECOMMENDED</div>
-                                <div class="cta-icon">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <h4>Join Community</h4>
-                                <p>Get real-time investment alerts, participate in discussions, access exclusive research, and learn our systematic framework.</p>
-                                <a href="https://www.skool.com/onepercentsolution-5410/about?ref=10a661019a1b4b3f8ff99baff81ab966" target="_blank" rel="noopener noreferrer" class="cta-option-button secondary">
-                                    <i class="fas fa-arrow-right"></i>
-                                    <span>Join Skool Community</span>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="email-signup-section">
-                            <h4>Or Subscribe for Free Updates</h4>
-                            <p>Get weekly market insights and strategy updates delivered to your inbox</p>
-                            <form id="subscribeForm" class="subscription-form">
-                                <div class="form-inline-group">
-                                    <input type="email" id="email" name="email" required placeholder="Enter your email address">
-                                    <button type="submit" class="form-submit-button">
-                                        <span>Subscribe Free</span>
-                                        <i class="fas fa-arrow-right"></i>
-                                    </button>
-                                </div>
-                                <p class="form-privacy">No credit card required. Unsubscribe anytime.</p>
-                            </form>
-                            <div id="formSuccess" class="form-success" style="display: none;">
-                                <i class="fas fa-check-circle"></i>
-                                <h4>Thank You for Subscribing!</h4>
-                                <p>Check your inbox for a confirmation email.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="trust-indicators">
-                        <div class="trust-item">
-                            <i class="fas fa-shield-alt"></i>
-                            <span>Secure & Private</span>
-                        </div>
-                        <div class="trust-item">
-                            <i class="fas fa-envelope"></i>
-                            <span>No Spam</span>
-                        </div>
-                        <div class="trust-item">
-                            <i class="fas fa-times-circle"></i>
-                            <span>Unsubscribe Anytime</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="section faq-section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Frequently Asked Questions</h2>
-                <p class="section-subtitle">Get answers to common questions about EPIG and Ekantik Capital Advisors (ECA)</p>
-            </div>
-
-            <div class="faq-container">
-                
-                <!-- Category 1: Understanding EPIG Strategy -->
-                <div class="faq-category">
-                    <h3><i class="fas fa-lightbulb"></i> Understanding EPIG Strategy</h3>
-                    <p>Learn what makes EPIG unique and how it differs from traditional approaches</p>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h4>How is EPIG different from traditional investment strategies?</h4>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>EPIG solves three critical problems that doom traditional portfolios: (1) <strong>P/E Independence</strong> - We deliver superior returns regardless of market entry timing through our asymmetric 120%/20% strategy. (2) <strong>Correlation Breaking</strong> - We limit market exposure during crises when traditional diversification fails (correlations spike to >0.95), achieving only 20% of typical drawdowns. (3) <strong>Capital Preservation</strong> - Our 10% max portfolio heat ceiling prevents catastrophic drawdowns. Traditional strategies have no such protections and suffer during corrections.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h4>Why not stay 100% in S&P 500?</h4>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p><strong>The Lost Decade Proof:</strong> Between 2000-2010, 100% S&P 500 returned -0.94% CAGR. EPIG's asymmetric approach (~120% in up years, ~20% drawdown in down years) would have delivered +10.42% CAGR—a $178,635 advantage on $100K.</p>
-
-                        <p><strong>Three Problems with 100% S&P:</strong></p>
-                        <ul>
-                            <li><strong>❌ Valuation Trap:</strong> At CAPE ~40x vs 17x historical average, you're buying at peaks with compressed future returns</li>
-                            <li><strong>❌ Downside Math:</strong> A 50% loss requires 100% gain to break even—you're constantly recovering, not compounding</li>
-                            <li><strong>❌ No Crisis Protection:</strong> Diversification fails when correlations spike to >0.95 during crashes</li>
-                        </ul>
-
-                        <p><strong>EPIG 500's Edge:</strong> Beat market returns by 20% in positive years + only 20% of drawdown in negative years = exponential wealth advantage. Hypothetical proof: $407K+ additional wealth over 20 years on $100K through asymmetric compounding.</p>
-
-                        <p><strong>Bottom Line:</strong> 100% S&P means 100% downside for 100% upside. EPIG offers powerful asymmetry—120% upside participation while limiting downside to just 20% when it matters most.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h4>How does EPIG compare to ideal attributes of an investment strategy (S.C.A.L.E)?</h4>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>The ideal investment strategy should excel at five key attributes. We call this the <strong>S.C.A.L.E framework</strong>. EPIG is <strong>designed</strong> to deliver on all five attributes—though actual results depend on disciplined execution, market conditions, and the quality of research:</p>
-                        
-                        <div style="margin: 20px 0; padding: 15px; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25); border-left: 4px solid rgba(59,130,246,0.6); border-radius: 8px;">
-                            <p style="margin: 0; font-weight: 600; color: rgba(255,255,255,0.92);">📊 EPIG S.C.A.L.E Design Objectives: 5/5 ✅✅✅✅✅</p>
-                            <p style="margin: 5px 0 0 0; font-size: 0.875rem; color: rgba(255,255,255,0.55);"><em>Note: These are design goals and framework attributes, not guaranteed outcomes. Actual performance varies.</em></p>
-                        </div>
-                        
-                        <p><strong>S - Simplicity</strong> ✅ <em>(Design Feature)</em></p>
-                        <p><strong>Framework Design:</strong> 100% stocks (S&P 500/blue chips) in bull markets → shift to cash during corrections. Clear 5-step process (AOMG → Disruption → Magnificent 7 → Episodic Pivots → Bias). Real-time alerts. Transparent TradingView portfolio. Stocks-only approach—accessible to all investor levels.</p>
-                        
-                        <p><strong>C - Cash-Like Liquidity</strong> ✅ <em>(Design Feature)</em></p>
-                        <p><strong>Framework Design:</strong> Instant access to highly liquid instruments (S&P 500 components, ETFs, leading growth stocks). T+2 settlement. Tight spreads ($0.01-0.05). No lock-ups, redemption gates, or forced holding periods. You control your capital—not locked into fund redemption schedules.</p>
-                        
-                        <p><strong>A - Asymmetric Returns</strong> ✅✅ <span style="color: #059669; font-weight: 600;">(Core Design Objective)</span></p>
-                        <p><strong>Framework Target:</strong> Beat market returns by 20% in positive years + only 20% of market drawdown in negative years = exponential compounding advantage. <strong>Historical Illustration:</strong> 2000-2010 showed that this asymmetric approach could have delivered +10.42% CAGR ($178,635 advantage on $100K). In 2015-2024, it could have delivered +18.40% CAGR ($229,263 advantage on $100K). <em>Actual results depend on research quality, execution discipline, and market conditions—not guaranteed.</em></p>
-                        
-                        <p><strong>L - Low Correlation to Markets</strong> ✅ <span style="color: #059669; font-weight: 600;">(Design Objective When It Matters)</span></p>
-                        <p><strong>Framework Design:</strong> Maintain 0.85-0.95 correlation in bull markets (to capture upside). Shift to 100% cash during crises to achieve 0.00 correlation when diversification fails (>0.95 correlation spikes). Cash is the only asset with guaranteed 0.00 correlation—gold and bitcoin often fail when needed most. <em>Success depends on accurate crisis identification and disciplined execution.</em></p>
-                        
-                        <p><strong>E - Externality Protection</strong> ✅ <em>(Design Feature)</em></p>
-                        <p><strong>Framework Design:</strong> 10% Heat ceiling = maximum drawdown <em>targeted</em> at 10% with multi-layer protection: position stops (8-10%) + portfolio cap (10%) + daily VaR. Zero leverage on core. No margin calls. No forced liquidations. Black swan resilience through dynamic cash allocation. <em>Risk controls are designed to limit losses but cannot eliminate all risk—extreme market conditions may exceed targets.</em></p>
-                        
-                        <div style="margin: 20px 0; padding: 15px; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.25); border-left: 4px solid rgba(212,175,55,0.7); border-radius: 8px;">
-                            <p style="margin: 0; font-weight: 600; color: rgba(255,255,255,0.92);"><strong>🏆 Bottom Line:</strong> EPIG is <strong>designed</strong> to address all 5 S.C.A.L.E attributes in one integrated framework. Most strategies excel at 1-2 attributes by design. EPIG's framework <em>aims</em> to deliver all five—actual results depend on execution, research quality, and market conditions.</p>
-                        </div>
-                        
-                        <p><strong>Framework Design Comparison:</strong></p>
-                        <ul>
-                            <li><strong>100% S&P 500:</strong> 2/5 by design - Simple and liquid, but symmetric returns, fully correlated, no protection</li>
-                            <li><strong>60/40 Portfolio:</strong> 1/5 by design - Simple, but bonds illiquid in crises, symmetric, correlated</li>
-                            <li><strong>Hedge Funds:</strong> 2/5 by design - Asymmetric and low correlation, but complex, illiquid lock-ups, opaque, expensive</li>
-                            <li><strong>Real Estate:</strong> 0/5 by design - Complex, illiquid, symmetric, correlated in recessions, vulnerable</li>
-                            <li><strong>EPIG:</strong> 5/5 by design - Framework addresses all five attributes ✅ <em>(Actual outcomes depend on execution and market conditions)</em></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Category 2: Performance & Returns -->
-                <div class="faq-category">
-                    <h3><i class="fas fa-chart-line"></i> Performance & Returns</h3>
-                    <p>Expected returns, historical performance, and live portfolio verification</p>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h4>What kind of returns can I expect with EPIG?</h4>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p><strong>Target Performance: Beat market returns by 20% in positive years, only 20% of market drawdown in negative years.</strong> When the S&P 500 is up 20%, we target ~24% returns. When the market is down 20%, we target just ~4% drawdown—dramatically outperforming traditional approaches.</p>
-
-                        <p><strong>Historical Evidence (Illustrative Analysis):</strong> Our analysis shows that achieving 120% of market gains in positive years and only 20% of losses in negative years would have:</p>
-                        <ul>
-                            <li><strong>2000-2010:</strong> Turned a market LOSS (-0.94% CAGR) into a +10.42% CAGR gain — a $178,635 advantage on $100K</li>
-                            <li><strong>2015-2024:</strong> Beat the market's +12.10% CAGR with +18.40% CAGR — a $229,263 advantage on $100K</li>
-                        </ul>
-                        
-                        <p><strong>Live Performance Verification:</strong> Our TradingView model portfolio provides complete transparency and accountability:</p>
-                        <ul>
-                            <li>✅ <strong>Real-Time Tracking</strong> - Every trade sent to Skool members is executed in the model portfolio simultaneously</li>
-                            <li>✅ <strong>Historical Track Record</strong> - Review past performance to see how EPIG has performed in actual market conditions</li>
-                            <li>✅ <strong>No Backtesting</strong> - Model portfolio reflects live trades, not hypothetical simulations</li>
-                            <li>✅ <strong>Full Transparency</strong> - Entry/exit prices, position sizes, P&L, and portfolio heat visible to all</li>
-                        </ul>
-                        
-                        <p><strong>Important Disclaimer:</strong> Target returns are aspirational goals based on systematic methodology. Actual results depend on research quality, market conditions, and disciplined execution. Performance varies and is not guaranteed. <strong>View the TradingView model portfolio to evaluate actual live performance before committing</strong>: <a href="https://www.tradingview.com/portfolios/6ac3a3e228d7443ab9885772d66fbc5e/" target="_blank" rel="noopener noreferrer" style="color: #7eb8f7; text-decoration: underline;">Live Model Portfolio</a></p>
-                    </div>
-                </div>
-
-                <!-- Category 3: Strategy & Methodology -->
-                <div class="faq-category">
-                    <h3><i class="fas fa-cogs"></i> Strategy & Methodology</h3>
-                    <p>How the systematic research framework and risk management work</p>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h4>How does the systematic 5-step research framework work?</h4>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Our Modus Operandi combines: (1) <strong>AOMG Identification</strong> - Analyze macro trends to pinpoint Areas of Maximum Growth. (2) <strong>Disruption Tracking</strong> - Monitor breakthrough innovations and superlative products. (3) <strong>Magnificent 7 Monitoring</strong> - Track leading tech companies shaping market narrative. (4) <strong>Episodic Pivots</strong> - Identify turning points triggered by catalysts. (5) <strong>Bias Analysis</strong> - Evaluate sentiment shifts and cognitive biases. This disciplined methodology identifies high-potential opportunities before they become obvious to the market.</p>
-                    </div>
-                </div>
-
-                <!-- Category 4: Getting Started -->
-                <div class="faq-category">
-                    <h3><i class="fas fa-rocket"></i> Getting Started</h3>
-                    <p>Who EPIG is for, how to join, and practical implementation details</p>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h4>Who is EPIG suitable for?</h4>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p><strong>EPIG is designed for investors of all experience levels—from beginners just starting their investment journey to seasoned professionals.</strong> The stocks-only approach makes it accessible to anyone who can buy and sell stocks through a brokerage account.</p>
-                        
-                        <p><strong>Ideal EPIG Member Profile:</strong></p>
-                        <ul>
-                            <li>✅ <strong>All Experience Levels Welcome:</strong> Whether you're a complete beginner or experienced investor—EPIG's systematic framework guides you step-by-step</li>
-                            <li>✅ <strong>Stocks-Only Approach:</strong> No options knowledge required—100% stock investments in S&P 500 components and leading growth companies</li>
-                            <li>✅ <strong>Willingness to Learn:</strong> Comfortable following a systematic framework with clear entry/exit signals and position sizing guidance</li>
-                            <li>✅ <strong>Capital Preservation Focus:</strong> Value protecting capital during downturns over chasing every market rally</li>
-                            <li>✅ <strong>Long-Term Horizon:</strong> 3-5+ year investment timeline; not day trading or seeking quick profits</li>
-                            <li>✅ <strong>Adequate Capital:</strong> $10K+ portfolio size recommended (see "Minimum Portfolio Size" FAQ for scaling details)</li>
-                            <li>✅ <strong>Self-Directed:</strong> Comfortable executing stock trades in your own brokerage account based on research and alerts</li>
-                            <li>✅ <strong>Systematic Approach:</strong> Value discipline and consistency over emotional decision-making</li>
-                        </ul>
-                        
-                        <p><strong>EPIG is NOT suitable for:</strong></p>
-                        <ul>
-                            <li>❌ Investors seeking guaranteed returns or "get rich quick" schemes</li>
-                            <li>❌ Those uncomfortable with any active portfolio monitoring (requires periodic reviews)</li>
-                            <li>❌ Very small portfolios below $10K (insufficient position sizing flexibility)</li>
-                            <li>❌ Day traders or short-term speculators (EPIG is systematic, not reactive)</li>
-                            <li>❌ Completely passive investors who want "set it and forget it" (requires following alerts and executing trades)</li>
-                        </ul>
-                        
-                        <div style="margin: 20px 0; padding: 15px; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25); border-left: 4px solid rgba(59,130,246,0.6); border-radius: 8px;">
-                            <p style="margin: 0; font-weight: 600; color: rgba(255,255,255,0.92);"><strong>💡 Bottom Line:</strong> EPIG is perfect for beginners who want to start investing the right way—with a proven systematic framework that protects capital. It's also ideal for experienced investors frustrated with traditional approaches that fail during corrections. The stocks-only strategy removes complexity while maintaining the power of systematic research and disciplined risk management.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h4>How does the risk management framework protect my capital?</h4>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p><strong>The Heat Model: 10% Maximum Portfolio Risk</strong></p>
-                        <p>Our "Heat Model" defines a total risk budget of 10% of current equity, creating a protective ceiling. Position sizing is calculated so that even if all stops are hit simultaneously, the maximum drawdown is targeted at 10%, preserving 90% of equity for continued compounding.</p>
-                        
-                        <p><strong>Dynamic Portfolio Allocation Based on Market Regime:</strong></p>
-                        <p>EPIG adjusts allocation opportunistically to match market conditions:</p>
-                        <ul>
-                            <li><strong>70-100% SPY (S&P 500):</strong> Core market exposure—scales from 70% in mixed conditions up to 100% during confirmed bull markets with low volatility</li>
-                            <li><strong>0-20% Long Term Stocks:</strong> High-quality growth stocks identified through our 5-step AOMG framework—allocated when compelling opportunities exist</li>
-                            <li><strong>0-10% Short Term Bets:</strong> Tactical stock positions capturing near-term catalysts, earnings plays, or technical setups—deployed opportunistically</li>
-                            <li><strong>0-100% Cash:</strong> During corrections (>10% potential) or high-risk regimes, EPIG shifts to cash to preserve capital—eliminating the "Volatility Tax"</li>
-                        </ul>
-                        
-                        <p><strong>Risk Management in Practice:</strong></p>
-                        <ul>
-                            <li>✅ <strong>Bull Markets:</strong> 100% allocated (70-100% SPY + 0-20% quality stocks + 0-10% tactical) with 10% VaR limit</li>
-                            <li>✅ <strong>Corrections:</strong> Shift to 30-50% stocks and 50-70% cash with 3-5% VaR to protect capital</li>
-                            <li>✅ <strong>Severe Downturns:</strong> Move to 100% cash (0.00 correlation) when >10% correction risk is high</li>
-                        </ul>
-                        
-                        <p><strong>Bottom Line:</strong> This mathematical, regime-based approach eliminates the "Volatility Tax" that devastates traditional portfolios. All investments are in liquid stocks—no options complexity. The framework is designed to be beginner-friendly while delivering sophisticated risk management.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h4>How do I get started and access the model portfolio?</h4>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p><strong>Two Ways to Engage with EPIG:</strong></p>
-                        
-                        <p><strong>Option 1: View Model Portfolio (TradingView)</strong></p>
-                        <p>Access our live TradingView portfolio to see EPIG in action. This portfolio:</p>
-                        <ul>
-                            <li>✅ <strong>Replicates All Skool Community Trades</strong> - Every entry/exit alert sent to paid members is executed in the model portfolio with full transparency</li>
-                            <li>✅ <strong>Shows Live Performance</strong> - Track current positions, P&L, portfolio heat, and allocation in real-time</li>
-                            <li>✅ <strong>Historical Track Record</strong> - Review past trades and performance to evaluate EPIG's effectiveness before committing</li>
-                            <li>✅ <strong>Complete Transparency</strong> - See exact entry/exit prices, position sizes, holding periods, and outcomes</li>
-                            <li>✅ <strong>Educational Value</strong> - Study how the 5-step research framework translates into actual positions</li>
-                        </ul>
-                        <p><em>Best for: Due diligence and evaluating EPIG's historical performance before joining the paid community.</em></p>
-                        
-                        <div style="margin: 20px 0; padding: 15px; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25); border-left: 4px solid rgba(59,130,246,0.6); border-radius: 8px;">
-                            <p style="margin: 0; font-weight: 600; color: rgba(255,255,255,0.92);"><strong>🔗 Model Portfolio Link:</strong> <a href="https://www.tradingview.com/portfolios/6ac3a3e228d7443ab9885772d66fbc5e/" target="_blank" rel="noopener noreferrer" style="color: #7eb8f7; text-decoration: underline;">View on TradingView</a> - The model portfolio serves as proof of performance and replicates every trade sent to Skool members. Past performance visible for transparency and evaluation.</p>
-                        </div>
-                        
-                        <p><strong>Option 2: Join Skool Community (Featured - Full Access)</strong></p>
-                        <p>Become a paid member to receive the real-time alerts that drive the model portfolio:</p>
-                        <ul>
-                            <li>✅ <strong>Real-Time Investment Alerts</strong> - Get notified immediately when positions are entered/exited (same trades executed in model portfolio)</li>
-                            <li>✅ <strong>5-Step Research Analysis</strong> - Understand the "why" behind each trade using our systematic framework</li>
-                            <li>✅ <strong>Risk Management Guidance</strong> - Position sizing, portfolio heat monitoring, stop-loss levels</li>
-                            <li>✅ <strong>Community Discussions</strong> - Engage with other investors, ask questions, share insights</li>
-                            <li>✅ <strong>Weekly Market Intelligence</strong> - Comprehensive analysis, AOMG identification, upcoming catalysts</li>
-                            <li>✅ <strong>Educational Resources</strong> - Webinars, enhancement strategies, continuous learning</li>
-                        </ul>
-                        <p><em>Best for: Active implementation of EPIG strategy with real-time guidance and community support.</em></p>
-                        
-                        <div style="margin: 20px 0; padding: 15px; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.25); border-left: 4px solid rgba(212,175,55,0.7); border-radius: 8px;">
-                            <p style="margin: 0; font-weight: 600; color: rgba(255,255,255,0.92);"><strong>🔗 Skool Community Link:</strong> <a href="https://www.skool.com/onepercentsolution-5410/about?ref=10a661019a1b4b3f8ff99baff81ab966" target="_blank" rel="noopener noreferrer" style="color: #7eb8f7; text-decoration: underline;">Join Skool Group</a> - Paid subscription required. All trade alerts are simultaneously executed in the public TradingView model portfolio for full accountability.</p>
-                        </div>
-                        
-                        <p><strong>Recommended Path:</strong></p>
-                        <ol>
-                            <li><strong>Step 1:</strong> Review the TradingView model portfolio to evaluate historical performance and understand trade structure</li>
-                            <li><strong>Step 2:</strong> Join the email list (free) to receive market updates and strategy insights</li>
-                            <li><strong>Step 3:</strong> When ready, join the Skool community (paid) to receive real-time alerts and implement EPIG in your own account</li>
-                            <li><strong>Step 4:</strong> Execute trades in your brokerage while monitoring the model portfolio for validation and learning</li>
-                        </ol>
-                        
-                        <p><strong>Key Point:</strong> The TradingView model portfolio is not "backtested" or hypothetical—it represents actual trades executed in real-time based on Skool alerts. This provides complete transparency and accountability for EPIG's performance claims.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h4>What time commitment is required to follow EPIG?</h4>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p><strong>Flexible Time Commitment Based on Your Engagement Level:</strong></p>
-                        
-                        <p><strong>Minimum Time (Execution Only): 5-15 minutes per trade</strong></p>
-                        <ul>
-                            <li>✅ Receive real-time alerts via Skool community</li>
-                            <li>✅ Execute trades in your brokerage account (2-5 minutes per position)</li>
-                            <li>✅ Track model portfolio on TradingView for updates</li>
-                            <li>✅ Follow entry/exit signals without deep analysis</li>
-                        </ul>
-                        <p><em>Best for: Busy investors who trust the systematic framework and prefer execution-only approach.</em></p>
-                        
-                        <p><strong>Moderate Engagement: 1-2 hours per week</strong></p>
-                        <ul>
-                            <li>✅ Review weekly market analysis reports (30-45 minutes)</li>
-                            <li>✅ Monitor daily portfolio heat checklists (5-10 minutes daily)</li>
-                            <li>✅ Participate in community discussions (optional)</li>
-                            <li>✅ Understand the "why" behind each trade</li>
-                        </ul>
-                        <p><em>Best for: Active investors who want deeper understanding of strategy mechanics and market context.</em></p>
-                        
-                        <p><strong>Full Immersion: 3-5+ hours per week</strong></p>
-                        <ul>
-                            <li>✅ Deep dive into 5-step research analysis</li>
-                            <li>✅ Engage in community discussions and peer learning</li>
-                            <li>✅ Attend webinars and educational sessions</li>
-                            <li>✅ Study enhancement strategies (tax-loss harvesting, options premium, etc.)</li>
-                            <li>✅ Develop your own analysis skills using EPIG framework</li>
-                        </ul>
-                        <p><em>Best for: Dedicated investors seeking mastery of the methodology and maximum value extraction.</em></p>
-                        
-                        <div style="margin: 20px 0; padding: 15px; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.25); border-left: 4px solid rgba(212,175,55,0.7); border-radius: 8px;">
-                            <p style="margin: 0; font-weight: 600; color: rgba(255,255,255,0.92);"><strong>✅ Perfect for All Levels:</strong> EPIG's stocks-only approach is accessible to beginners and experienced investors alike. Time commitment is flexible—from simple execution (5-15 min/trade) to full immersion (5+ hours/week). No options knowledge required. Start simple, grow your expertise over time.</p>
-                        </div>
-                        
-                        <p><strong>Bottom Line:</strong> Your time commitment is entirely up to you. Execute stock trade alerts with minimal time investment, or deeply engage with research and community for maximum learning. The systematic framework works either way and is designed to be beginner-friendly.</p>
-                    </div>
-                </div>
-
-                <!-- Category 6: Advanced Topics -->
-                <div class="faq-category">
-                    <h3><i class="fas fa-graduation-cap"></i> Advanced Topics</h3>
-                    <p>Optional enhancement strategies for experienced investors (not required for core EPIG)</p></p>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h4>How can I unlock additional value on top of EPIG?</h4>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>EPIG 500's core stocks-only framework targets 120% of market returns in positive years and only 20% of market drawdown in negative years—accessible to all investor levels. <strong>Advanced/experienced investors</strong> may optionally explore additional strategies beyond the core framework:</p>
-                        
-                        <div style="margin: 20px 0; padding: 15px; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.25); border-left: 4px solid rgba(212,175,55,0.7); border-radius: 8px;">
-                            <p style="margin: 0; font-weight: 600; color: rgba(255,255,255,0.92);">💡 Potential Additional Alpha: +2-8% annually (highly variable, skill and market-dependent)</p>
-                        </div>
-                        
-                        <p><strong>1. Tax-Loss Harvesting (+1-2% annually)</strong></p>
-                        <p>Strategically realize losses during market drawdowns to offset capital gains, reducing tax burden. EPIG's tactical approach creates natural opportunities. Example: $15K realized losses offset $15K gains = ~$5,250 tax savings (35% bracket). Requires understanding of wash-sale rules and tax bracket optimization. <em>Skill: Intermediate.</em></p>
-                        
-                        <p><strong>2. Tactical Leverage in Low-Risk Environments (+1-3% situational)</strong></p>
-                        <p>When portfolio heat is low (<5%) and market conditions favor (strong trends, low VIX), modestly increase position sizes within the 10% risk budget ceiling. Only during confirmed uptrends with substantial risk buffers. Scale back immediately if heat rises. <em>Skill: Advanced. Requires excellent risk discipline.</em></p>
-                        
-                        <p><strong>3. Sector/Thematic Overlays (+2-5% alpha potential)</strong></p>
-                        <p>Layer targeted exposure (10-20% portfolio) to 2-3 Areas of Maximum Growth (AOMG) themes when macro analysis identifies emerging megatrends. Examples: AI infrastructure, cybersecurity, weight-loss drugs, EVs. Hold 6-24 months. Requires aggressive trailing stops (20-25%) and timing discipline. <em>Skill: Advanced. Theme identification and momentum analysis critical.</em></p>
-                        
-                        <p><strong>Note on Options Strategies:</strong> Advanced investors may independently explore options strategies (covered calls, LEAPs, etc.) as additional enhancements. These require specialized knowledge and are beyond the scope of core EPIG, which focuses exclusively on stocks. Options education is available for those interested, but not required or recommended for most members.</p>
-                        
-                        <div style="margin: 20px 0; padding: 15px; background: rgba(220,38,38,0.1); border: 1px solid rgba(220,38,38,0.25); border-left: 4px solid rgba(220,38,38,0.7); border-radius: 8px;">
-                            <p style="margin: 0; font-weight: 600; color: rgba(255,255,255,0.92);"><strong>⚠️ CRITICAL DISCLAIMER - NO ACCOUNTABILITY FOR ADDITIONAL STRATEGIES:</strong></p>
-                            <ul style="margin: 10px 0 0 0;">
-                                <li><strong>Educational Only</strong> - These enhancement strategies are provided for educational purposes. EPIG does not provide recommendations, guidance, or alerts for these additional strategies.</li>
-                                <li><strong>No Accountability</strong> - We take NO responsibility or accountability for any additional investment or trading activities beyond the core EPIG framework (model portfolio trades sent to Skool community).</li>
-                                <li><strong>Independent Implementation</strong> - Any enhancement strategies are implemented independently by members at their own discretion and risk. Outcomes are determined by individual investing acumen, market conditions, execution timing, and psychological factors.</li>
-                                <li><strong>Core EPIG Only</strong> - Our accountability is limited exclusively to the core EPIG trades executed in the TradingView model portfolio and sent as alerts to Skool members. Nothing beyond that scope.</li>
-                                <li><strong>High Risk</strong> - Enhancement strategies involve additional complexity and risk. Many sophisticated investors fail at these approaches. Not suitable for all members.</li>
-                                <li><strong>No Performance Claims</strong> - Estimated alpha ranges (+1-5%) are illustrative examples based on academic research and market history, not guarantees or projections of actual results.</li>
-                            </ul>
-                        </div>
-                        
-                        <p><strong>Bottom Line:</strong> EPIG's core stocks-only framework (model portfolio trades) is our sole focus and accountability. Enhancement strategies are optional educational topics for advanced investors who choose to explore additional alpha generation independently. Master the core EPIG framework first—it already delivers significant advantage ($407K+ over 20 years on $100K per historical analysis). Enhancements are for experienced investors only and implemented entirely at your own risk.</p>
-                    </div>
-                </div>
-
-                <!-- Category 5: Pricing & Requirements -->
-                <div class="faq-category">
-                    <h3><i class="fas fa-dollar-sign"></i> Pricing & Requirements</h3>
-                    <p>Fee structure, minimum portfolio size, and membership details</p>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h4>What is the fee structure?</h4>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>EPIG operates on a transparent <strong>subscription-based model</strong> with flexible monthly or annual payment options. Pricing structure is currently being finalized and will be announced soon.</p>
-                        
-                        <p><strong>What's Included:</strong></p>
-                        <ul>
-                            <li>✅ <strong>Real-Time Investment Alerts</strong> - Entry/exit signals for all positions</li>
-                            <li>✅ <strong>Live Model Portfolio Access</strong> - Full transparency on TradingView</li>
-                            <li>✅ <strong>5-Step Research Analysis</strong> - Systematic framework guidance</li>
-                            <li>✅ <strong>Risk Management Tools</strong> - Heat Model, position sizing, VaR calculations</li>
-                            <li>✅ <strong>Community Access</strong> - Skool group with peer discussions and support</li>
-                            <li>✅ <strong>Weekly Market Intelligence</strong> - Comprehensive analysis and outlook</li>
-                        </ul>
-                        
-                        <p><strong>No Hidden Fees:</strong> No asset-under-management (AUM) fees, no performance fees, no commissions. You maintain 100% control of your capital in your own brokerage account. Simple subscription pricing with full access to all research, alerts, and community resources.</p>
-                        
-                        <p><em>Join our email list or Skool community to be notified when pricing details are finalized.</em></p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question" onclick="toggleFaq(this)">
-                        <h4>What is the minimum portfolio size required?</h4>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p><strong>Model Portfolio Baseline: $100,000</strong></p>
-                        
-                        <p>Our real-time price alerts and model portfolio performance tracking are based on a <strong>$100,000 baseline portfolio</strong>. This standardized approach ensures clear position sizing, risk management, and performance measurement.</p>
-                        
-                        <p><strong>Recommended Minimum: $10,000-$25,000</strong></p>
-                        
-                        <p>While the model is based on $100K, investors with smaller portfolios can participate by <strong>scaling position sizes proportionally</strong>:</p>
-                        
-                        <ul>
-                            <li><strong>$100K Portfolio:</strong> Follow model positions at 100% (baseline)</li>
-                            <li><strong>$50K Portfolio:</strong> Scale positions to 50% of model size</li>
-                            <li><strong>$25K Portfolio:</strong> Scale positions to 25% of model size</li>
-                            <li><strong>$10K Portfolio:</strong> Scale positions to 10% of model size</li>
-                        </ul>
-                        
-                        <div style="margin: 20px 0; padding: 15px; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25); border-left: 4px solid rgba(59,130,246,0.6); border-radius: 8px;">
-                            <p style="margin: 0; font-weight: 600; color: rgba(255,255,255,0.92);"><strong>💡 Example:</strong> If the model portfolio allocates $5,000 (5%) to a stock position, an investor with a $50K portfolio would allocate $2,500 (5%), and a $10K portfolio would allocate $500 (5%)—maintaining the same percentage allocation and risk profile.</p>
-                        </div>
-                        
-                        <p><strong>Why $10K-$25K Minimum Recommended?</strong></p>
-                        <ul>
-                            <li>✅ <strong>Position Sizing Flexibility</strong> - Ability to diversify across 5-8 stock positions (typical portfolio structure)</li>
-                            <li>✅ <strong>Stocks-Only Simplicity</strong> - No pattern day trader rules or options approval needed—just a standard brokerage account</li>
-                            <li>✅ <strong>Risk Management Practicality</strong> - 10% max portfolio heat = $1K-$2.5K maximum risk budget, allowing meaningful position sizes</li>
-                            <li>✅ <strong>Cost Efficiency</strong> - Trading costs (commissions, spreads) represent smaller percentage of position sizes</li>
-                        </ul>
-                        
-                        <p><strong>Below $10K?</strong> You can still participate! Scale positions proportionally (e.g., $5K portfolio = 5% of model sizes). However, very small portfolios may face limitations in diversification. Consider focusing on 2-3 core positions initially and growing your portfolio over time.</p>
-                        
-                        <p><em>Note: All investors maintain 100% control of their capital in their own brokerage accounts. EPIG provides research, alerts, and guidance—not discretionary management.</em></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Disclaimer Section -->
-    <section class="disclaimer-section">
-        <div class="container">
-            <div class="disclaimer-content">
-                <h4><i class="fas fa-exclamation-triangle"></i> Important Risk Disclosure</h4>
-                <p>
-                    <strong>Investment Risk:</strong> All investments involve risk, including the possible loss of principal. Past performance does not guarantee future results. The strategies and research presented are for educational and informational purposes only and should not be considered as personalized investment advice.
-                </p>
-                <p>
-                    <strong>No Guarantee of Returns:</strong> Target performance of beating market returns by 20% in positive years and ~20% of market drawdown in negative years are aspirational goals based on systematic methodology and historical analysis. The backtested hypothetical CAGR of 18.1% (2015-2026) represents what hypothetically could have occurred had the strategy been executed perfectly. Actual results may vary significantly based on market conditions, execution timing, and individual circumstances. The presented research framework and risk management approach do not guarantee profits or protect against all losses.
-                </p>
-                <p>
-                    <strong>Stock Market Risk:</strong> Investing in stocks involves substantial risk, including the possible loss of principal. Stock prices can be volatile and may decline significantly during market downturns. The stocks-only approach is designed to be accessible to all investor levels while maintaining disciplined risk management through position sizing and stop-losses.
-                </p>
-                <p>
-                    <strong>Do Your Own Research:</strong> Before implementing any investment strategy, consult with a qualified financial advisor who understands your specific situation, risk tolerance, and investment objectives. The EPIG framework requires active management, ongoing monitoring, and disciplined execution.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <span class="logo-eca">ECA</span>
-                        <span class="logo-divider">|</span>
-                        <span class="logo-text">Ekantik Capital Advisors</span>
-                    </div>
-                    <p>Ekantik Capital Advisors LLC - Strategic wealth protection through systematic research and first principles investing.</p>
-                    <div class="footer-badges">
-                        <div class="badge-item">
-                            <i class="fas fa-shield-check"></i>
-                            <span>Risk-Managed</span>
-                        </div>
-                        <div class="badge-item">
-                            <i class="fas fa-chart-line"></i>
-                            <span>Data-Driven</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="footer-links">
-                    <h4>Quick Links</h4>
-                    <a href="#what">What We Offer</a>
-                    <a href="#how">How It Works</a>
-                    <a href="#proof">Research & Proof</a>
-                    <a href="#subscribe">Get Started</a>
-                    <a href="https://www.tradingview.com/portfolios/6ac3a3e228d7443ab9885772d66fbc5e/" target="_blank" rel="noopener noreferrer">Model Portfolio</a>
-                    <a href="#" style="color: rgba(255, 255, 255, 0.6); font-size: 0.875rem; font-style: italic;">Advanced Options Strategy <span style="font-size: 0.75rem;">(Coming Soon)</span></a>
-                </div>
-                <div class="footer-contact">
-                    <h4>Connect With Us</h4>
-                    <p><i class="fas fa-globe"></i> Model Portfolio: <a href="https://www.tradingview.com/portfolios/6ac3a3e228d7443ab9885772d66fbc5e/" target="_blank" rel="noopener noreferrer" style="color: rgba(255, 255, 255, 0.9); text-decoration: underline;">TradingView</a></p>
-                    <p><i class="fas fa-users"></i> Community: <a href="https://www.skool.com/onepercentsolution-5410/about?ref=10a661019a1b4b3f8ff99baff81ab966" target="_blank" rel="noopener noreferrer" style="color: rgba(255, 255, 255, 0.9); text-decoration: underline;">Skool Group</a></p>
-                    <div class="social-links">
-                        <a href="https://www.linkedin.com/company/ekantik" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-                        <a href="https://twitter.com/ekantik" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="https://www.youtube.com/@ekantik" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Ekantik Capital Advisors LLC. All rights reserved.</p>
-                <div class="footer-legal">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Risk Disclaimer</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Video Modal -->
-    <div id="video-modal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeVideoModal()">&times;</span>
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <p class="modal-caption">Watch: Understanding the EPIG Strategy Framework</p>
+        <div class="hero__visual" aria-hidden="true">
+            <svg viewBox="0 0 360 440" class="ladder ladder--hero" role="img" aria-label="The Compounding Ladder">
+                <defs>
+                    <linearGradient id="goldGrad" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stop-color="#E5C673"/>
+                        <stop offset="100%" stop-color="#C8A951"/>
+                    </linearGradient>
+                </defs>
+                <!-- risk line -->
+                <line x1="20" y1="410" x2="340" y2="410" stroke="#C8A951" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.55"/>
+                <text x="20" y="430" fill="#FAF8F5" font-size="11" font-family="Source Sans 3" opacity="0.7">Risk per trade ≈ 0.5% (constant)</text>
+                <!-- steps -->
+                <g class="ladder__steps">
+                    <rect x="30"  y="350" width="60" height="50" rx="3" fill="#243A66" stroke="#C8A951" stroke-opacity="0.35"/>
+                    <rect x="90"  y="290" width="60" height="60" rx="3" fill="#2A4475" stroke="#C8A951" stroke-opacity="0.35"/>
+                    <rect x="150" y="220" width="60" height="70" rx="3" fill="#314F86" stroke="#C8A951" stroke-opacity="0.35"/>
+                    <rect x="210" y="140" width="60" height="80" rx="3" fill="#385A97" stroke="#C8A951" stroke-opacity="0.5"/>
+                    <rect x="270" y="50"  width="60" height="90" rx="3" fill="url(#goldGrad)"/>
+                </g>
+                <!-- step labels -->
+                <g fill="#FAF8F5" font-size="11" font-family="Source Sans 3" text-anchor="middle" opacity="0.85">
+                    <text x="60"  y="378">1</text>
+                    <text x="120" y="324">2</text>
+                    <text x="180" y="259">3</text>
+                    <text x="240" y="184">4</text>
+                    <text x="300" y="100" fill="#1B2A4A" font-weight="700">5+</text>
+                </g>
+                <!-- trajectory arrow -->
+                <path d="M 50 395 Q 180 280 310 70" fill="none" stroke="#C8A951" stroke-width="2" stroke-dasharray="6 5" opacity="0.85"/>
+                <polygon points="305,62 318,72 308,80" fill="#C8A951"/>
+            </svg>
+            <p class="hero__visual-caption"><em>The Compounding Ladder — visualized below.</em></p>
         </div>
     </div>
+    <a href="#problem" class="hero__scroll" aria-label="Scroll to next section">
+        <span></span>
+    </a>
+</section>
 
-    <!-- JavaScript -->
-    <script src="js/script.js"></script>
+<!-- ============ 2. THE HONEST PROBLEM ============ -->
+<section class="section section--ivory" id="problem">
+    <div class="container container--narrow">
+        <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Honest Problem</p>
+        <h2 class="section__h">The wealth you've built is doing one thing. The wealth that compounds does another.</h2>
+        <div class="prose">
+            <p>You've earned and held meaningful capital. Most of it sits in passive equity exposure — SPY, index funds, blue-chip portfolios — growing at the market's pace.</p>
+            <p>That pace is decent. It is also linear. Forty years of disciplined index investing produces, on average, between three and five doublings of capital. This is what most wealth management firms consider success.</p>
+            <p>It is not what extraordinary outcomes are made of.</p>
+            <p>The investors who reach generational wealth — across every century, every market, every discipline — share a single structural feature. They installed a <em>mechanism</em> on top of their passive base. Something that compounds at a higher CAGR than the market, with discipline that doesn't break under pressure, sized so survival is never in question.</p>
+            <p>Most investors never install that mechanism. The few who do, redefine what their wealth can become.</p>
+        </div>
+        <blockquote class="pullquote">
+            <span class="diamond">◆</span>
+            <p>"Don't pick a profession. Pick a mechanism."</p>
+        </blockquote>
+        <p class="prose__closing"><em>Ekantik 500 is the mechanism, engineered for investors who already understand this — and want it installed on top of the wealth they've built, without disturbing it.</em></p>
+        <a href="#ladder" class="transition-link">See the mechanics below ↓</a>
+    </div>
+</section>
+
+<!-- ============ 3. THE COMPOUNDING LADDER ============ -->
+<section class="section section--white" id="ladder">
+    <div class="container">
+        <header class="section__header section__header--center">
+            <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Centerpiece</p>
+            <h2 class="section__h section__h--lg">The Compounding Ladder</h2>
+            <p class="section__sub">The operational mechanism of Ekantik 500 — visualized.</p>
+        </header>
+
+        <div class="ladder-canvas">
+            <svg viewBox="0 0 1100 480" class="ladder ladder--full" role="img" aria-label="The Compounding Ladder — eight-step diagram">
+                <defs>
+                    <linearGradient id="goldGrad2" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stop-color="#E5C673"/>
+                        <stop offset="100%" stop-color="#C8A951"/>
+                    </linearGradient>
+                </defs>
+                <!-- baseline risk line -->
+                <line x1="60" y1="430" x2="1040" y2="430" stroke="#C8A951" stroke-width="1.5" stroke-dasharray="5 5" opacity="0.6"/>
+                <text x="60" y="455" fill="#64748B" font-size="13" font-family="Source Sans 3">Risk per trade ≈ 0.5% of capital (constant across every step)</text>
+
+                <!-- 8 steps -->
+                <g class="ladder__steps">
+                    <rect x="80"   y="380" width="100" height="50" fill="#1B2A4A"/>
+                    <rect x="200"  y="345" width="100" height="85" fill="#223358"/>
+                    <rect x="320"  y="305" width="100" height="125" fill="#293D67"/>
+                    <rect x="440"  y="260" width="100" height="170" fill="#314776"/>
+                    <rect x="560"  y="210" width="100" height="220" fill="#385285"/>
+                    <rect x="680"  y="155" width="100" height="275" fill="#405D94"/>
+                    <rect x="800"  y="95"  width="100" height="335" fill="#4768A4"/>
+                    <rect x="920"  y="30"  width="100" height="400" fill="url(#goldGrad2)"/>
+                </g>
+
+                <!-- step labels: quarter + contracts -->
+                <g font-family="Source Sans 3" text-anchor="middle">
+                    <g fill="#FAF8F5">
+                        <text x="130" y="408" font-size="13" font-weight="600">Q1</text>
+                        <text x="130" y="425" font-size="11" opacity="0.85">1 contract</text>
+                        <text x="250" y="378" font-size="13" font-weight="600">Q2–Q3</text>
+                        <text x="250" y="395" font-size="11" opacity="0.85">2 contracts</text>
+                        <text x="370" y="340" font-size="13" font-weight="600">Q4</text>
+                        <text x="370" y="357" font-size="11" opacity="0.85">3 contracts</text>
+                        <text x="490" y="295" font-size="13" font-weight="600">Y2 H1</text>
+                        <text x="490" y="312" font-size="11" opacity="0.85">4 contracts</text>
+                        <text x="610" y="245" font-size="13" font-weight="600">Y2 H2</text>
+                        <text x="610" y="262" font-size="11" opacity="0.85">5 contracts</text>
+                        <text x="730" y="190" font-size="13" font-weight="600">Y3 H1</text>
+                        <text x="730" y="207" font-size="11" opacity="0.85">6 contracts</text>
+                        <text x="850" y="130" font-size="13" font-weight="600">Y3 H2</text>
+                        <text x="850" y="147" font-size="11" opacity="0.85">7 contracts</text>
+                    </g>
+                    <g fill="#1B2A4A">
+                        <text x="970" y="65" font-size="14" font-weight="700">Y4+</text>
+                        <text x="970" y="83" font-size="12" font-weight="600">8+ contracts</text>
+                    </g>
+                </g>
+
+                <!-- trajectory arrow -->
+                <path d="M 130 420 Q 500 320 970 60" fill="none" stroke="#C8A951" stroke-width="2.5" stroke-dasharray="7 6" opacity="0.9"/>
+                <polygon points="962,52 985,68 970,82" fill="#C8A951"/>
+            </svg>
+        </div>
+
+        <div class="three-col">
+            <article class="explainer">
+                <p class="eyebrow"><span class="diamond">◆</span> Disciplined Risk</p>
+                <p>Risk per trade stays constant at approximately 0.5% of capital. At every step. This isn't aspiration — it's mathematics. The dollar amount grows because the capital base grows. The percentage never escalates.</p>
+            </article>
+            <article class="explainer">
+                <p class="eyebrow"><span class="diamond">◆</span> Earned Leverage</p>
+                <p>Position size increases only when verified profits compound the base. The second contract is paid for by the first contract's profits. The third by the second. Scale is <em>earned</em> — never borrowed, never assumed.</p>
+            </article>
+            <article class="explainer">
+                <p class="eyebrow"><span class="diamond">◆</span> Velocity Compounds</p>
+                <p>Each step shortens the time to the next. The first contract takes time to deliver compounding profits. The second contract works on a larger base, accelerating accumulation. By Step 5, the base is doing the heavy lifting and the dollar outcomes climb non-linearly.</p>
+            </article>
+        </div>
+
+        <p class="ladder__closing"><em>This is not a trading product. It is a disciplined wealth architecture, expressed as a ladder, executed as a system.</em></p>
+
+        <p class="compliance">The Compounding Ladder is an illustrative mechanism diagram, not a forecast. Time periods and position sizes are structural representations of the disciplined progression. Actual results vary with market conditions and individual account performance. Past performance does not guarantee future results.</p>
+    </div>
+</section>
+
+<!-- ============ 4. HOW IT WORKS ============ -->
+<section class="section section--ivory" id="how">
+    <div class="container">
+        <div class="two-col">
+            <div class="two-col__left">
+                <p class="eyebrow"><span class="diamond">◆</span> Architecture</p>
+                <h2 class="section__h">What you actually own</h2>
+                <div class="prose">
+                    <p>Ekantik 500 is structured as a separately managed account (SMA) at Interactive Brokers — your account, your name, your custody. You retain ownership of every position. Ekantik holds limited trading authority over the active sleeve only, executed under a Limited Power of Attorney with explicit contractual boundaries.</p>
+                    <p>Inside your dedicated sub-account, two things live: a passive equity foundation (typically SPY) that provides market exposure and serves as margin collateral, and an active cash sleeve where the disciplined futures overlay operates.</p>
+                    <p>The two work together. The equity foundation compounds at the market's pace. The active sleeve climbs The Compounding Ladder. The integrated result is exponentially superior to either component alone.</p>
+                </div>
+            </div>
+            <div class="two-col__right">
+                <ol class="numbered-card">
+                    <li>
+                        <h3>Your sub-account, your custody</h3>
+                        <p>Opened at Interactive Brokers in your name. You hold beneficial ownership of every dollar.</p>
+                    </li>
+                    <li>
+                        <h3>Limited trading authority</h3>
+                        <p>Granted via a one-page Letter of Direction. Authority is strictly bounded to futures and options activity. Revocable at any time.</p>
+                    </li>
+                    <li>
+                        <h3>Mixed-collateral funding</h3>
+                        <p>Your account holds passive SPY exposure as margin collateral plus active cash for the overlay strategy. You choose the mix.</p>
+                    </li>
+                    <li>
+                        <h3>Real-time transparency</h3>
+                        <p>Read-only broker access shows every trade, every position, every dollar — in real time, anytime.</p>
+                    </li>
+                    <li>
+                        <h3>Performance fee anchored to results</h3>
+                        <p>6% high-watermark hurdle plus 25% of profits above that hurdle. We earn when you earn — and only when you earn.</p>
+                    </li>
+                    <li>
+                        <h3>Philanthropic alignment</h3>
+                        <p>100% of performance fees flow to the BAPS Endowment. Ekantik takes zero personal equity from the firm.</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 5. TWO CONFIGURATIONS ============ -->
+<section class="section section--white" id="configurations">
+    <div class="container">
+        <header class="section__header section__header--center">
+            <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> Configurations</p>
+            <h2 class="section__h">Two configurations. Your choice.</h2>
+            <p class="section__sub">Each configuration runs the same disciplined methodology. The difference is how aggressively the active engine is deployed against your equity foundation.</p>
+        </header>
+
+        <div class="config-grid">
+            <article class="config-card">
+                <div class="config-card__bar"></div>
+                <h3 class="config-card__title">Standard</h3>
+                <dl class="config-card__list">
+                    <div><dt>Allocation</dt><dd>80% passive equity foundation · 20% active sleeve</dd></div>
+                    <div><dt>Margin profile</dt><dd>Portfolio Margin eligible at $500K+ NLV</dd></div>
+                    <div><dt>Position sizing</dt><dd>Conservative — typically 1–3 /MES contracts per setup</dd></div>
+                    <div><dt>Best fit</dt><dd>Investors prioritizing capital preservation with meaningful overlay enhancement</dd></div>
+                    <div><dt>NLV minimum</dt><dd>$500,000</dd></div>
+                </dl>
+            </article>
+            <article class="config-card">
+                <div class="config-card__bar"></div>
+                <h3 class="config-card__title">Enhanced</h3>
+                <dl class="config-card__list">
+                    <div><dt>Allocation</dt><dd>70% passive equity foundation · 30% active sleeve</dd></div>
+                    <div><dt>Margin profile</dt><dd>Portfolio Margin standard</dd></div>
+                    <div><dt>Position sizing</dt><dd>Larger — typically 3–5 /ES contracts (or /MES equivalent)</dd></div>
+                    <div><dt>Best fit</dt><dd>Investors with higher conviction in the strategy, seeking maximum sleeve compounding</dd></div>
+                    <div><dt>NLV minimum</dt><dd>$500,000</dd></div>
+                </dl>
+            </article>
+        </div>
+
+        <p class="config-grid__note">Investors typically begin in Standard and migrate to Enhanced after observing the strategy for 6–12 months. The upgrade is an internal reallocation — no new paperwork.</p>
+    </div>
+</section>
+
+<!-- ============ 6. THE EKANTIK STANDARD ============ -->
+<section class="section section--navy" id="standard">
+    <div class="container">
+        <header class="section__header section__header--center">
+            <p class="eyebrow eyebrow--center eyebrow--light"><span class="diamond">◆</span> The Standard</p>
+            <h2 class="section__h section__h--light">The Ekantik Standard</h2>
+            <p class="section__sub section__sub--light"><em>Five non-negotiables that govern every decision, every trade, every disclosure.</em></p>
+        </header>
+
+        <div class="principles">
+            <article class="principle">
+                <div class="principle__icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" width="36" height="36"><circle cx="16" cy="16" r="13" fill="none" stroke="#C8A951" stroke-width="1.5"/><circle cx="16" cy="16" r="6" fill="none" stroke="#C8A951" stroke-width="1.5"/><circle cx="16" cy="16" r="1.5" fill="#C8A951"/></svg>
+                </div>
+                <h3>Maximum Impact</h3>
+                <p><em>We exist to create deep, meaningful financial outcomes for those entrusted to us — not surface-level advice.</em></p>
+            </article>
+            <article class="principle">
+                <div class="principle__icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" width="36" height="36"><path d="M16 4 L26 9 V18 C26 24 16 28 16 28 C16 28 6 24 6 18 V9 Z" fill="none" stroke="#C8A951" stroke-width="1.5"/><path d="M11 16 L15 20 L21 12" fill="none" stroke="#C8A951" stroke-width="1.5"/></svg>
+                </div>
+                <h3>Full Outcome Accountability</h3>
+                <p><em>We own results alongside you. No advisory walk-away. No deflection. Skin in the game, always.</em></p>
+            </article>
+            <article class="principle">
+                <div class="principle__icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" width="36" height="36"><path d="M16 4 L4 10 V22 L16 28 L28 22 V10 Z" fill="none" stroke="#C8A951" stroke-width="1.5"/><path d="M16 4 V28 M4 10 L28 10 M4 22 L28 22" stroke="#C8A951" stroke-width="1" opacity="0.5"/></svg>
+                </div>
+                <h3>100% Fiduciary</h3>
+                <p><em>Your interests are the only interests. Fiduciary duty is our legal floor, not our aspiration.</em></p>
+            </article>
+            <article class="principle">
+                <div class="principle__icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" width="36" height="36"><polygon points="16,4 19,13 28,13 21,19 23,28 16,23 9,28 11,19 4,13 13,13" fill="none" stroke="#C8A951" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                </div>
+                <h3>10× Value</h3>
+                <p><em>Every touchpoint, every conversation, every artifact is engineered to feel disproportionately valuable. Less, but exceptional.</em></p>
+            </article>
+            <article class="principle">
+                <div class="principle__icon" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" width="36" height="36"><rect x="6" y="6" width="20" height="20" fill="none" stroke="#C8A951" stroke-width="1.5"/><path d="M10 11 H22 M10 16 H22 M10 21 H18" stroke="#C8A951" stroke-width="1.5"/></svg>
+                </div>
+                <h3>Radical Transparency</h3>
+                <p><em>Real-time broker access. Every trade visible. Every fee disclosed in advance. No fine print, no exceptions.</em></p>
+            </article>
+        </div>
+
+        <p class="standard__closing">If a competitor cannot match these five — and the data shows none can match all five simultaneously — your wealth deserves the firm that does.</p>
+    </div>
+</section>
+
+<!-- ============ 7. THE PROOF ============ -->
+<section class="section section--ivory" id="proof">
+    <div class="container">
+        <header class="section__header">
+            <p class="eyebrow"><span class="diamond">◆</span> The Proof</p>
+            <h2 class="section__h">The methodology, backtested</h2>
+            <p class="section__sub">Before Ekantik 500 was ever offered to an investor, the underlying methodology was tested across fifteen years of S&amp;P 500 market data — including the 2018 correction, the 2020 pandemic shock, the 2022 bear market, and every regime in between. The results below are backtested. They describe the structural design intent of the system, not a guarantee of future outcomes.</p>
+        </header>
+
+        <div class="metrics">
+            <article class="metric">
+                <p class="metric__label">Backtest Period</p>
+                <p class="metric__value">15 years</p>
+                <p class="metric__detail">Live market data, 2010–2024, inclusive of every major regime.</p>
+            </article>
+            <article class="metric">
+                <p class="metric__label">Statistical Edge</p>
+                <p class="metric__value">Profit Factor 3.06</p>
+                <p class="metric__detail">Net wins are 3× net losses on a per-trade basis.</p>
+            </article>
+            <article class="metric">
+                <p class="metric__label">Robustness</p>
+                <p class="metric__value">8 / 8 Tests Passed</p>
+                <p class="metric__detail">Parameter sensitivity, regime decomposition, walk-forward validation, slippage stress.</p>
+            </article>
+            <article class="metric">
+                <p class="metric__label">Calendar Consistency</p>
+                <p class="metric__value">Every Year Positive</p>
+                <p class="metric__detail">Methodology produced positive returns in each of the 15 backtested years, including 2018 and 2022.</p>
+            </article>
+        </div>
+
+        <div class="drawdown">
+            <h3 class="drawdown__h">Drawdown profile vs. SPY</h3>
+            <div class="drawdown__chart" aria-label="Comparison of maximum drawdown: SPY vs. Ekantik 500 methodology">
+                <div class="drawdown__row">
+                    <span class="drawdown__name">SPY</span>
+                    <div class="drawdown__bar drawdown__bar--spy"><span class="drawdown__val">−33.7%</span></div>
+                </div>
+                <div class="drawdown__row">
+                    <span class="drawdown__name">Ekantik 500</span>
+                    <div class="drawdown__bar drawdown__bar--e500"><span class="drawdown__val">−9.4%</span></div>
+                </div>
+                <p class="drawdown__axis">Maximum drawdown, 2010–2024 (backtested)</p>
+            </div>
+            <p class="drawdown__caption"><em>The Ekantik 500 methodology was engineered to refuse the upside-for-downside trade-off that defines the hedged equity category. Structural design intent: participation in equity upside while preserving capital through adverse regimes.</em></p>
+        </div>
+
+        <p class="compliance">All performance figures shown are backtested using historical market data and do not represent actual trading results. Backtested performance has inherent limitations, including but not limited to: hindsight bias in strategy design, assumed perfect execution, and unrepresentative market conditions in future periods. No representation is made that any account will achieve results similar to those shown. Actual investing involves risk, including the risk of loss. Past performance, whether actual or backtested, does not guarantee future results.</p>
+    </div>
+</section>
+
+<!-- ============ 8. FOUNDING MEMBER ACCESS ============ -->
+<section class="section section--navy section--founding" id="founding">
+    <div class="container container--narrow">
+        <p class="eyebrow eyebrow--center eyebrow--light"><span class="diamond">◆</span> Founding Member Access</p>
+        <h2 class="section__h section__h--light section__h--center">Founding Members start at Step 1.</h2>
+
+        <div class="founding__body">
+            <p>The Compounding Ladder has eight steps. Each step is built on the compounded base of the steps before it. The earlier you enter, the more steps of compounding lie ahead of you.</p>
+            <p>Founding Members enter at Step 1 — the ground level. Their capital, deployed today, participates in the entire ladder. Each subsequent investor enters at a higher step, with less compounding ahead of them.</p>
+            <p>This is not artificial scarcity. It is mathematical truth. We are limiting Founding Member capacity to the first cohort of investors who recognize this — and act on it — before the ladder has climbed without them.</p>
+        </div>
+
+        <div class="founding__card">
+            <p class="founding__card-h">Founding Member benefits include</p>
+            <ul class="diamond-list">
+                <li>Direct dialogue with Hiren Desai throughout onboarding and beyond</li>
+                <li>Quarterly strategic letters covering market posture, ladder progression, and mission updates</li>
+                <li>Locked fee schedule for the duration of the relationship — no upward adjustments as AUM scales</li>
+                <li>First-priority access to Ekantik's future product launches</li>
+                <li>The knowledge that 100% of performance fees from your capital flow directly to the BAPS Endowment</li>
+            </ul>
+        </div>
+
+        <div class="founding__cta">
+            <a href="#book" class="btn btn--primary btn--lg">Inquire About Founding Member Access</a>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 9. MISSION ALIGNMENT ============ -->
+<section class="section section--white" id="mission">
+    <div class="container">
+        <div class="two-col">
+            <div class="two-col__left">
+                <p class="eyebrow"><span class="diamond">◆</span> Mission Alignment</p>
+                <h2 class="section__h">Why this firm is structurally different</h2>
+                <div class="prose">
+                    <p>The founder of Ekantik Capital Advisors, Hiren Desai, holds zero economic equity in the firm. By signed and witnessed vow, all dividends, distributions, and sale proceeds of the firm are forfeit. The founder cannot sell the firm for personal gain. He cannot extract capital for personal enrichment. He receives only a market-rate salary and bonus tied to performance scorecards.</p>
+                    <p>One hundred percent of performance fees generated by Ekantik 500 — and every future product line — flow directly to the BAPS Endowment, Inc., a registered nonprofit serving the BAPS Swaminarayan Sanstha community of 1,800+ mandirs worldwide.</p>
+                    <p>The North Star is explicit: build a $50 billion BAPS Endowment by 2045.</p>
+                    <p>This structure does one thing — it makes Ekantik's fiduciary commitment legally and mechanically inseparable from the founder's personal mission. The firm cannot be acquired. The founder cannot exit. The performance fees cannot be redirected. Every dollar Ekantik 500 generates serves either the investor or the endowment — never the personal balance sheet of anyone at the firm.</p>
+                </div>
+                <p class="prose__closing"><em>This is not philanthropy as marketing. It is mission expressed as legal structure.</em></p>
+            </div>
+            <div class="two-col__right">
+                <div class="vow-diagram" role="img" aria-label="Structural diagram: investor capital flows, performance fees to BAPS Endowment, founder zero equity">
+                    <div class="vow-node vow-node--investor">
+                        <p class="vow-node__label">Investor Capital</p>
+                    </div>
+                    <div class="vow-arrow">→</div>
+                    <div class="vow-node vow-node--center">
+                        <p class="vow-node__label">Ekantik 500</p>
+                        <p class="vow-node__sub">Strategy</p>
+                    </div>
+                    <div class="vow-split">
+                        <div class="vow-branch">
+                            <div class="vow-arrow vow-arrow--up">↗</div>
+                            <div class="vow-node vow-node--return">
+                                <p class="vow-node__label">Returns → Investor</p>
+                                <p class="vow-node__sub">Your share</p>
+                            </div>
+                        </div>
+                        <div class="vow-branch">
+                            <div class="vow-arrow vow-arrow--down">↘</div>
+                            <div class="vow-node vow-node--gold">
+                                <p class="vow-node__label">Performance Fees</p>
+                                <p class="vow-node__sub">100% → BAPS Endowment</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="vow-footer">
+                        <p><span class="diamond">◆</span> Founder: zero personal equity · market salary only</p>
+                        <p><span class="diamond">◆</span> Endowment: 10,000+ devotional &amp; educational programs over decades</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 10. FAQ ============ -->
+<section class="section section--ivory" id="faq">
+    <div class="container container--narrow">
+        <header class="section__header section__header--center">
+            <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> FAQ</p>
+            <h2 class="section__h">Common questions</h2>
+        </header>
+
+        <div class="faq">
+            <details class="faq__item">
+                <summary>Do I need to sell my existing portfolio?</summary>
+                <div class="faq__body"><p>No. Ekantik 500 is funded with new capital deposited into a dedicated sub-account at Interactive Brokers. Your existing holdings at other brokerages stay where they are.</p></div>
+            </details>
+            <details class="faq__item">
+                <summary>What happens to my SPY position?</summary>
+                <div class="faq__body"><p>Within the sub-account, your SPY allocation serves two purposes: it provides ongoing market exposure (dividends and capital appreciation) and acts as margin collateral for the active sleeve. We do not trade your SPY — it sits passively while the futures overlay operates against it.</p></div>
+            </details>
+            <details class="faq__item">
+                <summary>How is the 6% hurdle calculated?</summary>
+                <div class="faq__body"><p>Performance fees apply only after your account exceeds the high-water mark by 6% on an annualized basis. In any period where the strategy delivers less than 6%, no performance fee is charged. The hurdle resets annually to your peak.</p></div>
+            </details>
+            <details class="faq__item">
+                <summary>What is the worst-case drawdown I should expect?</summary>
+                <div class="faq__body"><p>The methodology's backtested maximum drawdown over fifteen years was substantially less than that of pure SPY exposure. That said, all investing involves risk, and actual outcomes may differ from backtested results. We disclose maximum drawdown expectations as part of your onboarding consultation, calibrated to your specific configuration choice.</p></div>
+            </details>
+            <details class="faq__item">
+                <summary>Can I withdraw capital at any time?</summary>
+                <div class="faq__body"><p>Yes. Ekantik 500 sub-accounts have no lock-up provisions. You may withdraw capital subject to ordinary settlement timelines at the custodian.</p></div>
+            </details>
+            <details class="faq__item">
+                <summary>Who is Ekantik Capital Advisors LLC accountable to?</summary>
+                <div class="faq__body"><p>The Securities and Exchange Commission (as a Registered Investment Advisor), the IRS, our fiduciary duty to every client, and the BAPS Endowment trustees who receive 100% of our performance fees. Multi-directional accountability is by design.</p></div>
+            </details>
+            <details class="faq__item">
+                <summary>How do I know my capital is safe?</summary>
+                <div class="faq__body"><p>Your capital is custodied at Interactive Brokers, not at Ekantik. We never touch client cash. Our limited trading authority is bounded to futures and options activity in your sub-account only. Limits are documented in the Letter of Direction, which you sign and can revoke at any time.</p></div>
+            </details>
+            <details class="faq__item">
+                <summary>What if I want to change my configuration?</summary>
+                <div class="faq__body"><p>You may move between Standard and Enhanced configurations by reallocating cash between the equity foundation and the active sleeve. This is an internal account adjustment requiring no new paperwork.</p></div>
+            </details>
+            <details class="faq__item">
+                <summary>Is there a minimum holding period?</summary>
+                <div class="faq__body"><p>No formal minimum, but the strategy is designed for multi-year compounding. The Compounding Ladder builds value over quarters and years; entry-and-exit timing tends to undermine the underlying mechanism.</p></div>
+            </details>
+            <details class="faq__item">
+                <summary>Who do I talk to before deciding?</summary>
+                <div class="faq__body"><p>The founder, Hiren Desai, conducts every Founding Member consultation personally. Schedule a private call below.</p></div>
+            </details>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 11. FINAL CTA ============ -->
+<section class="section section--white section--book" id="book">
+    <div class="container container--narrow">
+        <header class="section__header section__header--center">
+            <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> Schedule</p>
+            <h2 class="section__h section__h--xl">Schedule your private consultation.</h2>
+            <p class="section__sub">A 45-minute conversation with the founder. No pitch. No pressure. Just whether Ekantik 500 fits where you are in your wealth journey.</p>
+        </header>
+
+        <div class="booking">
+            <!-- Cal.com embed placeholder. Replace data-cal-link with the live scheduler URL once provisioned. -->
+            <div class="booking__embed" id="calBookingEmbed" data-cal-link="ekantik/ekantik-500-consultation">
+                <div class="booking__fallback">
+                    <p><strong>Booking calendar loading…</strong></p>
+                    <p>If the calendar does not appear, please email <a href="mailto:hiren@ekantikcapital.com">hiren@ekantikcapital.com</a> to schedule a private consultation.</p>
+                    <a href="https://cal.com/ekantik/ekantik-500-consultation" target="_blank" rel="noopener" class="btn btn--primary btn--lg">Open Scheduler</a>
+                </div>
+            </div>
+        </div>
+
+        <p class="compliance compliance--book">By scheduling, you acknowledge that this consultation is not investment advice. Ekantik Capital Advisors LLC is a Registered Investment Advisor. Investing involves risk including potential loss of principal.</p>
+    </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer__cols">
+            <div class="footer__col">
+                <div class="logo logo--footer">
+                    <span class="logo__mark">E</span>
+                    <span class="logo__wordmark">EKANTIK CAPITAL</span>
+                    <span class="logo__sublabel">ADVISORS</span>
+                </div>
+                <p class="footer__tagline">Your Wealth. Our Accountability. Total Transparency.</p>
+                <address class="footer__address">
+                    Ekantik Capital Advisors LLC<br>
+                    <a href="mailto:hiren@ekantikcapital.com">hiren@ekantikcapital.com</a>
+                </address>
+            </div>
+            <div class="footer__col">
+                <h4 class="footer__h"><span class="diamond">◆</span> Products &amp; Properties</h4>
+                <ul class="footer__list">
+                    <li><a href="https://epig500.ekantikcapital.com">Ekantik 500</a></li>
+                    <li><a href="https://doubles.ekantikcapital.com">The Doctrine</a></li>
+                    <li><a href="https://10x.ekantikcapital.com">The Proof</a></li>
+                    <li><a href="https://alpha.ekantikcapital.com">The Research</a></li>
+                    <li><a href="https://founding.ekantikcapital.com">Founding Members</a></li>
+                </ul>
+            </div>
+            <div class="footer__col">
+                <h4 class="footer__h"><span class="diamond">◆</span> Legal &amp; Compliance</h4>
+                <ul class="footer__list">
+                    <li><a href="#">Form ADV Part 2</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                    <li><a href="#">Marketing Disclosures</a></li>
+                    <li><a href="#">Mission Vow &amp; Structure</a></li>
+                </ul>
+            </div>
+        </div>
+        <p class="footer__legal">
+            Ekantik Capital Advisors LLC is a Registered Investment Advisor. Registration does not imply a certain level of skill or training. All performance data is backtested and does not represent actual trading. Past performance does not guarantee future results. Investing involves risk including potential loss of principal. Please review our Form ADV Part 2 before engaging our services. © 2026 Ekantik Capital Advisors LLC. All rights reserved.
+        </p>
+    </div>
+</footer>
+
+<script src="js/script.js"></script>
 </body>
 </html>

@@ -1,191 +1,192 @@
 /* ================================================
-   EKANTIK CAPITAL ADVISORS — EPIG 500
-   Main JavaScript
+   EKANTIK 500 — Landing Page
    ================================================ */
 
-// ================================================
-// Mobile Menu Toggle
-// ================================================
-function toggleMobileMenu() {
-    const menu = document.getElementById('mobileMenu');
-    if (menu) {
-        menu.classList.toggle('active');
-    }
-}
+(function () {
+    'use strict';
 
-// Close mobile menu when clicking outside
-document.addEventListener('click', function(e) {
-    const menu = document.getElementById('mobileMenu');
-    const toggle = document.querySelector('.mobile-menu-toggle');
-    if (menu && toggle && !menu.contains(e.target) && !toggle.contains(e.target)) {
-        menu.classList.remove('active');
-    }
-});
-
-// ================================================
-// Smooth Scroll to Subscribe
-// ================================================
-function scrollToSubscribe() {
-    const el = document.getElementById('subscribe') || document.getElementById('contact');
-    if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-}
-
-// ================================================
-// FAQ Toggle
-// ================================================
-function toggleFaq(element) {
-    const faqItem = element.closest('.faq-item');
-    const answer = faqItem.querySelector('.faq-answer');
-    const isOpen = faqItem.classList.contains('active');
-
-    // Close all open FAQs
-    document.querySelectorAll('.faq-item.active').forEach(item => {
-        item.classList.remove('active');
-        const ans = item.querySelector('.faq-answer');
-        if (ans) ans.style.display = 'none';
-    });
-
-    // Toggle current
-    if (!isOpen) {
-        faqItem.classList.add('active');
-        if (answer) answer.style.display = 'block';
-    }
-}
-
-// ================================================
-// Video Modal
-// ================================================
-function closeVideoModal() {
-    const modal = document.getElementById('video-modal');
-    if (modal) {
-        modal.style.display = 'none';
-        // Stop video by resetting iframe src
-        const iframe = modal.querySelector('iframe');
-        if (iframe) {
-            const src = iframe.src;
-            iframe.src = '';
-            iframe.src = src;
-        }
-    }
-}
-
-// Close modal on backdrop click
-document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('video-modal');
-    if (modal) {
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) closeVideoModal();
+    // ---- Mobile menu ----
+    const menuToggle = document.querySelector('.nav__menu-toggle');
+    const navMobile = document.getElementById('navMobile');
+    if (menuToggle && navMobile) {
+        menuToggle.addEventListener('click', function () {
+            const isOpen = navMobile.classList.toggle('is-open');
+            menuToggle.setAttribute('aria-expanded', String(isOpen));
+        });
+        navMobile.querySelectorAll('a').forEach(function (a) {
+            a.addEventListener('click', function () {
+                navMobile.classList.remove('is-open');
+                menuToggle.setAttribute('aria-expanded', 'false');
+            });
         });
     }
-});
 
-// Close modal on Escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeVideoModal();
-});
+    // ---- Scroll reveal ----
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduceMotion && 'IntersectionObserver' in window) {
+        const targets = document.querySelectorAll(
+            '.section__h, .prose, .pullquote, .ladder-canvas, .three-col, .numbered-card, .config-card, .principle, .metric, .drawdown, .founding__card, .vow-diagram, .faq__item, .booking'
+        );
+        targets.forEach(function (el) { el.classList.add('reveal'); });
 
-// ================================================
-// Email Subscription Form
-// ================================================
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('subscribeForm');
-    if (form) {
-        form.addEventListener('submit', function(e) {
+        const io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+        targets.forEach(function (el) { io.observe(el); });
+    }
+
+    // ---- Smooth scroll for in-page anchors ----
+    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+            const id = link.getAttribute('href');
+            if (!id || id === '#') return;
+            const target = document.querySelector(id);
+            if (!target) return;
             e.preventDefault();
-            const email = document.getElementById('email').value;
-            if (email) {
-                // Hide form, show success
-                form.style.display = 'none';
-                const success = document.getElementById('formSuccess');
-                if (success) success.style.display = 'block';
-                console.log('Email subscribed:', email);
-            }
+            const offset = 72; // sticky nav
+            const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({ top: top, behavior: reduceMotion ? 'auto' : 'smooth' });
         });
+    });
+
+    // ---- Analytics stubs (per spec Section 5.4) ----
+    // These dispatch CustomEvents that any analytics provider (Plausible, Vercel Analytics)
+    // can listen for. Wire to provider once provisioned.
+    function track(name, props) {
+        try {
+            window.dispatchEvent(new CustomEvent('ekantik:track', { detail: { name: name, props: props || {} } }));
+            if (window.plausible) window.plausible(name, { props: props || {} });
+        } catch (e) { /* no-op */ }
     }
-});
 
-// ================================================
-// Navbar scroll effect
-// ================================================
-window.addEventListener('scroll', function() {
-    const navbar = document.querySelector('.navbar');
-    if (navbar) {
-        if (window.scrollY > 50) {
-            navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.4)';
-        } else {
-            navbar.style.boxShadow = 'none';
+    // hero CTA
+    document.querySelectorAll('a[href="#book"]').forEach(function (cta) {
+        cta.addEventListener('click', function () {
+            const source = cta.closest('section')?.id || 'unknown';
+            track(source === 'founding' ? 'founding_member_cta_click' : 'hero_cta_click', { section: source });
+        });
+    });
+
+    // ladder view
+    const ladder = document.getElementById('ladder');
+    if (ladder && 'IntersectionObserver' in window) {
+        const ladderIO = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    track('ladder_view', {});
+                    ladderIO.disconnect();
+                }
+            });
+        }, { threshold: 0.4 });
+        ladderIO.observe(ladder);
+    }
+
+    // FAQ expand
+    document.querySelectorAll('.faq__item').forEach(function (item, idx) {
+        item.addEventListener('toggle', function () {
+            if (item.open) {
+                track('faq_expand', { question_id: idx + 1, question: item.querySelector('summary')?.textContent?.trim() });
+            }
+        });
+    });
+
+    // page view
+    track('page_view', {
+        url: window.location.href,
+        referrer: document.referrer || null
+    });
+
+    // ---- Cal.com lazy loader ----
+    // Initializes the Cal.com inline embed when the booking section enters the viewport.
+    // Replace `data-cal-link` on the embed container with the real scheduler slug once provisioned.
+    const calContainer = document.getElementById('calBookingEmbed');
+    if (calContainer && 'IntersectionObserver' in window) {
+        const calIO = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                loadCal(calContainer);
+                calIO.disconnect();
+            });
+        }, { threshold: 0.2 });
+        calIO.observe(calContainer);
+    }
+
+    function loadCal(container) {
+        const link = container.getAttribute('data-cal-link');
+        if (!link) return;
+
+        // Cal.com embed bootstrap (official snippet, lightly trimmed).
+        (function (C, A, L) {
+            let p = function (a, ar) { a.q.push(ar); };
+            let d = C.document;
+            C.Cal = C.Cal || function () {
+                let cal = C.Cal;
+                let ar = arguments;
+                if (!cal.loaded) {
+                    cal.ns = {};
+                    cal.q = cal.q || [];
+                    d.head.appendChild(d.createElement('script')).src = A;
+                    cal.loaded = true;
+                }
+                if (ar[0] === L) {
+                    const api = function () { p(api, arguments); };
+                    const namespace = ar[1];
+                    api.q = api.q || [];
+                    if (typeof namespace === 'string') {
+                        cal.ns[namespace] = cal.ns[namespace] || api;
+                        p(cal.ns[namespace], ar);
+                        p(cal, ['initNamespace', namespace]);
+                    } else {
+                        p(cal, ar);
+                    }
+                    return;
+                }
+                p(cal, ar);
+            };
+        })(window, 'https://app.cal.com/embed/embed.js', 'init');
+
+        try {
+            window.Cal('init', 'ekantik500', { origin: 'https://cal.com' });
+            window.Cal.ns.ekantik500('inline', {
+                elementOrSelector: container,
+                calLink: link,
+                layout: 'month_view'
+            });
+            window.Cal.ns.ekantik500('ui', {
+                theme: 'light',
+                cssVarsPerTheme: {
+                    light: { 'cal-brand': '#C8A951' }
+                },
+                hideEventTypeDetails: false
+            });
+            // Track booking confirmations
+            window.Cal.ns.ekantik500('on', {
+                action: 'bookingSuccessful',
+                callback: function (e) {
+                    track('booking_confirmed', { source_section: 'final_cta' });
+                }
+            });
+        } catch (e) {
+            // fallback already rendered in HTML
         }
     }
-});
 
-// ================================================
-// Smooth scroll for all anchor links
-// ================================================
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                e.preventDefault();
-                const offset = 80; // navbar height
-                const top = target.getBoundingClientRect().top + window.scrollY - offset;
-                window.scrollTo({ top, behavior: 'smooth' });
+    // ---- Nav shadow on scroll ----
+    const nav = document.getElementById('nav');
+    if (nav) {
+        let last = 0;
+        window.addEventListener('scroll', function () {
+            const y = window.scrollY;
+            if ((y > 8) !== (last > 8)) {
+                nav.style.boxShadow = y > 8 ? '0 2px 16px rgba(27, 42, 74, 0.06)' : 'none';
             }
-        });
-    });
-});
-
-// ================================================
-// Animate on scroll (simple intersection observer)
-// ================================================
-document.addEventListener('DOMContentLoaded', function() {
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    // Observe cards and sections
-    document.querySelectorAll(
-        '.content-card, .step-item, .principle-card, .evidence-card, .benefit-item, .faq-item'
-    ).forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        observer.observe(el);
-    });
-});
-
-// ================================================
-// Active nav link highlighting
-// ================================================
-window.addEventListener('scroll', function() {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-
-    let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
-        if (window.scrollY >= sectionTop) {
-            current = section.getAttribute('id');
-        }
-    });
-
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === '#' + current) {
-            link.classList.add('active');
-        }
-    });
-});
+            last = y;
+        }, { passive: true });
+    }
+})();
