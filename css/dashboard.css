@@ -450,3 +450,62 @@
     .admin-single { grid-template-columns: 1fr; }
     .admin-output__stats { grid-template-columns: 1fr; }
 }
+
+/* Paste-format help disclosures */
+.paste-formats {
+    display: grid;
+    gap: var(--s-2);
+    margin: var(--s-3) 0 var(--s-4);
+}
+.paste-format {
+    background: var(--ivory);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+.paste-format > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: var(--s-3) var(--s-4);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+}
+.paste-format > summary::-webkit-details-marker { display: none; }
+.paste-format[open] > summary { border-bottom: 1px solid var(--line); background: var(--white); }
+.paste-format p { padding: var(--s-3) var(--s-4); font-size: 13px; color: var(--slate-dark); margin: 0; line-height: 1.6; }
+.paste-format pre {
+    background: var(--navy-deep);
+    color: var(--ivory);
+    padding: var(--s-3) var(--s-4);
+    margin: var(--s-2) var(--s-4);
+    border-radius: var(--radius);
+    font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-x: auto;
+}
+.paste-format__note { color: var(--slate); font-style: italic; font-size: 12px !important; }
+.paste-format code {
+    background: var(--ivory);
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+    font-size: 12px;
+    color: var(--navy);
+}
+.paste-format pre code { background: transparent; padding: 0; color: inherit; }
+
+/* Three-period meta chips on dashboard header */
+.dash-meta-period {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-right: 4px;
+}
+.dash-meta-period--hist { background: rgba(45, 80, 22, 0.12); color: var(--forest); }
+.dash-meta-period--gap  { background: rgba(100, 116, 139, 0.12); color: var(--slate-dark); font-weight: 500; }
+.dash-meta-period--gap a { color: var(--gold-deep); border-bottom: 1px dotted var(--gold-deep); }
+.dash-meta-period--live { background: rgba(200, 169, 81, 0.18); color: var(--gold-deep); }

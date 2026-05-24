@@ -134,7 +134,10 @@
     function renderMeta() {
         const meta = document.getElementById('dashMeta');
         const updated = META.last_updated ? new Date(META.last_updated).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) : '—';
-        meta.innerHTML = (META.dataset_label || 'Dataset') + ' · ' + (META.dataset_range || '') + ' · <strong>Last updated:</strong> ' + updated + ' · <strong>' + TRADES.length + '</strong> total trades';
+        const hist = TRADES.filter(function (t) { return t.period === 'historical'; }).length;
+        const live = TRADES.filter(function (t) { return t.period === 'pre_reg'; }).length;
+        const periodLine = '<span class="dash-meta-period dash-meta-period--hist">' + hist + ' historical</span> · <span class="dash-meta-period dash-meta-period--gap">Nov \'24 – Apr \'26 paused (<a href="https://accelerator.ekantikcapital.com/" target="_blank" rel="noopener">Accelerator</a>)</span> · <span class="dash-meta-period dash-meta-period--live">' + live + ' pre-reg live</span>';
+        meta.innerHTML = (META.dataset_label || 'Dataset') + ' · <strong>Last updated:</strong> ' + updated + '<br>' + periodLine;
     }
 
     function renderKpis(s) {
@@ -209,21 +212,59 @@
             ctx.beginPath(); ctx.moveTo(PAD_L, yZero); ctx.lineTo(W - PAD_R, yZero); ctx.stroke();
             ctx.setLineDash([]);
         }
-        // area
-        ctx.fillStyle = 'rgba(200, 169, 81, 0.15)';
+
+        // Find boundary between historical and pre-reg trades on the eq array
+        const histCount = s.chrono.filter(function (t) { return t.period === 'historical'; }).length;
+        const liveCount = s.chrono.length - histCount;
+        const gapStartIdx = histCount; // eq[histCount] = last historical equity point
+        const gapEndIdx   = histCount; // same point — gap is a band between historical end and pre-reg start
+
+        // Area fill (historical)
+        ctx.fillStyle = 'rgba(45, 80, 22, 0.10)';
         ctx.beginPath();
         ctx.moveTo(PAD_L, H - PAD_B);
-        for (let i = 0; i < eq.length; i++) ctx.lineTo(PAD_L + i * xStep, PAD_T + (max - eq[i]) * yScale);
-        ctx.lineTo(PAD_L + (eq.length - 1) * xStep, H - PAD_B);
+        for (let i = 0; i <= histCount; i++) ctx.lineTo(PAD_L + i * xStep, PAD_T + (max - eq[i]) * yScale);
+        ctx.lineTo(PAD_L + histCount * xStep, H - PAD_B);
         ctx.closePath(); ctx.fill();
-        // line
+
+        // Area fill (pre-reg) — gold
+        if (liveCount > 0) {
+            ctx.fillStyle = 'rgba(200, 169, 81, 0.18)';
+            ctx.beginPath();
+            ctx.moveTo(PAD_L + histCount * xStep, H - PAD_B);
+            for (let i = histCount; i < eq.length; i++) ctx.lineTo(PAD_L + i * xStep, PAD_T + (max - eq[i]) * yScale);
+            ctx.lineTo(PAD_L + (eq.length - 1) * xStep, H - PAD_B);
+            ctx.closePath(); ctx.fill();
+        }
+
+        // Gap separator — vertical dashed line + label
+        if (liveCount > 0) {
+            const xGap = PAD_L + histCount * xStep;
+            ctx.strokeStyle = 'rgba(200, 169, 81, 0.6)'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
+            ctx.beginPath(); ctx.moveTo(xGap, PAD_T); ctx.lineTo(xGap, H - PAD_B); ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.fillStyle = '#A88A38'; ctx.font = 'bold 10px "Source Sans 3", sans-serif';
+            ctx.fillText('PRE-REG RESTART', xGap + 6, PAD_T + 14);
+        }
+
+        // Curve line — historical segment (navy)
         ctx.strokeStyle = '#1B2A4A'; ctx.lineWidth = 2;
         ctx.beginPath();
-        for (let i = 0; i < eq.length; i++) {
+        for (let i = 0; i <= histCount; i++) {
             const x = PAD_L + i * xStep, y = PAD_T + (max - eq[i]) * yScale;
             if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
         }
         ctx.stroke();
+        // Pre-reg segment (gold)
+        if (liveCount > 0) {
+            ctx.strokeStyle = '#A88A38'; ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            for (let i = histCount; i < eq.length; i++) {
+                const x = PAD_L + i * xStep, y = PAD_T + (max - eq[i]) * yScale;
+                if (i === histCount) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        }
 
         document.getElementById('dashChartSub').textContent = eq.length + ' trades · ending +' + eq[eq.length-1].toFixed(0) + ' pts · peak +' + max.toFixed(0) + ' · trough ' + min.toFixed(0);
     }

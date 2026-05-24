@@ -2787,3 +2787,88 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .protocol-card__actions { flex-direction: column; align-items: stretch; }
     .protocol-card__actions .btn { width: 100%; }
 }
+
+/* ================================================
+   SIGNAL CONTINUITY — three-period timeline
+   ================================================ */
+.continuity {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-4);
+    margin: var(--s-8) 0 var(--s-6);
+    position: relative;
+}
+.period {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: var(--s-6);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.period--live   { border-top: 4px solid var(--forest); }
+.period--gap    { border-top: 4px solid var(--slate); background: repeating-linear-gradient(45deg, var(--white) 0 14px, var(--ivory) 14px 28px); }
+.period--prereg { border-top: 4px solid var(--gold); }
+
+.period__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-3);
+    margin-bottom: var(--s-3);
+    padding-bottom: var(--s-3);
+    border-bottom: 1px dashed var(--line);
+}
+.period__num {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--gold-deep);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+.period__range {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--slate);
+    letter-spacing: 0.3px;
+}
+.period__h {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--navy);
+    line-height: 1.25;
+    margin-bottom: var(--s-3);
+}
+.period__body {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--slate-dark);
+    margin-bottom: var(--s-4);
+    flex: 1;
+}
+.period__actions {
+    margin-bottom: var(--s-4);
+}
+.period__stat {
+    font-size: 12px;
+    color: var(--navy);
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--line);
+    line-height: 1.5;
+}
+.period__stat strong { color: var(--navy); font-weight: 700; }
+.period__stat--pending strong { color: var(--gold-deep); }
+.period__pending {
+    display: inline-block;
+    margin-top: 4px;
+    color: var(--slate);
+    font-style: italic;
+}
+
+@media (max-width: 900px) {
+    .continuity { grid-template-columns: 1fr; }
+}
