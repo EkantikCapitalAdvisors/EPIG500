@@ -223,20 +223,31 @@
         </div>
         <p class="scenario-outcome" id="scenarioOutcome">Realistic — published reference cadence applied unmodified. Most likely terrain.</p>
 
-        <!-- Capital growth chart: NLV over 1 year with step markers -->
+        <!-- Compounding Ladder — staircase visualization + summary + acceleration -->
         <div class="cl-chart" id="ladderChart">
-            <div class="cl-chart__head">
-                <div class="cl-chart__legend">
-                    <span class="cl-chart__legend-item"><span class="cl-chart__legend-swatch cl-chart__legend-swatch--area"></span> NLV growth</span>
-                    <span class="cl-chart__legend-item"><span class="cl-chart__legend-swatch cl-chart__legend-swatch--dot"></span> Step events (+1 /ES per $5K profit)</span>
+            <!-- Headline metric strip — the answer first -->
+            <div class="cl-hero" id="cl-hero"><!-- rendered by JS --></div>
+
+            <!-- Staircase: time on X, contracts active on Y -->
+            <div class="cl-stairs">
+                <p class="cl-axis-y-label">Contracts active</p>
+                <svg id="cl-stairs-svg" viewBox="0 0 1100 380" preserveAspectRatio="none" role="img" aria-label="Step function: contracts active over 12 months">
+                    <!-- rendered by JS -->
+                </svg>
+                <p class="cl-axis-x-label">Months from launch · 0 → 12</p>
+            </div>
+
+            <!-- Three summary cards -->
+            <div class="cl-summary" id="cl-summary"><!-- rendered by JS --></div>
+
+            <!-- Time-between-steps acceleration bars -->
+            <div class="cl-accel">
+                <div class="cl-accel__head">
+                    <h3 class="cl-accel__h">Time between steps · the velocity argument</h3>
+                    <p class="cl-accel__sub">Each subsequent step compresses because the engine throughput grows linearly with contract count. The first step takes <em>months</em>; the last takes <em>days</em>.</p>
                 </div>
-                <p class="cl-chart__axis-y">NLV ($K)</p>
+                <div class="cl-accel__bars" id="cl-accel-bars"><!-- rendered by JS --></div>
             </div>
-            <div class="cl-chart__canvas">
-                <canvas id="ladderCanvas" width="1100" height="420" aria-label="Compounding Ladder: NLV growth over 12 months with step markers at each $5K profit milestone"></canvas>
-                <div class="cl-chart__steps" id="cl-chart-steps"><!-- step badges rendered by JS --></div>
-            </div>
-            <p class="cl-chart__axis-x">Months from launch (0 → 12)</p>
         </div>
 
         <!-- Tangible kill conditions rail: all 8 ED conditions as named chips -->

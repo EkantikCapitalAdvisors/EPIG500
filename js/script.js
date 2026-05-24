@@ -192,117 +192,196 @@
     let currentSteps  = buildSteps(currentScenario);
 
     function drawLadderChart() {
-        const canvas = document.getElementById('ladderCanvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const dpr = window.devicePixelRatio || 1;
-        const W = canvas.clientWidth || 1100;
-        const H = canvas.clientHeight || 420;
-        canvas.width = W * dpr; canvas.height = H * dpr;
-        canvas.style.height = H + 'px';
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        ctx.clearRect(0, 0, W, H);
+        const svg = document.getElementById('cl-stairs-svg');
+        if (!svg) return;
 
-        const PAD_L = 70, PAD_R = 40, PAD_T = 30, PAD_B = 60;
-        const tMax = DURATION_MAX;
-        // Y range: always start at NLV_START; cap to max value observed (rounded up)
-        const valMin = NLV_START;
-        const finalVal = currentPoints[currentPoints.length - 1].value;
-        const valMax = currentScenario === 'cooperative' ? 300000
-                     : currentScenario === 'realistic'   ? 250000
-                     : 120000;
+        const steps = currentSteps;
+        const pts = currentPoints;
+        const W = 1100, H = 380;
+        const PAD_L = 60, PAD_R = 60, PAD_T = 30, PAD_B = 50;
+        const yMax = 10; // contract scale ceiling
 
-        function xAt(t) { return PAD_L + (t / tMax) * (W - PAD_L - PAD_R); }
-        function yAt(v) { return PAD_T + (1 - (v - valMin) / (valMax - valMin)) * (H - PAD_T - PAD_B); }
+        const innerW = W - PAD_L - PAD_R;
+        const innerH = H - PAD_T - PAD_B;
+        const xAt = function (t) { return PAD_L + (t / DURATION_MAX) * innerW; };
+        const yAt = function (c) { return H - PAD_B - (c / yMax) * innerH; };
 
-        // Y gridlines + dollar labels
-        ctx.strokeStyle = 'rgba(27, 42, 74, 0.06)'; ctx.lineWidth = 1;
-        ctx.fillStyle = '#64748B'; ctx.font = '11px "Source Sans 3", sans-serif';
-        const yTicks = 5;
-        for (let i = 0; i <= yTicks; i++) {
-            const v = valMin + (valMax - valMin) * i / yTicks;
-            const y = yAt(v);
-            ctx.beginPath(); ctx.moveTo(PAD_L, y); ctx.lineTo(W - PAD_R, y); ctx.stroke();
-            ctx.fillText('$' + Math.round(v / 1000) + 'K', 8, y + 4);
+        const lastStep = steps[steps.length - 1];
+        const finalVal = pts[pts.length - 1].value;
+
+        /* ── HERO ── */
+        const heroEl = document.getElementById('cl-hero');
+        if (heroEl) {
+            const profit = finalVal - NLV_START;
+            const profitPct = ((finalVal - NLV_START) / NLV_START) * 100;
+            heroEl.innerHTML = [
+                '<div class="cl-hero__col"><p class="cl-hero__label">Start</p><p class="cl-hero__value">$' + (NLV_START / 1000) + 'K</p><p class="cl-hero__sub">1 /ES · $500/trade</p></div>',
+                '<div class="cl-hero__arrow">→</div>',
+                '<div class="cl-hero__col"><p class="cl-hero__label">Year-end</p><p class="cl-hero__value cl-hero__value--accent">$' + Math.round(finalVal / 1000) + 'K</p><p class="cl-hero__sub">' + lastStep.contracts + ' /ES · $' + Math.round(finalVal * 0.005).toLocaleString() + '/trade</p></div>',
+                '<div class="cl-hero__col"><p class="cl-hero__label">Profit</p><p class="cl-hero__value cl-hero__value--gold">' + (profit >= 0 ? '+$' : '−$') + Math.abs(Math.round(profit / 1000)) + 'K</p><p class="cl-hero__sub">' + (profitPct >= 0 ? '+' : '') + profitPct.toFixed(0) + '% over 12 mo</p></div>',
+                '<div class="cl-hero__col"><p class="cl-hero__label">Contracts earned</p><p class="cl-hero__value cl-hero__value--gold">1 → ' + lastStep.contracts + '</p><p class="cl-hero__sub">+1 per $5K profit</p></div>'
+            ].join('');
         }
-        // X axis labels (months)
+
+        /* ── STAIRCASE SVG ── */
+        const parts = [];
+
+        // Background grid (horizontal lines at each contract level)
+        for (let c = 0; c <= yMax; c += 2) {
+            const y = yAt(c);
+            parts.push('<line x1="' + PAD_L + '" y1="' + y + '" x2="' + (W - PAD_R) + '" y2="' + y + '" stroke="rgba(27,42,74,0.06)" />');
+            parts.push('<text x="' + (PAD_L - 8) + '" y="' + (y + 4) + '" font-size="11" fill="#64748B" font-family="Source Sans 3" text-anchor="end">' + c + '</text>');
+        }
+        // Y-axis label highlights at each step's contract level
+        // X-axis gridlines + month labels
         for (let m = 0; m <= 12; m += 2) {
             const x = xAt(m);
-            ctx.fillText(m + (m === 0 ? ' mo' : ''), x - 10, H - PAD_B + 18);
-            ctx.strokeStyle = 'rgba(27, 42, 74, 0.04)';
-            ctx.beginPath(); ctx.moveTo(x, PAD_T); ctx.lineTo(x, H - PAD_B); ctx.stroke();
+            parts.push('<line x1="' + x + '" y1="' + PAD_T + '" x2="' + x + '" y2="' + (H - PAD_B) + '" stroke="rgba(27,42,74,0.04)" />');
+            parts.push('<text x="' + x + '" y="' + (H - PAD_B + 18) + '" font-size="11" fill="#64748B" font-family="Source Sans 3" text-anchor="middle">' + m + (m === 0 ? ' mo' : '') + '</text>');
         }
 
-        // Baseline at NLV_START
-        ctx.strokeStyle = 'rgba(27, 42, 74, 0.25)'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
-        const yBase = yAt(NLV_START);
-        ctx.beginPath(); ctx.moveTo(PAD_L, yBase); ctx.lineTo(W - PAD_R, yBase); ctx.stroke();
-        ctx.setLineDash([]);
-        ctx.fillStyle = 'rgba(27, 42, 74, 0.5)';
-        ctx.font = '10px "Source Sans 3", sans-serif';
-        ctx.fillText('start: $100K', W - PAD_R - 65, yBase - 5);
+        // Build the stair-step path
+        // Walk through steps: at each step, horizontal segment from prev time to current time at current contract level
+        // After last step, extend horizontally to t=12 at last contract level
+        if (steps.length === 0) {
+            // No data
+        } else {
+            const pathPoints = [];
+            const areaPoints = [];
 
-        // Area fill
-        const pts = currentPoints;
-        ctx.fillStyle = 'rgba(200, 169, 81, 0.15)';
-        ctx.beginPath();
-        ctx.moveTo(xAt(pts[0].t), yBase);
-        for (let i = 0; i < pts.length; i++) ctx.lineTo(xAt(pts[i].t), yAt(pts[i].value));
-        ctx.lineTo(xAt(pts[pts.length - 1].t), yBase);
-        ctx.closePath(); ctx.fill();
+            // Start at (t=0, contracts=1)
+            pathPoints.push([xAt(0), yAt(1)]);
 
-        // Curve line
-        ctx.strokeStyle = '#1B2A4A'; ctx.lineWidth = 2.5;
-        ctx.beginPath();
-        for (let i = 0; i < pts.length; i++) {
-            const x = xAt(pts[i].t), y = yAt(pts[i].value);
-            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            // For each step BEYOND the first: jump up at that step's time
+            for (let i = 1; i < steps.length; i++) {
+                // Horizontal segment from prev t to this step's t at previous contract level
+                pathPoints.push([xAt(steps[i].timeReached), yAt(steps[i - 1].contracts)]);
+                // Vertical segment up to this step's contract level
+                pathPoints.push([xAt(steps[i].timeReached), yAt(steps[i].contracts)]);
+            }
+            // Tail: horizontal at final contract level out to month 12
+            pathPoints.push([xAt(DURATION_MAX), yAt(lastStep.contracts)]);
+
+            // Area: same as path but close down to baseline
+            const baseY = yAt(0);
+            areaPoints.push([PAD_L, baseY]);
+            pathPoints.forEach(function (p) { areaPoints.push(p); });
+            areaPoints.push([xAt(DURATION_MAX), baseY]);
+
+            // Gradient defs
+            parts.push('<defs><linearGradient id="clStairGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C8A951" stop-opacity="0.35"/><stop offset="100%" stop-color="#C8A951" stop-opacity="0.05"/></linearGradient></defs>');
+
+            // Area fill
+            const areaD = 'M ' + areaPoints.map(function (p) { return p[0] + ',' + p[1]; }).join(' L ') + ' Z';
+            parts.push('<path d="' + areaD + '" fill="url(#clStairGrad)" />');
+
+            // Step line
+            const pathD = 'M ' + pathPoints.map(function (p) { return p[0] + ',' + p[1]; }).join(' L ');
+            parts.push('<path d="' + pathD + '" fill="none" stroke="#1B2A4A" stroke-width="2.5" stroke-linejoin="miter" stroke-linecap="square" />');
+
+            // Step transition markers (gold dots at each "knee")
+            for (let i = 1; i < steps.length; i++) {
+                const x = xAt(steps[i].timeReached);
+                const y = yAt(steps[i].contracts);
+                parts.push('<circle cx="' + x + '" cy="' + y + '" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>');
+            }
+            // First step starting marker
+            parts.push('<circle cx="' + xAt(0) + '" cy="' + yAt(1) + '" r="6" fill="#1B2A4A" stroke="white" stroke-width="2"/>');
+
+            // Concise step labels — only on every other step to avoid clutter, plus first + last
+            steps.forEach(function (s, i) {
+                if (i === 0 || i === steps.length - 1 || i % 2 === 1) {
+                    const x = xAt(s.timeReached);
+                    const y = yAt(s.contracts);
+                    const labelY = y - 12;
+                    const labelText = s.contracts + ' /ES';
+                    const subText = '$' + Math.round(s.nlv / 1000) + 'K';
+                    parts.push('<g class="cl-step-anno">');
+                    parts.push('<text x="' + (x + 8) + '" y="' + labelY + '" font-size="12" font-weight="700" fill="#1B2A4A" font-family="Source Sans 3">' + labelText + '</text>');
+                    parts.push('<text x="' + (x + 8) + '" y="' + (labelY + 13) + '" font-size="10" fill="#64748B" font-family="Source Sans 3">' + subText + '</text>');
+                    parts.push('</g>');
+                }
+            });
+
+            // Final state callout at top-right
+            const xEnd = xAt(DURATION_MAX);
+            const yEnd = yAt(lastStep.contracts);
+            parts.push('<rect x="' + (xEnd - 100) + '" y="' + (yEnd - 38) + '" width="100" height="34" rx="3" fill="#1B2A4A"/>');
+            parts.push('<text x="' + (xEnd - 50) + '" y="' + (yEnd - 22) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#C8A951" font-family="Source Sans 3">YEAR-END</text>');
+            parts.push('<text x="' + (xEnd - 50) + '" y="' + (yEnd - 8) + '" text-anchor="middle" font-size="13" font-weight="700" fill="white" font-family="Source Sans 3">$' + Math.round(finalVal / 1000) + 'K</text>');
         }
-        ctx.stroke();
 
-        // Step markers
-        for (let i = 0; i < currentSteps.length; i++) {
-            const s = currentSteps[i];
-            const x = xAt(s.timeReached);
-            const y = yAt(s.nlv);
-            // Dashed drop line
-            ctx.strokeStyle = 'rgba(200, 169, 81, 0.5)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
-            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, H - PAD_B); ctx.stroke();
-            ctx.setLineDash([]);
-            // Dot
-            ctx.fillStyle = '#C8A951';
-            ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = '#1B2A4A';
-            ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI * 2); ctx.fill();
+        svg.innerHTML = parts.join('');
+
+        /* ── THREE SUMMARY CARDS ── */
+        const sumEl = document.getElementById('cl-summary');
+        if (sumEl) {
+            const stepsAdvanced = lastStep.contracts - 1; // 0 if floor
+            const profitViaSteps = lastStep.cumProfit;
+            const profitPostStep = finalVal - NLV_START - profitViaSteps;
+            const firstStepDur = steps.length > 1 ? (steps[1].timeReached - steps[0].timeReached) : DURATION_MAX;
+            const lastStepDur = steps.length > 2 ? (steps[steps.length - 1].timeReached - steps[steps.length - 2].timeReached) : firstStepDur;
+            const accel = lastStepDur > 0 ? (firstStepDur / lastStepDur) : 1;
+            const finalRisk = Math.round(finalVal * 0.005);
+
+            sumEl.innerHTML = [
+                '<article class="cl-card">',
+                  '<p class="cl-card__label">End state</p>',
+                  '<p class="cl-card__value">$' + Math.round(finalVal / 1000) + 'K NLV</p>',
+                  '<dl class="cl-card__list">',
+                    '<div><dt>Profit</dt><dd>+$' + Math.round((finalVal - NLV_START) / 1000) + 'K</dd></div>',
+                    '<div><dt>Position</dt><dd>' + lastStep.contracts + ' /ES</dd></div>',
+                    '<div><dt>Risk / trade</dt><dd>$' + finalRisk.toLocaleString() + ' (0.5%)</dd></div>',
+                  '</dl>',
+                '</article>',
+                '<article class="cl-card cl-card--gold">',
+                  '<p class="cl-card__label">Earned leverage</p>',
+                  '<p class="cl-card__value">' + stepsAdvanced + ' contracts</p>',
+                  '<dl class="cl-card__list">',
+                    '<div><dt>Profit via steps</dt><dd>+$' + (profitViaSteps / 1000).toFixed(0) + 'K</dd></div>',
+                    '<div><dt>Profit post-ceiling</dt><dd>+$' + (profitPostStep / 1000).toFixed(0) + 'K</dd></div>',
+                    '<div><dt>Threshold</dt><dd>$5K → +1 /ES</dd></div>',
+                  '</dl>',
+                '</article>',
+                '<article class="cl-card">',
+                  '<p class="cl-card__label">Velocity</p>',
+                  '<p class="cl-card__value">' + accel.toFixed(1) + '× faster</p>',
+                  '<dl class="cl-card__list">',
+                    '<div><dt>1st step</dt><dd>' + firstStepDur.toFixed(1) + ' mo</dd></div>',
+                    '<div><dt>Last step</dt><dd>' + (lastStepDur < 1 ? Math.round(lastStepDur * 30) + ' days' : lastStepDur.toFixed(1) + ' mo') + '</dd></div>',
+                    '<div><dt>Reason</dt><dd>throughput scales w/ contracts</dd></div>',
+                  '</dl>',
+                '</article>'
+            ].join('');
         }
 
-        // Final NLV callout
-        const lastPt = pts[pts.length - 1];
-        const xEnd = xAt(lastPt.t), yEnd = yAt(lastPt.value);
-        ctx.fillStyle = '#1B2A4A';
-        ctx.font = 'bold 13px "Source Sans 3", sans-serif';
-        ctx.fillText('$' + Math.round(lastPt.value / 1000) + 'K @ 12 mo', xEnd - 90, yEnd - 12);
-
-        // Render step badges
-        const stepsContainer = document.getElementById('cl-chart-steps');
-        if (stepsContainer) {
-            stepsContainer.innerHTML = currentSteps.map(function (s, idx) {
-                const x = xAt(s.timeReached);
-                const xPct = (x / W) * 100;
-                const riskDollars = Math.round(s.nlv * 0.005);
-                return [
-                    '<div class="cl-step-badge ' + (idx % 2 === 0 ? 'cl-step-badge--bot' : 'cl-step-badge--top') + '" style="left:' + xPct + '%" data-step="' + s.n + '">',
-                      '<p class="cl-step-badge__num">Step ' + s.n + '</p>',
-                      '<p class="cl-step-badge__contracts">' + s.contracts + ' /ES</p>',
-                      '<p class="cl-step-badge__detail">NLV $' + Math.round(s.nlv / 1000) + 'K</p>',
-                      '<p class="cl-step-badge__detail">Risk: $' + riskDollars.toLocaleString() + '/trade</p>',
-                      '<p class="cl-step-badge__time">' + s.timeReached.toFixed(1) + ' mo · +$' + (s.cumProfit / 1000).toFixed(0) + 'K profit</p>',
-                    '</div>'
-                ].join('');
-            }).join('');
+        /* ── ACCELERATION BARS ── */
+        const accelEl = document.getElementById('cl-accel-bars');
+        if (accelEl) {
+            if (steps.length < 2) {
+                accelEl.innerHTML = '<p class="cl-accel__empty">No step transitions in this scenario.</p>';
+            } else {
+                // Compute durations between consecutive steps
+                const durations = [];
+                let maxDur = 0;
+                for (let i = 1; i < steps.length; i++) {
+                    const d = steps[i].timeReached - steps[i - 1].timeReached;
+                    durations.push({ from: steps[i - 1].contracts, to: steps[i].contracts, months: d });
+                    if (d > maxDur) maxDur = d;
+                }
+                accelEl.innerHTML = durations.map(function (d) {
+                    const pct = (d.months / maxDur) * 100;
+                    const dur = d.months < 1 ? Math.round(d.months * 30) + ' days' : d.months.toFixed(1) + ' months';
+                    return '<div class="cl-bar">'
+                        + '<span class="cl-bar__label">' + d.from + ' → ' + d.to + ' /ES</span>'
+                        + '<div class="cl-bar__track"><div class="cl-bar__fill" style="width:' + pct + '%"></div></div>'
+                        + '<span class="cl-bar__val">' + dur + '</span>'
+                        + '</div>';
+                }).join('');
+            }
         }
 
-        // Render cadence summary table
+        // Render cadence summary table (keeps existing detail table)
         renderCadenceTable();
     }
 

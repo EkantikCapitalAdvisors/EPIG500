@@ -2872,3 +2872,220 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 @media (max-width: 900px) {
     .continuity { grid-template-columns: 1fr; }
 }
+
+/* ================================================
+   COMPOUNDING LADDER v3 — staircase + summary + acceleration
+   ================================================ */
+
+/* HERO STRIP — the answer first */
+.cl-hero {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr 1fr;
+    gap: var(--s-4);
+    align-items: stretch;
+    padding: var(--s-6);
+    background: var(--white);
+    border: 1px solid var(--gold);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--s-8);
+    box-shadow: 0 6px 20px rgba(200, 169, 81, 0.08);
+}
+.cl-hero__col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--s-3);
+    border-left: 1px solid var(--line);
+}
+.cl-hero__col:first-child { border-left: 0; }
+.cl-hero__col:nth-child(3) { border-left: 0; }
+.cl-hero__label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--slate);
+    font-weight: 600;
+    margin-bottom: var(--s-2);
+}
+.cl-hero__value {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 30px;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 4px;
+}
+.cl-hero__value--accent { color: var(--navy); }
+.cl-hero__value--gold { color: var(--gold-deep); }
+.cl-hero__sub {
+    font-size: 12px;
+    color: var(--slate);
+    line-height: 1.4;
+}
+.cl-hero__arrow {
+    font-family: var(--font-serif);
+    font-size: 36px;
+    color: var(--gold);
+    font-weight: 300;
+    align-self: center;
+    padding: 0 var(--s-3);
+}
+
+/* STAIRCASE SVG */
+.cl-stairs {
+    background: var(--ivory);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: var(--s-6) var(--s-6) var(--s-4);
+    margin-bottom: var(--s-8);
+    position: relative;
+}
+.cl-axis-y-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--slate);
+    font-weight: 700;
+    margin-bottom: var(--s-3);
+}
+.cl-axis-x-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--slate);
+    font-weight: 600;
+    text-align: center;
+    margin-top: var(--s-2);
+}
+#cl-stairs-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 1100 / 380;
+}
+
+/* THREE SUMMARY CARDS */
+.cl-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-4);
+    margin-bottom: var(--s-8);
+}
+.cl-card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--navy);
+    border-radius: var(--radius);
+    padding: var(--s-6);
+}
+.cl-card--gold { border-top-color: var(--gold); background: linear-gradient(180deg, rgba(200,169,81,0.06), var(--white)); }
+.cl-card__label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--slate);
+    font-weight: 600;
+    margin-bottom: var(--s-3);
+}
+.cl-card__value {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--navy);
+    line-height: 1.1;
+    margin-bottom: var(--s-4);
+}
+.cl-card--gold .cl-card__value { color: var(--gold-deep); }
+.cl-card__list {
+    display: grid;
+    gap: var(--s-2);
+    padding-top: var(--s-3);
+    border-top: 1px dashed var(--line);
+}
+.cl-card__list > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 13px;
+}
+.cl-card__list dt { color: var(--slate); }
+.cl-card__list dd { color: var(--navy); font-weight: 600; }
+
+/* ACCELERATION BARS */
+.cl-accel {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--gold);
+    border-radius: var(--radius);
+    padding: var(--s-6) var(--s-8);
+    margin-bottom: var(--s-8);
+}
+.cl-accel__head { margin-bottom: var(--s-6); }
+.cl-accel__h {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--navy);
+    margin-bottom: var(--s-2);
+}
+.cl-accel__sub {
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.6;
+}
+.cl-accel__bars {
+    display: grid;
+    gap: var(--s-2);
+}
+.cl-accel__empty {
+    text-align: center;
+    color: var(--slate);
+    font-style: italic;
+    padding: var(--s-6);
+}
+.cl-bar {
+    display: grid;
+    grid-template-columns: 110px 1fr 90px;
+    gap: var(--s-3);
+    align-items: center;
+}
+.cl-bar__label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    font-variant-numeric: tabular-nums;
+}
+.cl-bar__track {
+    height: 22px;
+    background: var(--ivory);
+    border-radius: 2px;
+    overflow: hidden;
+}
+.cl-bar__fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-deep));
+    border-radius: 2px;
+    transition: width 400ms ease-out;
+}
+.cl-bar__val {
+    font-size: 12px;
+    color: var(--slate-dark);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+@media (max-width: 900px) {
+    .cl-hero { grid-template-columns: 1fr 1fr; gap: var(--s-3); }
+    .cl-hero__arrow { display: none; }
+    .cl-hero__col { border-left: 0; border-top: 1px solid var(--line); padding-top: var(--s-3); }
+    .cl-hero__col:nth-child(-n+2) { border-top: 0; padding-top: 0; }
+    .cl-summary { grid-template-columns: 1fr; }
+    .cl-bar { grid-template-columns: 90px 1fr 80px; }
+}
+@media (max-width: 560px) {
+    .cl-hero { grid-template-columns: 1fr; }
+    .cl-hero__col { border-top: 1px solid var(--line); border-left: 0; padding-top: var(--s-3); }
+    .cl-hero__col:first-child { border-top: 0; padding-top: 0; }
+    .cl-hero__value { font-size: 24px; }
+    .cl-card__value { font-size: 22px; }
+}

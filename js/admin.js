@@ -151,18 +151,31 @@
 
     function handleUpload(text, filename) {
         try {
-            // 0. Discord HTML export (DiscordChatExporter) — strip to journal text first
-            if ((filename && /\.html?$/i.test(filename)) || /class=["']?chatlog__/i.test(text)) {
-                const journal = discordHtmlToJournal(text);
-                if (!journal) throw new Error('Could not extract messages from the Discord HTML export.');
-                if (!looksLikeJournal(journal)) throw new Error('Discord export parsed, but no F##/M##: result lines found.');
+            // 0. Discord HTML export — two flavors:
+            //    (a) custom exporter with `const messages = [...]` embedded JSON
+            //    (b) DiscordChatExporter DOM-based format
+            const isHtml = (filename && /\.html?$/i.test(filename)) || /class=["']?chatlog__/i.test(text) || /const\s+messages\s*=\s*\[/.test(text);
+            if (isHtml) {
+                let journal = null;
+                let source = '';
+                // Try embedded JSON first — more reliable
+                journal = customDiscordJsonToJournal(text);
+                if (journal) source = 'embedded-JSON Discord export';
+                else {
+                    journal = discordHtmlToJournal(text);
+                    if (journal) source = 'DiscordChatExporter HTML';
+                }
+                if (!journal) throw new Error('Could not extract any messages from the HTML file.');
+                if (!looksLikeJournal(journal)) {
+                    throw new Error('HTML parsed (' + source + '), but no result lines (e.g. "M1: +21") were found in the messages.');
+                }
                 const parsed = parseEkantikJournal(journal);
-                if (!parsed.length) throw new Error('Discord export had no complete trade blocks.');
+                if (!parsed.length) throw new Error('HTML parsed, but no complete trade blocks. Make sure messages have a label + signed points (e.g. "M1: +21").');
                 const startId = CURRENT.trades.length + STAGED.length + 1;
                 parsed.forEach(function (t, i) { t.id = startId + i; });
                 STAGED = STAGED.concat(parsed);
                 renderPreview(); renderKpis();
-                status('✓ Imported ' + parsed.length + ' trade ' + (parsed.length === 1 ? 'block' : 'blocks') + ' from Discord HTML export.', 'success');
+                status('✓ Imported ' + parsed.length + ' trade ' + (parsed.length === 1 ? 'block' : 'blocks') + ' from ' + source + '.', 'success');
                 return;
             }
 
@@ -223,10 +236,12 @@
        Multiple trades may be separated by blank lines and/or new date headers.
     */
     // Per-line patterns. Prefix is any letter+word (M1, MO1, F1, MES, SPX, etc.)
-    const JOURNAL_ENTRY_RE  = /^\s*[A-Za-z]\w*\s*:\s*([sbSB])\s*(\d+(?:\.\d+)?)\s*$/;
-    const JOURNAL_RESULT_RE = /^\s*[A-Za-z]\w*\s*:\s*([+-]?\d+(?:\.\d+)?)\s+([Hh][23]|BE|be)\b/;
-    const JOURNAL_SL_RE     = /^\s*[A-Za-z]\w*\s*:\s*sl\s*(\d+(?:\.\d+)?)/i;
-    const JOURNAL_TP_RE     = /^\s*[A-Za-z]\w*\s*:\s*tp\s*(\d+(?:\.\d+)?)/i;
+    // Entry: starts with label, then s/b side letter, then price. Allows trailing inline SL/TP (parsed separately).
+    const JOURNAL_ENTRY_RE  = /^\s*[A-Za-z]\w*\s*:\s*([sbSB])\s+(\d+(?:\.\d+)?)/;
+    // Result: signed points required. Tag (H2/H3/BE) optional — defaults to H3 if absent.
+    const JOURNAL_RESULT_RE = /^\s*[A-Za-z]\w*\s*:\s*([+-]\d+(?:\.\d+)?)(?:\s+([Hh][23]|BE|be))?\s*$/;
+    const JOURNAL_SL_RE     = /\bsl\s*(\d+(?:\.\d+)?)/i;  // unanchored so it matches inline too
+    const JOURNAL_TP_RE     = /\btp\s*(\d+(?:\.\d+)?)/i;
 
     // Timestamp variants encountered in Discord paste / journal headers
     const TS_FULL_DATE_RE  = /\b(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+(\d{1,2})[:.](\d{2})\s*(AM|PM|am|pm)?\b/;
@@ -293,6 +308,31 @@
             return d;
         }
         return null;
+    }
+
+    /* Custom Discord HTML export → flattened journal text
+       Some exporters embed the full message array as a JSON literal inside a
+       <script> tag: `const messages = [{...}, {...}];`. Extract that array
+       directly — far more reliable than DOM walking. */
+    function customDiscordJsonToJournal(html) {
+        const m = html.match(/const\s+messages\s*=\s*(\[[\s\S]*?\]);/);
+        if (!m) return null;
+        let arr;
+        try { arr = JSON.parse(m[1]); }
+        catch (e) { return null; }
+        if (!Array.isArray(arr) || !arr.length) return null;
+
+        // Sort chronologically just in case
+        arr.sort(function (a, b) { return new Date(a.timestamp) - new Date(b.timestamp); });
+
+        const blocks = arr.map(function (msg) {
+            const content = (msg.content || '').trim();
+            if (!content) return null;
+            const ts = msg.timestamp ? new Date(msg.timestamp) : null;
+            const tsLine = ts && !isNaN(ts.getTime()) ? formatDiscordTs(ts.toISOString()) : '';
+            return (tsLine ? tsLine + '\n' : '') + content;
+        }).filter(Boolean);
+        return blocks.join('\n\n');
     }
 
     /* DiscordChatExporter HTML → flattened journal text
@@ -393,18 +433,27 @@
             const em = trimmed.match(JOURNAL_ENTRY_RE);
             if (em) {
                 pendingEntry = { side: em[1].toLowerCase() === 's' ? 'SHORT' : 'LONG', entry: parseFloat(em[2]) };
+                // Also capture inline SL/TP if present on the same line (e.g. "M3: s 7414 SL7426 tp7381")
+                const inlineSl = trimmed.match(JOURNAL_SL_RE);
+                if (inlineSl) pendingSl = parseFloat(inlineSl[1]);
+                const inlineTp = trimmed.match(JOURNAL_TP_RE);
+                if (inlineTp) pendingTp = parseFloat(inlineTp[1]);
                 continue;
             }
-            const sl = trimmed.match(JOURNAL_SL_RE);
-            if (sl) { pendingSl = parseFloat(sl[1]); continue; }
-            const tp = trimmed.match(JOURNAL_TP_RE);
-            if (tp) { pendingTp = parseFloat(tp[1]); continue; }
+            // Standalone SL/TP lines (label-prefixed): only fire if the line starts with a label
+            if (/^\s*[A-Za-z]\w*\s*:/.test(trimmed)) {
+                const sl = trimmed.match(JOURNAL_SL_RE);
+                if (sl && !em) { pendingSl = parseFloat(sl[1]); continue; }
+                const tp = trimmed.match(JOURNAL_TP_RE);
+                if (tp && !em) { pendingTp = parseFloat(tp[1]); continue; }
+            }
 
             const rm = trimmed.match(JOURNAL_RESULT_RE);
             if (rm) {
                 const pts = parseFloat(rm[1]);
-                let tag = rm[2].toUpperCase();
-                if (tag === 'H1') tag = 'H3'; // OP-04 — per-trade H1 is itself a breach
+                // Tag defaults to H3 (variance, OP-04 resting attribution) when absent
+                let tag = (rm[2] || 'H3').toUpperCase();
+                if (tag === 'H1') tag = 'H3';
 
                 // Timestamp fallback: if none was seen yet, use now() and nudge by index.
                 let tradeDate;
