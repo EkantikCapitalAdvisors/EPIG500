@@ -151,17 +151,24 @@
 
     function handleUpload(text, filename) {
         try {
-            // 0. Discord HTML export — two flavors:
+            // 0. Discord HTML export — three flavors:
             //    (a) custom exporter with `const messages = [...]` embedded JSON
-            //    (b) DiscordChatExporter DOM-based format
-            const isHtml = (filename && /\.html?$/i.test(filename)) || /class=["']?chatlog__/i.test(text) || /const\s+messages\s*=\s*\[/.test(text);
+            //    (b) DiscordChatExporter DOM-based format (chatlog__ classes)
+            //    (c) Zingfront-style export (ul.chatContent + .timeInfo)
+            const isHtml = (filename && /\.html?$/i.test(filename))
+                || /class=["']?chatlog__/i.test(text)
+                || /const\s+messages\s*=\s*\[/.test(text)
+                || /class=["']chatContent["']/.test(text);
             if (isHtml) {
                 let journal = null;
                 let source = '';
-                // Try embedded JSON first — more reliable
                 journal = customDiscordJsonToJournal(text);
                 if (journal) source = 'embedded-JSON Discord export';
-                else {
+                if (!journal) {
+                    journal = zingfrontHtmlToJournal(text);
+                    if (journal) source = 'Zingfront-style Discord export';
+                }
+                if (!journal) {
                     journal = discordHtmlToJournal(text);
                     if (journal) source = 'DiscordChatExporter HTML';
                 }
@@ -308,6 +315,43 @@
             return d;
         }
         return null;
+    }
+
+    /* Zingfront-style Discord HTML export → flattened journal text
+       Format observed: <ul class="chatContent"><li>... with <p class="timeInfo">
+       (author + timestamp) and a sibling <p> containing the message body.
+       Avatar src points at static-global.zingfront.com. */
+    function zingfrontHtmlToJournal(html) {
+        let doc;
+        try { doc = new DOMParser().parseFromString(html, 'text/html'); }
+        catch (e) { return null; }
+        if (!doc || !doc.body) return null;
+
+        const items = doc.querySelectorAll('ul.chatContent > li, .chatContent > li');
+        if (!items.length) return null;
+
+        const blocks = [];
+        items.forEach(function (li) {
+            const timeEl = li.querySelector('.time');
+            let tsFormatted = '';
+            if (timeEl) {
+                // "Fri May 22 2026 10:35:58 GMT-0500 (Central Daylight Time)" — JS Date parses cleanly
+                tsFormatted = formatDiscordTs(timeEl.textContent.trim());
+            }
+            // The message body <p> is any <p> in .titleInfo that does NOT have class="timeInfo"
+            const titleInfo = li.querySelector('.titleInfo');
+            const lines = [];
+            if (titleInfo) {
+                titleInfo.querySelectorAll('p').forEach(function (p) {
+                    if (p.classList.contains('timeInfo')) return;
+                    const text = (p.textContent || '').replace(/ /g, ' ').trim();
+                    if (text) lines.push(text);
+                });
+            }
+            if (!lines.length) return;
+            blocks.push((tsFormatted ? tsFormatted + '\n' : '') + lines.join('\n'));
+        });
+        return blocks.join('\n\n');
     }
 
     /* Custom Discord HTML export → flattened journal text

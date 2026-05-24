@@ -59,7 +59,7 @@
             <a href="#falsifiability">Falsifiability</a>
             <a href="#founding">Founding</a>
             <a href="#faq">FAQ</a>
-            <a href="dashboard.html">Live Dashboard</a>
+            <a href="/dashboard.html">Live Dashboard</a>
             <a href="#prereg">Pre-Register</a>
         </nav>
         <a href="https://discord.gg/cSQFunvNRx" target="_blank" rel="noopener" class="btn btn--primary btn--sm" data-cta="discord-nav">Follow on Discord</a>
@@ -212,7 +212,7 @@
         <header class="section__header section__header--center">
             <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Mechanism</p>
             <h2 class="section__h section__h--lg">The Compounding Ladder</h2>
-            <p class="section__sub">Starting at <strong>$100K NLV</strong>. The rule: every <strong>$5,000 in cumulative profit</strong> earns one additional /ES contract. Risk anchored at 0.5% of total NLV at every step. One-year horizon.</p>
+            <p class="section__sub">Starting at <strong>$100K NLV</strong> — <strong>90% SPY foundation + 10% cash buffer</strong>. SPY compounds at the 20-year S&amp;P historical average (~10%/yr) throughout. The /ES engine sits on top: 60-day no-trading buffer, then 1 /ES with one of three scaling paths capped at <strong>4 /ES maximum</strong>. Risk anchored at 0.5% of total NLV.</p>
         </header>
 
         <!-- Scenario toggle -->
@@ -230,7 +230,7 @@
 
             <!-- Staircase: time on X, contracts active on Y -->
             <div class="cl-stairs">
-                <p class="cl-axis-y-label">Contracts active</p>
+                <p class="cl-axis-y-label">Portfolio NLV ($K)</p>
                 <svg id="cl-stairs-svg" viewBox="0 0 1100 380" preserveAspectRatio="none" role="img" aria-label="Step function: contracts active over 12 months">
                     <!-- rendered by JS -->
                 </svg>
@@ -243,8 +243,8 @@
             <!-- Time-between-steps acceleration bars -->
             <div class="cl-accel">
                 <div class="cl-accel__head">
-                    <h3 class="cl-accel__h">Time between steps · the velocity argument</h3>
-                    <p class="cl-accel__sub">Each subsequent step compresses because the engine throughput grows linearly with contract count. The first step takes <em>months</em>; the last takes <em>days</em>.</p>
+                    <h3 class="cl-accel__h">Time at each contract level</h3>
+                    <p class="cl-accel__sub">The year breaks into the 60-day buffer plus one or two trading segments at fixed contract counts. No fractional scaling. No more than 4 /ES at any point.</p>
                 </div>
                 <div class="cl-accel__bars" id="cl-accel-bars"><!-- rendered by JS --></div>
             </div>
@@ -274,19 +274,19 @@
             </article>
         </div>
 
-        <!-- Step cadence: dynamic table reflecting the current scenario -->
+        <!-- Cadence breakdown: dynamic table reflecting the current scenario -->
         <div class="cadence">
-            <h3 class="cadence__h">Step-by-step cadence (current scenario)</h3>
-            <p class="cadence__sub">Every transition shown below requires the prior step to have accumulated $5,000 in verified profit. The time-to-next-step shrinks as the engine adds contracts — this is the velocity-compounds principle made concrete.</p>
+            <h3 class="cadence__h">Year breakdown (current scenario)</h3>
+            <p class="cadence__sub">The buffer is mandatory across all three scenarios. The scaling segment(s) below depend on which path you've selected. No row is generated for contract levels you never reach.</p>
             <div class="cadence__table-wrap">
                 <table class="cadence__table">
                     <thead>
-                        <tr><th>Step transition</th><th>Cumulative profit</th><th>NLV (start → end)</th><th>Time to next</th></tr>
+                        <tr><th>Window</th><th>Engine</th><th>SPY contribution</th><th>Engine contribution</th></tr>
                     </thead>
                     <tbody id="cl-cadence-tbody"><!-- rendered by JS --></tbody>
                 </table>
             </div>
-            <p class="compliance">Hypothetical and illustrative. The $1,900/month-per-/ES throughput assumption is taken from the 227-trade reference dataset's monthly cadence under realistic conditions. Real markets introduce friction, regime changes, and stand-down events that may materially extend or prevent this trajectory. The Falsifiability Gate supersedes all ladder logic — if rolling-100 expectancy crosses zero, or any of the eight Stage-2 kill conditions fire, the ladder halts regardless of which step has been reached.</p>
+            <p class="compliance">Hypothetical and illustrative. <strong>SPY assumption:</strong> the 90% foundation is modeled at 10% annualized — the rough 20-year historical average of the S&amp;P 500 total return. Future SPY performance may be higher, lower, or negative; this is not a forecast. <strong>Engine throughput:</strong> ~$1,480/month/ES, derived from the 227-trade reference dataset (+$26,662.50 per /ES ÷ 18 calendar months, Apr 2023 – Oct 2024). Calendar-month average, not active-day extrapolation. Real markets introduce friction, regime changes, and stand-down events that may materially extend or prevent this trajectory. The Falsifiability Gate supersedes all ladder logic — if rolling-100 expectancy crosses zero, or any of the eight Stage-2 kill conditions fire, the engine halts regardless of which level has been reached.</p>
         </div>
     </div>
 </section>
@@ -565,7 +565,7 @@
                 <p class="period__h">Pre-registration live publication</p>
                 <p class="period__body">Every trade on the restarted strategy published to the live dashboard within 24 hours of close. Tagged H2 or H3 per OP-04. Witnessed per the locked Falsifiability Protocol v1.0. By product launch, pre-registrants see the 227 historical trades plus every pre-registration trade — all on the same, witnessed methodology.</p>
                 <div class="period__actions">
-                    <a href="dashboard.html" class="btn btn--primary btn--sm">Open live dashboard →</a>
+                    <a href="/dashboard.html" target="_blank" rel="noopener" class="btn btn--primary btn--sm">Open live dashboard ↗</a>
                 </div>
                 <p class="period__stat"><strong id="continuityLiveCount">—</strong> pre-registration trades published so far</p>
             </article>
@@ -599,8 +599,8 @@
                 <p class="protocol-card__title">Pre-committed operational charter for the Majority Opinion Predisposal Strategy.</p>
                 <p class="protocol-card__lede">The full operational charter — eight Expression-Layer trigger conditions (ED-01 through ED-08), four Fidelity-Layer criteria (OP-01 through OP-04), the three-tier stand-down ladder, the Binding Interpretation Rule, the modification protocol, and the witness verification structure — is published as a single locked document. It was written before any investor capital was accepted. Any change is subject to a 48-hour cool-off, written justification, and witness countersignature, with public disclosure within 24 hours.</p>
                 <div class="protocol-card__actions">
-                    <a href="falsifiability-protocol.html" class="btn btn--primary btn--lg" data-cta="protocol-read">Read the full protocol →</a>
-                    <a href="falsifiability-protocol.html" target="_blank" rel="noopener" class="btn btn--ghost" data-cta="protocol-newtab">Open in new tab</a>
+                    <a href="/falsifiability-protocol.html" target="_blank" rel="noopener" class="btn btn--primary btn--lg" data-cta="protocol-read">Read the full protocol ↗</a>
+                    <a href="/falsifiability-protocol.html" target="_blank" rel="noopener" class="btn btn--ghost" data-cta="protocol-newtab">Open in new tab</a>
                 </div>
                 <p class="protocol-card__attest">Witness: <strong>Manish Dharod</strong>. Operator: <strong>Hiren Desai</strong>, Founder &amp; CIO. The summary below this card is the working overview; the linked document is the binding artifact.</p>
             </div>
@@ -890,7 +890,7 @@
                     <li><a href="https://alpha.ekantikcapital.com">The Research</a></li>
                     <li><a href="https://founding.ekantikcapital.com">Founding Members</a></li>
                     <li><a href="https://discord.gg/cSQFunvNRx" target="_blank" rel="noopener">Discord Community</a></li>
-                    <li><a href="dashboard.html">Live Trades Dashboard</a></li>
+                    <li><a href="/dashboard.html">Live Trades Dashboard</a></li>
                 </ul>
             </div>
             <div class="footer__col">
@@ -901,7 +901,7 @@
                     <li><a href="#">Terms of Use</a></li>
                     <li><a href="#">Marketing Disclosures</a></li>
                     <li><a href="#">Mission Vow &amp; Structure</a></li>
-                    <li><a href="falsifiability-protocol.html">Falsifiability Protocol v1.0</a></li>
+                    <li><a href="/falsifiability-protocol.html">Falsifiability Protocol v1.0</a></li>
                 </ul>
             </div>
         </div>

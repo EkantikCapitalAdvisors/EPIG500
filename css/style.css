@@ -3089,3 +3089,18 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .cl-hero__value { font-size: 24px; }
     .cl-card__value { font-size: 22px; }
 }
+
+/* Cadence bars — buffer variant + secondary label */
+.cl-bar { grid-template-columns: 150px 1fr 100px; }
+.cl-bar__label { display: flex; flex-direction: column; gap: 2px; }
+.cl-bar__label small {
+    font-size: 10px;
+    color: var(--slate);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+}
+.cl-bar--buffer .cl-bar__fill {
+    background: repeating-linear-gradient(45deg, #cbd5e1 0 6px, #e2e8f0 6px 12px);
+}
+.cl-bar--buffer .cl-bar__label { color: var(--slate-dark); }
