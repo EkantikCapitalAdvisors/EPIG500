@@ -63,7 +63,28 @@
             </label>
         </div>
         <div class="admin-panel__body" data-panel="paste" hidden>
-            <textarea id="adminPaste" rows="8" placeholder="Paste raw CSV rows or JSON…"></textarea>
+            <textarea id="adminPaste" rows="10" placeholder="Paste CSV, JSON, or Ekantik journal blocks…"></textarea>
+            <div class="paste-formats">
+                <details class="paste-format">
+                    <summary>◆ Ekantik journal format (auto-detected)</summary>
+                    <p>One block per trade. Date header, optional entry/SL/TP, then a result line ending in H2 or H3. Sides: <code>s</code> = sell/short, <code>b</code> = buy/long. Tags: <code>H2</code> = process breach, <code>H3</code> = variance.</p>
+<pre><code>5/19/26 12.09 PM
+MO1: s 7404
+MO1: sl 7416
+MO1: tp 7361
+
+MO1: +21 H3</code></pre>
+                    <p class="paste-format__note">Paste multiple blocks at once — each new date header starts a new trade.</p>
+                </details>
+                <details class="paste-format">
+                    <summary>◆ CSV (Tradovate, TradeZella, IB Orders)</summary>
+                    <p>Standard exports auto-detect. Needs at least a points or pnl column.</p>
+                </details>
+                <details class="paste-format">
+                    <summary>◆ JSON (native trades.json or array of trade objects)</summary>
+                    <p>Paste the contents of a downloaded trades.json or a JSON array.</p>
+                </details>
+            </div>
             <button class="btn btn--secondary btn--sm" id="adminPasteBtn">Parse pasted data</button>
         </div>
         <div class="admin-panel__body" data-panel="single" hidden>

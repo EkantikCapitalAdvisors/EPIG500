@@ -153,6 +153,19 @@
 
     function handleUpload(text, filename) {
         try {
+            // 1. Ekantik journal format detection (date + MO1:s/b/sl/tp + result line)
+            if (looksLikeJournal(text)) {
+                const parsed = parseEkantikJournal(text);
+                if (!parsed.length) throw new Error('Journal format detected but no complete trade blocks parsed.');
+                const startId = CURRENT.trades.length + STAGED.length + 1;
+                parsed.forEach(function (t, i) { t.id = startId + i; });
+                STAGED = STAGED.concat(parsed);
+                renderPreview(); renderKpis();
+                status('✓ Parsed ' + parsed.length + ' trade ' + (parsed.length === 1 ? 'block' : 'blocks') + ' from Ekantik journal format.', 'success');
+                return;
+            }
+
+            // 2. JSON detection
             let rows;
             if ((filename && /\.json$/i.test(filename)) || text.trim().charAt(0) === '[' || text.trim().charAt(0) === '{') {
                 const json = JSON.parse(text);
@@ -170,8 +183,9 @@
                     return norm;
                 });
             } else {
+                // 3. CSV fallback
                 rows = parseCSV(text);
-                if (!rows) throw new Error('Could not parse CSV.');
+                if (!rows) throw new Error('Could not parse CSV or detect a known format.');
             }
             const startId = CURRENT.trades.length + STAGED.length + 1;
             const parsed = rowsToTrades(rows, startId);
@@ -182,6 +196,90 @@
         } catch (e) {
             status('Parse failed: ' + e.message, 'error');
         }
+    }
+
+    /* ---------- Ekantik journal parser ----------
+       Format (one block per trade):
+         <M/D/YY h.mm AM|PM>
+         <LABEL>: <s|b> <entry_price>
+         <LABEL>: sl<stop_loss>            (optional, informational)
+         <LABEL>: tp<trailing_profit>      (optional, informational)
+         <blank line>
+         <LABEL>: +/-<points> H2|H3
+       LABEL is anything matching M\w+ (e.g. MO1, M01, MO2, MES, etc.)
+       Multiple trades may be separated by blank lines and/or new date headers.
+    */
+    const JOURNAL_DATE_RE   = /\b(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+(\d{1,2})[.:](\d{2})\s*(AM|PM|am|pm)?\b/;
+    const JOURNAL_ENTRY_RE  = /^\s*M\w*\s*:\s*([sbSB])\s*(\d+(?:\.\d+)?)/m;
+    const JOURNAL_RESULT_RE = /^\s*M\w*\s*:\s*([+-]\d+(?:\.\d+)?)\s+([Hh][23]|BE|be)/m;
+
+    function looksLikeJournal(text) {
+        return JOURNAL_DATE_RE.test(text) && JOURNAL_RESULT_RE.test(text);
+    }
+
+    function parseEkantikJournal(text) {
+        // Split into blocks. A block boundary is any line that itself is a date header.
+        const lines = text.split(/\r?\n/);
+        const blocks = [];
+        let buf = [];
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            if (JOURNAL_DATE_RE.test(line.trim()) && buf.length > 0) {
+                blocks.push(buf.join('\n'));
+                buf = [line];
+            } else {
+                buf.push(line);
+            }
+        }
+        if (buf.join('').trim().length) blocks.push(buf.join('\n'));
+
+        const trades = [];
+        for (let bi = 0; bi < blocks.length; bi++) {
+            const block = blocks[bi];
+            const dm = block.match(JOURNAL_DATE_RE);
+            const rm = block.match(JOURNAL_RESULT_RE);
+            if (!dm || !rm) continue;
+
+            // Date / time
+            let mo = parseInt(dm[1], 10);
+            let day = parseInt(dm[2], 10);
+            let yr = parseInt(dm[3], 10);
+            if (yr < 100) yr += 2000;
+            let hr = parseInt(dm[4], 10);
+            const min = parseInt(dm[5], 10);
+            const ampm = (dm[6] || '').toUpperCase();
+            if (ampm === 'PM' && hr < 12) hr += 12;
+            if (ampm === 'AM' && hr === 12) hr = 0;
+            const ts = new Date(yr, mo - 1, day, hr, min, 0).toISOString();
+
+            // Entry (optional)
+            const em = block.match(JOURNAL_ENTRY_RE);
+            const side = em ? (em[1].toLowerCase() === 's' ? 'SHORT' : 'LONG') : '';
+            const entry = em ? parseFloat(em[2]) : null;
+
+            // Stop loss / trailing profit (optional, captured for the record)
+            const slMatch = block.match(/^\s*M\w*\s*:\s*sl\s*(\d+(?:\.\d+)?)/im);
+            const tpMatch = block.match(/^\s*M\w*\s*:\s*tp\s*(\d+(?:\.\d+)?)/im);
+
+            // Result
+            const pts = parseFloat(rm[1]);
+            let tag = rm[2].toUpperCase();
+            if (tag === 'H1') tag = 'H3'; // OP-04: per-trade H1 is itself a breach
+
+            trades.push({
+                timestamp: ts,
+                symbol: '/ES',
+                side: side,
+                result: pts > 0 ? 'W' : pts < 0 ? 'L' : 'BE',
+                pts: Math.round(pts * 100) / 100,
+                dollars: Math.round(pts * 50 * 100) / 100,
+                tag: tag,
+                entry: entry,
+                sl: slMatch ? parseFloat(slMatch[1]) : null,
+                tp: tpMatch ? parseFloat(tpMatch[1]) : null
+            });
+        }
+        return trades;
     }
 
     document.getElementById('adminFile').addEventListener('change', function () {
