@@ -1,0 +1,2281 @@
+{
+  "meta": {
+    "version": 1,
+    "dataset_label": "Ekantik 500 reference dataset",
+    "dataset_range": "Apr 2023 – Oct 2024",
+    "last_updated": "2026-05-24T12:29:27.686Z",
+    "description": "Operator live trading record on the Majority Opinion Predisposal Strategy. Pre-committed protocol: see /falsifiability-protocol.html"
+  },
+  "trades": [
+    {
+      "id": 1,
+      "timestamp": "2023-04-03T17:48:46.649Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -8,
+      "dollars": -400,
+      "tag": "H3"
+    },
+    {
+      "id": 2,
+      "timestamp": "2023-04-03T16:34:19.082Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 10.61,
+      "dollars": 530.5,
+      "tag": "H3"
+    },
+    {
+      "id": 3,
+      "timestamp": "2023-04-03T17:47:47.385Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 10.59,
+      "dollars": 529.5,
+      "tag": "H3"
+    },
+    {
+      "id": 4,
+      "timestamp": "2023-04-04T17:08:15.971Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.75,
+      "dollars": 387.5,
+      "tag": "H3"
+    },
+    {
+      "id": 5,
+      "timestamp": "2023-04-04T18:34:15.620Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.7,
+      "dollars": 385,
+      "tag": "H3"
+    },
+    {
+      "id": 6,
+      "timestamp": "2023-04-05T18:03:08.441Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 6.3,
+      "dollars": 315,
+      "tag": "H3"
+    },
+    {
+      "id": 7,
+      "timestamp": "2023-04-05T15:05:51.579Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 8.37,
+      "dollars": 418.5,
+      "tag": "H3"
+    },
+    {
+      "id": 8,
+      "timestamp": "2023-04-05T18:57:01.925Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 4.94,
+      "dollars": 247,
+      "tag": "H3"
+    },
+    {
+      "id": 9,
+      "timestamp": "2023-04-06T18:33:27.914Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -7.21,
+      "dollars": -360.5,
+      "tag": "H3"
+    },
+    {
+      "id": 10,
+      "timestamp": "2023-04-06T16:42:27.840Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 8.97,
+      "dollars": 448.5,
+      "tag": "H3"
+    },
+    {
+      "id": 11,
+      "timestamp": "2023-04-07T18:34:09.208Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -8.02,
+      "dollars": -401,
+      "tag": "H3"
+    },
+    {
+      "id": 12,
+      "timestamp": "2023-04-07T15:04:12.281Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.89,
+      "dollars": -344.5,
+      "tag": "H3"
+    },
+    {
+      "id": 13,
+      "timestamp": "2023-04-08T16:27:52.800Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 11.29,
+      "dollars": 564.5,
+      "tag": "H3"
+    },
+    {
+      "id": 14,
+      "timestamp": "2023-04-08T19:34:43.891Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 7.55,
+      "dollars": 377.5,
+      "tag": "H3"
+    },
+    {
+      "id": 15,
+      "timestamp": "2023-04-08T18:40:32.810Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -5.73,
+      "dollars": -286.5,
+      "tag": "H3"
+    },
+    {
+      "id": 16,
+      "timestamp": "2023-04-09T14:37:09.439Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 9.09,
+      "dollars": 454.5,
+      "tag": "H3"
+    },
+    {
+      "id": 17,
+      "timestamp": "2023-04-09T15:00:56.958Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 8.16,
+      "dollars": 408,
+      "tag": "H3"
+    },
+    {
+      "id": 18,
+      "timestamp": "2023-04-10T19:46:17.659Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -4.49,
+      "dollars": -224.5,
+      "tag": "H3"
+    },
+    {
+      "id": 19,
+      "timestamp": "2023-04-10T16:28:34.197Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 9.36,
+      "dollars": 468,
+      "tag": "H3"
+    },
+    {
+      "id": 20,
+      "timestamp": "2023-04-11T14:48:27.447Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 5.1,
+      "dollars": 255,
+      "tag": "H3"
+    },
+    {
+      "id": 21,
+      "timestamp": "2023-04-11T18:50:55.786Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -5.99,
+      "dollars": -299.5,
+      "tag": "H3"
+    },
+    {
+      "id": 22,
+      "timestamp": "2023-04-11T20:22:58.048Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 9.17,
+      "dollars": 458.5,
+      "tag": "H3"
+    },
+    {
+      "id": 23,
+      "timestamp": "2023-04-12T20:09:56.424Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 9.71,
+      "dollars": 485.5,
+      "tag": "H3"
+    },
+    {
+      "id": 24,
+      "timestamp": "2023-04-12T17:22:47.684Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -5.81,
+      "dollars": -290.5,
+      "tag": "H3"
+    },
+    {
+      "id": 25,
+      "timestamp": "2023-04-13T16:10:01.146Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.7,
+      "dollars": -335,
+      "tag": "H3"
+    },
+    {
+      "id": 26,
+      "timestamp": "2023-04-13T15:30:41.578Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -4.33,
+      "dollars": -216.5,
+      "tag": "H3"
+    },
+    {
+      "id": 27,
+      "timestamp": "2023-04-13T18:19:52.258Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 5.4,
+      "dollars": 270,
+      "tag": "H3"
+    },
+    {
+      "id": 28,
+      "timestamp": "2023-04-14T15:05:52.639Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.95,
+      "dollars": 397.5,
+      "tag": "H3"
+    },
+    {
+      "id": 29,
+      "timestamp": "2023-04-14T14:35:17.649Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -7.42,
+      "dollars": -371,
+      "tag": "H3"
+    },
+    {
+      "id": 30,
+      "timestamp": "2023-04-15T14:43:50.612Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 9.14,
+      "dollars": 457,
+      "tag": "H3"
+    },
+    {
+      "id": 31,
+      "timestamp": "2023-04-15T18:38:28.976Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -7.89,
+      "dollars": -394.5,
+      "tag": "H3"
+    },
+    {
+      "id": 32,
+      "timestamp": "2023-04-16T14:47:03.213Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 10.03,
+      "dollars": 501.5,
+      "tag": "H3"
+    },
+    {
+      "id": 33,
+      "timestamp": "2023-04-16T17:52:39.008Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 10.62,
+      "dollars": 531,
+      "tag": "H3"
+    },
+    {
+      "id": 34,
+      "timestamp": "2023-04-16T20:17:40.218Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -6.12,
+      "dollars": -306,
+      "tag": "H3"
+    },
+    {
+      "id": 35,
+      "timestamp": "2023-04-17T16:34:12.462Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 10.31,
+      "dollars": 515.5,
+      "tag": "H3"
+    },
+    {
+      "id": 36,
+      "timestamp": "2023-04-17T18:42:09.565Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 5.21,
+      "dollars": 260.5,
+      "tag": "H3"
+    },
+    {
+      "id": 37,
+      "timestamp": "2023-04-18T14:38:56.906Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -6.03,
+      "dollars": -301.5,
+      "tag": "H3"
+    },
+    {
+      "id": 38,
+      "timestamp": "2023-04-18T18:37:45.284Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 5.87,
+      "dollars": 293.5,
+      "tag": "H3"
+    },
+    {
+      "id": 39,
+      "timestamp": "2023-04-19T16:58:03.518Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -5.22,
+      "dollars": -261,
+      "tag": "H3"
+    },
+    {
+      "id": 40,
+      "timestamp": "2023-04-19T14:49:52.457Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 6.33,
+      "dollars": 316.5,
+      "tag": "H3"
+    },
+    {
+      "id": 41,
+      "timestamp": "2023-04-19T19:09:11.694Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 8.69,
+      "dollars": 434.5,
+      "tag": "H3"
+    },
+    {
+      "id": 42,
+      "timestamp": "2023-04-20T15:55:58.138Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -8.93,
+      "dollars": -446.5,
+      "tag": "H3"
+    },
+    {
+      "id": 43,
+      "timestamp": "2023-04-20T14:30:46.996Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -4.8,
+      "dollars": -240,
+      "tag": "H3"
+    },
+    {
+      "id": 44,
+      "timestamp": "2023-04-21T16:54:55.695Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 9.01,
+      "dollars": 450.5,
+      "tag": "H3"
+    },
+    {
+      "id": 45,
+      "timestamp": "2023-04-21T15:42:23.378Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -3.07,
+      "dollars": -153.5,
+      "tag": "H3"
+    },
+    {
+      "id": 46,
+      "timestamp": "2023-04-22T15:19:19.849Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 9.8,
+      "dollars": 490,
+      "tag": "H3"
+    },
+    {
+      "id": 47,
+      "timestamp": "2023-04-22T18:10:01.685Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 8.74,
+      "dollars": 437,
+      "tag": "H3"
+    },
+    {
+      "id": 48,
+      "timestamp": "2023-04-22T16:10:17.751Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.73,
+      "dollars": -336.5,
+      "tag": "H3"
+    },
+    {
+      "id": 49,
+      "timestamp": "2023-04-23T16:41:18.119Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 4.33,
+      "dollars": 216.5,
+      "tag": "H3"
+    },
+    {
+      "id": 50,
+      "timestamp": "2023-04-23T17:44:39.333Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 11.31,
+      "dollars": 565.5,
+      "tag": "H3"
+    },
+    {
+      "id": 51,
+      "timestamp": "2023-04-24T19:56:59.612Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.46,
+      "dollars": 373,
+      "tag": "H3"
+    },
+    {
+      "id": 52,
+      "timestamp": "2023-04-24T19:23:22.392Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -6.96,
+      "dollars": -348,
+      "tag": "H3"
+    },
+    {
+      "id": 53,
+      "timestamp": "2023-04-24T17:22:12.909Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 10.8,
+      "dollars": 540,
+      "tag": "H3"
+    },
+    {
+      "id": 54,
+      "timestamp": "2023-04-25T17:03:03.365Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 8.11,
+      "dollars": 405.5,
+      "tag": "H3"
+    },
+    {
+      "id": 55,
+      "timestamp": "2023-04-25T15:26:56.180Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -6.25,
+      "dollars": -312.5,
+      "tag": "H3"
+    },
+    {
+      "id": 56,
+      "timestamp": "2023-04-26T20:23:15.104Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -3.02,
+      "dollars": -151,
+      "tag": "H3"
+    },
+    {
+      "id": 57,
+      "timestamp": "2023-04-26T14:44:23.827Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -5.18,
+      "dollars": -259,
+      "tag": "H3"
+    },
+    {
+      "id": 58,
+      "timestamp": "2023-04-27T19:02:34.226Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 9.73,
+      "dollars": 486.5,
+      "tag": "H3"
+    },
+    {
+      "id": 59,
+      "timestamp": "2023-04-27T14:35:54.690Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 6.42,
+      "dollars": 321,
+      "tag": "H3"
+    },
+    {
+      "id": 60,
+      "timestamp": "2023-04-27T19:19:00.403Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.4,
+      "dollars": 370,
+      "tag": "H3"
+    },
+    {
+      "id": 61,
+      "timestamp": "2023-04-28T18:33:48.680Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -7.08,
+      "dollars": -354,
+      "tag": "H3"
+    },
+    {
+      "id": 62,
+      "timestamp": "2023-04-28T19:24:44.660Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 6.2,
+      "dollars": 310,
+      "tag": "H3"
+    },
+    {
+      "id": 63,
+      "timestamp": "2023-04-29T18:40:13.418Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 6.06,
+      "dollars": 303,
+      "tag": "H3"
+    },
+    {
+      "id": 64,
+      "timestamp": "2023-04-29T18:40:58.894Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 4.19,
+      "dollars": 209.5,
+      "tag": "H3"
+    },
+    {
+      "id": 65,
+      "timestamp": "2023-04-30T16:09:16.803Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 8.93,
+      "dollars": 446.5,
+      "tag": "H3"
+    },
+    {
+      "id": 66,
+      "timestamp": "2023-04-30T18:08:42.618Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 7.74,
+      "dollars": 387,
+      "tag": "H3"
+    },
+    {
+      "id": 67,
+      "timestamp": "2023-04-30T18:08:28.922Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 6.93,
+      "dollars": 346.5,
+      "tag": "H3"
+    },
+    {
+      "id": 68,
+      "timestamp": "2023-05-01T18:00:03.080Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 10.74,
+      "dollars": 537,
+      "tag": "H3"
+    },
+    {
+      "id": 69,
+      "timestamp": "2023-05-01T17:26:29.266Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 3.97,
+      "dollars": 198.5,
+      "tag": "H3"
+    },
+    {
+      "id": 70,
+      "timestamp": "2023-05-02T14:51:10.150Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 8.02,
+      "dollars": 401,
+      "tag": "H3"
+    },
+    {
+      "id": 71,
+      "timestamp": "2023-05-02T16:44:00.467Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -4.96,
+      "dollars": -248,
+      "tag": "H3"
+    },
+    {
+      "id": 72,
+      "timestamp": "2023-05-03T18:21:36.830Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 8.37,
+      "dollars": 418.5,
+      "tag": "H3"
+    },
+    {
+      "id": 73,
+      "timestamp": "2023-05-03T19:02:18.842Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 5.34,
+      "dollars": 267,
+      "tag": "H3"
+    },
+    {
+      "id": 74,
+      "timestamp": "2023-05-03T17:31:05.369Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.12,
+      "dollars": -306,
+      "tag": "H3"
+    },
+    {
+      "id": 75,
+      "timestamp": "2023-05-04T16:08:00.858Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 5.66,
+      "dollars": 283,
+      "tag": "H3"
+    },
+    {
+      "id": 76,
+      "timestamp": "2023-05-04T19:43:06.792Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 5.48,
+      "dollars": 274,
+      "tag": "H3"
+    },
+    {
+      "id": 77,
+      "timestamp": "2023-05-05T15:58:05.007Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 5.99,
+      "dollars": 299.5,
+      "tag": "H3"
+    },
+    {
+      "id": 78,
+      "timestamp": "2023-05-05T17:59:51.265Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 6.99,
+      "dollars": 349.5,
+      "tag": "H3"
+    },
+    {
+      "id": 79,
+      "timestamp": "2023-05-05T19:47:11.970Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -4.2,
+      "dollars": -210,
+      "tag": "H3"
+    },
+    {
+      "id": 80,
+      "timestamp": "2023-05-06T17:26:42.207Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 9,
+      "dollars": 450,
+      "tag": "H3"
+    },
+    {
+      "id": 81,
+      "timestamp": "2023-05-06T18:00:52.103Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 9.08,
+      "dollars": 454,
+      "tag": "H3"
+    },
+    {
+      "id": 82,
+      "timestamp": "2023-05-07T16:16:31.833Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 6.11,
+      "dollars": 305.5,
+      "tag": "H3"
+    },
+    {
+      "id": 83,
+      "timestamp": "2023-05-07T19:27:44.035Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 9.06,
+      "dollars": 453,
+      "tag": "H3"
+    },
+    {
+      "id": 84,
+      "timestamp": "2023-05-08T19:29:36.216Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 8.69,
+      "dollars": 434.5,
+      "tag": "H3"
+    },
+    {
+      "id": 85,
+      "timestamp": "2023-05-08T16:43:55.442Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -4.33,
+      "dollars": -216.5,
+      "tag": "H3"
+    },
+    {
+      "id": 86,
+      "timestamp": "2023-05-08T16:55:13.513Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -7.81,
+      "dollars": -390.5,
+      "tag": "H3"
+    },
+    {
+      "id": 87,
+      "timestamp": "2023-05-09T15:35:36.377Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.06,
+      "dollars": -303,
+      "tag": "H3"
+    },
+    {
+      "id": 88,
+      "timestamp": "2023-05-09T20:24:47.180Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.15,
+      "dollars": 357.5,
+      "tag": "H3"
+    },
+    {
+      "id": 89,
+      "timestamp": "2023-05-10T17:58:34.846Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -4.82,
+      "dollars": -241,
+      "tag": "H3"
+    },
+    {
+      "id": 90,
+      "timestamp": "2023-05-10T19:01:27.990Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -7.65,
+      "dollars": -382.5,
+      "tag": "H3"
+    },
+    {
+      "id": 91,
+      "timestamp": "2023-05-11T19:41:06.927Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 6.92,
+      "dollars": 346,
+      "tag": "H3"
+    },
+    {
+      "id": 92,
+      "timestamp": "2023-05-11T20:21:47.628Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -8.54,
+      "dollars": -427,
+      "tag": "H3"
+    },
+    {
+      "id": 93,
+      "timestamp": "2023-05-11T19:46:14.861Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 10.07,
+      "dollars": 503.5,
+      "tag": "H3"
+    },
+    {
+      "id": 94,
+      "timestamp": "2023-05-12T14:32:57.947Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.73,
+      "dollars": 386.5,
+      "tag": "H3"
+    },
+    {
+      "id": 95,
+      "timestamp": "2023-05-12T19:18:41.804Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -3.87,
+      "dollars": -193.5,
+      "tag": "H3"
+    },
+    {
+      "id": 96,
+      "timestamp": "2023-05-13T20:13:51.645Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "BE",
+      "pts": 0,
+      "dollars": 0,
+      "tag": "BE"
+    },
+    {
+      "id": 97,
+      "timestamp": "2023-05-13T18:25:35.914Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 11.64,
+      "dollars": 582,
+      "tag": "H3"
+    },
+    {
+      "id": 98,
+      "timestamp": "2023-05-14T15:35:27.558Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -9.05,
+      "dollars": -452.5,
+      "tag": "H3"
+    },
+    {
+      "id": 99,
+      "timestamp": "2023-05-14T15:00:08.978Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -5.01,
+      "dollars": -250.5,
+      "tag": "H3"
+    },
+    {
+      "id": 100,
+      "timestamp": "2023-05-14T17:19:56.210Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.9,
+      "dollars": -345,
+      "tag": "H3"
+    },
+    {
+      "id": 101,
+      "timestamp": "2023-05-15T17:57:21.434Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -4.9,
+      "dollars": -245,
+      "tag": "H3"
+    },
+    {
+      "id": 102,
+      "timestamp": "2023-05-15T18:43:36.826Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 11.2,
+      "dollars": 560,
+      "tag": "H3"
+    },
+    {
+      "id": 103,
+      "timestamp": "2023-05-16T18:28:28.335Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.67,
+      "dollars": 383.5,
+      "tag": "H3"
+    },
+    {
+      "id": 104,
+      "timestamp": "2023-05-16T16:45:03.619Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 11.5,
+      "dollars": 575,
+      "tag": "H3"
+    },
+    {
+      "id": 105,
+      "timestamp": "2023-05-16T18:35:56.362Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.8,
+      "dollars": -340,
+      "tag": "H3"
+    },
+    {
+      "id": 106,
+      "timestamp": "2023-05-17T19:22:49.210Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -4.51,
+      "dollars": -225.5,
+      "tag": "H3"
+    },
+    {
+      "id": 107,
+      "timestamp": "2023-05-17T18:08:15.928Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -7.13,
+      "dollars": -356.5,
+      "tag": "H3"
+    },
+    {
+      "id": 108,
+      "timestamp": "2023-05-18T19:34:52.879Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 6.54,
+      "dollars": 327,
+      "tag": "H3"
+    },
+    {
+      "id": 109,
+      "timestamp": "2023-05-18T16:34:40.673Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 5,
+      "dollars": 250,
+      "tag": "H3"
+    },
+    {
+      "id": 110,
+      "timestamp": "2023-05-19T18:30:38.279Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 9.35,
+      "dollars": 467.5,
+      "tag": "H3"
+    },
+    {
+      "id": 111,
+      "timestamp": "2023-05-19T18:09:34.566Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -7.09,
+      "dollars": -354.5,
+      "tag": "H3"
+    },
+    {
+      "id": 112,
+      "timestamp": "2023-05-19T14:32:23.412Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 10.61,
+      "dollars": 530.5,
+      "tag": "H3"
+    },
+    {
+      "id": 113,
+      "timestamp": "2023-05-20T18:50:02.489Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 8.55,
+      "dollars": 427.5,
+      "tag": "H3"
+    },
+    {
+      "id": 114,
+      "timestamp": "2023-05-20T18:22:14.203Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 6.33,
+      "dollars": 316.5,
+      "tag": "H3"
+    },
+    {
+      "id": 115,
+      "timestamp": "2023-05-21T14:50:13.856Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -5.95,
+      "dollars": -297.5,
+      "tag": "H3"
+    },
+    {
+      "id": 116,
+      "timestamp": "2023-05-21T18:25:39.420Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 5.7,
+      "dollars": 285,
+      "tag": "H3"
+    },
+    {
+      "id": 117,
+      "timestamp": "2023-05-22T17:16:53.457Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 9.62,
+      "dollars": 481,
+      "tag": "H3"
+    },
+    {
+      "id": 118,
+      "timestamp": "2023-05-22T16:15:59.883Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 8.49,
+      "dollars": 424.5,
+      "tag": "H3"
+    },
+    {
+      "id": 119,
+      "timestamp": "2023-05-22T17:11:00.995Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -7.34,
+      "dollars": -367,
+      "tag": "H3"
+    },
+    {
+      "id": 120,
+      "timestamp": "2023-05-23T14:50:48.739Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -3.61,
+      "dollars": -180.5,
+      "tag": "H3"
+    },
+    {
+      "id": 121,
+      "timestamp": "2023-05-23T15:03:33.403Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 6.89,
+      "dollars": 344.5,
+      "tag": "H3"
+    },
+    {
+      "id": 122,
+      "timestamp": "2023-05-24T20:29:28.530Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 6.99,
+      "dollars": 349.5,
+      "tag": "H3"
+    },
+    {
+      "id": 123,
+      "timestamp": "2023-05-24T17:05:07.278Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -4.27,
+      "dollars": -213.5,
+      "tag": "H3"
+    },
+    {
+      "id": 124,
+      "timestamp": "2023-05-25T17:35:49.407Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 10.31,
+      "dollars": 515.5,
+      "tag": "H3"
+    },
+    {
+      "id": 125,
+      "timestamp": "2023-05-25T15:07:40.236Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -5.26,
+      "dollars": -263,
+      "tag": "H3"
+    },
+    {
+      "id": 126,
+      "timestamp": "2023-05-25T19:13:14.192Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -5.51,
+      "dollars": -275.5,
+      "tag": "H3"
+    },
+    {
+      "id": 127,
+      "timestamp": "2023-05-26T15:21:52.462Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 6.62,
+      "dollars": 331,
+      "tag": "H3"
+    },
+    {
+      "id": 128,
+      "timestamp": "2023-05-26T15:20:22.992Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 6.8,
+      "dollars": 340,
+      "tag": "H3"
+    },
+    {
+      "id": 129,
+      "timestamp": "2023-05-27T17:45:47.947Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 5.09,
+      "dollars": 254.5,
+      "tag": "H3"
+    },
+    {
+      "id": 130,
+      "timestamp": "2023-05-27T18:15:21.242Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 11.42,
+      "dollars": 571,
+      "tag": "H3"
+    },
+    {
+      "id": 131,
+      "timestamp": "2023-05-27T19:26:38.395Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.99,
+      "dollars": -349.5,
+      "tag": "H3"
+    },
+    {
+      "id": 132,
+      "timestamp": "2023-05-28T15:27:15.443Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 8.76,
+      "dollars": 438,
+      "tag": "H3"
+    },
+    {
+      "id": 133,
+      "timestamp": "2023-05-28T14:57:57.799Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 6.35,
+      "dollars": 317.5,
+      "tag": "H3"
+    },
+    {
+      "id": 134,
+      "timestamp": "2023-05-29T20:08:08.454Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 7.34,
+      "dollars": 367,
+      "tag": "H3"
+    },
+    {
+      "id": 135,
+      "timestamp": "2023-05-29T17:19:49.630Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 11.14,
+      "dollars": 557,
+      "tag": "H3"
+    },
+    {
+      "id": 136,
+      "timestamp": "2023-05-30T17:25:20.554Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -4.55,
+      "dollars": -227.5,
+      "tag": "H3"
+    },
+    {
+      "id": 137,
+      "timestamp": "2023-05-30T16:49:11.545Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 8.84,
+      "dollars": 442,
+      "tag": "H3"
+    },
+    {
+      "id": 138,
+      "timestamp": "2023-05-30T17:34:31.177Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 8.34,
+      "dollars": 417,
+      "tag": "H3"
+    },
+    {
+      "id": 139,
+      "timestamp": "2023-05-31T19:40:15.015Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.32,
+      "dollars": 366,
+      "tag": "H3"
+    },
+    {
+      "id": 140,
+      "timestamp": "2023-05-31T19:08:00.297Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -9.15,
+      "dollars": -457.5,
+      "tag": "H3"
+    },
+    {
+      "id": 141,
+      "timestamp": "2023-06-01T16:02:40.319Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -5.26,
+      "dollars": -263,
+      "tag": "H3"
+    },
+    {
+      "id": 142,
+      "timestamp": "2023-06-01T14:55:37.839Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -5.94,
+      "dollars": -297,
+      "tag": "H3"
+    },
+    {
+      "id": 143,
+      "timestamp": "2023-06-02T14:58:22.127Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -5.2,
+      "dollars": -260,
+      "tag": "H3"
+    },
+    {
+      "id": 144,
+      "timestamp": "2023-06-02T19:02:45.936Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 10.74,
+      "dollars": 537,
+      "tag": "H3"
+    },
+    {
+      "id": 145,
+      "timestamp": "2023-06-02T16:55:40.482Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 7.26,
+      "dollars": 363,
+      "tag": "H3"
+    },
+    {
+      "id": 146,
+      "timestamp": "2023-06-03T17:03:39.984Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 2.7,
+      "dollars": 135,
+      "tag": "H3"
+    },
+    {
+      "id": 147,
+      "timestamp": "2023-06-03T14:51:42.422Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 8.13,
+      "dollars": 406.5,
+      "tag": "H3"
+    },
+    {
+      "id": 148,
+      "timestamp": "2023-06-04T17:51:31.737Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -8.51,
+      "dollars": -425.5,
+      "tag": "H3"
+    },
+    {
+      "id": 149,
+      "timestamp": "2023-06-04T16:12:12.302Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -5.45,
+      "dollars": -272.5,
+      "tag": "H3"
+    },
+    {
+      "id": 150,
+      "timestamp": "2023-06-05T18:40:40.923Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -2.21,
+      "dollars": -110.5,
+      "tag": "H3"
+    },
+    {
+      "id": 151,
+      "timestamp": "2023-06-05T19:44:54.108Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.61,
+      "dollars": 380.5,
+      "tag": "H3"
+    },
+    {
+      "id": 152,
+      "timestamp": "2023-06-05T18:08:27.379Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 8.2,
+      "dollars": 410,
+      "tag": "H3"
+    },
+    {
+      "id": 153,
+      "timestamp": "2023-06-06T17:27:32.383Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -6.34,
+      "dollars": -317,
+      "tag": "H3"
+    },
+    {
+      "id": 154,
+      "timestamp": "2023-06-06T18:49:43.519Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -8.03,
+      "dollars": -401.5,
+      "tag": "H3"
+    },
+    {
+      "id": 155,
+      "timestamp": "2023-06-07T18:20:12.689Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 13.15,
+      "dollars": 657.5,
+      "tag": "H3"
+    },
+    {
+      "id": 156,
+      "timestamp": "2023-06-07T20:05:02.084Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.13,
+      "dollars": -306.5,
+      "tag": "H3"
+    },
+    {
+      "id": 157,
+      "timestamp": "2023-06-07T15:04:00.760Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -5.06,
+      "dollars": -253,
+      "tag": "H3"
+    },
+    {
+      "id": 158,
+      "timestamp": "2023-06-08T19:22:23.619Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.82,
+      "dollars": -341,
+      "tag": "H3"
+    },
+    {
+      "id": 159,
+      "timestamp": "2023-06-08T20:15:33.464Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.2,
+      "dollars": -310,
+      "tag": "H3"
+    },
+    {
+      "id": 160,
+      "timestamp": "2023-06-09T19:53:27.676Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 9.15,
+      "dollars": 457.5,
+      "tag": "H3"
+    },
+    {
+      "id": 161,
+      "timestamp": "2023-06-09T18:57:10.992Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 3.95,
+      "dollars": 197.5,
+      "tag": "H3"
+    },
+    {
+      "id": 162,
+      "timestamp": "2023-06-10T14:47:58.879Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 6.94,
+      "dollars": 347,
+      "tag": "H3"
+    },
+    {
+      "id": 163,
+      "timestamp": "2023-06-10T19:47:08.593Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.6,
+      "dollars": -330,
+      "tag": "H3"
+    },
+    {
+      "id": 164,
+      "timestamp": "2023-06-10T17:07:26.288Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -5.38,
+      "dollars": -269,
+      "tag": "H3"
+    },
+    {
+      "id": 165,
+      "timestamp": "2023-06-11T17:59:33.283Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -4.67,
+      "dollars": -233.5,
+      "tag": "H3"
+    },
+    {
+      "id": 166,
+      "timestamp": "2023-06-11T17:54:47.078Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -6.74,
+      "dollars": -337,
+      "tag": "H3"
+    },
+    {
+      "id": 167,
+      "timestamp": "2023-06-12T14:52:32.106Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 10.55,
+      "dollars": 527.5,
+      "tag": "H3"
+    },
+    {
+      "id": 168,
+      "timestamp": "2023-06-12T15:04:55.349Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 8.97,
+      "dollars": 448.5,
+      "tag": "H3"
+    },
+    {
+      "id": 169,
+      "timestamp": "2023-06-13T14:46:09.839Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.52,
+      "dollars": -326,
+      "tag": "H3"
+    },
+    {
+      "id": 170,
+      "timestamp": "2023-06-13T17:04:14.032Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 7.85,
+      "dollars": 392.5,
+      "tag": "H3"
+    },
+    {
+      "id": 171,
+      "timestamp": "2023-06-13T15:47:36.404Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -6.09,
+      "dollars": -304.5,
+      "tag": "H3"
+    },
+    {
+      "id": 172,
+      "timestamp": "2023-06-14T16:14:29.648Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 4.31,
+      "dollars": 215.5,
+      "tag": "H3"
+    },
+    {
+      "id": 173,
+      "timestamp": "2023-06-14T17:11:52.633Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -6.74,
+      "dollars": -337,
+      "tag": "H3"
+    },
+    {
+      "id": 174,
+      "timestamp": "2023-06-15T17:29:48.885Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -8.11,
+      "dollars": -405.5,
+      "tag": "H3"
+    },
+    {
+      "id": 175,
+      "timestamp": "2023-06-15T19:32:52.199Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -3.76,
+      "dollars": -188,
+      "tag": "H3"
+    },
+    {
+      "id": 176,
+      "timestamp": "2023-06-16T20:17:56.246Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 8.5,
+      "dollars": 425,
+      "tag": "H3"
+    },
+    {
+      "id": 177,
+      "timestamp": "2023-06-16T16:54:44.182Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.36,
+      "dollars": 368,
+      "tag": "H3"
+    },
+    {
+      "id": 178,
+      "timestamp": "2023-06-16T20:04:34.971Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.17,
+      "dollars": -308.5,
+      "tag": "H3"
+    },
+    {
+      "id": 179,
+      "timestamp": "2023-06-17T19:05:17.606Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 5.7,
+      "dollars": 285,
+      "tag": "H3"
+    },
+    {
+      "id": 180,
+      "timestamp": "2023-06-17T17:29:35.932Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 5.94,
+      "dollars": 297,
+      "tag": "H3"
+    },
+    {
+      "id": 181,
+      "timestamp": "2023-06-18T18:47:07.979Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -6.51,
+      "dollars": -325.5,
+      "tag": "H3"
+    },
+    {
+      "id": 182,
+      "timestamp": "2023-06-18T17:56:59.117Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.88,
+      "dollars": -344,
+      "tag": "H3"
+    },
+    {
+      "id": 183,
+      "timestamp": "2023-06-18T20:19:18.273Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 5.75,
+      "dollars": 287.5,
+      "tag": "H3"
+    },
+    {
+      "id": 184,
+      "timestamp": "2023-06-19T14:50:25.587Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -4.08,
+      "dollars": -204,
+      "tag": "H3"
+    },
+    {
+      "id": 185,
+      "timestamp": "2023-06-19T16:31:19.412Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "BE",
+      "pts": 0,
+      "dollars": 0,
+      "tag": "BE"
+    },
+    {
+      "id": 186,
+      "timestamp": "2023-06-20T15:36:17.161Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 9.52,
+      "dollars": 476,
+      "tag": "H3"
+    },
+    {
+      "id": 187,
+      "timestamp": "2023-06-20T15:03:10.937Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.58,
+      "dollars": 379,
+      "tag": "H3"
+    },
+    {
+      "id": 188,
+      "timestamp": "2023-06-21T18:03:23.753Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -8.96,
+      "dollars": -448,
+      "tag": "H3"
+    },
+    {
+      "id": 189,
+      "timestamp": "2023-06-21T16:09:10.260Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.11,
+      "dollars": -305.5,
+      "tag": "H3"
+    },
+    {
+      "id": 190,
+      "timestamp": "2023-06-21T19:12:14.785Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 11.37,
+      "dollars": 568.5,
+      "tag": "H3"
+    },
+    {
+      "id": 191,
+      "timestamp": "2023-06-22T18:39:44.305Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 8.42,
+      "dollars": 421,
+      "tag": "H3"
+    },
+    {
+      "id": 192,
+      "timestamp": "2023-06-22T19:02:47.149Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 5.15,
+      "dollars": 257.5,
+      "tag": "H3"
+    },
+    {
+      "id": 193,
+      "timestamp": "2023-06-23T17:46:58.220Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.51,
+      "dollars": 375.5,
+      "tag": "H3"
+    },
+    {
+      "id": 194,
+      "timestamp": "2023-06-23T16:47:59.189Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -7.41,
+      "dollars": -370.5,
+      "tag": "H3"
+    },
+    {
+      "id": 195,
+      "timestamp": "2023-06-24T19:33:21.948Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "BE",
+      "pts": 0,
+      "dollars": 0,
+      "tag": "BE"
+    },
+    {
+      "id": 196,
+      "timestamp": "2023-06-24T20:29:06.323Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 7.63,
+      "dollars": 381.5,
+      "tag": "H3"
+    },
+    {
+      "id": 197,
+      "timestamp": "2023-06-24T17:57:41.183Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 5.64,
+      "dollars": 282,
+      "tag": "H3"
+    },
+    {
+      "id": 198,
+      "timestamp": "2023-06-25T19:59:37.515Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -8.14,
+      "dollars": -407,
+      "tag": "H3"
+    },
+    {
+      "id": 199,
+      "timestamp": "2023-06-25T20:03:40.932Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 9.96,
+      "dollars": 498,
+      "tag": "H3"
+    },
+    {
+      "id": 200,
+      "timestamp": "2023-06-26T18:34:49.967Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -7.99,
+      "dollars": -399.5,
+      "tag": "H3"
+    },
+    {
+      "id": 201,
+      "timestamp": "2023-06-26T16:07:19.858Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.99,
+      "dollars": -349.5,
+      "tag": "H3"
+    },
+    {
+      "id": 202,
+      "timestamp": "2023-06-27T18:14:42.737Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 5.16,
+      "dollars": 258,
+      "tag": "H3"
+    },
+    {
+      "id": 203,
+      "timestamp": "2023-06-27T17:31:02.752Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.73,
+      "dollars": 386.5,
+      "tag": "H3"
+    },
+    {
+      "id": 204,
+      "timestamp": "2023-06-27T18:59:55.213Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 7.1,
+      "dollars": 355,
+      "tag": "H3"
+    },
+    {
+      "id": 205,
+      "timestamp": "2023-06-28T20:23:31.355Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -7.86,
+      "dollars": -393,
+      "tag": "H3"
+    },
+    {
+      "id": 206,
+      "timestamp": "2023-06-28T16:33:50.218Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -3.36,
+      "dollars": -168,
+      "tag": "H3"
+    },
+    {
+      "id": 207,
+      "timestamp": "2023-06-29T16:39:00.205Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -6.76,
+      "dollars": -338,
+      "tag": "H3"
+    },
+    {
+      "id": 208,
+      "timestamp": "2023-06-29T19:32:01.812Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 11.68,
+      "dollars": 584,
+      "tag": "H3"
+    },
+    {
+      "id": 209,
+      "timestamp": "2023-06-29T16:14:59.692Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 6.18,
+      "dollars": 309,
+      "tag": "H3"
+    },
+    {
+      "id": 210,
+      "timestamp": "2023-06-30T15:35:53.027Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 6.58,
+      "dollars": 329,
+      "tag": "H3"
+    },
+    {
+      "id": 211,
+      "timestamp": "2023-06-30T16:45:11.493Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 8.8,
+      "dollars": 440,
+      "tag": "H3"
+    },
+    {
+      "id": 212,
+      "timestamp": "2023-07-01T17:30:51.150Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 8.7,
+      "dollars": 435,
+      "tag": "H3"
+    },
+    {
+      "id": 213,
+      "timestamp": "2023-07-01T18:42:12.490Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 10.64,
+      "dollars": 532,
+      "tag": "H3"
+    },
+    {
+      "id": 214,
+      "timestamp": "2023-07-02T16:42:00.188Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 7.69,
+      "dollars": 384.5,
+      "tag": "H3"
+    },
+    {
+      "id": 215,
+      "timestamp": "2023-07-02T15:51:36.035Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 8.69,
+      "dollars": 434.5,
+      "tag": "H3"
+    },
+    {
+      "id": 216,
+      "timestamp": "2023-07-02T19:42:18.908Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -4.92,
+      "dollars": -246,
+      "tag": "H3"
+    },
+    {
+      "id": 217,
+      "timestamp": "2023-07-03T19:12:11.418Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -4.04,
+      "dollars": -202,
+      "tag": "H3"
+    },
+    {
+      "id": 218,
+      "timestamp": "2023-07-03T17:37:40.619Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 9.21,
+      "dollars": 460.5,
+      "tag": "H3"
+    },
+    {
+      "id": 219,
+      "timestamp": "2023-07-04T15:56:06.852Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 7.82,
+      "dollars": 391,
+      "tag": "H3"
+    },
+    {
+      "id": 220,
+      "timestamp": "2023-07-04T15:14:35.138Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 5.74,
+      "dollars": 287,
+      "tag": "H3"
+    },
+    {
+      "id": 221,
+      "timestamp": "2023-07-05T15:34:35.467Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 11.45,
+      "dollars": 572.5,
+      "tag": "H3"
+    },
+    {
+      "id": 222,
+      "timestamp": "2023-07-05T16:28:29.762Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "L",
+      "pts": -6.81,
+      "dollars": -340.5,
+      "tag": "H3"
+    },
+    {
+      "id": 223,
+      "timestamp": "2023-07-05T16:45:10.794Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 10.32,
+      "dollars": 516,
+      "tag": "H3"
+    },
+    {
+      "id": 224,
+      "timestamp": "2023-07-06T20:15:44.628Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 7.84,
+      "dollars": 392,
+      "tag": "H3"
+    },
+    {
+      "id": 225,
+      "timestamp": "2023-07-06T15:28:01.011Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "L",
+      "pts": -2.17,
+      "dollars": -108.5,
+      "tag": "H3"
+    },
+    {
+      "id": 226,
+      "timestamp": "2023-07-07T19:55:39.573Z",
+      "symbol": "/ES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 5.87,
+      "dollars": 293.5,
+      "tag": "H3"
+    },
+    {
+      "id": 227,
+      "timestamp": "2023-07-07T18:14:51.413Z",
+      "symbol": "/ES",
+      "side": "SHORT",
+      "result": "W",
+      "pts": 5.67,
+      "dollars": 283.5,
+      "tag": "H3"
+    }
+  ]
+}

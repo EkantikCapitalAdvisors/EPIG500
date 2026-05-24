@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Trades Dashboard · Ekantik 500</title>
+    <meta name="description" content="Live trades dashboard for the Ekantik 500 Majority Opinion Predisposal Strategy — real-time KPIs, equity curve, 8-test sustainability battery, and trade table.">
+    <meta name="robots" content="noindex">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dash-body">
+
+<header class="dash-nav">
+    <div class="container dash-nav__inner">
+        <a href="/" class="logo">
+            <span class="logo__mark">E</span>
+            <span class="logo__wordmark">EKANTIK CAPITAL</span>
+            <span class="logo__sublabel">DASHBOARD</span>
+        </a>
+        <nav class="dash-nav__links">
+            <a href="/">← Landing page</a>
+            <a href="falsifiability-protocol.html">Protocol</a>
+            <a href="admin.html" class="dash-nav__admin">Admin</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container dash-main">
+    <header class="dash-header">
+        <p class="eyebrow"><span class="diamond">◆</span> Live Trades · Majority Opinion Predisposal Strategy</p>
+        <h1 class="dash-title">Operator record — live execution</h1>
+        <p class="dash-sub" id="dashMeta">Loading dataset…</p>
+    </header>
+
+    <!-- KPI strip -->
+    <section class="dash-kpis" id="dashKpis" aria-label="Key performance indicators">
+        <!-- rendered by JS -->
+    </section>
+
+    <!-- Battery verdict band -->
+    <section class="dash-battery" aria-label="8-Test Sustainability Battery">
+        <div class="dash-battery__verdict">
+            <p class="dash-battery__label">8-Test Sustainability Battery</p>
+            <p class="dash-battery__value" id="dashBatteryVerdict">—</p>
+        </div>
+        <div class="dash-battery__grid" id="dashBatteryGrid">
+            <!-- 8 compact test pills rendered by JS -->
+        </div>
+        <a href="/#battery" class="dash-battery__more">See the full battery →</a>
+    </section>
+
+    <!-- Equity curve -->
+    <section class="dash-chart" aria-label="Equity curve">
+        <header class="dash-chart__head">
+            <h2 class="dash-chart__h">Cumulative P&amp;L (/ES points)</h2>
+            <p class="dash-chart__sub" id="dashChartSub">—</p>
+        </header>
+        <canvas id="dashEquityCurve" width="1100" height="320"></canvas>
+    </section>
+
+    <!-- Filters + trades table -->
+    <section class="dash-table" aria-label="Trade record">
+        <header class="dash-table__head">
+            <h2 class="dash-chart__h">Trade record</h2>
+            <div class="dash-table__filters">
+                <select id="dashFilterResult">
+                    <option value="">All trades</option>
+                    <option value="W">Winners only</option>
+                    <option value="L">Losers only</option>
+                </select>
+                <select id="dashFilterSide">
+                    <option value="">All sides</option>
+                    <option value="LONG">Long</option>
+                    <option value="SHORT">Short</option>
+                </select>
+                <input type="search" id="dashSearch" placeholder="Search ID, symbol…">
+                <button class="btn btn--secondary btn--sm" id="dashExportCsv">Export CSV</button>
+            </div>
+        </header>
+        <div class="dash-table__wrap">
+            <table class="dash-table__table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Symbol</th>
+                        <th>Side</th>
+                        <th>Result</th>
+                        <th class="num">Points</th>
+                        <th class="num">$ / contract</th>
+                        <th>Tag</th>
+                    </tr>
+                </thead>
+                <tbody id="dashTableBody">
+                    <!-- rendered by JS -->
+                </tbody>
+            </table>
+        </div>
+        <p class="dash-table__count" id="dashTableCount">—</p>
+    </section>
+
+    <footer class="dash-footer">
+        <p>Educational only. Operator live record. Past performance does not guarantee future results. Dataset committed to <code>/data/trades.json</code> — see <a href="falsifiability-protocol.html">Falsifiability Protocol v1.0</a>.</p>
+    </footer>
+</main>
+
+<script src="js/dashboard.js"></script>
+</body>
+</html>
