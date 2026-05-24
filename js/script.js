@@ -118,15 +118,19 @@
        Starting capital: $100K NLV. 1-year horizon. 60 days of no-trading buffer
        up front (~2 months observation/protocol-warmup). Contract scaling capped
        at 4 /ES maximum. Three discrete scenarios (Floor / Realistic / Cooperative).
-       Throughput per /ES from reference data: ~$1,900/mo/contract. */
+       Throughput per /ES from reference data: $26,662.50 / 18 calendar months
+       = ~$1,480/mo/contract. Calendar-month average, not active-day extrapolation. */
 
     const NLV_START         = 100000;
-    const PER_ES_MONTHLY    = 1900;
+    // Per-/ES per-calendar-month throughput, DERIVED from the 227-trade reference
+    // dataset: total $26,662.50 / 18 calendar months (Apr 2023 – Oct 2024).
+    // Rounded to the nearest $10. Not extrapolated from active-day rates.
+    const PER_ES_MONTHLY    = 1480;
     const DURATION_MAX      = 12;            // months
     const BUFFER_DAYS       = 60;            // no-trading buffer at start of year
     const BUFFER_MONTHS     = BUFFER_DAYS / 30; // 2 months
     const COOP_BUFFER_PROFIT = 5000;          // 1-ES profit needed before cooperative scales to 4
-    const COOP_SCALE_T      = BUFFER_MONTHS + (COOP_BUFFER_PROFIT / PER_ES_MONTHLY); // ≈ 4.63 mo
+    const COOP_SCALE_T      = BUFFER_MONTHS + (COOP_BUFFER_PROFIT / PER_ES_MONTHLY); // ≈ 5.38 mo
     const MAX_CONTRACTS     = 4;
 
     // Each scenario defines the active-trading transitions (after the 60d buffer).
