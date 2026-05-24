@@ -180,60 +180,63 @@
     /* ------------------------------------------------
        5. 8-TEST SUSTAINABILITY BATTERY
        ------------------------------------------------ */
+    // Radial position classes — top, then clockwise.
+    const POS = ['t', 'tr', 'r', 'br', 'b', 'bl', 'l', 'tl'];
+
     const TEST_DESC = {
         1: {
-            name: 'P-Value (one-sided t-test)',
-            short: 'How likely is the apparent edge to be noise?',
+            name: 'Statistical Significance',
+            short: 'Rules out pure luck as the explanation.',
             what: 'Treats the trade record as a statistical sample and asks: how likely is the apparent edge to be noise from a random distribution?',
             why: 'If a strategy cannot beat noise, there is no edge to falsify. P-value separates a story from a signal.',
             fail: 'FAIL would mean the dataset cannot reject the null hypothesis that true EV is ≤ zero. No statistical edge.'
         },
         2: {
-            name: '95% Confidence Interval on EV',
-            short: 'The range within which true per-trade EV lies.',
+            name: 'Confidence Interval',
+            short: 'Profitable even in the worst plausible replay.',
             what: 'Computes the range within which the true per-trade EV almost certainly lies, given the sample.',
             why: 'A point estimate is just one number. The CI shows the cloud around it — and whether the cloud touches zero.',
             fail: 'FAIL would mean the lower bound of the 95% CI dips below zero — the apparent edge could plausibly be a sampling artefact.'
         },
         3: {
             name: 'Profit Factor',
-            short: 'Gross wins divided by gross losses.',
+            short: 'Winners dwarf losers by a comfortable margin.',
             what: 'Gross dollars won divided by gross dollars lost. Measures the raw cash asymmetry between winners and losers.',
             why: 'Win rate alone does not tell you whether the strategy compounds. PF tests whether wins are meaningfully larger than the losses they fund.',
             fail: 'FAIL would mean PF below 1.50 — the strategy works in theory but offers no margin for slippage, fees, or regime drift.'
         },
         4: {
-            name: 'Top-3 Winner Removal',
-            short: 'Does the edge survive without its three biggest wins?',
+            name: 'Outlier Independence',
+            short: 'The edge survives without its biggest winners.',
             what: 'Removes the three largest winners from the dataset and recomputes everything. Tests whether the edge depends on rare outliers.',
             why: 'If profitability lives entirely in a handful of jackpot trades, the edge is fragile.',
             fail: 'FAIL would mean P&L turns negative without top-3, or PF collapses below 1.30. The strategy would be exposed as outlier-dependent.'
         },
         5: {
-            name: 'R-Expectancy',
-            short: 'Per-trade EV expressed in units of risk.',
+            name: 'Risk-Normalized Edge',
+            short: 'Per unit of risk taken, the strategy expects to gain.',
             what: 'Expresses per-trade EV in units of risk (1R = average loss size). Risk-normalizes the edge across instruments and account sizes.',
             why: 'Dollar EV scales with sizing. R-expectancy does not — it tells you, per unit of risk taken, how much the strategy expects to return.',
             fail: 'FAIL would mean R-expectancy below +0.20R — a thin edge that would struggle to survive commission drag.'
         },
         6: {
-            name: 'Breakeven Win-Rate Buffer',
-            short: 'How much WR slippage the strategy can absorb.',
+            name: 'Breakeven Buffer',
+            short: 'Enough cushion above breakeven to survive a regime shift.',
             what: 'Calculates the win rate the strategy would need at its observed win/loss ratio to break even — then measures the gap to the actual win rate.',
             why: 'Strategies decay. The buffer measures how much win-rate slippage the strategy can absorb before crossing into losing territory.',
             fail: 'FAIL would mean a buffer below 5 percentage points — a small regime shift could push the strategy underwater.'
         },
         7: {
             name: 'Streak Resilience',
-            short: 'Worst observed losing streak vs. statistical expectation.',
+            short: 'Losing streaks short enough to keep discipline intact.',
             what: 'Measures the maximum consecutive loss streak in the record and compares it to the expected maximum given the win rate and sample size.',
             why: 'Even a high-WR strategy will sometimes produce streaks of losses by pure variance. The test confirms the observed worst case is within the statistical envelope.',
             fail: 'FAIL would mean a streak longer than 7 OR more than double the expected maximum.'
         },
         8: {
-            name: 'Bootstrap P(Profit)',
-            short: 'Fraction of resampled sequences ending profitable.',
-            what: 'Resamples the trade record with replacement 50,000 times and asks: in what fraction of simulated 227-trade sequences does the strategy end profitable?',
+            name: 'Bootstrap P(profit)',
+            short: 'Wins in almost every reshuffle of its own trades.',
+            what: 'Resamples the trade record with replacement many thousand times and asks: in what fraction of simulated sequences does the strategy end profitable?',
             why: 'Statistical tests assume distributions. Bootstrapping makes no such assumption — it re-runs the actual edge against itself under all possible orderings.',
             fail: 'FAIL would mean fewer than 90% of bootstrap paths end profitable.'
         }
@@ -347,18 +350,21 @@
         grid.innerHTML = results.map(function (r, i) {
             const num = i + 1;
             const meta = TEST_DESC[num];
+            const pos = POS[i] || '';
+            const numStr = num < 10 ? '0' + num : String(num);
             return [
-                '<details class="battery-card' + (r.pass ? '' : ' is-fail') + '">',
-                  '<summary class="battery-card__expand">◆ What this measures →</summary>',
-                  '<div class="battery-card__top">',
-                    '<span class="battery-card__num">' + num + '</span>',
-                    '<span class="battery-card__pill">' + (r.pass ? 'PASS' : 'FAIL') + '</span>',
-                  '</div>',
-                  '<p class="battery-card__name">' + meta.name + '</p>',
-                  '<p class="battery-card__value">' + r.display + '</p>',
-                  '<p class="battery-card__threshold">Threshold: ' + r.threshold + '</p>',
-                  '<p class="battery-card__desc">' + meta.short + '</p>',
+                '<details class="battery-card battery-card--' + pos + (r.pass ? '' : ' is-fail') + '">',
+                  '<summary class="battery-card__summary">',
+                    '<p class="battery-card__num">' + numStr + '</p>',
+                    '<p class="battery-card__name">' + meta.name + '</p>',
+                    '<p class="battery-card__short">' + meta.short + '</p>',
+                    '<div class="battery-card__meta">',
+                      '<span class="battery-card__pill">' + (r.pass ? 'PASS' : 'FAIL') + '</span>',
+                      '<span class="battery-card__value">' + r.display + '</span>',
+                    '</div>',
+                  '</summary>',
                   '<div class="battery-card__body">',
+                    '<p class="battery-card__threshold">Threshold: <strong>' + r.threshold + '</strong></p>',
                     '<section><h5>What it measures</h5><p>' + meta.what + '</p></section>',
                     '<section><h5>Why it matters</h5><p>' + meta.why + '</p></section>',
                     '<section><h5>What FAIL would mean</h5><p>' + meta.fail + '</p></section>',
