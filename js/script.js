@@ -52,7 +52,12 @@
     document.querySelectorAll('a[href="#book"]').forEach(function (cta) {
         cta.addEventListener('click', function () {
             const source = cta.closest('section')?.id || 'unknown';
-            track(source === 'founding' ? 'founding_member_cta_click' : 'hero_cta_click', { section: source });
+            track(source === 'founding' ? 'founding_member_cta_click' : 'book_cta_click', { section: source });
+        });
+    });
+    document.querySelectorAll('a[data-cta^="discord-"]').forEach(function (cta) {
+        cta.addEventListener('click', function () {
+            track('discord_cta_click', { source: cta.dataset.cta, section: cta.closest('section')?.id || 'nav' });
         });
     });
 
@@ -65,81 +70,82 @@
     /* ------------------------------------------------
        3. SCENARIO TOGGLE (Ladder section)
        ------------------------------------------------ */
-    /* Capital growth chart
-       Models active sleeve value over time. At each step boundary the engine adds a contract,
-       and the increased throughput compresses the time to the next step ("velocity compounds").
-       Numbers derived from spec cadence table (~$1,900/month per /ES at Step 1, etc.). */
+    /* Compounding Ladder model — simplified
+       Starting capital: $100K NLV. 1-year horizon. Rule: every $5,000 in cumulative
+       profit earns one additional /ES contract. Throughput per /ES from reference
+       data (~$1,900/mo/contract under realistic scenario). */
 
-    // Step model: time reached (months), contracts active after this step, $/ES/month avg
-    // Capital base is reset at each step from the cumulative active-sleeve value.
-    // Initial active sleeve: $50,000 ($500K NLV × 10% buffer).
-    const ACTIVE_START = 50000;
-    const NLV_START = 500000;
+    const NLV_START = 100000;
+    const PROFIT_PER_STEP = 5000;
+    const PER_ES_MONTHLY = 1900;
+    const DURATION_MAX = 12; // months
+    const MAX_STEPS = 10;
 
-    const STEPS = [
-        { n: 1, label: 'Q1',     contracts: 1, timeReached: 0,    monthsAtStep: 6.0 },
-        { n: 2, label: 'Q2–Q3', contracts: 2, timeReached: 6.0,  monthsAtStep: 3.0 },
-        { n: 3, label: 'Q4',    contracts: 3, timeReached: 9.0,  monthsAtStep: 2.0 },
-        { n: 4, label: 'Y2 H1', contracts: 4, timeReached: 11.0, monthsAtStep: 1.5 },
-        { n: 5, label: 'Y2 H2', contracts: 5, timeReached: 12.5, monthsAtStep: 1.3 },
-        { n: 6, label: 'Y3 H1', contracts: 6, timeReached: 13.8, monthsAtStep: 1.0 },
-        { n: 7, label: 'Y3 H2', contracts: 7, timeReached: 14.8, monthsAtStep: 0.9 },
-        { n: 8, label: 'Y4+',   contracts: 8, timeReached: 15.7, monthsAtStep: 0.0 }
-    ];
-    const PER_ES_MONTHLY = 1900; // From cadence table
+    function buildSteps(scenario) {
+        // Throughput multiplier per scenario
+        const mult = scenario === 'cooperative' ? 1.3
+                   : scenario === 'realistic'   ? 1.0
+                   : 0; // floor: no compounding
+        const steps = [{ n: 1, contracts: 1, timeReached: 0, nlv: NLV_START, cumProfit: 0 }];
+        if (mult === 0) return steps;
+        let t = 0, cum = 0, c = 1;
+        while (t < DURATION_MAX && c < MAX_STEPS) {
+            const monthsToNext = PROFIT_PER_STEP / (c * PER_ES_MONTHLY * mult);
+            if (t + monthsToNext > DURATION_MAX) break;
+            t += monthsToNext;
+            cum += PROFIT_PER_STEP;
+            c += 1;
+            steps.push({ n: c, contracts: c, timeReached: t, nlv: NLV_START + cum, cumProfit: cum });
+        }
+        return steps;
+    }
 
     function buildCurve(scenario) {
-        // Multiplier per scenario applied to monthly throughput
-        const mult = scenario === 'cooperative' ? 1.1
-                   : scenario === 'realistic'   ? 0.75
-                   : 0.0; // floor: no compounding, sleeve stays ~flat
-        const points = [{ t: 0, value: ACTIVE_START, step: 1 }];
-        let value = ACTIVE_START;
-        let advanceUpTo = scenario === 'cooperative' ? 8 : scenario === 'realistic' ? 6 : 1;
-        for (let i = 0; i < STEPS.length - 1; i++) {
-            if (i + 1 > advanceUpTo) break;
-            const s = STEPS[i];
-            const next = STEPS[i + 1];
-            const duration = next.timeReached - s.timeReached;
-            const monthlyGain = s.contracts * PER_ES_MONTHLY * mult;
-            // Smooth growth over duration
+        const mult = scenario === 'cooperative' ? 1.3
+                   : scenario === 'realistic'   ? 1.0
+                   : 0;
+        const steps = buildSteps(scenario);
+        const points = [{ t: 0, value: NLV_START }];
+        let value = NLV_START;
+        // Smooth growth between each pair of steps
+        for (let i = 0; i < steps.length - 1; i++) {
+            const a = steps[i], b = steps[i + 1];
+            const duration = b.timeReached - a.timeReached;
             const SUBDIV = 6;
             for (let k = 1; k <= SUBDIV; k++) {
                 const tFrac = k / SUBDIV;
-                points.push({ t: s.timeReached + tFrac * duration, value: value + monthlyGain * tFrac * duration, step: s.n });
+                points.push({ t: a.timeReached + tFrac * duration, value: value + (b.nlv - a.nlv) * tFrac });
             }
-            value += monthlyGain * duration;
+            value = b.nlv;
         }
-        // Final extrapolation beyond last reached step
-        const last = points[points.length - 1];
-        const tailMonths = 2.0;
-        const finalStepIdx = Math.min(advanceUpTo - 1, STEPS.length - 1);
-        const finalGain = STEPS[finalStepIdx].contracts * PER_ES_MONTHLY * mult * tailMonths;
-        points.push({ t: last.t + tailMonths, value: value + finalGain, step: STEPS[finalStepIdx].n });
+        // After last step, continue accumulating at constant contracts until 12 months
+        if (mult > 0 && steps.length > 0) {
+            const lastStep = steps[steps.length - 1];
+            const remaining = DURATION_MAX - lastStep.timeReached;
+            if (remaining > 0) {
+                const monthlyGain = lastStep.contracts * PER_ES_MONTHLY * mult;
+                const SUBDIV = 8;
+                for (let k = 1; k <= SUBDIV; k++) {
+                    const tFrac = k / SUBDIV;
+                    points.push({ t: lastStep.timeReached + tFrac * remaining, value: value + monthlyGain * tFrac * remaining });
+                }
+            }
+        } else {
+            // floor: flat at NLV_START all year
+            points.push({ t: DURATION_MAX, value: NLV_START });
+        }
         return points;
     }
 
-    function nlvAtStep(stepNum, points) {
-        // Total NLV = SPY foundation (held flat for illustration) + active sleeve value
-        // Active sleeve = points value at start of that step
-        const target = STEPS[stepNum - 1];
-        let p = points[0];
-        for (let i = 0; i < points.length; i++) {
-            if (points[i].t >= target.timeReached) { p = points[i]; break; }
-            p = points[i];
-        }
-        const spy = NLV_START * 0.90; // assume foundation held
-        return spy + p.value;
-    }
-
     const SCENARIO_LABELS = {
-        cooperative: 'Cooperative — all steps fire on illustrative cadence. Approximately three doublings on the active sleeve over ~16 months.',
-        realistic:   'Most likely terrain — earned progress with stand-down events and partial steps. Ladder advances through ~Step 6.',
-        floor:       'Capital preserved. Edge expressed linearly. The strategy\'s quiet outcome — no compounding observed.'
+        cooperative: 'Cooperative — published cadence × 1.3. Ladder reaches the engine ceiling early; subsequent months compound at full intensity.',
+        realistic:   'Realistic — published reference cadence applied unmodified. Most likely terrain.',
+        floor:       'Floor — strategy launches but no edge expression. Active sleeve flat at 1 /ES the whole year.'
     };
 
     let currentScenario = 'realistic';
     let currentPoints = buildCurve(currentScenario);
+    let currentSteps  = buildSteps(currentScenario);
 
     function drawLadderChart() {
         const canvas = document.getElementById('ladderCanvas');
@@ -153,15 +159,19 @@
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.clearRect(0, 0, W, H);
 
-        const PAD_L = 60, PAD_R = 40, PAD_T = 30, PAD_B = 60;
-        const tMax = 18;
-        const valMax = currentScenario === 'cooperative' ? 220000 : currentScenario === 'realistic' ? 130000 : 70000;
-        const valMin = 0;
+        const PAD_L = 70, PAD_R = 40, PAD_T = 30, PAD_B = 60;
+        const tMax = DURATION_MAX;
+        // Y range: always start at NLV_START; cap to max value observed (rounded up)
+        const valMin = NLV_START;
+        const finalVal = currentPoints[currentPoints.length - 1].value;
+        const valMax = currentScenario === 'cooperative' ? 300000
+                     : currentScenario === 'realistic'   ? 250000
+                     : 120000;
 
         function xAt(t) { return PAD_L + (t / tMax) * (W - PAD_L - PAD_R); }
         function yAt(v) { return PAD_T + (1 - (v - valMin) / (valMax - valMin)) * (H - PAD_T - PAD_B); }
 
-        // Y gridlines + labels
+        // Y gridlines + dollar labels
         ctx.strokeStyle = 'rgba(27, 42, 74, 0.06)'; ctx.lineWidth = 1;
         ctx.fillStyle = '#64748B'; ctx.font = '11px "Source Sans 3", sans-serif';
         const yTicks = 5;
@@ -172,20 +182,29 @@
             ctx.fillText('$' + Math.round(v / 1000) + 'K', 8, y + 4);
         }
         // X axis labels (months)
-        for (let m = 0; m <= 18; m += 3) {
+        for (let m = 0; m <= 12; m += 2) {
             const x = xAt(m);
-            ctx.fillText(m + (m === 0 ? ' mo' : ''), x - 8, H - PAD_B + 18);
+            ctx.fillText(m + (m === 0 ? ' mo' : ''), x - 10, H - PAD_B + 18);
             ctx.strokeStyle = 'rgba(27, 42, 74, 0.04)';
             ctx.beginPath(); ctx.moveTo(x, PAD_T); ctx.lineTo(x, H - PAD_B); ctx.stroke();
         }
+
+        // Baseline at NLV_START
+        ctx.strokeStyle = 'rgba(27, 42, 74, 0.25)'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+        const yBase = yAt(NLV_START);
+        ctx.beginPath(); ctx.moveTo(PAD_L, yBase); ctx.lineTo(W - PAD_R, yBase); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(27, 42, 74, 0.5)';
+        ctx.font = '10px "Source Sans 3", sans-serif';
+        ctx.fillText('start: $100K', W - PAD_R - 65, yBase - 5);
 
         // Area fill
         const pts = currentPoints;
         ctx.fillStyle = 'rgba(200, 169, 81, 0.15)';
         ctx.beginPath();
-        ctx.moveTo(xAt(pts[0].t), yAt(valMin));
+        ctx.moveTo(xAt(pts[0].t), yBase);
         for (let i = 0; i < pts.length; i++) ctx.lineTo(xAt(pts[i].t), yAt(pts[i].value));
-        ctx.lineTo(xAt(pts[pts.length - 1].t), yAt(valMin));
+        ctx.lineTo(xAt(pts[pts.length - 1].t), yBase);
         ctx.closePath(); ctx.fill();
 
         // Curve line
@@ -197,48 +216,76 @@
         }
         ctx.stroke();
 
-        // Step markers — only for steps actually reached
-        const advanceUpTo = currentScenario === 'cooperative' ? 8 : currentScenario === 'realistic' ? 6 : 1;
-        ctx.font = '12px "Source Sans 3", sans-serif';
-        for (let i = 0; i < STEPS.length; i++) {
-            const s = STEPS[i];
-            if (s.n > advanceUpTo) continue;
+        // Step markers
+        for (let i = 0; i < currentSteps.length; i++) {
+            const s = currentSteps[i];
             const x = xAt(s.timeReached);
-            // Find value at this t
-            let val = ACTIVE_START;
-            for (let p = 0; p < pts.length; p++) { if (pts[p].t >= s.timeReached) { val = pts[p].value; break; } val = pts[p].value; }
-            const y = yAt(val);
+            const y = yAt(s.nlv);
             // Dashed drop line
-            ctx.strokeStyle = 'rgba(200, 169, 81, 0.45)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+            ctx.strokeStyle = 'rgba(200, 169, 81, 0.5)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
             ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, H - PAD_B); ctx.stroke();
             ctx.setLineDash([]);
             // Dot
             ctx.fillStyle = '#C8A951';
-            ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(x, y, 7, 0, Math.PI * 2); ctx.fill();
             ctx.fillStyle = '#1B2A4A';
-            ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI * 2); ctx.fill();
         }
 
-        // Render step badges (HTML overlay) — positioned over the canvas
+        // Final NLV callout
+        const lastPt = pts[pts.length - 1];
+        const xEnd = xAt(lastPt.t), yEnd = yAt(lastPt.value);
+        ctx.fillStyle = '#1B2A4A';
+        ctx.font = 'bold 13px "Source Sans 3", sans-serif';
+        ctx.fillText('$' + Math.round(lastPt.value / 1000) + 'K @ 12 mo', xEnd - 90, yEnd - 12);
+
+        // Render step badges
         const stepsContainer = document.getElementById('cl-chart-steps');
         if (stepsContainer) {
-            stepsContainer.innerHTML = STEPS.map(function (s) {
+            stepsContainer.innerHTML = currentSteps.map(function (s, idx) {
                 const x = xAt(s.timeReached);
                 const xPct = (x / W) * 100;
-                const reached = s.n <= advanceUpTo;
-                const nlv = nlvAtStep(s.n, pts);
-                const riskDollars = Math.round(nlv * 0.005);
+                const riskDollars = Math.round(s.nlv * 0.005);
                 return [
-                    '<div class="cl-step-badge' + (reached ? '' : ' is-not-reached') + '" style="left:' + xPct + '%" data-step="' + s.n + '">',
+                    '<div class="cl-step-badge ' + (idx % 2 === 0 ? 'cl-step-badge--bot' : 'cl-step-badge--top') + '" style="left:' + xPct + '%" data-step="' + s.n + '">',
                       '<p class="cl-step-badge__num">Step ' + s.n + '</p>',
                       '<p class="cl-step-badge__contracts">' + s.contracts + ' /ES</p>',
-                      '<p class="cl-step-badge__detail">NLV $' + Math.round(nlv / 1000) + 'K</p>',
-                      '<p class="cl-step-badge__detail">$' + riskDollars.toLocaleString() + '/trade · 0.5%</p>',
-                      '<p class="cl-step-badge__time">' + s.label + ' · ' + s.timeReached.toFixed(1) + ' mo</p>',
+                      '<p class="cl-step-badge__detail">NLV $' + Math.round(s.nlv / 1000) + 'K</p>',
+                      '<p class="cl-step-badge__detail">Risk: $' + riskDollars.toLocaleString() + '/trade</p>',
+                      '<p class="cl-step-badge__time">' + s.timeReached.toFixed(1) + ' mo · +$' + (s.cumProfit / 1000).toFixed(0) + 'K profit</p>',
                     '</div>'
                 ].join('');
             }).join('');
         }
+
+        // Render cadence summary table
+        renderCadenceTable();
+    }
+
+    function renderCadenceTable() {
+        const tbody = document.getElementById('cl-cadence-tbody');
+        if (!tbody) return;
+        const steps = currentSteps;
+        let rows = '';
+        for (let i = 0; i < steps.length - 1; i++) {
+            const a = steps[i], b = steps[i + 1];
+            const dt = (b.timeReached - a.timeReached);
+            const dtLabel = dt < 1 ? Math.round(dt * 30) + ' days' : dt.toFixed(1) + ' months';
+            rows += '<tr>'
+                + '<td>' + a.contracts + ' → ' + b.contracts + ' /ES</td>'
+                + '<td>$' + (a.cumProfit / 1000).toFixed(0) + 'K → $' + (b.cumProfit / 1000).toFixed(0) + 'K</td>'
+                + '<td>$' + a.nlv.toLocaleString() + ' → $' + b.nlv.toLocaleString() + '</td>'
+                + '<td>' + dtLabel + '</td>'
+                + '</tr>';
+        }
+        const last = steps[steps.length - 1];
+        const lastPt = currentPoints[currentPoints.length - 1];
+        rows += '<tr class="cadence__total">'
+            + '<td>Year-end</td>'
+            + '<td colspan="2">@ ' + last.contracts + ' /ES, ' + last.timeReached.toFixed(1) + ' mo to ladder peak</td>'
+            + '<td>NLV $' + Math.round(lastPt.value / 1000) + 'K (illustrative)</td>'
+            + '</tr>';
+        tbody.innerHTML = rows;
     }
 
     /* Kill conditions rail */
@@ -904,40 +951,63 @@
     }
 
     /* ------------------------------------------------
-       10. CAL.COM LAZY LOAD
+       10. CALENDLY LAZY LOAD
        ------------------------------------------------ */
-    const calContainer = document.getElementById('calBookingEmbed');
-    if (calContainer && 'IntersectionObserver' in window) {
-        const calIO = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) { if (entry.isIntersecting) { loadCal(calContainer); calIO.disconnect(); } });
+    const calendlyContainer = document.getElementById('calendlyEmbed');
+    if (calendlyContainer && 'IntersectionObserver' in window) {
+        const cIO = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) { if (entry.isIntersecting) { loadCalendly(calendlyContainer); cIO.disconnect(); } });
         }, { threshold: 0.2 });
-        calIO.observe(calContainer);
+        cIO.observe(calendlyContainer);
+    } else if (calendlyContainer) {
+        loadCalendly(calendlyContainer);
     }
-    function loadCal(container) {
-        const link = container.getAttribute('data-cal-link');
-        if (!link) return;
-        (function (C, A, L) {
-            let p = function (a, ar) { a.q.push(ar); };
-            let d = C.document;
-            C.Cal = C.Cal || function () {
-                let cal = C.Cal; let ar = arguments;
-                if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement('script')).src = A; cal.loaded = true; }
-                if (ar[0] === L) {
-                    const api = function () { p(api, arguments); };
-                    const ns = ar[1]; api.q = api.q || [];
-                    if (typeof ns === 'string') { cal.ns[ns] = cal.ns[ns] || api; p(cal.ns[ns], ar); p(cal, ['initNamespace', ns]); }
-                    else { p(cal, ar); }
-                    return;
+
+    function loadCalendly(container) {
+        const url = container.getAttribute('data-calendly-url');
+        if (!url) return;
+
+        // Inject Calendly widget CSS once
+        if (!document.getElementById('calendly-widget-css')) {
+            const link = document.createElement('link');
+            link.id = 'calendly-widget-css';
+            link.rel = 'stylesheet';
+            link.href = 'https://assets.calendly.com/assets/external/widget.css';
+            document.head.appendChild(link);
+        }
+
+        // Replace fallback with inline widget container
+        const fallback = container.querySelector('.booking__fallback');
+        if (fallback) fallback.remove();
+        const widget = document.createElement('div');
+        widget.className = 'calendly-inline-widget';
+        widget.setAttribute('data-url', url + '?hide_event_type_details=0&primary_color=C8A951&text_color=1B2A4A');
+        widget.style.minWidth = '320px';
+        widget.style.height   = '720px';
+        container.appendChild(widget);
+
+        // Inject Calendly loader script once; it auto-initializes any
+        // .calendly-inline-widget on the page when loaded.
+        if (window.Calendly) {
+            window.Calendly.initInlineWidget({ url: widget.getAttribute('data-url'), parentElement: widget });
+        } else {
+            const s = document.createElement('script');
+            s.src = 'https://assets.calendly.com/assets/external/widget.js';
+            s.async = true;
+            document.head.appendChild(s);
+        }
+
+        // Booking confirmation event — Calendly posts a window message on event_scheduled
+        if (!window.__calendlyListenerAttached) {
+            window.__calendlyListenerAttached = true;
+            window.addEventListener('message', function (e) {
+                if (e.data && typeof e.data.event === 'string' && e.data.event.indexOf('calendly') === 0) {
+                    if (e.data.event === 'calendly.event_scheduled') {
+                        track('booking_confirmed', { source_section: 'final_cta', provider: 'calendly' });
+                    }
                 }
-                p(cal, ar);
-            };
-        })(window, 'https://app.cal.com/embed/embed.js', 'init');
-        try {
-            window.Cal('init', 'ekantik500', { origin: 'https://cal.com' });
-            window.Cal.ns.ekantik500('inline', { elementOrSelector: container, calLink: link, layout: 'month_view' });
-            window.Cal.ns.ekantik500('ui', { theme: 'light', cssVarsPerTheme: { light: { 'cal-brand': '#C8A951' } } });
-            window.Cal.ns.ekantik500('on', { action: 'bookingSuccessful', callback: function () { track('booking_confirmed', { source_section: 'final_cta' }); } });
-        } catch (e) {}
+            });
+        }
     }
 
     /* ------------------------------------------------
