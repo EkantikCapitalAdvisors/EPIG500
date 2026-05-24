@@ -145,7 +145,8 @@
                 result: result,
                 pts: Math.round(pts * 100) / 100,
                 dollars: Math.round(pts * 50 * 100) / 100,
-                tag: tagKey && r[tagKey] ? String(r[tagKey]).toUpperCase() : (pts === 0 ? 'BE' : 'H3')
+                tag: tagKey && r[tagKey] ? String(r[tagKey]).toUpperCase() : (pts === 0 ? 'BE' : 'H3'),
+                period: 'pre_reg'
             });
         }
         return out;
@@ -274,6 +275,7 @@
                 pts: Math.round(pts * 100) / 100,
                 dollars: Math.round(pts * 50 * 100) / 100,
                 tag: tag,
+                period: 'pre_reg',
                 entry: entry,
                 sl: slMatch ? parseFloat(slMatch[1]) : null,
                 tp: tpMatch ? parseFloat(tpMatch[1]) : null
@@ -318,7 +320,8 @@
             result: pts > 0 ? 'W' : pts < 0 ? 'L' : 'BE',
             pts: Math.round(pts * 100) / 100,
             dollars: Math.round(pts * 50 * 100) / 100,
-            tag: (fd.get('tag') || 'H3').toString()
+            tag: (fd.get('tag') || 'H3').toString(),
+            period: (fd.get('period') || 'pre_reg').toString()
         };
         STAGED.push(t);
         renderPreview(); renderKpis();

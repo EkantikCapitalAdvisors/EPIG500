@@ -3,8 +3,8 @@
     "version": 1,
     "dataset_label": "Ekantik 500 reference dataset",
     "dataset_range": "Apr 2023 – Oct 2024",
-    "last_updated": "2026-05-24T12:29:27.686Z",
-    "description": "Operator live trading record on the Majority Opinion Predisposal Strategy. Pre-committed protocol: see /falsifiability-protocol.html"
+    "last_updated": "2026-05-24T12:56:22.103Z",
+    "description": "Operator live trading record on the Majority Opinion Predisposal Strategy. Period 1 (historical reference, 227 trades, Apr 2023 – Oct 2024) plus any Period 3 (pre-registration live trades, May 2026 → product launch). See /falsifiability-protocol.html and the #continuity section for the three-period reconciliation."
   },
   "trades": [
     {
@@ -15,7 +15,8 @@
       "result": "L",
       "pts": -8,
       "dollars": -400,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 2,
@@ -25,7 +26,8 @@
       "result": "W",
       "pts": 10.61,
       "dollars": 530.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 3,
@@ -35,7 +37,8 @@
       "result": "W",
       "pts": 10.59,
       "dollars": 529.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 4,
@@ -45,7 +48,8 @@
       "result": "W",
       "pts": 7.75,
       "dollars": 387.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 5,
@@ -55,7 +59,8 @@
       "result": "W",
       "pts": 7.7,
       "dollars": 385,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 6,
@@ -65,7 +70,8 @@
       "result": "W",
       "pts": 6.3,
       "dollars": 315,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 7,
@@ -75,7 +81,8 @@
       "result": "W",
       "pts": 8.37,
       "dollars": 418.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 8,
@@ -85,7 +92,8 @@
       "result": "W",
       "pts": 4.94,
       "dollars": 247,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 9,
@@ -95,7 +103,8 @@
       "result": "L",
       "pts": -7.21,
       "dollars": -360.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 10,
@@ -105,7 +114,8 @@
       "result": "W",
       "pts": 8.97,
       "dollars": 448.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 11,
@@ -115,7 +125,8 @@
       "result": "L",
       "pts": -8.02,
       "dollars": -401,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 12,
@@ -125,7 +136,8 @@
       "result": "L",
       "pts": -6.89,
       "dollars": -344.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 13,
@@ -135,7 +147,8 @@
       "result": "W",
       "pts": 11.29,
       "dollars": 564.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 14,
@@ -145,7 +158,8 @@
       "result": "W",
       "pts": 7.55,
       "dollars": 377.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 15,
@@ -155,7 +169,8 @@
       "result": "L",
       "pts": -5.73,
       "dollars": -286.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 16,
@@ -165,7 +180,8 @@
       "result": "W",
       "pts": 9.09,
       "dollars": 454.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 17,
@@ -175,7 +191,8 @@
       "result": "W",
       "pts": 8.16,
       "dollars": 408,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 18,
@@ -185,7 +202,8 @@
       "result": "L",
       "pts": -4.49,
       "dollars": -224.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 19,
@@ -195,7 +213,8 @@
       "result": "W",
       "pts": 9.36,
       "dollars": 468,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 20,
@@ -205,7 +224,8 @@
       "result": "W",
       "pts": 5.1,
       "dollars": 255,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 21,
@@ -215,7 +235,8 @@
       "result": "L",
       "pts": -5.99,
       "dollars": -299.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 22,
@@ -225,7 +246,8 @@
       "result": "W",
       "pts": 9.17,
       "dollars": 458.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 23,
@@ -235,7 +257,8 @@
       "result": "W",
       "pts": 9.71,
       "dollars": 485.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 24,
@@ -245,7 +268,8 @@
       "result": "L",
       "pts": -5.81,
       "dollars": -290.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 25,
@@ -255,7 +279,8 @@
       "result": "L",
       "pts": -6.7,
       "dollars": -335,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 26,
@@ -265,7 +290,8 @@
       "result": "L",
       "pts": -4.33,
       "dollars": -216.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 27,
@@ -275,7 +301,8 @@
       "result": "W",
       "pts": 5.4,
       "dollars": 270,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 28,
@@ -285,7 +312,8 @@
       "result": "W",
       "pts": 7.95,
       "dollars": 397.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 29,
@@ -295,7 +323,8 @@
       "result": "L",
       "pts": -7.42,
       "dollars": -371,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 30,
@@ -305,7 +334,8 @@
       "result": "W",
       "pts": 9.14,
       "dollars": 457,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 31,
@@ -315,7 +345,8 @@
       "result": "L",
       "pts": -7.89,
       "dollars": -394.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 32,
@@ -325,7 +356,8 @@
       "result": "W",
       "pts": 10.03,
       "dollars": 501.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 33,
@@ -335,7 +367,8 @@
       "result": "W",
       "pts": 10.62,
       "dollars": 531,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 34,
@@ -345,7 +378,8 @@
       "result": "L",
       "pts": -6.12,
       "dollars": -306,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 35,
@@ -355,7 +389,8 @@
       "result": "W",
       "pts": 10.31,
       "dollars": 515.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 36,
@@ -365,7 +400,8 @@
       "result": "W",
       "pts": 5.21,
       "dollars": 260.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 37,
@@ -375,7 +411,8 @@
       "result": "L",
       "pts": -6.03,
       "dollars": -301.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 38,
@@ -385,7 +422,8 @@
       "result": "W",
       "pts": 5.87,
       "dollars": 293.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 39,
@@ -395,7 +433,8 @@
       "result": "L",
       "pts": -5.22,
       "dollars": -261,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 40,
@@ -405,7 +444,8 @@
       "result": "W",
       "pts": 6.33,
       "dollars": 316.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 41,
@@ -415,7 +455,8 @@
       "result": "W",
       "pts": 8.69,
       "dollars": 434.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 42,
@@ -425,7 +466,8 @@
       "result": "L",
       "pts": -8.93,
       "dollars": -446.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 43,
@@ -435,7 +477,8 @@
       "result": "L",
       "pts": -4.8,
       "dollars": -240,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 44,
@@ -445,7 +488,8 @@
       "result": "W",
       "pts": 9.01,
       "dollars": 450.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 45,
@@ -455,7 +499,8 @@
       "result": "L",
       "pts": -3.07,
       "dollars": -153.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 46,
@@ -465,7 +510,8 @@
       "result": "W",
       "pts": 9.8,
       "dollars": 490,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 47,
@@ -475,7 +521,8 @@
       "result": "W",
       "pts": 8.74,
       "dollars": 437,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 48,
@@ -485,7 +532,8 @@
       "result": "L",
       "pts": -6.73,
       "dollars": -336.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 49,
@@ -495,7 +543,8 @@
       "result": "W",
       "pts": 4.33,
       "dollars": 216.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 50,
@@ -505,7 +554,8 @@
       "result": "W",
       "pts": 11.31,
       "dollars": 565.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 51,
@@ -515,7 +565,8 @@
       "result": "W",
       "pts": 7.46,
       "dollars": 373,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 52,
@@ -525,7 +576,8 @@
       "result": "L",
       "pts": -6.96,
       "dollars": -348,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 53,
@@ -535,7 +587,8 @@
       "result": "W",
       "pts": 10.8,
       "dollars": 540,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 54,
@@ -545,7 +598,8 @@
       "result": "W",
       "pts": 8.11,
       "dollars": 405.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 55,
@@ -555,7 +609,8 @@
       "result": "L",
       "pts": -6.25,
       "dollars": -312.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 56,
@@ -565,7 +620,8 @@
       "result": "L",
       "pts": -3.02,
       "dollars": -151,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 57,
@@ -575,7 +631,8 @@
       "result": "L",
       "pts": -5.18,
       "dollars": -259,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 58,
@@ -585,7 +642,8 @@
       "result": "W",
       "pts": 9.73,
       "dollars": 486.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 59,
@@ -595,7 +653,8 @@
       "result": "W",
       "pts": 6.42,
       "dollars": 321,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 60,
@@ -605,7 +664,8 @@
       "result": "W",
       "pts": 7.4,
       "dollars": 370,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 61,
@@ -615,7 +675,8 @@
       "result": "L",
       "pts": -7.08,
       "dollars": -354,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 62,
@@ -625,7 +686,8 @@
       "result": "W",
       "pts": 6.2,
       "dollars": 310,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 63,
@@ -635,7 +697,8 @@
       "result": "W",
       "pts": 6.06,
       "dollars": 303,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 64,
@@ -645,7 +708,8 @@
       "result": "W",
       "pts": 4.19,
       "dollars": 209.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 65,
@@ -655,7 +719,8 @@
       "result": "W",
       "pts": 8.93,
       "dollars": 446.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 66,
@@ -665,7 +730,8 @@
       "result": "W",
       "pts": 7.74,
       "dollars": 387,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 67,
@@ -675,7 +741,8 @@
       "result": "W",
       "pts": 6.93,
       "dollars": 346.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 68,
@@ -685,7 +752,8 @@
       "result": "W",
       "pts": 10.74,
       "dollars": 537,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 69,
@@ -695,7 +763,8 @@
       "result": "W",
       "pts": 3.97,
       "dollars": 198.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 70,
@@ -705,7 +774,8 @@
       "result": "W",
       "pts": 8.02,
       "dollars": 401,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 71,
@@ -715,7 +785,8 @@
       "result": "L",
       "pts": -4.96,
       "dollars": -248,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 72,
@@ -725,7 +796,8 @@
       "result": "W",
       "pts": 8.37,
       "dollars": 418.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 73,
@@ -735,7 +807,8 @@
       "result": "W",
       "pts": 5.34,
       "dollars": 267,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 74,
@@ -745,7 +818,8 @@
       "result": "L",
       "pts": -6.12,
       "dollars": -306,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 75,
@@ -755,7 +829,8 @@
       "result": "W",
       "pts": 5.66,
       "dollars": 283,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 76,
@@ -765,7 +840,8 @@
       "result": "W",
       "pts": 5.48,
       "dollars": 274,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 77,
@@ -775,7 +851,8 @@
       "result": "W",
       "pts": 5.99,
       "dollars": 299.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 78,
@@ -785,7 +862,8 @@
       "result": "W",
       "pts": 6.99,
       "dollars": 349.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 79,
@@ -795,7 +873,8 @@
       "result": "L",
       "pts": -4.2,
       "dollars": -210,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 80,
@@ -805,7 +884,8 @@
       "result": "W",
       "pts": 9,
       "dollars": 450,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 81,
@@ -815,7 +895,8 @@
       "result": "W",
       "pts": 9.08,
       "dollars": 454,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 82,
@@ -825,7 +906,8 @@
       "result": "W",
       "pts": 6.11,
       "dollars": 305.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 83,
@@ -835,7 +917,8 @@
       "result": "W",
       "pts": 9.06,
       "dollars": 453,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 84,
@@ -845,7 +928,8 @@
       "result": "W",
       "pts": 8.69,
       "dollars": 434.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 85,
@@ -855,7 +939,8 @@
       "result": "L",
       "pts": -4.33,
       "dollars": -216.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 86,
@@ -865,7 +950,8 @@
       "result": "L",
       "pts": -7.81,
       "dollars": -390.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 87,
@@ -875,7 +961,8 @@
       "result": "L",
       "pts": -6.06,
       "dollars": -303,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 88,
@@ -885,7 +972,8 @@
       "result": "W",
       "pts": 7.15,
       "dollars": 357.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 89,
@@ -895,7 +983,8 @@
       "result": "L",
       "pts": -4.82,
       "dollars": -241,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 90,
@@ -905,7 +994,8 @@
       "result": "L",
       "pts": -7.65,
       "dollars": -382.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 91,
@@ -915,7 +1005,8 @@
       "result": "W",
       "pts": 6.92,
       "dollars": 346,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 92,
@@ -925,7 +1016,8 @@
       "result": "L",
       "pts": -8.54,
       "dollars": -427,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 93,
@@ -935,7 +1027,8 @@
       "result": "W",
       "pts": 10.07,
       "dollars": 503.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 94,
@@ -945,7 +1038,8 @@
       "result": "W",
       "pts": 7.73,
       "dollars": 386.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 95,
@@ -955,7 +1049,8 @@
       "result": "L",
       "pts": -3.87,
       "dollars": -193.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 96,
@@ -965,7 +1060,8 @@
       "result": "BE",
       "pts": 0,
       "dollars": 0,
-      "tag": "BE"
+      "tag": "BE",
+      "period": "historical"
     },
     {
       "id": 97,
@@ -975,7 +1071,8 @@
       "result": "W",
       "pts": 11.64,
       "dollars": 582,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 98,
@@ -985,7 +1082,8 @@
       "result": "L",
       "pts": -9.05,
       "dollars": -452.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 99,
@@ -995,7 +1093,8 @@
       "result": "L",
       "pts": -5.01,
       "dollars": -250.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 100,
@@ -1005,7 +1104,8 @@
       "result": "L",
       "pts": -6.9,
       "dollars": -345,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 101,
@@ -1015,7 +1115,8 @@
       "result": "L",
       "pts": -4.9,
       "dollars": -245,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 102,
@@ -1025,7 +1126,8 @@
       "result": "W",
       "pts": 11.2,
       "dollars": 560,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 103,
@@ -1035,7 +1137,8 @@
       "result": "W",
       "pts": 7.67,
       "dollars": 383.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 104,
@@ -1045,7 +1148,8 @@
       "result": "W",
       "pts": 11.5,
       "dollars": 575,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 105,
@@ -1055,7 +1159,8 @@
       "result": "L",
       "pts": -6.8,
       "dollars": -340,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 106,
@@ -1065,7 +1170,8 @@
       "result": "L",
       "pts": -4.51,
       "dollars": -225.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 107,
@@ -1075,7 +1181,8 @@
       "result": "L",
       "pts": -7.13,
       "dollars": -356.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 108,
@@ -1085,7 +1192,8 @@
       "result": "W",
       "pts": 6.54,
       "dollars": 327,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 109,
@@ -1095,7 +1203,8 @@
       "result": "W",
       "pts": 5,
       "dollars": 250,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 110,
@@ -1105,7 +1214,8 @@
       "result": "W",
       "pts": 9.35,
       "dollars": 467.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 111,
@@ -1115,7 +1225,8 @@
       "result": "L",
       "pts": -7.09,
       "dollars": -354.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 112,
@@ -1125,7 +1236,8 @@
       "result": "W",
       "pts": 10.61,
       "dollars": 530.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 113,
@@ -1135,7 +1247,8 @@
       "result": "W",
       "pts": 8.55,
       "dollars": 427.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 114,
@@ -1145,7 +1258,8 @@
       "result": "W",
       "pts": 6.33,
       "dollars": 316.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 115,
@@ -1155,7 +1269,8 @@
       "result": "L",
       "pts": -5.95,
       "dollars": -297.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 116,
@@ -1165,7 +1280,8 @@
       "result": "W",
       "pts": 5.7,
       "dollars": 285,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 117,
@@ -1175,7 +1291,8 @@
       "result": "W",
       "pts": 9.62,
       "dollars": 481,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 118,
@@ -1185,7 +1302,8 @@
       "result": "W",
       "pts": 8.49,
       "dollars": 424.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 119,
@@ -1195,7 +1313,8 @@
       "result": "L",
       "pts": -7.34,
       "dollars": -367,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 120,
@@ -1205,7 +1324,8 @@
       "result": "L",
       "pts": -3.61,
       "dollars": -180.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 121,
@@ -1215,7 +1335,8 @@
       "result": "W",
       "pts": 6.89,
       "dollars": 344.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 122,
@@ -1225,7 +1346,8 @@
       "result": "W",
       "pts": 6.99,
       "dollars": 349.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 123,
@@ -1235,7 +1357,8 @@
       "result": "L",
       "pts": -4.27,
       "dollars": -213.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 124,
@@ -1245,7 +1368,8 @@
       "result": "W",
       "pts": 10.31,
       "dollars": 515.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 125,
@@ -1255,7 +1379,8 @@
       "result": "L",
       "pts": -5.26,
       "dollars": -263,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 126,
@@ -1265,7 +1390,8 @@
       "result": "L",
       "pts": -5.51,
       "dollars": -275.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 127,
@@ -1275,7 +1401,8 @@
       "result": "W",
       "pts": 6.62,
       "dollars": 331,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 128,
@@ -1285,7 +1412,8 @@
       "result": "W",
       "pts": 6.8,
       "dollars": 340,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 129,
@@ -1295,7 +1423,8 @@
       "result": "W",
       "pts": 5.09,
       "dollars": 254.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 130,
@@ -1305,7 +1434,8 @@
       "result": "W",
       "pts": 11.42,
       "dollars": 571,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 131,
@@ -1315,7 +1445,8 @@
       "result": "L",
       "pts": -6.99,
       "dollars": -349.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 132,
@@ -1325,7 +1456,8 @@
       "result": "W",
       "pts": 8.76,
       "dollars": 438,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 133,
@@ -1335,7 +1467,8 @@
       "result": "W",
       "pts": 6.35,
       "dollars": 317.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 134,
@@ -1345,7 +1478,8 @@
       "result": "W",
       "pts": 7.34,
       "dollars": 367,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 135,
@@ -1355,7 +1489,8 @@
       "result": "W",
       "pts": 11.14,
       "dollars": 557,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 136,
@@ -1365,7 +1500,8 @@
       "result": "L",
       "pts": -4.55,
       "dollars": -227.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 137,
@@ -1375,7 +1511,8 @@
       "result": "W",
       "pts": 8.84,
       "dollars": 442,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 138,
@@ -1385,7 +1522,8 @@
       "result": "W",
       "pts": 8.34,
       "dollars": 417,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 139,
@@ -1395,7 +1533,8 @@
       "result": "W",
       "pts": 7.32,
       "dollars": 366,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 140,
@@ -1405,7 +1544,8 @@
       "result": "L",
       "pts": -9.15,
       "dollars": -457.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 141,
@@ -1415,7 +1555,8 @@
       "result": "L",
       "pts": -5.26,
       "dollars": -263,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 142,
@@ -1425,7 +1566,8 @@
       "result": "L",
       "pts": -5.94,
       "dollars": -297,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 143,
@@ -1435,7 +1577,8 @@
       "result": "L",
       "pts": -5.2,
       "dollars": -260,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 144,
@@ -1445,7 +1588,8 @@
       "result": "W",
       "pts": 10.74,
       "dollars": 537,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 145,
@@ -1455,7 +1599,8 @@
       "result": "W",
       "pts": 7.26,
       "dollars": 363,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 146,
@@ -1465,7 +1610,8 @@
       "result": "W",
       "pts": 2.7,
       "dollars": 135,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 147,
@@ -1475,7 +1621,8 @@
       "result": "W",
       "pts": 8.13,
       "dollars": 406.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 148,
@@ -1485,7 +1632,8 @@
       "result": "L",
       "pts": -8.51,
       "dollars": -425.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 149,
@@ -1495,7 +1643,8 @@
       "result": "L",
       "pts": -5.45,
       "dollars": -272.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 150,
@@ -1505,7 +1654,8 @@
       "result": "L",
       "pts": -2.21,
       "dollars": -110.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 151,
@@ -1515,7 +1665,8 @@
       "result": "W",
       "pts": 7.61,
       "dollars": 380.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 152,
@@ -1525,7 +1676,8 @@
       "result": "W",
       "pts": 8.2,
       "dollars": 410,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 153,
@@ -1535,7 +1687,8 @@
       "result": "L",
       "pts": -6.34,
       "dollars": -317,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 154,
@@ -1545,7 +1698,8 @@
       "result": "L",
       "pts": -8.03,
       "dollars": -401.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 155,
@@ -1555,7 +1709,8 @@
       "result": "W",
       "pts": 13.15,
       "dollars": 657.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 156,
@@ -1565,7 +1720,8 @@
       "result": "L",
       "pts": -6.13,
       "dollars": -306.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 157,
@@ -1575,7 +1731,8 @@
       "result": "L",
       "pts": -5.06,
       "dollars": -253,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 158,
@@ -1585,7 +1742,8 @@
       "result": "L",
       "pts": -6.82,
       "dollars": -341,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 159,
@@ -1595,7 +1753,8 @@
       "result": "L",
       "pts": -6.2,
       "dollars": -310,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 160,
@@ -1605,7 +1764,8 @@
       "result": "W",
       "pts": 9.15,
       "dollars": 457.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 161,
@@ -1615,7 +1775,8 @@
       "result": "W",
       "pts": 3.95,
       "dollars": 197.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 162,
@@ -1625,7 +1786,8 @@
       "result": "W",
       "pts": 6.94,
       "dollars": 347,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 163,
@@ -1635,7 +1797,8 @@
       "result": "L",
       "pts": -6.6,
       "dollars": -330,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 164,
@@ -1645,7 +1808,8 @@
       "result": "L",
       "pts": -5.38,
       "dollars": -269,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 165,
@@ -1655,7 +1819,8 @@
       "result": "L",
       "pts": -4.67,
       "dollars": -233.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 166,
@@ -1665,7 +1830,8 @@
       "result": "L",
       "pts": -6.74,
       "dollars": -337,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 167,
@@ -1675,7 +1841,8 @@
       "result": "W",
       "pts": 10.55,
       "dollars": 527.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 168,
@@ -1685,7 +1852,8 @@
       "result": "W",
       "pts": 8.97,
       "dollars": 448.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 169,
@@ -1695,7 +1863,8 @@
       "result": "L",
       "pts": -6.52,
       "dollars": -326,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 170,
@@ -1705,7 +1874,8 @@
       "result": "W",
       "pts": 7.85,
       "dollars": 392.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 171,
@@ -1715,7 +1885,8 @@
       "result": "L",
       "pts": -6.09,
       "dollars": -304.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 172,
@@ -1725,7 +1896,8 @@
       "result": "W",
       "pts": 4.31,
       "dollars": 215.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 173,
@@ -1735,7 +1907,8 @@
       "result": "L",
       "pts": -6.74,
       "dollars": -337,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 174,
@@ -1745,7 +1918,8 @@
       "result": "L",
       "pts": -8.11,
       "dollars": -405.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 175,
@@ -1755,7 +1929,8 @@
       "result": "L",
       "pts": -3.76,
       "dollars": -188,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 176,
@@ -1765,7 +1940,8 @@
       "result": "W",
       "pts": 8.5,
       "dollars": 425,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 177,
@@ -1775,7 +1951,8 @@
       "result": "W",
       "pts": 7.36,
       "dollars": 368,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 178,
@@ -1785,7 +1962,8 @@
       "result": "L",
       "pts": -6.17,
       "dollars": -308.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 179,
@@ -1795,7 +1973,8 @@
       "result": "W",
       "pts": 5.7,
       "dollars": 285,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 180,
@@ -1805,7 +1984,8 @@
       "result": "W",
       "pts": 5.94,
       "dollars": 297,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 181,
@@ -1815,7 +1995,8 @@
       "result": "L",
       "pts": -6.51,
       "dollars": -325.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 182,
@@ -1825,7 +2006,8 @@
       "result": "L",
       "pts": -6.88,
       "dollars": -344,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 183,
@@ -1835,7 +2017,8 @@
       "result": "W",
       "pts": 5.75,
       "dollars": 287.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 184,
@@ -1845,7 +2028,8 @@
       "result": "L",
       "pts": -4.08,
       "dollars": -204,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 185,
@@ -1855,7 +2039,8 @@
       "result": "BE",
       "pts": 0,
       "dollars": 0,
-      "tag": "BE"
+      "tag": "BE",
+      "period": "historical"
     },
     {
       "id": 186,
@@ -1865,7 +2050,8 @@
       "result": "W",
       "pts": 9.52,
       "dollars": 476,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 187,
@@ -1875,7 +2061,8 @@
       "result": "W",
       "pts": 7.58,
       "dollars": 379,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 188,
@@ -1885,7 +2072,8 @@
       "result": "L",
       "pts": -8.96,
       "dollars": -448,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 189,
@@ -1895,7 +2083,8 @@
       "result": "L",
       "pts": -6.11,
       "dollars": -305.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 190,
@@ -1905,7 +2094,8 @@
       "result": "W",
       "pts": 11.37,
       "dollars": 568.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 191,
@@ -1915,7 +2105,8 @@
       "result": "W",
       "pts": 8.42,
       "dollars": 421,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 192,
@@ -1925,7 +2116,8 @@
       "result": "W",
       "pts": 5.15,
       "dollars": 257.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 193,
@@ -1935,7 +2127,8 @@
       "result": "W",
       "pts": 7.51,
       "dollars": 375.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 194,
@@ -1945,7 +2138,8 @@
       "result": "L",
       "pts": -7.41,
       "dollars": -370.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 195,
@@ -1955,7 +2149,8 @@
       "result": "BE",
       "pts": 0,
       "dollars": 0,
-      "tag": "BE"
+      "tag": "BE",
+      "period": "historical"
     },
     {
       "id": 196,
@@ -1965,7 +2160,8 @@
       "result": "W",
       "pts": 7.63,
       "dollars": 381.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 197,
@@ -1975,7 +2171,8 @@
       "result": "W",
       "pts": 5.64,
       "dollars": 282,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 198,
@@ -1985,7 +2182,8 @@
       "result": "L",
       "pts": -8.14,
       "dollars": -407,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 199,
@@ -1995,7 +2193,8 @@
       "result": "W",
       "pts": 9.96,
       "dollars": 498,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 200,
@@ -2005,7 +2204,8 @@
       "result": "L",
       "pts": -7.99,
       "dollars": -399.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 201,
@@ -2015,7 +2215,8 @@
       "result": "L",
       "pts": -6.99,
       "dollars": -349.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 202,
@@ -2025,7 +2226,8 @@
       "result": "W",
       "pts": 5.16,
       "dollars": 258,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 203,
@@ -2035,7 +2237,8 @@
       "result": "W",
       "pts": 7.73,
       "dollars": 386.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 204,
@@ -2045,7 +2248,8 @@
       "result": "W",
       "pts": 7.1,
       "dollars": 355,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 205,
@@ -2055,7 +2259,8 @@
       "result": "L",
       "pts": -7.86,
       "dollars": -393,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 206,
@@ -2065,7 +2270,8 @@
       "result": "L",
       "pts": -3.36,
       "dollars": -168,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 207,
@@ -2075,7 +2281,8 @@
       "result": "L",
       "pts": -6.76,
       "dollars": -338,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 208,
@@ -2085,7 +2292,8 @@
       "result": "W",
       "pts": 11.68,
       "dollars": 584,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 209,
@@ -2095,7 +2303,8 @@
       "result": "W",
       "pts": 6.18,
       "dollars": 309,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 210,
@@ -2105,7 +2314,8 @@
       "result": "W",
       "pts": 6.58,
       "dollars": 329,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 211,
@@ -2115,7 +2325,8 @@
       "result": "W",
       "pts": 8.8,
       "dollars": 440,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 212,
@@ -2125,7 +2336,8 @@
       "result": "W",
       "pts": 8.7,
       "dollars": 435,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 213,
@@ -2135,7 +2347,8 @@
       "result": "W",
       "pts": 10.64,
       "dollars": 532,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 214,
@@ -2145,7 +2358,8 @@
       "result": "W",
       "pts": 7.69,
       "dollars": 384.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 215,
@@ -2155,7 +2369,8 @@
       "result": "W",
       "pts": 8.69,
       "dollars": 434.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 216,
@@ -2165,7 +2380,8 @@
       "result": "L",
       "pts": -4.92,
       "dollars": -246,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 217,
@@ -2175,7 +2391,8 @@
       "result": "L",
       "pts": -4.04,
       "dollars": -202,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 218,
@@ -2185,7 +2402,8 @@
       "result": "W",
       "pts": 9.21,
       "dollars": 460.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 219,
@@ -2195,7 +2413,8 @@
       "result": "W",
       "pts": 7.82,
       "dollars": 391,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 220,
@@ -2205,7 +2424,8 @@
       "result": "W",
       "pts": 5.74,
       "dollars": 287,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 221,
@@ -2215,7 +2435,8 @@
       "result": "W",
       "pts": 11.45,
       "dollars": 572.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 222,
@@ -2225,7 +2446,8 @@
       "result": "L",
       "pts": -6.81,
       "dollars": -340.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 223,
@@ -2235,7 +2457,8 @@
       "result": "W",
       "pts": 10.32,
       "dollars": 516,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 224,
@@ -2245,7 +2468,8 @@
       "result": "W",
       "pts": 7.84,
       "dollars": 392,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 225,
@@ -2255,7 +2479,8 @@
       "result": "L",
       "pts": -2.17,
       "dollars": -108.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 226,
@@ -2265,7 +2490,8 @@
       "result": "W",
       "pts": 5.87,
       "dollars": 293.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     },
     {
       "id": 227,
@@ -2275,7 +2501,8 @@
       "result": "W",
       "pts": 5.67,
       "dollars": 283.5,
-      "tag": "H3"
+      "tag": "H3",
+      "period": "historical"
     }
   ]
 }

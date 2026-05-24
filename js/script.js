@@ -49,6 +49,19 @@
     }
     track('page_view', { url: location.href, referrer: document.referrer || null });
 
+    /* Populate continuity section pre-reg counter from data/trades.json */
+    const continuityCount = document.getElementById('continuityLiveCount');
+    if (continuityCount) {
+        fetch('data/trades.json', { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (j) {
+                if (!j || !j.trades) return;
+                const live = j.trades.filter(function (t) { return t.period === 'pre_reg'; }).length;
+                continuityCount.textContent = live === 0 ? 'Awaiting first restart trade' : (live + (live === 1 ? ' trade' : ' trades'));
+            })
+            .catch(function () {});
+    }
+
     document.querySelectorAll('a[href="#prereg"]').forEach(function (cta) {
         cta.addEventListener('click', function () {
             track('prereg_cta_click', { source: cta.dataset.cta || 'unknown', section: cta.closest('section')?.id || 'unknown' });
