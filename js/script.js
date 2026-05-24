@@ -493,7 +493,8 @@
         { id: 'ED-02', name: 'Rolling-50 win rate',  trigger: '< 52%',                     link: 'Test 6' },
         { id: 'ED-03', name: 'Rolling-50 PF',        trigger: '< 1.30',                    link: 'Test 3' },
         { id: 'ED-04', name: 'Rolling-50 W:L ratio', trigger: '< 1.10',                    link: 'Test 5' },
-        { id: 'ED-05', name: 'Realized drawdown',    trigger: '> −30 /ES pts',             link: 'Architecture' },
+        { id: 'ED-05a', name: 'DD warning',          trigger: '> −45 /ES pts',             link: 'Architecture · 25th-pct bootstrap' },
+        { id: 'ED-05b', name: 'DD hard kill',        trigger: '> −75 /ES pts',             link: 'Architecture · 1st-pct bootstrap' },
         { id: 'ED-06', name: 'Top-3 removal',        trigger: 'P&L < 0 without top-3',     link: 'Test 4' },
         { id: 'ED-07', name: 'Loss streak',          trigger: '≥ 7 consecutive',           link: 'Test 7' },
         { id: 'ED-08', name: 'P-value floor',        trigger: 'p > 0.10 past trade 100',   link: 'Test 1' }
