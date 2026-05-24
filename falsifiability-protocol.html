@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Majority Opinion Predisposal Strategy — Falsifiability Protocol v1.0 · Ekantik Capital Advisors</title>
+<style>
+  :root {
+    --navy: #1B2A4A;
+    --navy-dark: #131F38;
+    --gold: #C8A951;
+    --gold-light: #E2C97A;
+    --ivory: #FAF8F5;
+    --paper: #FFFFFF;
+    --slate: #5A5A5A;
+    --slate-light: #94A3B8;
+    --rule: #E8DFC8;
+    --red: #B5403A;
+    --green: #2E7D5B;
+    --shadow: 0 1px 3px rgba(27, 42, 74, 0.06);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--ivory); color: var(--navy); font-family: "Source Sans Pro", "Helvetica Neue", system-ui, -apple-system, sans-serif; line-height: 1.7; font-size: 17px; }
+  body { padding: 0; }
+
+  /* Top banner / save-as-pdf hint */
+  .save-banner {
+    background: var(--navy-dark);
+    color: var(--ivory);
+    padding: 14px 24px;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    text-align: center;
+    border-bottom: 1px solid var(--gold);
+  }
+  .save-banner code { background: rgba(200,169,81,0.18); color: var(--gold-light); padding: 2px 8px; border-radius: 2px; font-family: "JetBrains Mono", "Courier New", monospace; font-size: 12px; }
+
+  .container { max-width: 880px; margin: 0 auto; background: var(--paper); padding: 80px 80px 100px; box-shadow: var(--shadow); }
+
+  /* Top metadata */
+  .firm-tag { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--slate); font-weight: 600; margin-bottom: 28px; }
+  .firm-tag::before { content: "\25C6"; color: var(--gold); margin-right: 8px; }
+
+  h1.protocol-title { font-family: "Playfair Display", "Georgia", serif; font-weight: 700; font-size: 52px; line-height: 1.1; color: var(--navy); margin-bottom: 12px; letter-spacing: -0.01em; }
+  .protocol-subtitle { font-family: "Playfair Display", "Georgia", serif; font-style: italic; font-size: 19px; color: var(--slate); margin-bottom: 36px; }
+
+  .gold-rule { height: 2px; background: var(--gold); width: 80px; margin: 32px 0; }
+  .gold-rule-full { height: 1px; background: var(--gold); width: 100%; margin: 48px 0; }
+
+  .lead {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--slate);
+    border-left: 3px solid var(--gold);
+    padding: 12px 0 12px 20px;
+    margin: 28px 0 40px;
+  }
+
+  /* Header metadata table */
+  table.meta { width: 100%; border-collapse: collapse; margin: 24px 0 48px; }
+  table.meta td { padding: 10px 12px; border-top: 1px solid var(--rule); font-size: 14px; vertical-align: top; }
+  table.meta tr:last-child td { border-bottom: 1px solid var(--rule); }
+  table.meta td:first-child { width: 26%; font-weight: 600; color: var(--slate); letter-spacing: 0.02em; }
+  table.meta td:last-child { color: var(--navy); }
+
+  /* Section headings */
+  h2.article-h {
+    font-family: "Playfair Display", "Georgia", serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--navy);
+    margin: 64px 0 8px;
+    line-height: 1.2;
+  }
+  h2.article-h .article-label {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  h2.article-h .article-label::before { content: "\25C6"; margin-right: 8px; }
+
+  h3.crit-h {
+    font-family: "Playfair Display", "Georgia", serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--navy);
+    margin: 36px 0 8px;
+  }
+  h3.crit-h .crit-label {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: 700;
+    margin-right: 10px;
+    padding: 3px 9px;
+    background: rgba(200, 169, 81, 0.12);
+    border-radius: 2px;
+    vertical-align: 3px;
+  }
+
+  p { margin: 14px 0; }
+  p.note { font-size: 14px; color: var(--slate); }
+
+  /* Callout for the binding rule */
+  .binding-rule {
+    background: var(--ivory);
+    border: 1px solid var(--gold);
+    border-left: 4px solid var(--gold);
+    padding: 22px 28px;
+    margin: 32px 0;
+    border-radius: 2px;
+  }
+  .binding-rule .label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .binding-rule .body { font-size: 15px; line-height: 1.7; color: var(--navy); font-style: italic; }
+
+  /* Rationale block */
+  .rationale {
+    background: rgba(200,169,81,0.04);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 18px 24px;
+    margin: 24px 0;
+  }
+  .rationale .label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--slate);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .rationale p { font-size: 14.5px; color: var(--navy); margin: 8px 0; }
+
+  /* Lists */
+  ul.actions, ul.gate-conds { margin: 16px 0 16px 0; padding-left: 0; list-style: none; }
+  ul.actions li, ul.gate-conds li {
+    position: relative; padding-left: 28px; margin: 12px 0; font-size: 15px; line-height: 1.65;
+  }
+  ul.actions li::before, ul.gate-conds li::before {
+    content: "\25C6"; color: var(--gold); position: absolute; left: 6px; top: 0; font-size: 10px;
+  }
+  ul.actions li strong, ul.gate-conds li strong { color: var(--navy); }
+
+  /* Criterion meta block */
+  .crit-meta {
+    background: var(--ivory);
+    border: 1px solid var(--rule);
+    padding: 14px 18px;
+    margin: 14px 0 4px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .crit-meta strong { color: var(--navy); display: inline-block; min-width: 90px; }
+  .crit-meta .red { color: var(--red); font-weight: 700; }
+
+  /* Tier table */
+  table.tiers {
+    width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px;
+  }
+  table.tiers th {
+    background: var(--navy); color: var(--ivory); padding: 14px 14px;
+    text-align: left; font-weight: 600; letter-spacing: 0.04em;
+    font-size: 13px; text-transform: uppercase;
+  }
+  table.tiers td {
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding: 14px 14px; vertical-align: top; line-height: 1.6;
+  }
+  table.tiers tr:nth-child(even) td { background: var(--ivory); }
+  table.tiers .tier {
+    color: var(--gold); font-weight: 700; font-family: "Playfair Display", serif; font-size: 15px;
+  }
+  table.tiers .tier-label {
+    display: block; font-size: 11px; color: var(--slate); font-family: "Source Sans Pro", sans-serif;
+    font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 2px;
+  }
+
+  /* Signature block */
+  .sig-block {
+    margin: 56px 0 0; padding: 32px;
+    border: 1px solid var(--rule); background: var(--ivory);
+  }
+  .sig-block h3 {
+    font-family: "Playfair Display", serif; font-size: 16px; font-weight: 700;
+    color: var(--navy); margin-bottom: 18px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .sig-block .sig-row { margin: 18px 0; display: flex; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+  .sig-block .sig-row > div { flex: 1; min-width: 260px; }
+  .sig-block .sig-name { font-weight: 700; color: var(--navy); font-size: 15px; margin-bottom: 6px; }
+  .sig-block .sig-role { font-size: 13px; color: var(--slate); margin-bottom: 14px; }
+  .sig-block .sig-line {
+    border-top: 1px solid var(--navy); width: 100%; padding-top: 6px;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--slate);
+  }
+  .sig-block p.attest { font-size: 13px; color: var(--slate); line-height: 1.6; margin-top: 24px; font-style: italic; }
+
+  /* Footer */
+  footer { text-align: center; padding: 36px 24px; font-size: 11px; color: var(--slate); border-top: 1px solid var(--rule); margin-top: 60px; }
+  footer span.dot { color: var(--gold); margin: 0 8px; }
+
+  /* Inline emphasis */
+  em.gold { color: var(--gold); font-style: normal; font-weight: 600; }
+  strong { color: var(--navy); }
+  code.inline { font-family: "JetBrains Mono", "Courier New", monospace; font-size: 13.5px; background: var(--ivory); padding: 1px 6px; border-radius: 2px; color: var(--navy); }
+
+  /* Print styles */
+  @media print {
+    .save-banner { display: none; }
+    body { background: white; }
+    .container { box-shadow: none; padding: 36px; max-width: 100%; }
+    h2.article-h { page-break-after: avoid; }
+    table.tiers, .sig-block { page-break-inside: avoid; }
+  }
+  @media (max-width: 720px) {
+    .container { padding: 40px 24px 60px; }
+    h1.protocol-title { font-size: 36px; }
+    h2.article-h { font-size: 22px; }
+    table.meta td { font-size: 13px; padding: 8px 6px; }
+    table.tiers { font-size: 13px; }
+    table.tiers th, table.tiers td { padding: 10px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="save-banner">
+  <a href="/" style="color: var(--gold-light); text-decoration: none; font-weight: 600;">← Back to Ekantik 500</a>
+  <span style="margin: 0 16px; color: rgba(250,248,245,0.3);">·</span>
+  <strong>Pre-commitment artifact</strong>
+  <span style="margin: 0 16px; color: rgba(250,248,245,0.3);">·</span>
+  Published before any investor capital deployment
+  <span style="margin: 0 16px; color: rgba(250,248,245,0.3);">·</span>
+  <a href="javascript:window.print();" style="color: var(--gold-light); text-decoration: none;">Save as PDF →</a>
+</div>
+
+<div class="container">
+
+  <div class="firm-tag">Ekantik Capital Advisors LLC</div>
+
+  <h1 class="protocol-title">Falsifiability Protocol</h1>
+  <p class="protocol-subtitle">A pre-committed operational charter · v1.0 · Majority Opinion Predisposal Strategy</p>
+
+  <p class="lead">
+    Governing the Majority Opinion Predisposal Strategy on ES &amp; MES futures within the Ekantik 500 active engine. Issued by the operator. Witness-locked. Publicly disclosed. Modification subject to a 48-hour cool-off and written justification.
+  </p>
+
+  <table class="meta">
+    <tr><td>Document</td><td>Falsifiability Protocol · Locked Operational Charter</td></tr>
+    <tr><td>Version</td><td>1.0 — initial issue; two layers issued together (Expression + Fidelity)</td></tr>
+    <tr><td>Reference</td><td>FP-MOPS-V1-2026-05</td></tr>
+    <tr><td>Strategy</td><td>Majority Opinion Predisposal Strategy · ES / MES Futures</td></tr>
+    <tr><td>Vehicle</td><td>Ekantik 500 · Active /ES Engine Layer</td></tr>
+    <tr><td>Issuing entity</td><td>Ekantik Capital Advisors LLC · Maple Grove, MN</td></tr>
+    <tr><td>Date locked</td><td>____ May 2026</td></tr>
+    <tr><td>Distribution</td><td>Public · epig500.ekantikcapital.com</td></tr>
+  </table>
+
+  <!-- ============== PREAMBLE ============== -->
+  <h2 class="article-h"><span class="article-label">Preamble</span>Two gates, both binding.</h2>
+
+  <p>
+    Every credible system pre-defines the conditions under which it admits failure. Most trading operations do not. This one defines two — and runs them in parallel.
+  </p>
+
+  <p>
+    The <strong>Expression Layer</strong> (Articles I–III) defines the precise statistical threshold at which the operator agrees the Majority Opinion Predisposal edge is dead, the stand-down sequence, and the re-deployment gate. The <strong>Fidelity Layer</strong> (Articles V–VI) defines the criteria under which the operator admits the <em>published method is not what is actually running</em> — independent of whether the edge itself is sound.
+  </p>
+
+  <p>
+    The two layers are bound by a single interpretation rule. The edge cannot be declared falsified using data produced while transmission fidelity is in breach. Both layers are reported on the public page in real time.
+  </p>
+
+  <div class="binding-rule">
+    <div class="label">The Binding Interpretation Rule</div>
+    <div class="body">
+      Expression-Layer (Edge Gate) firings while a Fidelity-Layer Tier 2 or Tier 3 breach is active in the rolling 30-day window are <strong>interpretation-suspended</strong> pending operator remediation. The edge cannot be declared falsified from data generated during a known transmission-fidelity breach.
+    </div>
+  </div>
+
+  <!-- ============== ARTICLE I — TRIGGER ============== -->
+  <h2 class="article-h"><span class="article-label">Article I</span>The Expression Layer — Trigger Condition</h2>
+
+  <p>The operator agrees to declare the edge statistically dead upon satisfaction of <strong>any one</strong> of the following conditions, evaluated continuously across the documented qualified-trade record:</p>
+
+  <ul class="gate-conds">
+    <li><strong>ED-01 · Rolling-100 realized expectancy ≤ $0 / trade.</strong> The edge becomes net-negative across the most recent 100 qualified trades.</li>
+    <li><strong>ED-02 · Rolling-50 win rate &lt; 52%.</strong> Distribution shifts below the breakeven win-rate at the documented 1.31 win:loss ratio.</li>
+    <li><strong>ED-03 · Rolling-50 profit factor &lt; 1.30.</strong> Asymmetry of winners-to-losers collapses below the slippage-buffer floor.</li>
+    <li><strong>ED-04 · Rolling-50 win:loss ratio &lt; 1.10.</strong> Asymmetry decays even where win-rate holds.</li>
+    <li><strong>ED-05 · Realized peak-to-trough drawdown &gt; −30 ES points (portfolio).</strong> Architecture-linked ceiling.</li>
+    <li><strong>ED-06 · Top-3 winner removal turns the cumulative record negative.</strong> Edge survives only on outliers.</li>
+    <li><strong>ED-07 · Consecutive loss streak ≥ 7 in any rolling window.</strong> A 2-sigma deviation from the documented streak distribution.</li>
+    <li><strong>ED-08 · One-sided t-test p-value &gt; 0.10 past trade 100.</strong> Statistical signal can no longer be distinguished from noise.</li>
+  </ul>
+
+  <p class="note">A qualified trade is one entered and exited under all operative documented rules, unaffected by execution error, platform malfunction, or extraordinary market event. The trigger is satisfied at the close of the trade that first brings any of the conditions to its threshold.</p>
+
+  <div class="rationale">
+    <div class="label">Rationale — threshold ladder</div>
+    <p>
+      The reference dataset shows documented per-trade EV of <em class="gold">+$117</em> with standard error over a 100-trade window of <em class="gold">~$43</em>. The $0 threshold (ED-01) sits roughly 2.7 standard errors below documented EV — statistical evidence of collapse, not noise. The remaining seven conditions probe different failure topologies (distributional shift, asymmetry decay, outlier dependence, tail-risk breach, ruin-line proximity). The edge is declared dead when any one of the eight fires.
+    </p>
+  </div>
+
+  <!-- ============== ARTICLE II — ACTION ============== -->
+  <h2 class="article-h"><span class="article-label">Article II</span>The Expression Layer — Action Protocol</h2>
+
+  <p>Upon satisfaction of any trigger condition in Article I, immediately and without exception:</p>
+
+  <ul class="actions">
+    <li><strong>New entries</strong> drop to zero size from the next session, on any account, under any rule, until the Re-Deployment Gate is satisfied in full.</li>
+    <li><strong>Open positions</strong> close at the next defined exit per the original trade plan. No discretionary acceleration or delay.</li>
+    <li><strong>Strategy status</strong> moves to research-only (analysis, paper, prop-firm-funded virtual deployment permitted; no live capital).</li>
+    <li><strong>Public notification</strong> in the Discord journal within 24 hours: the trigger condition that satisfied (ED-01 through ED-08), the figure that satisfied it, the closing trade ID, and a statement of research-only status.</li>
+    <li><strong>Member notification</strong> within the same 24-hour window for all Ekantik 500 investors with capital deployed against the strategy.</li>
+  </ul>
+
+  <!-- ============== ARTICLE III — RE-DEPLOYMENT ============== -->
+  <h2 class="article-h"><span class="article-label">Article III</span>The Expression Layer — Re-Deployment Gate</h2>
+
+  <p>The strategy does not return to live deployment until <strong>all three</strong> conditions are satisfied:</p>
+
+  <ul class="actions">
+    <li><strong>Out-of-sample test</strong> — ≥ +$50 per trade across ≥ 50 qualified trades on virtual / paper / prop-firm capital. Never on member capital. Battery re-run on the out-of-sample record must return 6 of 8 PASS minimum, with no FAIL on Tests 1, 3, or 4.</li>
+    <li><strong>Written re-derivation</strong> — explaining the structural cause of decay, any logic changes proposed, and the rationale for believing the edge has returned. Must address which of the eight Expression-Layer conditions fired and why the proposed remediation closes that specific failure mode.</li>
+    <li><strong>48-hour cool-off</strong> — between satisfaction of the above and any new live entry.</li>
+  </ul>
+
+  <div class="rationale">
+    <div class="label">Rationale — asymmetric bar</div>
+    <p>
+      Stand-down requires only evidence that one of the eight Expression-Layer thresholds was crossed. Re-deployment requires evidence of <em class="gold">meaningfully positive</em> expectancy (+$50 per trade) plus a battery pass plus written structural diagnosis. Quick to fail; slow to forgive. The asymmetry is deliberate: false positives on cessation are recoverable; false positives on resumption are not.
+    </p>
+  </div>
+
+  <!-- ============== ARTICLE IV — MODIFICATION ============== -->
+  <h2 class="article-h"><span class="article-label">Article IV</span>Modification Protocol</h2>
+
+  <p>Any modification to this protocol — thresholds, window sizes, action steps, re-deployment criteria, cool-off periods, or any Fidelity-Layer criterion — is subject to:</p>
+
+  <ul class="actions">
+    <li><strong>48-hour cool-off</strong> — no modification enacted within 48 hours of first proposal.</li>
+    <li><strong>Written justification</strong> — identifying the structural reason, not the recent outcome. Justifications referencing recent P&amp;L are facially insufficient. Must specify which layer the change addresses (operator capacity vs. edge improvement) and establish it is not an edge conclusion drawn from contaminated transmission-fidelity data.</li>
+    <li><strong>Witness countersignature</strong> — at least one named witness signs that the protocol was followed (the witness does not endorse the substance).</li>
+    <li><strong>Public disclosure</strong> — posted to the Discord journal within 24 hours of becoming operative; reflected in the next-issued version with incremented version and refreshed lock date.</li>
+  </ul>
+
+  <!-- ============== ARTICLE V — FIDELITY LAYER ============== -->
+  <h2 class="article-h"><span class="article-label">Article V</span>The Fidelity Layer — Four Criteria</h2>
+
+  <p>Is the published method what is actually running? Each criterion is pre-committed, observable, binary-checkable, and time-bounded — mapping to a distinct layer of operator fidelity: substrate, intraday, structural, cognitive.</p>
+
+  <!-- OP-01 -->
+  <h3 class="crit-h"><span class="crit-label">OP-01</span>Frozen Process Adherence</h3>
+
+  <p>Every entry follows the published Majority Opinion Predisposal rule set without modification. The frozen process is the experimental constant; any modification mid-flight resets the evidence window. The witness — not the operator — approves any rule change, subject to the Article IV protocol.</p>
+
+  <div class="crit-meta">
+    <strong>Breach:</strong> any unannounced or witness-uncountersigned process modification, regardless of whether the resulting trade was profitable.<br>
+    <strong>Threshold:</strong> <span class="red">zero breaches, period.</span><br>
+    <strong>Verification:</strong> witness audits the rule-modification log monthly; modification artifact retrievable per change.
+  </div>
+
+  <!-- OP-02 -->
+  <h3 class="crit-h"><span class="crit-label">OP-02</span>One-Loss Daily Rule</h3>
+
+  <p>
+    After any closed losing trade, no further entries that session. The day ends on the first loss — regardless of setup quality, conviction, or remaining time. This is the load-bearing intraday rule: it structurally eliminates revenge-trading, instrument-switching, and post-loss impulsivity in a single bound. There is no exception for "the next setup looks good." The day is over.
+  </p>
+
+  <div class="crit-meta">
+    <strong>Breach:</strong> any second-trade-after-a-loss within the same session.<br>
+    <strong>Threshold:</strong> <span class="red">zero breaches per rolling 30 trading days.</span><br>
+    <strong>Verification:</strong> witness audits the daily trade log monthly; flagged trades disqualified from edge statistics and logged H2.
+  </div>
+
+  <!-- OP-03 -->
+  <h3 class="crit-h"><span class="crit-label">OP-03</span>Daily −12 Point Cap</h3>
+
+  <p>
+    Cumulative same-day P&amp;L cannot reach −12 ES points. In practice this fires only as a backstop to OP-02, when the first trade of the session is a single &gt;−12 pt loss (slipped stop, gap, structural break). When the cap fires, the session closes regardless of which rule triggered.
+  </p>
+
+  <div class="crit-meta">
+    <strong>Breach:</strong> any session in which cumulative P&amp;L breached −12 pts and a subsequent entry was taken.<br>
+    <strong>Threshold:</strong> <span class="red">zero breaches per calendar quarter.</span><br>
+    <strong>Verification:</strong> automated daily-cumulative report against the public trade log; witness reviews monthly.
+  </div>
+
+  <!-- OP-04 -->
+  <h3 class="crit-h"><span class="crit-label">OP-04</span>Per-Trade Attribution Discipline</h3>
+
+  <p>
+    Every qualified trade receives an operator attribution tag — <strong>H2 (process breached)</strong> or <strong>H3 (variance)</strong> — logged before the next entry, against a pre-decision log (rationale, expected outcome, frozen-process checklist). H3 is the resting attribution; H2 is the exception. <strong>H1 (edge failed) is not an operator attribution and is never applied to a single trade.</strong> "Edge failed" is a verdict about the strategy, knowable only across a sample — so it is system-derived: H1 is declared solely by the Expression Gate's rolling-window verdicts (Article I), subject to the Binding Interpretation Rule. H1 is locked out at the per-trade level by design.
+  </p>
+
+  <div class="crit-meta">
+    <strong>Breach:</strong> tag missing at next entry · tag inconsistent with pre-decision log · <strong>H1 hand-applied to a trade</strong> (the per-trade verdict belongs to the gate, not the operator).<br>
+    <strong>Threshold:</strong> <span class="red">zero breaches inside rolling 100-trade window.</span><br>
+    <strong>Verification:</strong> witness audits the attribution log monthly.
+  </div>
+
+  <!-- ============== ARTICLE VI — TIER LADDER ============== -->
+  <h2 class="article-h"><span class="article-label">Article VI</span>The Fidelity Layer — Three-Tier Stand-Down</h2>
+
+  <table class="tiers">
+    <thead>
+      <tr>
+        <th style="width: 22%">Tier</th>
+        <th style="width: 28%">Trigger</th>
+        <th style="width: 34%">Response</th>
+        <th style="width: 16%">Resume</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tier">T1</span><span class="tier-label">Logged breach</span></td>
+        <td>Single isolated breach of OP-02 or OP-04.</td>
+        <td>Logged within 24h + Discord entry. Witness review within 7 days, written corrective action. Counter resets to zero. No size or operational change.</td>
+        <td>Immediate; counter restarts at zero.</td>
+      </tr>
+      <tr>
+        <td><span class="tier">T2</span><span class="tier-label">Conditions reduced</span></td>
+        <td>2+ breaches of OP-02 or OP-03 in rolling 30 trades. Or OP-04 H1 misapplication.</td>
+        <td>Position cut to minimum sizing (1 MES, no scaling, no /ES) for next 20 qualified trades. Daily filing under witness oversight. Counter resets. Trading continues at reduced conditions.</td>
+        <td>20 clean minimum-size trades + witness countersignature.</td>
+      </tr>
+      <tr>
+        <td><span class="tier">T3</span><span class="tier-label">Full cessation</span></td>
+        <td>Any OP-01 breach. Or a second T2 inside rolling 100 trades.</td>
+        <td>Immediate cessation; new entries → zero next session; open positions exit per plan. Discord entry within 24h with breach, structural cause, remediation pathway. Witness convenes structural review. Protocol update if breach revealed structural inadequacy.</td>
+        <td>Witness-countersigned remediation artifact + 30-day calendar gap + 20 minimum-size trades.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="note">
+    <strong>Calibration.</strong> The first 30 days following public launch are observation-only while baseline adherence is established; the Fidelity Layer is binding from day 31. The Expression Layer (Articles I–III) is binding from day one.
+  </p>
+
+  <!-- ============== ARTICLE VII — WITNESS ============== -->
+  <h2 class="article-h"><span class="article-label">Article VII</span>Witness &amp; Verification</h2>
+
+  <p>The named witness for this protocol is <strong>Manish Dharod</strong>, who holds authority over: modification approvals (Article IV), breach tier classifications (Article VI), and Stage-1 resumption events (T2 / T3). The witness signs that protocol was followed; the witness does not endorse the substance of any decision or modification.</p>
+
+  <ul class="actions">
+    <li><strong>Countersignature</strong> required for: modifications, T2/T3 resumptions, monthly attribution audits. Artifact retrievable from the public page.</li>
+    <li><strong>Classification disputes:</strong> 7-day cool-off from initial classification; witness reviews with written rationale; if unresolved, a neutral third-party adjudicator — mutually agreed and named at the time of dispute — decides; decision binding and published in the breach record.</li>
+    <li><strong>Monthly audit:</strong> findings across all four Fidelity-Layer criteria, plus rolling Expression-Layer figures, published monthly to <code class="inline">witness-audits.json</code>. Without the monthly artifact, the "witness reviews monthly" claim is itself in breach.</li>
+  </ul>
+
+  <!-- ============== SIGNATURE ============== -->
+  <div class="sig-block">
+    <h3>Signatures &amp; Lock</h3>
+
+    <div class="sig-row">
+      <div>
+        <div class="sig-name">Operator</div>
+        <div class="sig-role">Hiren Desai · Founder &amp; Chief Investment Officer · Ekantik Capital Advisors LLC</div>
+        <div class="sig-line">Signature / Date locked</div>
+      </div>
+      <div>
+        <div class="sig-name">Witness 01</div>
+        <div class="sig-role">Manish Dharod</div>
+        <div class="sig-line">Relationship · Signature · Date</div>
+      </div>
+    </div>
+
+    <p class="attest">
+      By signature, the operator attests this protocol was derived prior to the deployment of member capital and is hereby locked as the governing operational charter for the Majority Opinion Predisposal Strategy. Witness signature attests only that the modification protocol was followed.
+    </p>
+  </div>
+
+  <footer>
+    Falsifiability Protocol · v1.0 · Doc Ref FP-MOPS-V1-2026-05<span class="dot">·</span>Ekantik Capital Advisors LLC · Maple Grove, MN<span class="dot">·</span>Public — epig500.ekantikcapital.com<span class="dot">·</span>© 2026 Ekantik Capital Advisors LLC. All rights reserved.
+  </footer>
+
+</div>
+
+</body>
+</html>
