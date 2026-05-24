@@ -212,7 +212,7 @@
         <header class="section__header section__header--center">
             <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Mechanism</p>
             <h2 class="section__h section__h--lg">The Compounding Ladder</h2>
-            <p class="section__sub">Starting at <strong>$100K NLV</strong>. The rule: every <strong>$5,000 in cumulative profit</strong> earns one additional /ES contract. Risk anchored at 0.5% of total NLV at every step. One-year horizon.</p>
+            <p class="section__sub">Starting at <strong>$100K NLV</strong>. A <strong>60-day no-trading buffer</strong> begins the year — observation, witness audit, baseline adherence. Then engine runs at 1 /ES with one of three scaling paths, capped at <strong>4 /ES maximum</strong>. Risk anchored at 0.5% of total NLV at every step.</p>
         </header>
 
         <!-- Scenario toggle -->
@@ -243,8 +243,8 @@
             <!-- Time-between-steps acceleration bars -->
             <div class="cl-accel">
                 <div class="cl-accel__head">
-                    <h3 class="cl-accel__h">Time between steps · the velocity argument</h3>
-                    <p class="cl-accel__sub">Each subsequent step compresses because the engine throughput grows linearly with contract count. The first step takes <em>months</em>; the last takes <em>days</em>.</p>
+                    <h3 class="cl-accel__h">Time at each contract level</h3>
+                    <p class="cl-accel__sub">The year breaks into the 60-day buffer plus one or two trading segments at fixed contract counts. No fractional scaling. No more than 4 /ES at any point.</p>
                 </div>
                 <div class="cl-accel__bars" id="cl-accel-bars"><!-- rendered by JS --></div>
             </div>
@@ -274,19 +274,19 @@
             </article>
         </div>
 
-        <!-- Step cadence: dynamic table reflecting the current scenario -->
+        <!-- Cadence breakdown: dynamic table reflecting the current scenario -->
         <div class="cadence">
-            <h3 class="cadence__h">Step-by-step cadence (current scenario)</h3>
-            <p class="cadence__sub">Every transition shown below requires the prior step to have accumulated $5,000 in verified profit. The time-to-next-step shrinks as the engine adds contracts — this is the velocity-compounds principle made concrete.</p>
+            <h3 class="cadence__h">Year breakdown (current scenario)</h3>
+            <p class="cadence__sub">The buffer is mandatory across all three scenarios. The scaling segment(s) below depend on which path you've selected. No row is generated for contract levels you never reach.</p>
             <div class="cadence__table-wrap">
                 <table class="cadence__table">
                     <thead>
-                        <tr><th>Step transition</th><th>Cumulative profit</th><th>NLV (start → end)</th><th>Time to next</th></tr>
+                        <tr><th>Segment</th><th>Throughput</th><th>NLV (start → end)</th><th>Duration</th></tr>
                     </thead>
                     <tbody id="cl-cadence-tbody"><!-- rendered by JS --></tbody>
                 </table>
             </div>
-            <p class="compliance">Hypothetical and illustrative. The $1,900/month-per-/ES throughput assumption is taken from the 227-trade reference dataset's monthly cadence under realistic conditions. Real markets introduce friction, regime changes, and stand-down events that may materially extend or prevent this trajectory. The Falsifiability Gate supersedes all ladder logic — if rolling-100 expectancy crosses zero, or any of the eight Stage-2 kill conditions fire, the ladder halts regardless of which step has been reached.</p>
+            <p class="compliance">Hypothetical and illustrative. The $1,900/month-per-/ES throughput assumption is taken from the 227-trade reference dataset's monthly cadence. Real markets introduce friction, regime changes, and stand-down events that may materially extend or prevent this trajectory. The Falsifiability Gate supersedes all ladder logic — if rolling-100 expectancy crosses zero, or any of the eight Stage-2 kill conditions fire, the ladder halts regardless of which level has been reached.</p>
         </div>
     </div>
 </section>

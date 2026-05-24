@@ -114,78 +114,98 @@
     /* ------------------------------------------------
        3. SCENARIO TOGGLE (Ladder section)
        ------------------------------------------------ */
-    /* Compounding Ladder model — simplified
-       Starting capital: $100K NLV. 1-year horizon. Rule: every $5,000 in cumulative
-       profit earns one additional /ES contract. Throughput per /ES from reference
-       data (~$1,900/mo/contract under realistic scenario). */
+    /* Compounding Ladder model — v4
+       Starting capital: $100K NLV. 1-year horizon. 60 days of no-trading buffer
+       up front (~2 months observation/protocol-warmup). Contract scaling capped
+       at 4 /ES maximum. Three discrete scenarios (Floor / Realistic / Cooperative).
+       Throughput per /ES from reference data: ~$1,900/mo/contract. */
 
-    const NLV_START = 100000;
-    const PROFIT_PER_STEP = 5000;
-    const PER_ES_MONTHLY = 1900;
-    const DURATION_MAX = 12; // months
-    const MAX_STEPS = 10;
+    const NLV_START         = 100000;
+    const PER_ES_MONTHLY    = 1900;
+    const DURATION_MAX      = 12;            // months
+    const BUFFER_DAYS       = 60;            // no-trading buffer at start of year
+    const BUFFER_MONTHS     = BUFFER_DAYS / 30; // 2 months
+    const COOP_BUFFER_PROFIT = 5000;          // 1-ES profit needed before cooperative scales to 4
+    const COOP_SCALE_T      = BUFFER_MONTHS + (COOP_BUFFER_PROFIT / PER_ES_MONTHLY); // ≈ 4.63 mo
+    const MAX_CONTRACTS     = 4;
+
+    // Each scenario defines the active-trading transitions (after the 60d buffer).
+    const SCENARIO_CONFIG = {
+        floor: {
+            label: 'Floor — 1 /ES throughout the year after the 60-day buffer. Engine runs at minimum scale; capital preserved.',
+            transitions: [
+                { startMonth: BUFFER_MONTHS, contracts: 1 }
+            ]
+        },
+        realistic: {
+            label: 'Realistic — 1 /ES after the buffer, then a mid-year scale to 2 /ES once the rolling-50 verdict confirms edge.',
+            transitions: [
+                { startMonth: BUFFER_MONTHS, contracts: 1 },
+                { startMonth: 6.0,           contracts: 2 }  // mid-year switch
+            ]
+        },
+        cooperative: {
+            label: 'Cooperative — 1 /ES until \\u2248$5K profit buffer is built, then a single jump to the 4 /ES ceiling and hold to year-end.',
+            transitions: [
+                { startMonth: BUFFER_MONTHS, contracts: 1 },
+                { startMonth: COOP_SCALE_T,  contracts: 4 }  // buffer-built jump to ceiling
+            ]
+        }
+    };
 
     function buildSteps(scenario) {
-        // Throughput multiplier per scenario
-        const mult = scenario === 'cooperative' ? 1.3
-                   : scenario === 'realistic'   ? 1.0
-                   : 0; // floor: no compounding
-        const steps = [{ n: 1, contracts: 1, timeReached: 0, nlv: NLV_START, cumProfit: 0 }];
-        if (mult === 0) return steps;
-        let t = 0, cum = 0, c = 1;
-        while (t < DURATION_MAX && c < MAX_STEPS) {
-            const monthsToNext = PROFIT_PER_STEP / (c * PER_ES_MONTHLY * mult);
-            if (t + monthsToNext > DURATION_MAX) break;
-            t += monthsToNext;
-            cum += PROFIT_PER_STEP;
-            c += 1;
-            steps.push({ n: c, contracts: c, timeReached: t, nlv: NLV_START + cum, cumProfit: cum });
+        const cfg = SCENARIO_CONFIG[scenario];
+        if (!cfg) return [];
+        const out = [];
+        let nlv = NLV_START;
+        let cumProfit = 0;
+        let prevT = 0;
+        let prevContracts = 0;
+        for (let i = 0; i < cfg.transitions.length; i++) {
+            const tr = cfg.transitions[i];
+            if (prevContracts > 0) {
+                const dt = tr.startMonth - prevT;
+                cumProfit += prevContracts * PER_ES_MONTHLY * dt;
+                nlv = NLV_START + cumProfit;
+            }
+            out.push({
+                n: i + 1,
+                contracts: Math.min(tr.contracts, MAX_CONTRACTS),
+                timeReached: tr.startMonth,
+                nlv: nlv,
+                cumProfit: cumProfit
+            });
+            prevT = tr.startMonth;
+            prevContracts = tr.contracts;
         }
-        return steps;
+        return out;
     }
 
     function buildCurve(scenario) {
-        const mult = scenario === 'cooperative' ? 1.3
-                   : scenario === 'realistic'   ? 1.0
-                   : 0;
         const steps = buildSteps(scenario);
         const points = [{ t: 0, value: NLV_START }];
-        let value = NLV_START;
-        // Smooth growth between each pair of steps
-        for (let i = 0; i < steps.length - 1; i++) {
-            const a = steps[i], b = steps[i + 1];
-            const duration = b.timeReached - a.timeReached;
-            const SUBDIV = 6;
+        if (!steps.length) return points;
+        // Flat through the buffer period
+        points.push({ t: steps[0].timeReached, value: NLV_START });
+        // Smooth growth between consecutive steps + tail to year-end
+        for (let i = 0; i < steps.length; i++) {
+            const s = steps[i];
+            const nextT = i + 1 < steps.length ? steps[i + 1].timeReached : DURATION_MAX;
+            const duration = nextT - s.timeReached;
+            const monthlyGain = s.contracts * PER_ES_MONTHLY;
+            const SUBDIV = 8;
             for (let k = 1; k <= SUBDIV; k++) {
                 const tFrac = k / SUBDIV;
-                points.push({ t: a.timeReached + tFrac * duration, value: value + (b.nlv - a.nlv) * tFrac });
+                points.push({ t: s.timeReached + tFrac * duration, value: s.nlv + monthlyGain * tFrac * duration });
             }
-            value = b.nlv;
-        }
-        // After last step, continue accumulating at constant contracts until 12 months
-        if (mult > 0 && steps.length > 0) {
-            const lastStep = steps[steps.length - 1];
-            const remaining = DURATION_MAX - lastStep.timeReached;
-            if (remaining > 0) {
-                const monthlyGain = lastStep.contracts * PER_ES_MONTHLY * mult;
-                const SUBDIV = 8;
-                for (let k = 1; k <= SUBDIV; k++) {
-                    const tFrac = k / SUBDIV;
-                    points.push({ t: lastStep.timeReached + tFrac * remaining, value: value + monthlyGain * tFrac * remaining });
-                }
-            }
-        } else {
-            // floor: flat at NLV_START all year
-            points.push({ t: DURATION_MAX, value: NLV_START });
         }
         return points;
     }
 
-    const SCENARIO_LABELS = {
-        cooperative: 'Cooperative — published cadence × 1.3. Ladder reaches the engine ceiling early; subsequent months compound at full intensity.',
-        realistic:   'Realistic — published reference cadence applied unmodified. Most likely terrain.',
-        floor:       'Floor — strategy launches but no edge expression. Active sleeve flat at 1 /ES the whole year.'
-    };
+    const SCENARIO_LABELS = Object.keys(SCENARIO_CONFIG).reduce(function (acc, k) {
+        acc[k] = SCENARIO_CONFIG[k].label;
+        return acc;
+    }, {});
 
     let currentScenario = 'realistic';
     let currentPoints = buildCurve(currentScenario);
@@ -199,7 +219,7 @@
         const pts = currentPoints;
         const W = 1100, H = 380;
         const PAD_L = 60, PAD_R = 60, PAD_T = 30, PAD_B = 50;
-        const yMax = 10; // contract scale ceiling
+        const yMax = 5; // contract scale ceiling (4 max + 1 headroom)
 
         const innerW = W - PAD_L - PAD_R;
         const innerH = H - PAD_T - PAD_B;
@@ -215,11 +235,11 @@
             const profit = finalVal - NLV_START;
             const profitPct = ((finalVal - NLV_START) / NLV_START) * 100;
             heroEl.innerHTML = [
-                '<div class="cl-hero__col"><p class="cl-hero__label">Start</p><p class="cl-hero__value">$' + (NLV_START / 1000) + 'K</p><p class="cl-hero__sub">1 /ES · $500/trade</p></div>',
+                '<div class="cl-hero__col"><p class="cl-hero__label">Start</p><p class="cl-hero__value">$' + (NLV_START / 1000) + 'K</p><p class="cl-hero__sub">60-day buffer · 0 trades</p></div>',
                 '<div class="cl-hero__arrow">→</div>',
                 '<div class="cl-hero__col"><p class="cl-hero__label">Year-end</p><p class="cl-hero__value cl-hero__value--accent">$' + Math.round(finalVal / 1000) + 'K</p><p class="cl-hero__sub">' + lastStep.contracts + ' /ES · $' + Math.round(finalVal * 0.005).toLocaleString() + '/trade</p></div>',
                 '<div class="cl-hero__col"><p class="cl-hero__label">Profit</p><p class="cl-hero__value cl-hero__value--gold">' + (profit >= 0 ? '+$' : '−$') + Math.abs(Math.round(profit / 1000)) + 'K</p><p class="cl-hero__sub">' + (profitPct >= 0 ? '+' : '') + profitPct.toFixed(0) + '% over 12 mo</p></div>',
-                '<div class="cl-hero__col"><p class="cl-hero__label">Contracts earned</p><p class="cl-hero__value cl-hero__value--gold">1 → ' + lastStep.contracts + '</p><p class="cl-hero__sub">+1 per $5K profit</p></div>'
+                '<div class="cl-hero__col"><p class="cl-hero__label">Contracts earned</p><p class="cl-hero__value cl-hero__value--gold">1 → ' + lastStep.contracts + '</p><p class="cl-hero__sub">cap: ' + MAX_CONTRACTS + ' /ES</p></div>'
             ].join('');
         }
 
@@ -227,18 +247,26 @@
         const parts = [];
 
         // Background grid (horizontal lines at each contract level)
-        for (let c = 0; c <= yMax; c += 2) {
+        for (let c = 0; c <= yMax; c++) {
             const y = yAt(c);
             parts.push('<line x1="' + PAD_L + '" y1="' + y + '" x2="' + (W - PAD_R) + '" y2="' + y + '" stroke="rgba(27,42,74,0.06)" />');
             parts.push('<text x="' + (PAD_L - 8) + '" y="' + (y + 4) + '" font-size="11" fill="#64748B" font-family="Source Sans 3" text-anchor="end">' + c + '</text>');
         }
-        // Y-axis label highlights at each step's contract level
         // X-axis gridlines + month labels
         for (let m = 0; m <= 12; m += 2) {
             const x = xAt(m);
             parts.push('<line x1="' + x + '" y1="' + PAD_T + '" x2="' + x + '" y2="' + (H - PAD_B) + '" stroke="rgba(27,42,74,0.04)" />');
             parts.push('<text x="' + x + '" y="' + (H - PAD_B + 18) + '" font-size="11" fill="#64748B" font-family="Source Sans 3" text-anchor="middle">' + m + (m === 0 ? ' mo' : '') + '</text>');
         }
+
+        // 60-day NO-TRADING BUFFER band — hatched, with label
+        parts.push('<defs><pattern id="clBufferHatch" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#94A3B8" stroke-width="1.2" opacity="0.45"/></pattern></defs>');
+        parts.push('<rect x="' + PAD_L + '" y="' + PAD_T + '" width="' + (xAt(BUFFER_MONTHS) - PAD_L) + '" height="' + (H - PAD_T - PAD_B) + '" fill="url(#clBufferHatch)" opacity="0.6"/>');
+        // Buffer label centered in the band
+        const xBufMid = (PAD_L + xAt(BUFFER_MONTHS)) / 2;
+        parts.push('<text x="' + xBufMid + '" y="' + (PAD_T + 14) + '" text-anchor="middle" font-size="10" font-weight="700" fill="#475569" font-family="Source Sans 3" letter-spacing="1.5">60-DAY BUFFER</text>');
+        parts.push('<text x="' + xBufMid + '" y="' + (PAD_T + 28) + '" text-anchor="middle" font-size="10" fill="#64748B" font-family="Source Sans 3">no trading</text>');
+        parts.push('<line x1="' + xAt(BUFFER_MONTHS) + '" y1="' + PAD_T + '" x2="' + xAt(BUFFER_MONTHS) + '" y2="' + (H - PAD_B) + '" stroke="#94A3B8" stroke-width="1" stroke-dasharray="4 3" opacity="0.6"/>');
 
         // Build the stair-step path
         // Walk through steps: at each step, horizontal segment from prev time to current time at current contract level
@@ -248,15 +276,18 @@
         } else {
             const pathPoints = [];
             const areaPoints = [];
+            const firstStep = steps[0];
 
-            // Start at (t=0, contracts=1)
-            pathPoints.push([xAt(0), yAt(1)]);
+            // Start at (t=0, contracts=0) — buffer period at zero
+            pathPoints.push([xAt(0), yAt(0)]);
+            // Horizontal across the buffer
+            pathPoints.push([xAt(firstStep.timeReached), yAt(0)]);
+            // Vertical jump up to first contract level
+            pathPoints.push([xAt(firstStep.timeReached), yAt(firstStep.contracts)]);
 
-            // For each step BEYOND the first: jump up at that step's time
+            // For each subsequent step: horizontal then vertical jump
             for (let i = 1; i < steps.length; i++) {
-                // Horizontal segment from prev t to this step's t at previous contract level
                 pathPoints.push([xAt(steps[i].timeReached), yAt(steps[i - 1].contracts)]);
-                // Vertical segment up to this step's contract level
                 pathPoints.push([xAt(steps[i].timeReached), yAt(steps[i].contracts)]);
             }
             // Tail: horizontal at final contract level out to month 12
@@ -279,36 +310,24 @@
             const pathD = 'M ' + pathPoints.map(function (p) { return p[0] + ',' + p[1]; }).join(' L ');
             parts.push('<path d="' + pathD + '" fill="none" stroke="#1B2A4A" stroke-width="2.5" stroke-linejoin="miter" stroke-linecap="square" />');
 
-            // Step transition markers (gold dots at each "knee")
-            for (let i = 1; i < steps.length; i++) {
-                const x = xAt(steps[i].timeReached);
-                const y = yAt(steps[i].contracts);
-                parts.push('<circle cx="' + x + '" cy="' + y + '" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>');
-            }
-            // First step starting marker
-            parts.push('<circle cx="' + xAt(0) + '" cy="' + yAt(1) + '" r="6" fill="#1B2A4A" stroke="white" stroke-width="2"/>');
-
-            // Concise step labels — only on every other step to avoid clutter, plus first + last
+            // Step transition markers (gold dots at each "knee", including the buffer-exit)
             steps.forEach(function (s, i) {
-                if (i === 0 || i === steps.length - 1 || i % 2 === 1) {
-                    const x = xAt(s.timeReached);
-                    const y = yAt(s.contracts);
-                    const labelY = y - 12;
-                    const labelText = s.contracts + ' /ES';
-                    const subText = '$' + Math.round(s.nlv / 1000) + 'K';
-                    parts.push('<g class="cl-step-anno">');
-                    parts.push('<text x="' + (x + 8) + '" y="' + labelY + '" font-size="12" font-weight="700" fill="#1B2A4A" font-family="Source Sans 3">' + labelText + '</text>');
-                    parts.push('<text x="' + (x + 8) + '" y="' + (labelY + 13) + '" font-size="10" fill="#64748B" font-family="Source Sans 3">' + subText + '</text>');
-                    parts.push('</g>');
-                }
+                const x = xAt(s.timeReached);
+                const y = yAt(s.contracts);
+                parts.push('<circle cx="' + x + '" cy="' + y + '" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>');
+                // Label every step (small number, never crowded with only 1-2 transitions)
+                const labelX = x + 10;
+                const labelY = y - 10;
+                parts.push('<text x="' + labelX + '" y="' + labelY + '" font-size="13" font-weight="700" fill="#1B2A4A" font-family="Source Sans 3">' + s.contracts + ' /ES</text>');
+                parts.push('<text x="' + labelX + '" y="' + (labelY + 14) + '" font-size="10" fill="#64748B" font-family="Source Sans 3">$' + Math.round(s.nlv / 1000) + 'K NLV · ' + s.timeReached.toFixed(1) + ' mo</text>');
             });
 
-            // Final state callout at top-right
+            // Final state callout at right edge
             const xEnd = xAt(DURATION_MAX);
             const yEnd = yAt(lastStep.contracts);
-            parts.push('<rect x="' + (xEnd - 100) + '" y="' + (yEnd - 38) + '" width="100" height="34" rx="3" fill="#1B2A4A"/>');
-            parts.push('<text x="' + (xEnd - 50) + '" y="' + (yEnd - 22) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#C8A951" font-family="Source Sans 3">YEAR-END</text>');
-            parts.push('<text x="' + (xEnd - 50) + '" y="' + (yEnd - 8) + '" text-anchor="middle" font-size="13" font-weight="700" fill="white" font-family="Source Sans 3">$' + Math.round(finalVal / 1000) + 'K</text>');
+            parts.push('<rect x="' + (xEnd - 110) + '" y="' + (yEnd - 44) + '" width="110" height="36" rx="3" fill="#1B2A4A"/>');
+            parts.push('<text x="' + (xEnd - 55) + '" y="' + (yEnd - 28) + '" text-anchor="middle" font-size="10" font-weight="700" fill="#C8A951" font-family="Source Sans 3" letter-spacing="1">YEAR-END</text>');
+            parts.push('<text x="' + (xEnd - 55) + '" y="' + (yEnd - 13) + '" text-anchor="middle" font-size="14" font-weight="700" fill="white" font-family="Source Sans 3">$' + Math.round(finalVal / 1000) + 'K</text>');
         }
 
         svg.innerHTML = parts.join('');
@@ -317,12 +336,21 @@
         const sumEl = document.getElementById('cl-summary');
         if (sumEl) {
             const stepsAdvanced = lastStep.contracts - 1; // 0 if floor
-            const profitViaSteps = lastStep.cumProfit;
-            const profitPostStep = finalVal - NLV_START - profitViaSteps;
-            const firstStepDur = steps.length > 1 ? (steps[1].timeReached - steps[0].timeReached) : DURATION_MAX;
-            const lastStepDur = steps.length > 2 ? (steps[steps.length - 1].timeReached - steps[steps.length - 2].timeReached) : firstStepDur;
-            const accel = lastStepDur > 0 ? (firstStepDur / lastStepDur) : 1;
+            const profitViaScaling = lastStep.cumProfit;          // profit at 1 ES before the scale event
+            const profitPostScaling = finalVal - NLV_START - profitViaScaling;
+            const activeMonths = DURATION_MAX - BUFFER_MONTHS;
             const finalRisk = Math.round(finalVal * 0.005);
+
+            // Compose a position narrative based on scenario shape
+            let positionNarrative;
+            if (lastStep.contracts === 1) {
+                positionNarrative = '1 /ES the entire active window';
+            } else if (steps.length === 2) {
+                const scaleAt = steps[1].timeReached;
+                positionNarrative = '1 → ' + lastStep.contracts + ' /ES @ month ' + scaleAt.toFixed(1);
+            } else {
+                positionNarrative = lastStep.contracts + ' /ES at year-end';
+            }
 
             sumEl.innerHTML = [
                 '<article class="cl-card">',
@@ -331,54 +359,57 @@
                   '<dl class="cl-card__list">',
                     '<div><dt>Profit</dt><dd>+$' + Math.round((finalVal - NLV_START) / 1000) + 'K</dd></div>',
                     '<div><dt>Position</dt><dd>' + lastStep.contracts + ' /ES</dd></div>',
-                    '<div><dt>Risk / trade</dt><dd>$' + finalRisk.toLocaleString() + ' (0.5%)</dd></div>',
+                    '<div><dt>Risk / trade</dt><dd>$' + finalRisk.toLocaleString() + ' (0.5% NLV)</dd></div>',
                   '</dl>',
                 '</article>',
                 '<article class="cl-card cl-card--gold">',
                   '<p class="cl-card__label">Earned leverage</p>',
-                  '<p class="cl-card__value">' + stepsAdvanced + ' contracts</p>',
+                  '<p class="cl-card__value">' + stepsAdvanced + (stepsAdvanced === 1 ? ' contract' : ' contracts') + ' gained</p>',
                   '<dl class="cl-card__list">',
-                    '<div><dt>Profit via steps</dt><dd>+$' + (profitViaSteps / 1000).toFixed(0) + 'K</dd></div>',
-                    '<div><dt>Profit post-ceiling</dt><dd>+$' + (profitPostStep / 1000).toFixed(0) + 'K</dd></div>',
-                    '<div><dt>Threshold</dt><dd>$5K → +1 /ES</dd></div>',
+                    '<div><dt>Pre-scale profit</dt><dd>+$' + (profitViaScaling / 1000).toFixed(1) + 'K</dd></div>',
+                    '<div><dt>Post-scale profit</dt><dd>+$' + (profitPostScaling / 1000).toFixed(1) + 'K</dd></div>',
+                    '<div><dt>Position arc</dt><dd>' + positionNarrative + '</dd></div>',
                   '</dl>',
                 '</article>',
                 '<article class="cl-card">',
-                  '<p class="cl-card__label">Velocity</p>',
-                  '<p class="cl-card__value">' + accel.toFixed(1) + '× faster</p>',
+                  '<p class="cl-card__label">Cadence</p>',
+                  '<p class="cl-card__value">' + BUFFER_DAYS + '-day buffer</p>',
                   '<dl class="cl-card__list">',
-                    '<div><dt>1st step</dt><dd>' + firstStepDur.toFixed(1) + ' mo</dd></div>',
-                    '<div><dt>Last step</dt><dd>' + (lastStepDur < 1 ? Math.round(lastStepDur * 30) + ' days' : lastStepDur.toFixed(1) + ' mo') + '</dd></div>',
-                    '<div><dt>Reason</dt><dd>throughput scales w/ contracts</dd></div>',
+                    '<div><dt>Active trading</dt><dd>' + activeMonths.toFixed(1) + ' months</dd></div>',
+                    '<div><dt>Scale events</dt><dd>' + stepsAdvanced + ' this year</dd></div>',
+                    '<div><dt>Max contracts</dt><dd>cap @ ' + MAX_CONTRACTS + ' /ES</dd></div>',
                   '</dl>',
                 '</article>'
             ].join('');
         }
 
-        /* ── ACCELERATION BARS ── */
+        /* ── TIME-AT-EACH-LEVEL BARS ── */
         const accelEl = document.getElementById('cl-accel-bars');
         if (accelEl) {
-            if (steps.length < 2) {
-                accelEl.innerHTML = '<p class="cl-accel__empty">No step transitions in this scenario.</p>';
-            } else {
-                // Compute durations between consecutive steps
-                const durations = [];
-                let maxDur = 0;
-                for (let i = 1; i < steps.length; i++) {
-                    const d = steps[i].timeReached - steps[i - 1].timeReached;
-                    durations.push({ from: steps[i - 1].contracts, to: steps[i].contracts, months: d });
-                    if (d > maxDur) maxDur = d;
-                }
-                accelEl.innerHTML = durations.map(function (d) {
-                    const pct = (d.months / maxDur) * 100;
-                    const dur = d.months < 1 ? Math.round(d.months * 30) + ' days' : d.months.toFixed(1) + ' months';
-                    return '<div class="cl-bar">'
-                        + '<span class="cl-bar__label">' + d.from + ' → ' + d.to + ' /ES</span>'
-                        + '<div class="cl-bar__track"><div class="cl-bar__fill" style="width:' + pct + '%"></div></div>'
-                        + '<span class="cl-bar__val">' + dur + '</span>'
-                        + '</div>';
-                }).join('');
+            // Compose segments: buffer + one per contract level + tail to year-end
+            const segments = [];
+            segments.push({ label: '60-day buffer', sub: 'no trading', months: BUFFER_MONTHS, kind: 'buffer' });
+            for (let i = 0; i < steps.length; i++) {
+                const s = steps[i];
+                const nextT = i + 1 < steps.length ? steps[i + 1].timeReached : DURATION_MAX;
+                const dur = nextT - s.timeReached;
+                segments.push({
+                    label: s.contracts + ' /ES',
+                    sub: '$' + Math.round(s.contracts * PER_ES_MONTHLY).toLocaleString() + '/mo throughput',
+                    months: dur,
+                    kind: 'trading'
+                });
             }
+            const maxDur = Math.max.apply(null, segments.map(function (x) { return x.months; }));
+            accelEl.innerHTML = segments.map(function (s) {
+                const pct = maxDur > 0 ? (s.months / maxDur) * 100 : 0;
+                const dur = s.months < 1 ? Math.round(s.months * 30) + ' days' : s.months.toFixed(1) + ' months';
+                return '<div class="cl-bar cl-bar--' + s.kind + '">'
+                    + '<span class="cl-bar__label">' + s.label + '<small>' + s.sub + '</small></span>'
+                    + '<div class="cl-bar__track"><div class="cl-bar__fill" style="width:' + pct + '%"></div></div>'
+                    + '<span class="cl-bar__val">' + dur + '</span>'
+                    + '</div>';
+            }).join('');
         }
 
         // Render cadence summary table (keeps existing detail table)
@@ -389,23 +420,30 @@
         const tbody = document.getElementById('cl-cadence-tbody');
         if (!tbody) return;
         const steps = currentSteps;
+        const lastPt = currentPoints[currentPoints.length - 1];
         let rows = '';
-        for (let i = 0; i < steps.length - 1; i++) {
-            const a = steps[i], b = steps[i + 1];
-            const dt = (b.timeReached - a.timeReached);
-            const dtLabel = dt < 1 ? Math.round(dt * 30) + ' days' : dt.toFixed(1) + ' months';
+
+        // Buffer row
+        rows += '<tr><td>60-day buffer</td><td>—</td><td>$' + NLV_START.toLocaleString() + '</td><td>' + BUFFER_DAYS + ' days · no trading</td></tr>';
+
+        // One row per active-trading segment
+        for (let i = 0; i < steps.length; i++) {
+            const s = steps[i];
+            const nextT = i + 1 < steps.length ? steps[i + 1].timeReached : DURATION_MAX;
+            const dur = nextT - s.timeReached;
+            const durLabel = dur < 1 ? Math.round(dur * 30) + ' days' : dur.toFixed(1) + ' months';
+            const endNlv = i + 1 < steps.length ? steps[i + 1].nlv : lastPt.value;
             rows += '<tr>'
-                + '<td>' + a.contracts + ' → ' + b.contracts + ' /ES</td>'
-                + '<td>$' + (a.cumProfit / 1000).toFixed(0) + 'K → $' + (b.cumProfit / 1000).toFixed(0) + 'K</td>'
-                + '<td>$' + a.nlv.toLocaleString() + ' → $' + b.nlv.toLocaleString() + '</td>'
-                + '<td>' + dtLabel + '</td>'
+                + '<td>' + s.contracts + ' /ES</td>'
+                + '<td>+$' + (s.contracts * PER_ES_MONTHLY * dur / 1000).toFixed(1) + 'K @ this level</td>'
+                + '<td>$' + Math.round(s.nlv / 1000) + 'K → $' + Math.round(endNlv / 1000) + 'K</td>'
+                + '<td>' + durLabel + '</td>'
                 + '</tr>';
         }
-        const last = steps[steps.length - 1];
-        const lastPt = currentPoints[currentPoints.length - 1];
+
         rows += '<tr class="cadence__total">'
             + '<td>Year-end</td>'
-            + '<td colspan="2">@ ' + last.contracts + ' /ES, ' + last.timeReached.toFixed(1) + ' mo to ladder peak</td>'
+            + '<td colspan="2">' + steps[steps.length - 1].contracts + ' /ES position · ' + (DURATION_MAX - BUFFER_MONTHS).toFixed(1) + ' months active</td>'
             + '<td>NLV $' + Math.round(lastPt.value / 1000) + 'K (illustrative)</td>'
             + '</tr>';
         tbody.innerHTML = rows;
