@@ -222,15 +222,77 @@
        LABEL is anything matching M\w+ (e.g. MO1, M01, MO2, MES, etc.)
        Multiple trades may be separated by blank lines and/or new date headers.
     */
-    // Prefix is now any letter+word (M1, MO1, F1, F##, MES, SPX, etc.)
-    const JOURNAL_DATE_RE   = /\b(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+(\d{1,2})[.:](\d{2})\s*(AM|PM|am|pm)?\b/;
-    const JOURNAL_ENTRY_RE  = /^\s*[A-Za-z]\w*\s*:\s*([sbSB])\s*(\d+(?:\.\d+)?)/m;
-    const JOURNAL_RESULT_RE = /^\s*[A-Za-z]\w*\s*:\s*([+-]?\d+(?:\.\d+)?)\s+([Hh][23]|BE|be)\b/m;
-    const JOURNAL_SL_RE     = /^\s*[A-Za-z]\w*\s*:\s*sl\s*(\d+(?:\.\d+)?)/im;
-    const JOURNAL_TP_RE     = /^\s*[A-Za-z]\w*\s*:\s*tp\s*(\d+(?:\.\d+)?)/im;
+    // Per-line patterns. Prefix is any letter+word (M1, MO1, F1, MES, SPX, etc.)
+    const JOURNAL_ENTRY_RE  = /^\s*[A-Za-z]\w*\s*:\s*([sbSB])\s*(\d+(?:\.\d+)?)\s*$/;
+    const JOURNAL_RESULT_RE = /^\s*[A-Za-z]\w*\s*:\s*([+-]?\d+(?:\.\d+)?)\s+([Hh][23]|BE|be)\b/;
+    const JOURNAL_SL_RE     = /^\s*[A-Za-z]\w*\s*:\s*sl\s*(\d+(?:\.\d+)?)/i;
+    const JOURNAL_TP_RE     = /^\s*[A-Za-z]\w*\s*:\s*tp\s*(\d+(?:\.\d+)?)/i;
 
+    // Timestamp variants encountered in Discord paste / journal headers
+    const TS_FULL_DATE_RE  = /\b(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+(\d{1,2})[:.](\d{2})\s*(AM|PM|am|pm)?\b/;
+    const TS_TODAY_RE      = /\bToday\s+at\s+(\d{1,2})[:.](\d{2})\s*(AM|PM|am|pm)/i;
+    const TS_YESTERDAY_RE  = /\bYesterday\s+at\s+(\d{1,2})[:.](\d{2})\s*(AM|PM|am|pm)/i;
+    const TS_TIME_ONLY_RE  = /(?:^|[\s\[—\-])(\d{1,2})[:.](\d{2})\s*(AM|PM|am|pm)\b/;
+
+    // Detection: any result line is enough to trigger journal parsing.
     function looksLikeJournal(text) {
-        return JOURNAL_DATE_RE.test(text) && JOURNAL_RESULT_RE.test(text);
+        const lines = text.split(/\r?\n/);
+        for (let i = 0; i < lines.length; i++) if (JOURNAL_RESULT_RE.test(lines[i])) return true;
+        return false;
+    }
+
+    /* Extract a timestamp from a single line. Returns a Date or null.
+       Handles full date+time, 'Today at', 'Yesterday at', and bare time-only
+       (in which case the date defaults to today). */
+    function extractTimestamp(line) {
+        const trimmed = line.trim();
+        if (!trimmed) return null;
+
+        // Full date M/D/YY h:mm AM/PM
+        let m = trimmed.match(TS_FULL_DATE_RE);
+        if (m) {
+            let yr = parseInt(m[3], 10); if (yr < 100) yr += 2000;
+            let hr = parseInt(m[4], 10);
+            const min = parseInt(m[5], 10);
+            const ampm = (m[6] || '').toUpperCase();
+            if (ampm === 'PM' && hr < 12) hr += 12;
+            if (ampm === 'AM' && hr === 12) hr = 0;
+            return new Date(yr, parseInt(m[1], 10) - 1, parseInt(m[2], 10), hr, min, 0);
+        }
+        // 'Today at h:mm AM/PM'
+        m = trimmed.match(TS_TODAY_RE);
+        if (m) {
+            const d = new Date();
+            let hr = parseInt(m[1], 10);
+            if (/pm/i.test(m[3]) && hr < 12) hr += 12;
+            if (/am/i.test(m[3]) && hr === 12) hr = 0;
+            d.setHours(hr, parseInt(m[2], 10), 0, 0);
+            return d;
+        }
+        // 'Yesterday at h:mm AM/PM'
+        m = trimmed.match(TS_YESTERDAY_RE);
+        if (m) {
+            const d = new Date(); d.setDate(d.getDate() - 1);
+            let hr = parseInt(m[1], 10);
+            if (/pm/i.test(m[3]) && hr < 12) hr += 12;
+            if (/am/i.test(m[3]) && hr === 12) hr = 0;
+            d.setHours(hr, parseInt(m[2], 10), 0, 0);
+            return d;
+        }
+        // Bare time only — assume today
+        m = trimmed.match(TS_TIME_ONLY_RE);
+        if (m) {
+            // Reject if the line itself is a known trade line (avoid eating "F1: +12 H3" times)
+            if (JOURNAL_ENTRY_RE.test(trimmed) || JOURNAL_RESULT_RE.test(trimmed)
+                || JOURNAL_SL_RE.test(trimmed) || JOURNAL_TP_RE.test(trimmed)) return null;
+            const d = new Date();
+            let hr = parseInt(m[1], 10);
+            if (/pm/i.test(m[3]) && hr < 12) hr += 12;
+            if (/am/i.test(m[3]) && hr === 12) hr = 0;
+            d.setHours(hr, parseInt(m[2], 10), 0, 0);
+            return d;
+        }
+        return null;
     }
 
     /* DiscordChatExporter HTML → flattened journal text
@@ -300,73 +362,81 @@
         return raw; // emit as-is; journal regex may still match if it's already close
     }
 
+    /* Line-walking parser. Emits a trade for every result line encountered,
+       using the most recent timestamp + entry/sl/tp seen above it. Forgiving
+       about block boundaries — Discord paste, Ekantik journal, or just bare
+       result lines all work. */
     function parseEkantikJournal(text) {
-        // Split into blocks. A block boundary is any line that itself is a date header.
         const lines = text.split(/\r?\n/);
-        const blocks = [];
-        let buf = [];
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
-            if (JOURNAL_DATE_RE.test(line.trim()) && buf.length > 0) {
-                blocks.push(buf.join('\n'));
-                buf = [line];
-            } else {
-                buf.push(line);
-            }
-        }
-        if (buf.join('').trim().length) blocks.push(buf.join('\n'));
-
         const trades = [];
-        for (let bi = 0; bi < blocks.length; bi++) {
-            const block = blocks[bi];
-            const dm = block.match(JOURNAL_DATE_RE);
-            const rm = block.match(JOURNAL_RESULT_RE);
-            if (!dm || !rm) continue;
 
-            // Date / time
-            let mo = parseInt(dm[1], 10);
-            let day = parseInt(dm[2], 10);
-            let yr = parseInt(dm[3], 10);
-            if (yr < 100) yr += 2000;
-            let hr = parseInt(dm[4], 10);
-            const min = parseInt(dm[5], 10);
-            const ampm = (dm[6] || '').toUpperCase();
-            if (ampm === 'PM' && hr < 12) hr += 12;
-            if (ampm === 'AM' && hr === 12) hr = 0;
-            const ts = new Date(yr, mo - 1, day, hr, min, 0).toISOString();
+        let lastTs = null;          // Date object
+        let pendingEntry = null;    // { side, entry }
+        let pendingSl = null;
+        let pendingTp = null;
+        let resultIndex = 0;        // for nudging timestamps when many results share a time
 
-            // Entry (optional)
-            const em = block.match(JOURNAL_ENTRY_RE);
-            const side = em ? (em[1].toLowerCase() === 's' ? 'SHORT' : 'LONG') : '';
-            const entry = em ? parseFloat(em[2]) : null;
+        const isOptions = currentStrategy() === 'options';
+        const dollarMult = isOptions ? 1 : 50;
+        const sym = defaultSymbol();
 
-            // Stop loss / trailing profit (optional, captured for the record)
-            const slMatch = block.match(JOURNAL_SL_RE);
-            const tpMatch = block.match(JOURNAL_TP_RE);
+        for (let i = 0; i < lines.length; i++) {
+            const raw = lines[i];
+            const trimmed = raw.trim();
+            if (!trimmed) continue;
 
-            // Result
-            const pts = parseFloat(rm[1]);
-            let tag = rm[2].toUpperCase();
-            if (tag === 'H1') tag = 'H3'; // OP-04: per-trade H1 is itself a breach
+            // Timestamp line — capture and continue
+            const ts = extractTimestamp(trimmed);
+            if (ts) { lastTs = ts; continue; }
 
-            const sym = defaultSymbol();
-            const isOptions = currentStrategy() === 'options';
-            // Options: pts ARE dollars-per-contract on SPX; futures: pts × $50 = $/contract (ES) or $5 (MES)
-            const dollarMult = isOptions ? 1 : 50;
-            trades.push({
-                timestamp: ts,
-                symbol: sym,
-                side: side,
-                result: pts > 0 ? 'W' : pts < 0 ? 'L' : 'BE',
-                pts: Math.round(pts * 100) / 100,
-                dollars: Math.round(pts * dollarMult * 100) / 100,
-                tag: tag,
-                period: 'pre_reg',
-                strategy: currentStrategy(),
-                entry: entry,
-                sl: slMatch ? parseFloat(slMatch[1]) : null,
-                tp: tpMatch ? parseFloat(tpMatch[1]) : null
-            });
+            // Trade structure lines
+            const em = trimmed.match(JOURNAL_ENTRY_RE);
+            if (em) {
+                pendingEntry = { side: em[1].toLowerCase() === 's' ? 'SHORT' : 'LONG', entry: parseFloat(em[2]) };
+                continue;
+            }
+            const sl = trimmed.match(JOURNAL_SL_RE);
+            if (sl) { pendingSl = parseFloat(sl[1]); continue; }
+            const tp = trimmed.match(JOURNAL_TP_RE);
+            if (tp) { pendingTp = parseFloat(tp[1]); continue; }
+
+            const rm = trimmed.match(JOURNAL_RESULT_RE);
+            if (rm) {
+                const pts = parseFloat(rm[1]);
+                let tag = rm[2].toUpperCase();
+                if (tag === 'H1') tag = 'H3'; // OP-04 — per-trade H1 is itself a breach
+
+                // Timestamp fallback: if none was seen yet, use now() and nudge by index.
+                let tradeDate;
+                if (lastTs) {
+                    tradeDate = new Date(lastTs.getTime() + resultIndex * 1000);
+                } else {
+                    tradeDate = new Date(Date.now() + resultIndex * 1000);
+                }
+                resultIndex++;
+
+                trades.push({
+                    timestamp: tradeDate.toISOString(),
+                    symbol: sym,
+                    side: pendingEntry ? pendingEntry.side : '',
+                    result: pts > 0 ? 'W' : pts < 0 ? 'L' : 'BE',
+                    pts: Math.round(pts * 100) / 100,
+                    dollars: Math.round(pts * dollarMult * 100) / 100,
+                    tag: tag,
+                    period: 'pre_reg',
+                    strategy: currentStrategy(),
+                    entry: pendingEntry ? pendingEntry.entry : null,
+                    sl: pendingSl,
+                    tp: pendingTp
+                });
+
+                // Reset trade context — next result starts fresh
+                pendingEntry = null;
+                pendingSl = null;
+                pendingTp = null;
+                continue;
+            }
+            // Author lines / other noise — ignore
         }
         return trades;
     }
