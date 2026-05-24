@@ -49,10 +49,9 @@
     }
     track('page_view', { url: location.href, referrer: document.referrer || null });
 
-    document.querySelectorAll('a[href="#book"]').forEach(function (cta) {
+    document.querySelectorAll('a[href="#prereg"]').forEach(function (cta) {
         cta.addEventListener('click', function () {
-            const source = cta.closest('section')?.id || 'unknown';
-            track(source === 'founding' ? 'founding_member_cta_click' : 'book_cta_click', { section: source });
+            track('prereg_cta_click', { source: cta.dataset.cta || 'unknown', section: cta.closest('section')?.id || 'unknown' });
         });
     });
     document.querySelectorAll('a[data-cta^="discord-"]').forEach(function (cta) {
@@ -60,6 +59,38 @@
             track('discord_cta_click', { source: cta.dataset.cta, section: cta.closest('section')?.id || 'nav' });
         });
     });
+
+    /* Pre-registration form — builds a mailto: with structured body */
+    const preregForm = document.getElementById('preregForm');
+    if (preregForm) {
+        preregForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const fd = new FormData(preregForm);
+            const name = (fd.get('name') || '').trim();
+            const email = (fd.get('email') || '').trim();
+            const capital = (fd.get('capital') || '').trim();
+            const curiosity = (fd.get('curiosity') || '').trim();
+            const subject = 'Ekantik 500 — pre-registration: ' + name;
+            const body = [
+                'Pre-registration submission',
+                '',
+                'Name:      ' + name,
+                'Email:     ' + email,
+                'Capital:   ' + (capital || '(not specified)'),
+                '',
+                'Curiosity:',
+                curiosity || '(none)',
+                '',
+                '---',
+                'Submitted from epig500.ekantikcapital.com pre-registration form.'
+            ].join('\n');
+            const mailto = 'mailto:hiren@ekantikcapital.com'
+                + '?subject=' + encodeURIComponent(subject)
+                + '&body=' + encodeURIComponent(body);
+            track('prereg_submit', { capital: capital || 'unspecified' });
+            window.location.href = mailto;
+        });
+    }
 
     document.querySelectorAll('.faq__item').forEach(function (item, idx) {
         item.addEventListener('toggle', function () {
