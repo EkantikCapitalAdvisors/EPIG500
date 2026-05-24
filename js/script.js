@@ -122,16 +122,41 @@
        = ~$1,480/mo/contract. Calendar-month average, not active-day extrapolation. */
 
     const NLV_START         = 100000;
+    const SPY_PCT           = 0.90;          // 90% SPY foundation
+    const BUFFER_PCT        = 0.10;          // 10% cash buffer
+    const SPY_START         = NLV_START * SPY_PCT;   // $90K
+    const CASH_START        = NLV_START * BUFFER_PCT; // $10K
+    // S&P 500 historical average annual return (last 20 years, incl. dividends, rounded)
+    const SPY_ANNUAL_RETURN = 0.10;
+    const SPY_MONTHLY_RATE  = Math.pow(1 + SPY_ANNUAL_RETURN, 1/12) - 1; // ≈ 0.797%/mo
     // Per-/ES per-calendar-month throughput, DERIVED from the 227-trade reference
     // dataset: total $26,662.50 / 18 calendar months (Apr 2023 – Oct 2024).
-    // Rounded to the nearest $10. Not extrapolated from active-day rates.
     const PER_ES_MONTHLY    = 1480;
     const DURATION_MAX      = 12;            // months
-    const BUFFER_DAYS       = 60;            // no-trading buffer at start of year
+    const BUFFER_DAYS       = 60;            // engine no-trading buffer at start of year
     const BUFFER_MONTHS     = BUFFER_DAYS / 30; // 2 months
     const COOP_BUFFER_PROFIT = 5000;          // 1-ES profit needed before cooperative scales to 4
-    const COOP_SCALE_T      = BUFFER_MONTHS + (COOP_BUFFER_PROFIT / PER_ES_MONTHLY); // ≈ 5.38 mo
+    const COOP_SCALE_T      = BUFFER_MONTHS + (COOP_BUFFER_PROFIT / PER_ES_MONTHLY);
     const MAX_CONTRACTS     = 4;
+
+    // SPY value at month t (compound monthly)
+    function spyAt(t) { return SPY_START * Math.pow(1 + SPY_MONTHLY_RATE, t); }
+    // Engine cumulative profit at month t for a given scenario
+    function enginePnlAt(t, scenario) {
+        const cfg = SCENARIO_CONFIG[scenario];
+        if (!cfg || t <= 0) return 0;
+        let cum = 0;
+        for (let i = 0; i < cfg.transitions.length; i++) {
+            const start = cfg.transitions[i].startMonth;
+            const next  = (i + 1 < cfg.transitions.length) ? cfg.transitions[i + 1].startMonth : DURATION_MAX;
+            const c     = Math.min(cfg.transitions[i].contracts, MAX_CONTRACTS);
+            if (t <= start) break;
+            const segEnd = Math.min(t, next);
+            cum += c * PER_ES_MONTHLY * (segEnd - start);
+            if (t <= next) break;
+        }
+        return cum;
+    }
 
     // Each scenario defines the active-trading transitions (after the 60d buffer).
     const SCENARIO_CONFIG = {
@@ -161,47 +186,41 @@
         const cfg = SCENARIO_CONFIG[scenario];
         if (!cfg) return [];
         const out = [];
-        let nlv = NLV_START;
-        let cumProfit = 0;
-        let prevT = 0;
-        let prevContracts = 0;
         for (let i = 0; i < cfg.transitions.length; i++) {
             const tr = cfg.transitions[i];
-            if (prevContracts > 0) {
-                const dt = tr.startMonth - prevT;
-                cumProfit += prevContracts * PER_ES_MONTHLY * dt;
-                nlv = NLV_START + cumProfit;
-            }
+            const t = tr.startMonth;
+            const enginePnl = enginePnlAt(t, scenario);
+            const spy = spyAt(t);
             out.push({
                 n: i + 1,
                 contracts: Math.min(tr.contracts, MAX_CONTRACTS),
-                timeReached: tr.startMonth,
-                nlv: nlv,
-                cumProfit: cumProfit
+                timeReached: t,
+                spy: spy,
+                cash: CASH_START,
+                enginePnl: enginePnl,
+                nlv: spy + CASH_START + enginePnl,
+                cumProfit: enginePnl
             });
-            prevT = tr.startMonth;
-            prevContracts = tr.contracts;
         }
         return out;
     }
 
+    /* Compose a series of (t, spy, cash, enginePnl, total) points for the
+       stacked-area chart. Densely sampled monthly. */
     function buildCurve(scenario) {
-        const steps = buildSteps(scenario);
-        const points = [{ t: 0, value: NLV_START }];
-        if (!steps.length) return points;
-        // Flat through the buffer period
-        points.push({ t: steps[0].timeReached, value: NLV_START });
-        // Smooth growth between consecutive steps + tail to year-end
-        for (let i = 0; i < steps.length; i++) {
-            const s = steps[i];
-            const nextT = i + 1 < steps.length ? steps[i + 1].timeReached : DURATION_MAX;
-            const duration = nextT - s.timeReached;
-            const monthlyGain = s.contracts * PER_ES_MONTHLY;
-            const SUBDIV = 8;
-            for (let k = 1; k <= SUBDIV; k++) {
-                const tFrac = k / SUBDIV;
-                points.push({ t: s.timeReached + tFrac * duration, value: s.nlv + monthlyGain * tFrac * duration });
-            }
+        const points = [];
+        const SUBDIV = 48; // 4 samples per month
+        for (let i = 0; i <= SUBDIV; i++) {
+            const t = (i / SUBDIV) * DURATION_MAX;
+            const spy = spyAt(t);
+            const enginePnl = enginePnlAt(t, scenario);
+            points.push({
+                t: t,
+                spy: spy,
+                cash: CASH_START,
+                enginePnl: enginePnl,
+                value: spy + CASH_START + enginePnl
+            });
         }
         return points;
     }
@@ -222,39 +241,46 @@
         const steps = currentSteps;
         const pts = currentPoints;
         const W = 1100, H = 380;
-        const PAD_L = 60, PAD_R = 60, PAD_T = 30, PAD_B = 50;
-        const yMax = 5; // contract scale ceiling (4 max + 1 headroom)
-
+        const PAD_L = 70, PAD_R = 70, PAD_T = 30, PAD_B = 50;
         const innerW = W - PAD_L - PAD_R;
         const innerH = H - PAD_T - PAD_B;
-        const xAt = function (t) { return PAD_L + (t / DURATION_MAX) * innerW; };
-        const yAt = function (c) { return H - PAD_B - (c / yMax) * innerH; };
 
         const lastStep = steps[steps.length - 1];
         const finalVal = pts[pts.length - 1].value;
+
+        // Y range: $0 to (final NLV rounded up to next $20K)
+        const yMaxRaw = Math.max.apply(null, pts.map(function (p) { return p.value; }));
+        const yMax = Math.ceil(yMaxRaw / 20000) * 20000;
+        const xAt = function (t) { return PAD_L + (t / DURATION_MAX) * innerW; };
+        const yAt = function (v) { return H - PAD_B - (v / yMax) * innerH; };
 
         /* ── HERO ── */
         const heroEl = document.getElementById('cl-hero');
         if (heroEl) {
             const profit = finalVal - NLV_START;
-            const profitPct = ((finalVal - NLV_START) / NLV_START) * 100;
+            const profitPct = (profit / NLV_START) * 100;
+            const finalSpy = pts[pts.length - 1].spy;
+            const finalEngine = pts[pts.length - 1].enginePnl;
+            const spyGain = finalSpy - SPY_START;
+            const engineFrac = profit > 0 ? Math.round((finalEngine / profit) * 100) : 0;
+            const spyFrac = profit > 0 ? Math.round((spyGain / profit) * 100) : 0;
             heroEl.innerHTML = [
-                '<div class="cl-hero__col"><p class="cl-hero__label">Start</p><p class="cl-hero__value">$' + (NLV_START / 1000) + 'K</p><p class="cl-hero__sub">60-day buffer · 0 trades</p></div>',
+                '<div class="cl-hero__col"><p class="cl-hero__label">Start</p><p class="cl-hero__value">$' + (NLV_START / 1000) + 'K</p><p class="cl-hero__sub">$' + (SPY_START/1000) + 'K SPY · $' + (CASH_START/1000) + 'K cash</p></div>',
                 '<div class="cl-hero__arrow">→</div>',
-                '<div class="cl-hero__col"><p class="cl-hero__label">Year-end</p><p class="cl-hero__value cl-hero__value--accent">$' + Math.round(finalVal / 1000) + 'K</p><p class="cl-hero__sub">' + lastStep.contracts + ' /ES · $' + Math.round(finalVal * 0.005).toLocaleString() + '/trade</p></div>',
-                '<div class="cl-hero__col"><p class="cl-hero__label">Profit</p><p class="cl-hero__value cl-hero__value--gold">' + (profit >= 0 ? '+$' : '−$') + Math.abs(Math.round(profit / 1000)) + 'K</p><p class="cl-hero__sub">' + (profitPct >= 0 ? '+' : '') + profitPct.toFixed(0) + '% over 12 mo</p></div>',
-                '<div class="cl-hero__col"><p class="cl-hero__label">Contracts earned</p><p class="cl-hero__value cl-hero__value--gold">1 → ' + lastStep.contracts + '</p><p class="cl-hero__sub">cap: ' + MAX_CONTRACTS + ' /ES</p></div>'
+                '<div class="cl-hero__col"><p class="cl-hero__label">Year-end</p><p class="cl-hero__value cl-hero__value--accent">$' + Math.round(finalVal / 1000) + 'K</p><p class="cl-hero__sub">' + lastStep.contracts + ' /ES · 0.5% NLV risk</p></div>',
+                '<div class="cl-hero__col"><p class="cl-hero__label">Total profit</p><p class="cl-hero__value cl-hero__value--gold">+$' + Math.round(profit / 1000) + 'K</p><p class="cl-hero__sub">' + (profitPct >= 0 ? '+' : '') + profitPct.toFixed(0) + '% over 12 mo</p></div>',
+                '<div class="cl-hero__col"><p class="cl-hero__label">Contribution split</p><p class="cl-hero__value cl-hero__value--gold">' + spyFrac + ' / ' + engineFrac + '</p><p class="cl-hero__sub">SPY (+$' + Math.round(spyGain/1000) + 'K) · Engine (+$' + Math.round(finalEngine/1000) + 'K)</p></div>'
             ].join('');
         }
 
-        /* ── STAIRCASE SVG ── */
+        /* ── STACKED-AREA PORTFOLIO COMPOSITION SVG ── */
         const parts = [];
 
-        // Background grid (horizontal lines at each contract level)
-        for (let c = 0; c <= yMax; c++) {
-            const y = yAt(c);
+        // Y gridlines + dollar labels ($20K increments)
+        for (let v = 0; v <= yMax; v += 20000) {
+            const y = yAt(v);
             parts.push('<line x1="' + PAD_L + '" y1="' + y + '" x2="' + (W - PAD_R) + '" y2="' + y + '" stroke="rgba(27,42,74,0.06)" />');
-            parts.push('<text x="' + (PAD_L - 8) + '" y="' + (y + 4) + '" font-size="11" fill="#64748B" font-family="Source Sans 3" text-anchor="end">' + c + '</text>');
+            parts.push('<text x="' + (PAD_L - 8) + '" y="' + (y + 4) + '" font-size="11" fill="#64748B" font-family="Source Sans 3" text-anchor="end">$' + (v / 1000) + 'K</text>');
         }
         // X-axis gridlines + month labels
         for (let m = 0; m <= 12; m += 2) {
@@ -263,125 +289,115 @@
             parts.push('<text x="' + x + '" y="' + (H - PAD_B + 18) + '" font-size="11" fill="#64748B" font-family="Source Sans 3" text-anchor="middle">' + m + (m === 0 ? ' mo' : '') + '</text>');
         }
 
-        // 60-day NO-TRADING BUFFER band — hatched, with label
-        parts.push('<defs><pattern id="clBufferHatch" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="#94A3B8" stroke-width="1.2" opacity="0.45"/></pattern></defs>');
-        parts.push('<rect x="' + PAD_L + '" y="' + PAD_T + '" width="' + (xAt(BUFFER_MONTHS) - PAD_L) + '" height="' + (H - PAD_T - PAD_B) + '" fill="url(#clBufferHatch)" opacity="0.6"/>');
-        // Buffer label centered in the band
-        const xBufMid = (PAD_L + xAt(BUFFER_MONTHS)) / 2;
-        parts.push('<text x="' + xBufMid + '" y="' + (PAD_T + 14) + '" text-anchor="middle" font-size="10" font-weight="700" fill="#475569" font-family="Source Sans 3" letter-spacing="1.5">60-DAY BUFFER</text>');
-        parts.push('<text x="' + xBufMid + '" y="' + (PAD_T + 28) + '" text-anchor="middle" font-size="10" fill="#64748B" font-family="Source Sans 3">no trading</text>');
-        parts.push('<line x1="' + xAt(BUFFER_MONTHS) + '" y1="' + PAD_T + '" x2="' + xAt(BUFFER_MONTHS) + '" y2="' + (H - PAD_B) + '" stroke="#94A3B8" stroke-width="1" stroke-dasharray="4 3" opacity="0.6"/>');
+        // Build stacked-area paths: SPY (bottom) + cash (middle) + engine (top)
+        function buildArea(getTopValue, getBottomValue) {
+            const top = pts.map(function (p) { return xAt(p.t) + ',' + yAt(getTopValue(p)); });
+            const bot = pts.slice().reverse().map(function (p) { return xAt(p.t) + ',' + yAt(getBottomValue(p)); });
+            return 'M ' + top.join(' L ') + ' L ' + bot.join(' L ') + ' Z';
+        }
+        const spyArea    = buildArea(function (p) { return p.spy; }, function () { return 0; });
+        const cashArea   = buildArea(function (p) { return p.spy + p.cash; }, function (p) { return p.spy; });
+        const engineArea = buildArea(function (p) { return p.value; }, function (p) { return p.spy + p.cash; });
+
+        parts.push('<path d="' + spyArea + '" fill="#1B2A4A" fill-opacity="0.85"/>');           // SPY: deep navy
+        parts.push('<path d="' + cashArea + '" fill="#94A3B8" fill-opacity="0.7"/>');           // Cash: slate
+        parts.push('<path d="' + engineArea + '" fill="#C8A951" fill-opacity="0.9"/>');         // Engine: gold
+
+        // Top-line stroke (total NLV)
+        const topLine = pts.map(function (p, i) { return (i === 0 ? 'M ' : 'L ') + xAt(p.t) + ',' + yAt(p.value); }).join(' ');
+        parts.push('<path d="' + topLine + '" fill="none" stroke="#131E36" stroke-width="2"/>');
+
+        // SPY/cash dividing line (subtle, white)
+        const spyTopLine = pts.map(function (p, i) { return (i === 0 ? 'M ' : 'L ') + xAt(p.t) + ',' + yAt(p.spy); }).join(' ');
+        const cashTopLine = pts.map(function (p, i) { return (i === 0 ? 'M ' : 'L ') + xAt(p.t) + ',' + yAt(p.spy + p.cash); }).join(' ');
+        parts.push('<path d="' + spyTopLine + '" fill="none" stroke="white" stroke-width="0.8" opacity="0.5"/>');
+        parts.push('<path d="' + cashTopLine + '" fill="none" stroke="white" stroke-width="0.8" opacity="0.5"/>');
+
+        // 60-day engine-buffer marker — vertical dashed line + label (applies only to engine; SPY runs from day 1)
+        const xBuf = xAt(BUFFER_MONTHS);
+        parts.push('<line x1="' + xBuf + '" y1="' + PAD_T + '" x2="' + xBuf + '" y2="' + (H - PAD_B) + '" stroke="#475569" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>');
+        parts.push('<text x="' + (xBuf + 6) + '" y="' + (PAD_T + 12) + '" font-size="10" font-weight="700" fill="#475569" font-family="Source Sans 3" letter-spacing="1">ENGINE BEGINS</text>');
+        parts.push('<text x="' + (xBuf + 6) + '" y="' + (PAD_T + 26) + '" font-size="10" fill="#64748B" font-family="Source Sans 3">after 60-day buffer</text>');
 
         // Build the stair-step path
         // Walk through steps: at each step, horizontal segment from prev time to current time at current contract level
         // After last step, extend horizontally to t=12 at last contract level
-        if (steps.length === 0) {
-            // No data
-        } else {
-            const pathPoints = [];
-            const areaPoints = [];
-            const firstStep = steps[0];
+        // Contract transition markers — gold pin + label, sitting on the engine area
+        steps.forEach(function (s) {
+            const x = xAt(s.timeReached);
+            const yTop = yAt(s.nlv);
+            parts.push('<line x1="' + x + '" y1="' + yTop + '" x2="' + x + '" y2="' + (yTop - 28) + '" stroke="#C8A951" stroke-width="1.5"/>');
+            parts.push('<circle cx="' + x + '" cy="' + yTop + '" r="5" fill="#C8A951" stroke="white" stroke-width="1.5"/>');
+            parts.push('<rect x="' + (x + 6) + '" y="' + (yTop - 42) + '" width="62" height="18" rx="2" fill="#1B2A4A"/>');
+            parts.push('<text x="' + (x + 37) + '" y="' + (yTop - 30) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#C8A951" font-family="Source Sans 3">' + s.contracts + ' /ES</text>');
+        });
 
-            // Start at (t=0, contracts=0) — buffer period at zero
-            pathPoints.push([xAt(0), yAt(0)]);
-            // Horizontal across the buffer
-            pathPoints.push([xAt(firstStep.timeReached), yAt(0)]);
-            // Vertical jump up to first contract level
-            pathPoints.push([xAt(firstStep.timeReached), yAt(firstStep.contracts)]);
+        // Layer legend (top-left, inside chart)
+        const legendY = PAD_T + 8;
+        parts.push('<g class="cl-legend" font-family="Source Sans 3" font-size="11" fill="#FAF8F5">');
+        parts.push('<rect x="' + (PAD_L + 8) + '" y="' + legendY + '" width="14" height="10" fill="#C8A951"/><text x="' + (PAD_L + 26) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">Engine profit</text>');
+        parts.push('<rect x="' + (PAD_L + 130) + '" y="' + legendY + '" width="14" height="10" fill="#94A3B8" fill-opacity="0.7"/><text x="' + (PAD_L + 148) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">Cash buffer (10%)</text>');
+        parts.push('<rect x="' + (PAD_L + 268) + '" y="' + legendY + '" width="14" height="10" fill="#1B2A4A" fill-opacity="0.85"/><text x="' + (PAD_L + 286) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">SPY foundation (90% · 10% annualized)</text>');
+        parts.push('</g>');
 
-            // For each subsequent step: horizontal then vertical jump
-            for (let i = 1; i < steps.length; i++) {
-                pathPoints.push([xAt(steps[i].timeReached), yAt(steps[i - 1].contracts)]);
-                pathPoints.push([xAt(steps[i].timeReached), yAt(steps[i].contracts)]);
-            }
-            // Tail: horizontal at final contract level out to month 12
-            pathPoints.push([xAt(DURATION_MAX), yAt(lastStep.contracts)]);
-
-            // Area: same as path but close down to baseline
-            const baseY = yAt(0);
-            areaPoints.push([PAD_L, baseY]);
-            pathPoints.forEach(function (p) { areaPoints.push(p); });
-            areaPoints.push([xAt(DURATION_MAX), baseY]);
-
-            // Gradient defs
-            parts.push('<defs><linearGradient id="clStairGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C8A951" stop-opacity="0.35"/><stop offset="100%" stop-color="#C8A951" stop-opacity="0.05"/></linearGradient></defs>');
-
-            // Area fill
-            const areaD = 'M ' + areaPoints.map(function (p) { return p[0] + ',' + p[1]; }).join(' L ') + ' Z';
-            parts.push('<path d="' + areaD + '" fill="url(#clStairGrad)" />');
-
-            // Step line
-            const pathD = 'M ' + pathPoints.map(function (p) { return p[0] + ',' + p[1]; }).join(' L ');
-            parts.push('<path d="' + pathD + '" fill="none" stroke="#1B2A4A" stroke-width="2.5" stroke-linejoin="miter" stroke-linecap="square" />');
-
-            // Step transition markers (gold dots at each "knee", including the buffer-exit)
-            steps.forEach(function (s, i) {
-                const x = xAt(s.timeReached);
-                const y = yAt(s.contracts);
-                parts.push('<circle cx="' + x + '" cy="' + y + '" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>');
-                // Label every step (small number, never crowded with only 1-2 transitions)
-                const labelX = x + 10;
-                const labelY = y - 10;
-                parts.push('<text x="' + labelX + '" y="' + labelY + '" font-size="13" font-weight="700" fill="#1B2A4A" font-family="Source Sans 3">' + s.contracts + ' /ES</text>');
-                parts.push('<text x="' + labelX + '" y="' + (labelY + 14) + '" font-size="10" fill="#64748B" font-family="Source Sans 3">$' + Math.round(s.nlv / 1000) + 'K NLV · ' + s.timeReached.toFixed(1) + ' mo</text>');
-            });
-
-            // Final state callout at right edge
-            const xEnd = xAt(DURATION_MAX);
-            const yEnd = yAt(lastStep.contracts);
-            parts.push('<rect x="' + (xEnd - 110) + '" y="' + (yEnd - 44) + '" width="110" height="36" rx="3" fill="#1B2A4A"/>');
-            parts.push('<text x="' + (xEnd - 55) + '" y="' + (yEnd - 28) + '" text-anchor="middle" font-size="10" font-weight="700" fill="#C8A951" font-family="Source Sans 3" letter-spacing="1">YEAR-END</text>');
-            parts.push('<text x="' + (xEnd - 55) + '" y="' + (yEnd - 13) + '" text-anchor="middle" font-size="14" font-weight="700" fill="white" font-family="Source Sans 3">$' + Math.round(finalVal / 1000) + 'K</text>');
-        }
+        // Year-end stacked breakdown callout on the right
+        const xEnd = xAt(DURATION_MAX);
+        const finalSpy = pts[pts.length - 1].spy;
+        const finalEngine = pts[pts.length - 1].enginePnl;
+        const finalProfit = finalVal - NLV_START;
+        const calloutH = 90;
+        const calloutY = yAt(finalVal) - 8;
+        const calloutAdj = Math.max(PAD_T + 4, calloutY - calloutH);
+        parts.push('<rect x="' + (xEnd - 132) + '" y="' + calloutAdj + '" width="132" height="' + calloutH + '" rx="4" fill="#1B2A4A"/>');
+        parts.push('<text x="' + (xEnd - 66) + '" y="' + (calloutAdj + 14) + '" text-anchor="middle" font-size="10" font-weight="700" fill="#C8A951" font-family="Source Sans 3" letter-spacing="1">YEAR-END NLV</text>');
+        parts.push('<text x="' + (xEnd - 66) + '" y="' + (calloutAdj + 36) + '" text-anchor="middle" font-size="20" font-weight="700" fill="white" font-family="Source Sans 3">$' + Math.round(finalVal / 1000) + 'K</text>');
+        parts.push('<text x="' + (xEnd - 124) + '" y="' + (calloutAdj + 56) + '" font-size="10" fill="#94A3B8" font-family="Source Sans 3">SPY    +$' + Math.round((finalSpy - SPY_START)/1000) + 'K</text>');
+        parts.push('<text x="' + (xEnd - 124) + '" y="' + (calloutAdj + 70) + '" font-size="10" fill="#C8A951" font-family="Source Sans 3">Engine +$' + Math.round(finalEngine/1000) + 'K</text>');
+        parts.push('<text x="' + (xEnd - 124) + '" y="' + (calloutAdj + 84) + '" font-size="10" fill="white" font-weight="700" font-family="Source Sans 3">Total  +$' + Math.round(finalProfit/1000) + 'K</text>');
 
         svg.innerHTML = parts.join('');
 
         /* ── THREE SUMMARY CARDS ── */
         const sumEl = document.getElementById('cl-summary');
         if (sumEl) {
-            const stepsAdvanced = lastStep.contracts - 1; // 0 if floor
-            const profitViaScaling = lastStep.cumProfit;          // profit at 1 ES before the scale event
-            const profitPostScaling = finalVal - NLV_START - profitViaScaling;
-            const activeMonths = DURATION_MAX - BUFFER_MONTHS;
+            const stepsAdvanced = lastStep.contracts - 1;
+            const finalSpy = pts[pts.length - 1].spy;
+            const finalEngine = pts[pts.length - 1].enginePnl;
+            const spyGain = finalSpy - SPY_START;
+            const profit = finalVal - NLV_START;
             const finalRisk = Math.round(finalVal * 0.005);
 
-            // Compose a position narrative based on scenario shape
             let positionNarrative;
-            if (lastStep.contracts === 1) {
-                positionNarrative = '1 /ES the entire active window';
-            } else if (steps.length === 2) {
-                const scaleAt = steps[1].timeReached;
-                positionNarrative = '1 → ' + lastStep.contracts + ' /ES @ month ' + scaleAt.toFixed(1);
-            } else {
-                positionNarrative = lastStep.contracts + ' /ES at year-end';
-            }
+            if (lastStep.contracts === 1) positionNarrative = '1 /ES the entire active window';
+            else if (steps.length === 2)  positionNarrative = '1 → ' + lastStep.contracts + ' /ES @ month ' + steps[1].timeReached.toFixed(1);
+            else                          positionNarrative = lastStep.contracts + ' /ES at year-end';
 
             sumEl.innerHTML = [
                 '<article class="cl-card">',
-                  '<p class="cl-card__label">End state</p>',
-                  '<p class="cl-card__value">$' + Math.round(finalVal / 1000) + 'K NLV</p>',
+                  '<p class="cl-card__label">SPY foundation · 90%</p>',
+                  '<p class="cl-card__value">+$' + Math.round(spyGain / 1000) + 'K</p>',
                   '<dl class="cl-card__list">',
-                    '<div><dt>Profit</dt><dd>+$' + Math.round((finalVal - NLV_START) / 1000) + 'K</dd></div>',
-                    '<div><dt>Position</dt><dd>' + lastStep.contracts + ' /ES</dd></div>',
-                    '<div><dt>Risk / trade</dt><dd>$' + finalRisk.toLocaleString() + ' (0.5% NLV)</dd></div>',
+                    '<div><dt>Start</dt><dd>$' + (SPY_START/1000) + 'K</dd></div>',
+                    '<div><dt>Year-end</dt><dd>$' + Math.round(finalSpy/1000) + 'K</dd></div>',
+                    '<div><dt>Assumption</dt><dd>10% annualized (20-yr avg)</dd></div>',
                   '</dl>',
                 '</article>',
                 '<article class="cl-card cl-card--gold">',
-                  '<p class="cl-card__label">Earned leverage</p>',
-                  '<p class="cl-card__value">' + stepsAdvanced + (stepsAdvanced === 1 ? ' contract' : ' contracts') + ' gained</p>',
+                  '<p class="cl-card__label">Engine overlay</p>',
+                  '<p class="cl-card__value">+$' + Math.round(finalEngine / 1000) + 'K</p>',
                   '<dl class="cl-card__list">',
-                    '<div><dt>Pre-scale profit</dt><dd>+$' + (profitViaScaling / 1000).toFixed(1) + 'K</dd></div>',
-                    '<div><dt>Post-scale profit</dt><dd>+$' + (profitPostScaling / 1000).toFixed(1) + 'K</dd></div>',
                     '<div><dt>Position arc</dt><dd>' + positionNarrative + '</dd></div>',
+                    '<div><dt>Throughput</dt><dd>$' + PER_ES_MONTHLY.toLocaleString() + '/mo · /ES</dd></div>',
+                    '<div><dt>Cap</dt><dd>' + MAX_CONTRACTS + ' /ES max</dd></div>',
                   '</dl>',
                 '</article>',
                 '<article class="cl-card">',
-                  '<p class="cl-card__label">Cadence</p>',
-                  '<p class="cl-card__value">' + BUFFER_DAYS + '-day buffer</p>',
+                  '<p class="cl-card__label">Combined</p>',
+                  '<p class="cl-card__value">$' + Math.round(finalVal / 1000) + 'K NLV</p>',
                   '<dl class="cl-card__list">',
-                    '<div><dt>Active trading</dt><dd>' + activeMonths.toFixed(1) + ' months</dd></div>',
-                    '<div><dt>Scale events</dt><dd>' + stepsAdvanced + ' this year</dd></div>',
-                    '<div><dt>Max contracts</dt><dd>cap @ ' + MAX_CONTRACTS + ' /ES</dd></div>',
+                    '<div><dt>Total profit</dt><dd>+$' + Math.round(profit / 1000) + 'K</dd></div>',
+                    '<div><dt>Engine share</dt><dd>' + (profit > 0 ? Math.round(finalEngine/profit*100) : 0) + '%</dd></div>',
+                    '<div><dt>Risk / trade</dt><dd>$' + finalRisk.toLocaleString() + ' (0.5% NLV)</dd></div>',
                   '</dl>',
                 '</article>'
             ].join('');
@@ -427,28 +443,37 @@
         const lastPt = currentPoints[currentPoints.length - 1];
         let rows = '';
 
-        // Buffer row
-        rows += '<tr><td>60-day buffer</td><td>—</td><td>$' + NLV_START.toLocaleString() + '</td><td>' + BUFFER_DAYS + ' days · no trading</td></tr>';
+        function spySegment(tStart, tEnd) { return spyAt(tEnd) - spyAt(tStart); }
 
-        // One row per active-trading segment
+        // Buffer row — SPY still grows during this window
+        rows += '<tr><td>0 → ' + BUFFER_MONTHS.toFixed(1) + ' mo · 60-day buffer</td>'
+            + '<td>0 /ES · engine idle</td>'
+            + '<td>+$' + Math.round(spySegment(0, BUFFER_MONTHS)).toLocaleString() + ' SPY</td>'
+            + '<td>+$0 engine</td></tr>';
+
         for (let i = 0; i < steps.length; i++) {
             const s = steps[i];
             const nextT = i + 1 < steps.length ? steps[i + 1].timeReached : DURATION_MAX;
             const dur = nextT - s.timeReached;
+            const enginePnl = s.contracts * PER_ES_MONTHLY * dur;
+            const spyPnl = spySegment(s.timeReached, nextT);
             const durLabel = dur < 1 ? Math.round(dur * 30) + ' days' : dur.toFixed(1) + ' months';
-            const endNlv = i + 1 < steps.length ? steps[i + 1].nlv : lastPt.value;
             rows += '<tr>'
+                + '<td>' + s.timeReached.toFixed(1) + ' → ' + nextT.toFixed(1) + ' mo · ' + durLabel + '</td>'
                 + '<td>' + s.contracts + ' /ES</td>'
-                + '<td>+$' + (s.contracts * PER_ES_MONTHLY * dur / 1000).toFixed(1) + 'K @ this level</td>'
-                + '<td>$' + Math.round(s.nlv / 1000) + 'K → $' + Math.round(endNlv / 1000) + 'K</td>'
-                + '<td>' + durLabel + '</td>'
+                + '<td>+$' + Math.round(spyPnl).toLocaleString() + ' SPY</td>'
+                + '<td>+$' + Math.round(enginePnl).toLocaleString() + ' engine</td>'
                 + '</tr>';
         }
 
+        const totalSpy = lastPt.spy - SPY_START;
+        const totalEngine = lastPt.enginePnl;
+        const totalProfit = lastPt.value - NLV_START;
         rows += '<tr class="cadence__total">'
-            + '<td>Year-end</td>'
-            + '<td colspan="2">' + steps[steps.length - 1].contracts + ' /ES position · ' + (DURATION_MAX - BUFFER_MONTHS).toFixed(1) + ' months active</td>'
-            + '<td>NLV $' + Math.round(lastPt.value / 1000) + 'K (illustrative)</td>'
+            + '<td>Year-end total</td>'
+            + '<td>NLV $' + Math.round(lastPt.value / 1000) + 'K</td>'
+            + '<td>+$' + Math.round(totalSpy).toLocaleString() + ' SPY</td>'
+            + '<td>+$' + Math.round(totalEngine).toLocaleString() + ' engine · +$' + Math.round(totalProfit/1000) + 'K combined</td>'
             + '</tr>';
         tbody.innerHTML = rows;
     }

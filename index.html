@@ -212,7 +212,7 @@
         <header class="section__header section__header--center">
             <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Mechanism</p>
             <h2 class="section__h section__h--lg">The Compounding Ladder</h2>
-            <p class="section__sub">Starting at <strong>$100K NLV</strong>. A <strong>60-day no-trading buffer</strong> begins the year — observation, witness audit, baseline adherence. Then engine runs at 1 /ES with one of three scaling paths, capped at <strong>4 /ES maximum</strong>. Risk anchored at 0.5% of total NLV at every step.</p>
+            <p class="section__sub">Starting at <strong>$100K NLV</strong> — <strong>90% SPY foundation + 10% cash buffer</strong>. SPY compounds at the 20-year S&amp;P historical average (~10%/yr) throughout. The /ES engine sits on top: 60-day no-trading buffer, then 1 /ES with one of three scaling paths capped at <strong>4 /ES maximum</strong>. Risk anchored at 0.5% of total NLV.</p>
         </header>
 
         <!-- Scenario toggle -->
@@ -230,7 +230,7 @@
 
             <!-- Staircase: time on X, contracts active on Y -->
             <div class="cl-stairs">
-                <p class="cl-axis-y-label">Contracts active</p>
+                <p class="cl-axis-y-label">Portfolio NLV ($K)</p>
                 <svg id="cl-stairs-svg" viewBox="0 0 1100 380" preserveAspectRatio="none" role="img" aria-label="Step function: contracts active over 12 months">
                     <!-- rendered by JS -->
                 </svg>
@@ -281,12 +281,12 @@
             <div class="cadence__table-wrap">
                 <table class="cadence__table">
                     <thead>
-                        <tr><th>Segment</th><th>Throughput</th><th>NLV (start → end)</th><th>Duration</th></tr>
+                        <tr><th>Window</th><th>Engine</th><th>SPY contribution</th><th>Engine contribution</th></tr>
                     </thead>
                     <tbody id="cl-cadence-tbody"><!-- rendered by JS --></tbody>
                 </table>
             </div>
-            <p class="compliance">Hypothetical and illustrative. The <strong>~$1,480/month-per-/ES throughput</strong> is derived directly from the 227-trade reference dataset: total +$26,662.50 per /ES divided by 18 calendar months (Apr 2023 – Oct 2024). It is a calendar-month average, not an active-day extrapolation. Real markets introduce friction, regime changes, and stand-down events that may materially extend or prevent this trajectory. The Falsifiability Gate supersedes all ladder logic — if rolling-100 expectancy crosses zero, or any of the eight Stage-2 kill conditions fire, the ladder halts regardless of which level has been reached.</p>
+            <p class="compliance">Hypothetical and illustrative. <strong>SPY assumption:</strong> the 90% foundation is modeled at 10% annualized — the rough 20-year historical average of the S&amp;P 500 total return. Future SPY performance may be higher, lower, or negative; this is not a forecast. <strong>Engine throughput:</strong> ~$1,480/month/ES, derived from the 227-trade reference dataset (+$26,662.50 per /ES ÷ 18 calendar months, Apr 2023 – Oct 2024). Calendar-month average, not active-day extrapolation. Real markets introduce friction, regime changes, and stand-down events that may materially extend or prevent this trajectory. The Falsifiability Gate supersedes all ladder logic — if rolling-100 expectancy crosses zero, or any of the eight Stage-2 kill conditions fire, the engine halts regardless of which level has been reached.</p>
         </div>
     </div>
 </section>
