@@ -52,7 +52,12 @@
     document.querySelectorAll('a[href="#book"]').forEach(function (cta) {
         cta.addEventListener('click', function () {
             const source = cta.closest('section')?.id || 'unknown';
-            track(source === 'founding' ? 'founding_member_cta_click' : 'hero_cta_click', { section: source });
+            track(source === 'founding' ? 'founding_member_cta_click' : 'book_cta_click', { section: source });
+        });
+    });
+    document.querySelectorAll('a[data-cta^="discord-"]').forEach(function (cta) {
+        cta.addEventListener('click', function () {
+            track('discord_cta_click', { source: cta.dataset.cta, section: cta.closest('section')?.id || 'nav' });
         });
     });
 
