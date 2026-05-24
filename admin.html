@@ -39,78 +39,89 @@
     <!-- Live KPIs (mirror dashboard) -->
     <section class="dash-kpis" id="adminKpis"></section>
 
-    <!-- Upload panel -->
-    <section class="admin-panel" aria-label="Upload trades">
+    <!-- Discord import panel -->
+    <section class="admin-panel" aria-label="Import Discord trades">
         <header class="admin-panel__head">
-            <h2 class="dash-chart__h">Upload new trades</h2>
-            <p class="admin-panel__sub">All processing is client-side. Choose a mode below, preview the parsed rows, then merge or replace.</p>
+            <h2 class="dash-chart__h">Import Discord trades</h2>
+            <p class="admin-panel__sub">All processing happens in your browser. Drop a DiscordChatExporter HTML file, or paste raw <code>#alerts</code> text. Preview before staging.</p>
         </header>
 
-        <div class="admin-tabs" role="tablist">
-            <button class="admin-tab is-active" data-mode="file" role="tab">CSV / JSON file</button>
-            <button class="admin-tab" data-mode="paste" role="tab">Paste CSV / JSON</button>
-            <button class="admin-tab" data-mode="single" role="tab">Add single trade</button>
-        </div>
-
-        <div class="admin-panel__body" data-panel="file">
-            <label class="upload-drop" for="adminFile">
-                <input type="file" id="adminFile" accept=".csv,.json,.txt" hidden>
-                <div class="upload-drop__inner">
-                    <p class="upload-drop__icon">↑</p>
-                    <p class="upload-drop__primary">Drop a CSV or JSON file, or click to browse</p>
-                    <p class="upload-drop__secondary">Auto-detects Tradovate, TradeZella, IB Orders, Discord exports, or the internal trades.json shape.</p>
-                </div>
+        <!-- Strategy toggle -->
+        <div class="strategy-toggle" role="radiogroup" aria-label="Strategy">
+            <span class="strategy-toggle__label">Strategy</span>
+            <label class="strategy-radio">
+                <input type="radio" name="strategy" value="futures" checked>
+                <span>Futures (ES / MES)</span>
+            </label>
+            <label class="strategy-radio">
+                <input type="radio" name="strategy" value="options">
+                <span>Options (SPX / SPY / etc.)</span>
             </label>
         </div>
-        <div class="admin-panel__body" data-panel="paste" hidden>
-            <textarea id="adminPaste" rows="10" placeholder="Paste CSV, JSON, or Ekantik journal blocks…"></textarea>
-            <div class="paste-formats">
-                <details class="paste-format">
-                    <summary>◆ Ekantik journal format (auto-detected)</summary>
-                    <p>One block per trade. Date header, optional entry/SL/TP, then a result line ending in H2 or H3. Sides: <code>s</code> = sell/short, <code>b</code> = buy/long. Tags: <code>H2</code> = process breach, <code>H3</code> = variance.</p>
-<pre><code>5/19/26 12.09 PM
-MO1: s 7404
-MO1: sl 7416
-MO1: tp 7361
 
-MO1: +21 H3</code></pre>
-                    <p class="paste-format__note">Paste multiple blocks at once — each new date header starts a new trade.</p>
-                </details>
-                <details class="paste-format">
-                    <summary>◆ CSV (Tradovate, TradeZella, IB Orders)</summary>
-                    <p>Standard exports auto-detect. Needs at least a points or pnl column.</p>
-                </details>
-                <details class="paste-format">
-                    <summary>◆ JSON (native trades.json or array of trade objects)</summary>
-                    <p>Paste the contents of a downloaded trades.json or a JSON array.</p>
-                </details>
+        <!-- Primary drop zone — Discord HTML export -->
+        <label class="discord-drop" for="adminFile">
+            <input type="file" id="adminFile" accept=".html,.htm,.json,.csv,.txt" hidden>
+            <div class="discord-drop__inner">
+                <p class="discord-drop__icon">↑</p>
+                <p class="discord-drop__primary">Drop your Discord HTML export here</p>
+                <p class="discord-drop__secondary">
+                    or <span class="discord-drop__browse">browse for a file</span>
+                    — the <a href="https://github.com/Tyrrrz/DiscordChatExporter" target="_blank" rel="noopener" onclick="event.stopPropagation();">DiscordChatExporter</a> <code>.html</code> file
+                </p>
+                <p class="discord-drop__also">Also accepts .csv, .json, or the native trades.json shape</p>
             </div>
-            <button class="btn btn--secondary btn--sm" id="adminPasteBtn">Parse pasted data</button>
-        </div>
-        <div class="admin-panel__body" data-panel="single" hidden>
+        </label>
+
+        <!-- Collapsible paste area -->
+        <details class="paste-toggle">
+            <summary>▼ …or paste raw text instead</summary>
+            <p class="paste-toggle__help">Paste Discord <code>#alerts</code> messages (<code>F##: s 6940</code> / <code>F##: +12.5 H3</code>), the Ekantik journal format, a CSV row block, or a Discord JSON export. Points-based.</p>
+            <textarea id="adminPaste" rows="8" placeholder="Paste Discord text here…"></textarea>
+            <button class="btn btn--primary btn--sm" id="adminPasteBtn">Parse &amp; preview</button>
+
+            <details class="paste-format paste-format--inline">
+                <summary>◆ Show supported formats</summary>
+                <div class="paste-format__grid">
+                    <div>
+                        <h5>Discord #alerts (journal)</h5>
+                        <pre><code>5/19/26 12.09 PM
+F1: s 6940
+F1: sl 6952
+F1: tp 6918
+
+F1: +12.5 H3</code></pre>
+                        <p>Prefix can be <code>F##</code>, <code>M##</code>, <code>MO##</code> — anything <code>[A-Z]\w*</code>. Side: <code>s</code>=short / <code>b</code>=long. Tag: <code>H2</code>=process breach / <code>H3</code>=variance.</p>
+                    </div>
+                    <div>
+                        <h5>Short-form (no entry block)</h5>
+                        <pre><code>5/19/26 12.09 PM
+F1: +12.5 H3
+5/19/26 1.34 PM
+F2: -8.25 H2</code></pre>
+                        <p>Just date + result. Side and entry are optional.</p>
+                    </div>
+                    <div>
+                        <h5>CSV / JSON</h5>
+                        <p>Native <code>trades.json</code>, vendor exports (Tradovate, TradeZella, IB), or a generic array of trade objects.</p>
+                    </div>
+                </div>
+            </details>
+        </details>
+
+        <!-- Manual single-trade fallback, tucked away -->
+        <details class="paste-toggle">
+            <summary>▼ Or add a single trade manually</summary>
             <form id="adminSingleForm" class="admin-single">
                 <label><span>Timestamp</span><input type="datetime-local" name="timestamp" required></label>
                 <label><span>Symbol</span><input type="text" name="symbol" value="/ES" required></label>
-                <label><span>Side</span>
-                    <select name="side"><option>LONG</option><option>SHORT</option></select>
-                </label>
+                <label><span>Side</span><select name="side"><option>LONG</option><option>SHORT</option></select></label>
                 <label><span>Points (signed)</span><input type="number" name="pts" step="0.25" required placeholder="e.g. 7.5 or -4.25"></label>
-                <label><span>Tag</span>
-                    <select name="tag">
-                        <option value="H3">H3 — variance (default)</option>
-                        <option value="H2">H2 — process breach</option>
-                        <option value="BE">BE — breakeven</option>
-                    </select>
-                </label>
-                <label><span>Period</span>
-                    <select name="period">
-                        <option value="pre_reg">Pre-registration (live)</option>
-                        <option value="historical">Historical (Apr '23 – Oct '24)</option>
-                    </select>
-                </label>
+                <label><span>Tag</span><select name="tag"><option value="H3">H3 — variance</option><option value="H2">H2 — process breach</option><option value="BE">BE — breakeven</option></select></label>
+                <label><span>Period</span><select name="period"><option value="pre_reg">Pre-registration (live)</option><option value="historical">Historical</option></select></label>
                 <button type="submit" class="btn btn--primary btn--sm">Stage trade</button>
             </form>
-        </div>
+        </details>
 
         <!-- Preview pane -->
         <div class="admin-preview" id="adminPreview" hidden>

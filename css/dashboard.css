@@ -509,3 +509,191 @@
 .dash-meta-period--gap  { background: rgba(100, 116, 139, 0.12); color: var(--slate-dark); font-weight: 500; }
 .dash-meta-period--gap a { color: var(--gold-deep); border-bottom: 1px dotted var(--gold-deep); }
 .dash-meta-period--live { background: rgba(200, 169, 81, 0.18); color: var(--gold-deep); }
+
+/* ================================================
+   DISCORD IMPORT — strategy toggle + drop zone + paste
+   ================================================ */
+.strategy-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    margin-bottom: var(--s-6);
+    padding: var(--s-3) var(--s-4);
+    background: var(--ivory);
+    border-radius: var(--radius);
+}
+.strategy-toggle__label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--slate);
+}
+.strategy-radio {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--navy);
+    font-weight: 500;
+}
+.strategy-radio input { accent-color: var(--gold); cursor: pointer; }
+.strategy-radio:has(input:checked) { color: var(--navy); font-weight: 700; }
+
+.discord-drop {
+    display: block;
+    border: 2px dashed var(--gold);
+    border-radius: var(--radius-lg);
+    padding: var(--s-12) var(--s-6);
+    text-align: center;
+    cursor: pointer;
+    background: var(--white);
+    transition: all var(--transition);
+    margin-bottom: var(--s-6);
+}
+.discord-drop:hover,
+.discord-drop.is-dragover {
+    background: rgba(200, 169, 81, 0.05);
+    border-color: var(--gold-deep);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(200, 169, 81, 0.15);
+}
+.discord-drop__icon {
+    font-size: 32px;
+    color: var(--gold);
+    margin-bottom: var(--s-4);
+    line-height: 1;
+}
+.discord-drop__primary {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: var(--s-3);
+}
+.discord-drop__secondary {
+    font-size: 14px;
+    color: var(--slate);
+}
+.discord-drop__browse {
+    color: var(--gold-deep);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.discord-drop:hover .discord-drop__browse { color: var(--navy); }
+.discord-drop__secondary a {
+    color: var(--gold-deep);
+    border-bottom: 1px dotted var(--gold-deep);
+}
+.discord-drop__secondary code {
+    background: var(--ivory);
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--navy);
+}
+.discord-drop__also {
+    font-size: 11px;
+    color: var(--slate-light, #94A3B8);
+    margin-top: var(--s-3);
+    font-style: italic;
+}
+
+/* Collapsible paste / single-trade sections */
+.paste-toggle {
+    background: var(--ivory);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: var(--s-3) var(--s-5, 20px);
+    margin-bottom: var(--s-3);
+    transition: border-color var(--transition);
+}
+.paste-toggle[open] {
+    border-color: var(--gold);
+    background: var(--white);
+    padding-bottom: var(--s-6);
+}
+.paste-toggle > summary {
+    list-style: none;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--slate-dark);
+    padding: var(--s-2) 0;
+}
+.paste-toggle > summary::-webkit-details-marker { display: none; }
+.paste-toggle[open] > summary { color: var(--navy); margin-bottom: var(--s-4); }
+.paste-toggle__help {
+    font-size: 13px;
+    color: var(--slate);
+    margin-bottom: var(--s-3);
+    line-height: 1.6;
+}
+.paste-toggle__help code {
+    background: var(--ivory);
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--navy);
+}
+.paste-toggle textarea {
+    width: 100%;
+    padding: var(--s-3);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--ivory);
+    color: var(--navy);
+    min-height: 140px;
+    resize: vertical;
+    margin-bottom: var(--s-3);
+}
+.paste-toggle textarea:focus { outline: 2px solid var(--gold); outline-offset: -1px; }
+
+.paste-format--inline {
+    margin-top: var(--s-4);
+    background: var(--ivory);
+    border-radius: var(--radius);
+}
+.paste-format__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-4);
+    padding: var(--s-4);
+}
+.paste-format__grid h5 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold-deep);
+    margin-bottom: var(--s-2);
+}
+.paste-format__grid pre {
+    background: var(--navy-deep);
+    color: var(--ivory);
+    padding: var(--s-3);
+    border-radius: var(--radius);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    line-height: 1.5;
+    margin-bottom: var(--s-2);
+    overflow-x: auto;
+}
+.paste-format__grid p {
+    font-size: 12px;
+    color: var(--slate-dark);
+    line-height: 1.5;
+}
+
+@media (max-width: 800px) {
+    .paste-format__grid { grid-template-columns: 1fr; }
+    .discord-drop { padding: var(--s-8) var(--s-4); }
+    .discord-drop__primary { font-size: 18px; }
+    .strategy-toggle { flex-wrap: wrap; }
+}
