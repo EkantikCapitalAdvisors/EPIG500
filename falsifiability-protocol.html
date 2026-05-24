@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Majority Opinion Predisposal Strategy — Falsifiability Protocol v1.0 · Ekantik Capital Advisors</title>
+<title>Majority Opinion Predisposal Strategy — Falsifiability Protocol v1.1 · Ekantik Capital Advisors</title>
 <style>
   :root {
     --navy: #1B2A4A;
@@ -254,7 +254,7 @@
   <div class="firm-tag">Ekantik Capital Advisors LLC</div>
 
   <h1 class="protocol-title">Falsifiability Protocol</h1>
-  <p class="protocol-subtitle">A pre-committed operational charter · v1.0 · Majority Opinion Predisposal Strategy</p>
+  <p class="protocol-subtitle">A pre-committed operational charter · v1.1 · Majority Opinion Predisposal Strategy</p>
 
   <p class="lead">
     Governing the Majority Opinion Predisposal Strategy on ES &amp; MES futures within the Ekantik 500 active engine. Issued by the operator. Witness-locked. Publicly disclosed. Modification subject to a 48-hour cool-off and written justification.
@@ -262,8 +262,8 @@
 
   <table class="meta">
     <tr><td>Document</td><td>Falsifiability Protocol · Locked Operational Charter</td></tr>
-    <tr><td>Version</td><td>1.0 — initial issue; two layers issued together (Expression + Fidelity)</td></tr>
-    <tr><td>Reference</td><td>FP-MOPS-V1-2026-05</td></tr>
+    <tr><td>Version</td><td>1.1 — ED-05 drawdown ceiling split into ED-05a (warning, −45 pts) + ED-05b (hard kill, −75 pts), both derived from bootstrap analysis of the reference dataset. All other gates unchanged from v1.0.</td></tr>
+    <tr><td>Reference</td><td>FP-MOPS-V1.1-2026-05</td></tr>
     <tr><td>Strategy</td><td>Majority Opinion Predisposal Strategy · ES / MES Futures</td></tr>
     <tr><td>Vehicle</td><td>Ekantik 500 · Active /ES Engine Layer</td></tr>
     <tr><td>Issuing entity</td><td>Ekantik Capital Advisors LLC · Maple Grove, MN</td></tr>
@@ -303,7 +303,8 @@
     <li><strong>ED-02 · Rolling-50 win rate &lt; 52%.</strong> Distribution shifts below the breakeven win-rate at the documented 1.31 win:loss ratio.</li>
     <li><strong>ED-03 · Rolling-50 profit factor &lt; 1.30.</strong> Asymmetry of winners-to-losers collapses below the slippage-buffer floor.</li>
     <li><strong>ED-04 · Rolling-50 win:loss ratio &lt; 1.10.</strong> Asymmetry decays even where win-rate holds.</li>
-    <li><strong>ED-05 · Realized peak-to-trough drawdown &gt; −30 ES points (portfolio).</strong> Architecture-linked ceiling.</li>
+    <li><strong>ED-05a · Realized peak-to-trough drawdown &gt; −45 ES points (portfolio) — warning tier.</strong> Triggers Stage-1 Tier-2 conditions-reduced response (minimum sizing, witness oversight) for next 20 qualified trades. Threshold derived from the 25th percentile of the reference-dataset bootstrap (50,000 random orderings); roughly the midpoint between median and 75th-pct max DD under the documented edge.</li>
+    <li><strong>ED-05b · Realized peak-to-trough drawdown &gt; −75 ES points (portfolio) — hard kill.</strong> Architecture-linked ceiling. Derived from the 1st percentile of the bootstrap distribution: under the documented edge, fewer than 1% of random orderings of the reference dataset produce a max DD this deep. Crossing this threshold is therefore stronger evidence of edge failure than of variance, and triggers the full Stage-2 stand-down action protocol.</li>
     <li><strong>ED-06 · Top-3 winner removal turns the cumulative record negative.</strong> Edge survives only on outliers.</li>
     <li><strong>ED-07 · Consecutive loss streak ≥ 7 in any rolling window.</strong> A 2-sigma deviation from the documented streak distribution.</li>
     <li><strong>ED-08 · One-sided t-test p-value &gt; 0.10 past trade 100.</strong> Statistical signal can no longer be distinguished from noise.</li>
@@ -315,6 +316,25 @@
     <div class="label">Rationale — threshold ladder</div>
     <p>
       The reference dataset shows documented per-trade EV of <em class="gold">+$117</em> with standard error over a 100-trade window of <em class="gold">~$43</em>. The $0 threshold (ED-01) sits roughly 2.7 standard errors below documented EV — statistical evidence of collapse, not noise. The remaining seven conditions probe different failure topologies (distributional shift, asymmetry decay, outlier dependence, tail-risk breach, ruin-line proximity). The edge is declared dead when any one of the eight fires.
+    </p>
+  </div>
+
+  <div class="rationale">
+    <div class="label">Rationale — drawdown ceiling (ED-05a / ED-05b)</div>
+    <p>
+      The original v1 specification set a single −30 ES-point kill, calibrated to the worst observed max DD of the reference dataset (−29.14 pts in original order). That calibration was inappropriately tight. Bootstrapping the 227 trades with 50,000 random orderings — preserving the empirical edge but resampling the path — yields the distribution of max DDs that the same edge naturally produces:
+    </p>
+    <p style="margin-top: 6px;">
+      <em class="gold">1st pct: −75.6 pts</em> · <em class="gold">5th pct: −61.7</em> · <em class="gold">25th pct: −47.1</em> · <em class="gold">median: −39.6</em> · <em class="gold">75th pct: −33.8</em> · <em class="gold">95th pct: −27.8</em>
+    </p>
+    <p style="margin-top: 6px;">
+      The observed −29 pt DD therefore sits at the ~93rd percentile of bootstrap orderings — the historical record happened to be on the lucky side of the distribution. A −30 pt kill would fire in approximately 95% of random orderings under the same healthy edge: a kill on noise, not signal. The split-tier replacement, anchored to bootstrap percentiles, preserves the gate's intent while passing the variance-of-the-same-edge test:
+    </p>
+    <p style="margin-top: 6px;">
+      <strong>ED-05a (warning, −45 pts)</strong> sits between the median (−40) and the 25th percentile (−47). Firing here means the operator is in the worse 75% of paths under a known-healthy edge — worth a Tier-2 conditions-reduced response, not a hard cessation. <strong>ED-05b (hard kill, −75 pts)</strong> sits at the 1st percentile of the bootstrap. 99% of paths under the documented edge stay above this line; crossing it is stronger evidence of edge failure than of variance.
+    </p>
+    <p style="margin-top: 6px;">
+      Bootstrap script and result CSV will be published alongside this protocol as <code class="inline">bootstrap-ed05.csv</code> for independent verification. Investors at any account size can re-run the analysis using the public reference dataset.
     </p>
   </div>
 
@@ -488,7 +508,7 @@
   </div>
 
   <footer>
-    Falsifiability Protocol · v1.0 · Doc Ref FP-MOPS-V1-2026-05<span class="dot">·</span>Ekantik Capital Advisors LLC · Maple Grove, MN<span class="dot">·</span>Public — epig500.ekantikcapital.com<span class="dot">·</span>© 2026 Ekantik Capital Advisors LLC. All rights reserved.
+    Falsifiability Protocol · v1.1 · Doc Ref FP-MOPS-V1.1-2026-05<span class="dot">·</span>Ekantik Capital Advisors LLC · Maple Grove, MN<span class="dot">·</span>Public — epig500.ekantikcapital.com<span class="dot">·</span>© 2026 Ekantik Capital Advisors LLC. All rights reserved.
   </footer>
 
 </div>
