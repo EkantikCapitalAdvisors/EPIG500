@@ -135,9 +135,14 @@
     const DURATION_MAX      = 12;            // months
     const BUFFER_DAYS       = 60;            // engine no-trading buffer at start of year
     const BUFFER_MONTHS     = BUFFER_DAYS / 30; // 2 months
-    const COOP_BUFFER_PROFIT = 5000;          // 1-ES profit needed before cooperative scales to 4
-    const COOP_SCALE_T      = BUFFER_MONTHS + (COOP_BUFFER_PROFIT / PER_ES_MONTHLY);
+    const COOP_BUFFER_PROFIT = 5000;          // profit needed at each level before scaling +1 contract
     const MAX_CONTRACTS     = 4;
+    // Cooperative scale times — each step requires ≈$5K profit at the current contract count.
+    // Time to earn $5K at N contracts = $5,000 / (N × $1,480/mo). Accelerates as contracts grow.
+    const COOP_T1 = BUFFER_MONTHS;                                              // 2.00 mo — engine starts at 1 /ES
+    const COOP_T2 = COOP_T1 + COOP_BUFFER_PROFIT / (1 * PER_ES_MONTHLY);        // 5.38 — scale to 2 after $5K at 1 ES
+    const COOP_T3 = COOP_T2 + COOP_BUFFER_PROFIT / (2 * PER_ES_MONTHLY);        // 7.07 — scale to 3 after $5K at 2 ES
+    const COOP_T4 = COOP_T3 + COOP_BUFFER_PROFIT / (3 * PER_ES_MONTHLY);        // 8.20 — scale to 4 after $5K at 3 ES
 
     // SPY value at month t (compound monthly)
     function spyAt(t) { return SPY_START * Math.pow(1 + SPY_MONTHLY_RATE, t); }
@@ -174,10 +179,12 @@
             ]
         },
         cooperative: {
-            label: 'Cooperative — 1 /ES until ≈$5K profit buffer is built, then a single jump to the 4 /ES ceiling and hold to year-end.',
+            label: 'Cooperative — gradual scaling 1 → 2 → 3 → 4. Each step is earned by ≈$5K profit at the current contract count. Acceleration is built in: each next $5K arrives faster than the last because throughput scales with contracts.',
             transitions: [
-                { startMonth: BUFFER_MONTHS, contracts: 1 },
-                { startMonth: COOP_SCALE_T,  contracts: 4 }  // buffer-built jump to ceiling
+                { startMonth: COOP_T1, contracts: 1 },
+                { startMonth: COOP_T2, contracts: 2 },
+                { startMonth: COOP_T3, contracts: 3 },
+                { startMonth: COOP_T4, contracts: 4 }
             ]
         }
     };
