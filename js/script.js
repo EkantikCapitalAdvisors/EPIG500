@@ -951,40 +951,63 @@
     }
 
     /* ------------------------------------------------
-       10. CAL.COM LAZY LOAD
+       10. CALENDLY LAZY LOAD
        ------------------------------------------------ */
-    const calContainer = document.getElementById('calBookingEmbed');
-    if (calContainer && 'IntersectionObserver' in window) {
-        const calIO = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) { if (entry.isIntersecting) { loadCal(calContainer); calIO.disconnect(); } });
+    const calendlyContainer = document.getElementById('calendlyEmbed');
+    if (calendlyContainer && 'IntersectionObserver' in window) {
+        const cIO = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) { if (entry.isIntersecting) { loadCalendly(calendlyContainer); cIO.disconnect(); } });
         }, { threshold: 0.2 });
-        calIO.observe(calContainer);
+        cIO.observe(calendlyContainer);
+    } else if (calendlyContainer) {
+        loadCalendly(calendlyContainer);
     }
-    function loadCal(container) {
-        const link = container.getAttribute('data-cal-link');
-        if (!link) return;
-        (function (C, A, L) {
-            let p = function (a, ar) { a.q.push(ar); };
-            let d = C.document;
-            C.Cal = C.Cal || function () {
-                let cal = C.Cal; let ar = arguments;
-                if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement('script')).src = A; cal.loaded = true; }
-                if (ar[0] === L) {
-                    const api = function () { p(api, arguments); };
-                    const ns = ar[1]; api.q = api.q || [];
-                    if (typeof ns === 'string') { cal.ns[ns] = cal.ns[ns] || api; p(cal.ns[ns], ar); p(cal, ['initNamespace', ns]); }
-                    else { p(cal, ar); }
-                    return;
+
+    function loadCalendly(container) {
+        const url = container.getAttribute('data-calendly-url');
+        if (!url) return;
+
+        // Inject Calendly widget CSS once
+        if (!document.getElementById('calendly-widget-css')) {
+            const link = document.createElement('link');
+            link.id = 'calendly-widget-css';
+            link.rel = 'stylesheet';
+            link.href = 'https://assets.calendly.com/assets/external/widget.css';
+            document.head.appendChild(link);
+        }
+
+        // Replace fallback with inline widget container
+        const fallback = container.querySelector('.booking__fallback');
+        if (fallback) fallback.remove();
+        const widget = document.createElement('div');
+        widget.className = 'calendly-inline-widget';
+        widget.setAttribute('data-url', url + '?hide_event_type_details=0&primary_color=C8A951&text_color=1B2A4A');
+        widget.style.minWidth = '320px';
+        widget.style.height   = '720px';
+        container.appendChild(widget);
+
+        // Inject Calendly loader script once; it auto-initializes any
+        // .calendly-inline-widget on the page when loaded.
+        if (window.Calendly) {
+            window.Calendly.initInlineWidget({ url: widget.getAttribute('data-url'), parentElement: widget });
+        } else {
+            const s = document.createElement('script');
+            s.src = 'https://assets.calendly.com/assets/external/widget.js';
+            s.async = true;
+            document.head.appendChild(s);
+        }
+
+        // Booking confirmation event — Calendly posts a window message on event_scheduled
+        if (!window.__calendlyListenerAttached) {
+            window.__calendlyListenerAttached = true;
+            window.addEventListener('message', function (e) {
+                if (e.data && typeof e.data.event === 'string' && e.data.event.indexOf('calendly') === 0) {
+                    if (e.data.event === 'calendly.event_scheduled') {
+                        track('booking_confirmed', { source_section: 'final_cta', provider: 'calendly' });
+                    }
                 }
-                p(cal, ar);
-            };
-        })(window, 'https://app.cal.com/embed/embed.js', 'init');
-        try {
-            window.Cal('init', 'ekantik500', { origin: 'https://cal.com' });
-            window.Cal.ns.ekantik500('inline', { elementOrSelector: container, calLink: link, layout: 'month_view' });
-            window.Cal.ns.ekantik500('ui', { theme: 'light', cssVarsPerTheme: { light: { 'cal-brand': '#C8A951' } } });
-            window.Cal.ns.ekantik500('on', { action: 'bookingSuccessful', callback: function () { track('booking_confirmed', { source_section: 'final_cta' }); } });
-        } catch (e) {}
+            });
+        }
     }
 
     /* ------------------------------------------------
