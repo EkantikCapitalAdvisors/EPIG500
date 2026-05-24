@@ -24,28 +24,12 @@
         <nav class="dash-nav__links">
             <a href="dashboard.html">← Dashboard</a>
             <a href="/">Landing</a>
-            <button id="lockoutBtn" class="dash-nav__admin" hidden>Lock</button>
         </nav>
     </div>
 </header>
 
-<!-- Lock screen -->
-<main class="container dash-main" id="adminGate">
-    <div class="admin-gate">
-        <p class="eyebrow"><span class="diamond">◆</span> Restricted</p>
-        <h1 class="dash-title">Admin access</h1>
-        <p class="dash-sub">Enter the admin passcode to manage the trade record.</p>
-        <form id="gateForm" class="admin-gate__form">
-            <input type="password" id="gatePass" placeholder="Passcode" autocomplete="off" required>
-            <button type="submit" class="btn btn--primary">Unlock</button>
-            <p class="admin-gate__hint">Passcode is set in <code>js/admin.js</code>. This is a soft gate — replace with proper auth for production.</p>
-            <p class="admin-gate__error" id="gateError" hidden>Incorrect passcode.</p>
-        </form>
-    </div>
-</main>
-
-<!-- Admin workspace -->
-<main class="container dash-main" id="adminWorkspace" hidden>
+<!-- Admin workspace (no gate) -->
+<main class="container dash-main" id="adminWorkspace">
     <header class="dash-header">
         <p class="eyebrow"><span class="diamond">◆</span> Admin · Trade Management</p>
         <h1 class="dash-title">Manage the trade record</h1>

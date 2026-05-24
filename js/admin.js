@@ -1,49 +1,16 @@
 /* ================================================
    EKANTIK 500 — Admin Interface
-   Soft-gated trade upload + dataset management.
-   NOTE: the passcode here is a client-side gate, not real auth.
-   For production, put admin.html behind GitHub OAuth or move to a server.
+   Trade upload + dataset management. No gate — admin actions only persist
+   when the operator downloads the new trades.json and commits it.
    ================================================ */
 (function () {
     'use strict';
 
-    // CHANGE THIS PASSCODE
-    const PASSCODE = 'ekantik500';
-
     let CURRENT = { meta: {}, trades: [] };
     let STAGED = [];
 
-    /* ---------- Gate ---------- */
-    const gate = document.getElementById('adminGate');
-    const work = document.getElementById('adminWorkspace');
-    const lockBtn = document.getElementById('lockoutBtn');
-
-    function unlock() {
-        gate.hidden = true;
-        work.hidden = false;
-        lockBtn.hidden = false;
-        sessionStorage.setItem('ekantik_admin_unlocked', '1');
-        loadCurrent();
-    }
-    function lock() {
-        sessionStorage.removeItem('ekantik_admin_unlocked');
-        location.reload();
-    }
-    if (sessionStorage.getItem('ekantik_admin_unlocked') === '1') {
-        unlock();
-    }
-    document.getElementById('gateForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const pass = document.getElementById('gatePass').value;
-        const err = document.getElementById('gateError');
-        if (pass === PASSCODE) {
-            err.hidden = true;
-            unlock();
-        } else {
-            err.hidden = false;
-        }
-    });
-    lockBtn.addEventListener('click', lock);
+    // Load the current dataset on page open
+    loadCurrent();
 
     /* ---------- Load current dataset ---------- */
     function loadCurrent() {
