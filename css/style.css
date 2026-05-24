@@ -2961,7 +2961,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     width: 100%;
     height: auto;
     display: block;
-    aspect-ratio: 1100 / 380;
+    aspect-ratio: 1100 / 400;
 }
 
 /* THREE SUMMARY CARDS */
