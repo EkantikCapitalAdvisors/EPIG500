@@ -2565,3 +2565,225 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .founding__cta { flex-direction: column; }
     .founding__cta .btn { width: 100%; }
 }
+
+/* ================================================
+   PRE-REGISTRATION BANNER + FORM
+   ================================================ */
+.prereg-banner {
+    background: var(--navy-deep);
+    border-bottom: 1px solid var(--gold);
+    color: var(--ivory);
+}
+.prereg-banner__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-4);
+    padding: 10px var(--s-6);
+    font-size: 13px;
+    flex-wrap: wrap;
+}
+.prereg-banner__pill {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-size: 11px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.prereg-banner__text { color: rgba(250, 248, 245, 0.9); }
+.prereg-banner__text strong { color: var(--gold-bright); }
+.prereg-banner__cta {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding-left: var(--s-3);
+    border-left: 1px solid rgba(200, 169, 81, 0.3);
+    white-space: nowrap;
+}
+.prereg-banner__cta:hover { color: var(--gold-bright); }
+
+@media (max-width: 768px) {
+    .prereg-banner__inner { padding: var(--s-3) var(--s-4); flex-direction: column; gap: var(--s-2); text-align: center; }
+    .prereg-banner__cta { border-left: 0; padding-left: 0; }
+}
+
+/* Pre-registration form */
+.prereg-form {
+    display: grid;
+    gap: var(--s-4);
+    background: var(--white);
+    border: 1px solid var(--gold);
+    border-radius: var(--radius-lg);
+    padding: var(--s-8);
+    margin: var(--s-8) 0 var(--s-12);
+    box-shadow: 0 8px 24px rgba(27, 42, 74, 0.06);
+}
+.prereg-form__field { display: grid; gap: var(--s-2); }
+.prereg-form__label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--slate);
+}
+.prereg-form input,
+.prereg-form select,
+.prereg-form textarea {
+    font: inherit;
+    font-size: 15px;
+    padding: 12px var(--s-4);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--ivory);
+    color: var(--navy);
+    width: 100%;
+    transition: border-color var(--transition);
+}
+.prereg-form input:focus,
+.prereg-form select:focus,
+.prereg-form textarea:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: -1px;
+    border-color: var(--gold);
+}
+.prereg-form textarea { resize: vertical; min-height: 90px; font-family: inherit; }
+.prereg-form__note {
+    font-size: 12px;
+    color: var(--slate);
+    text-align: center;
+    margin-top: var(--s-2);
+}
+.prereg-form__note a { color: var(--gold-deep); border-bottom: 1px solid transparent; }
+.prereg-form__note a:hover { border-bottom-color: var(--gold); }
+
+/* Educational call collapsible */
+.prereg-call {
+    background: var(--ivory);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: var(--s-6);
+    margin-top: var(--s-12);
+}
+.prereg-call > summary {
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--navy);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.prereg-call > summary::-webkit-details-marker { display: none; }
+.prereg-call > summary::after {
+    content: '+';
+    color: var(--gold);
+    font-size: 22px;
+    font-weight: 400;
+    transition: transform var(--transition);
+    line-height: 1;
+}
+.prereg-call[open] > summary::after { transform: rotate(45deg); }
+.prereg-call__body { padding-top: var(--s-4); }
+.prereg-call__body p {
+    color: var(--slate-dark);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: var(--s-6);
+}
+
+/* ================================================
+   FALSIFIABILITY PROTOCOL CARD
+   ================================================ */
+.protocol-card {
+    background: var(--white);
+    color: var(--navy);
+    border: 1px solid var(--gold);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin: var(--s-12) auto;
+    max-width: 920px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+.protocol-card__meta {
+    background: var(--navy-deep);
+    color: rgba(250, 248, 245, 0.85);
+    padding: var(--s-3) var(--s-6);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--gold);
+    flex-wrap: wrap;
+    gap: var(--s-3);
+}
+.protocol-card__doc,
+.protocol-card__version {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+}
+.protocol-card__doc code {
+    background: rgba(200, 169, 81, 0.15);
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+    font-size: 11px;
+    color: var(--gold-bright);
+}
+.protocol-card__body { padding: var(--s-8); }
+.protocol-card__h {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--gold-deep);
+    margin-bottom: var(--s-3);
+}
+.protocol-card__title {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: var(--s-6);
+}
+.protocol-card__lede {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--slate-dark);
+    margin-bottom: var(--s-6);
+}
+.protocol-card__actions {
+    display: flex;
+    gap: var(--s-4);
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--s-6);
+    padding-bottom: var(--s-4);
+    border-bottom: 1px dashed var(--line);
+}
+.protocol-card__actions .btn--ghost { color: var(--navy); padding-left: 0; }
+.protocol-card__actions .btn--ghost:hover { color: var(--gold-deep); }
+.protocol-card__attest {
+    font-size: 12px;
+    color: var(--slate);
+    line-height: 1.6;
+    font-style: italic;
+}
+.protocol-card__attest strong { color: var(--navy); font-style: normal; }
+
+@media (max-width: 768px) {
+    .protocol-card__body { padding: var(--s-6); }
+    .protocol-card__title { font-size: 22px; }
+    .protocol-card__actions { flex-direction: column; align-items: stretch; }
+    .protocol-card__actions .btn { width: 100%; }
+}

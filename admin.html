@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin · Ekantik 500</title>
+    <meta name="robots" content="noindex,nofollow">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dash-body">
+
+<header class="dash-nav">
+    <div class="container dash-nav__inner">
+        <a href="/" class="logo">
+            <span class="logo__mark">E</span>
+            <span class="logo__wordmark">EKANTIK CAPITAL</span>
+            <span class="logo__sublabel">ADMIN</span>
+        </a>
+        <nav class="dash-nav__links">
+            <a href="dashboard.html">← Dashboard</a>
+            <a href="/">Landing</a>
+            <button id="lockoutBtn" class="dash-nav__admin" hidden>Lock</button>
+        </nav>
+    </div>
+</header>
+
+<!-- Lock screen -->
+<main class="container dash-main" id="adminGate">
+    <div class="admin-gate">
+        <p class="eyebrow"><span class="diamond">◆</span> Restricted</p>
+        <h1 class="dash-title">Admin access</h1>
+        <p class="dash-sub">Enter the admin passcode to manage the trade record.</p>
+        <form id="gateForm" class="admin-gate__form">
+            <input type="password" id="gatePass" placeholder="Passcode" autocomplete="off" required>
+            <button type="submit" class="btn btn--primary">Unlock</button>
+            <p class="admin-gate__hint">Passcode is set in <code>js/admin.js</code>. This is a soft gate — replace with proper auth for production.</p>
+            <p class="admin-gate__error" id="gateError" hidden>Incorrect passcode.</p>
+        </form>
+    </div>
+</main>
+
+<!-- Admin workspace -->
+<main class="container dash-main" id="adminWorkspace" hidden>
+    <header class="dash-header">
+        <p class="eyebrow"><span class="diamond">◆</span> Admin · Trade Management</p>
+        <h1 class="dash-title">Manage the trade record</h1>
+        <p class="dash-sub" id="adminMeta">—</p>
+    </header>
+
+    <!-- Live KPIs (mirror dashboard) -->
+    <section class="dash-kpis" id="adminKpis"></section>
+
+    <!-- Upload panel -->
+    <section class="admin-panel" aria-label="Upload trades">
+        <header class="admin-panel__head">
+            <h2 class="dash-chart__h">Upload new trades</h2>
+            <p class="admin-panel__sub">All processing is client-side. Choose a mode below, preview the parsed rows, then merge or replace.</p>
+        </header>
+
+        <div class="admin-tabs" role="tablist">
+            <button class="admin-tab is-active" data-mode="file" role="tab">CSV / JSON file</button>
+            <button class="admin-tab" data-mode="paste" role="tab">Paste CSV / JSON</button>
+            <button class="admin-tab" data-mode="single" role="tab">Add single trade</button>
+        </div>
+
+        <div class="admin-panel__body" data-panel="file">
+            <label class="upload-drop" for="adminFile">
+                <input type="file" id="adminFile" accept=".csv,.json,.txt" hidden>
+                <div class="upload-drop__inner">
+                    <p class="upload-drop__icon">↑</p>
+                    <p class="upload-drop__primary">Drop a CSV or JSON file, or click to browse</p>
+                    <p class="upload-drop__secondary">Auto-detects Tradovate, TradeZella, IB Orders, Discord exports, or the internal trades.json shape.</p>
+                </div>
+            </label>
+        </div>
+        <div class="admin-panel__body" data-panel="paste" hidden>
+            <textarea id="adminPaste" rows="8" placeholder="Paste raw CSV rows or JSON…"></textarea>
+            <button class="btn btn--secondary btn--sm" id="adminPasteBtn">Parse pasted data</button>
+        </div>
+        <div class="admin-panel__body" data-panel="single" hidden>
+            <form id="adminSingleForm" class="admin-single">
+                <label><span>Timestamp</span><input type="datetime-local" name="timestamp" required></label>
+                <label><span>Symbol</span><input type="text" name="symbol" value="/ES" required></label>
+                <label><span>Side</span>
+                    <select name="side"><option>LONG</option><option>SHORT</option></select>
+                </label>
+                <label><span>Points (signed)</span><input type="number" name="pts" step="0.25" required placeholder="e.g. 7.5 or -4.25"></label>
+                <label><span>Tag</span>
+                    <select name="tag">
+                        <option value="H3">H3 — variance (default)</option>
+                        <option value="H2">H2 — process breach</option>
+                        <option value="BE">BE — breakeven</option>
+                    </select>
+                </label>
+                <button type="submit" class="btn btn--primary btn--sm">Stage trade</button>
+            </form>
+        </div>
+
+        <!-- Preview pane -->
+        <div class="admin-preview" id="adminPreview" hidden>
+            <header class="admin-preview__head">
+                <h3>Pending trades · <span id="adminPreviewCount">0</span> rows staged</h3>
+                <div class="admin-preview__actions">
+                    <button class="btn btn--secondary btn--sm" id="adminClearStage">Clear stage</button>
+                </div>
+            </header>
+            <div class="admin-preview__wrap">
+                <table class="dash-table__table">
+                    <thead><tr><th>#</th><th>Timestamp</th><th>Symbol</th><th>Side</th><th>Result</th><th class="num">Pts</th><th>Tag</th></tr></thead>
+                    <tbody id="adminPreviewBody"></tbody>
+                </table>
+            </div>
+
+            <div class="admin-merge">
+                <p class="admin-merge__h">Apply staged trades</p>
+                <div class="admin-merge__choice">
+                    <label><input type="radio" name="mergeMode" value="merge" checked> <strong>Merge</strong> with current dataset (append, dedupe by ID)</label>
+                    <label><input type="radio" name="mergeMode" value="replace"> <strong>Replace</strong> the entire dataset</label>
+                </div>
+                <button class="btn btn--primary btn--lg" id="adminBuildJson">Build new trades.json →</button>
+            </div>
+        </div>
+
+        <div class="admin-status" id="adminStatus" hidden></div>
+    </section>
+
+    <!-- Output / commit instructions -->
+    <section class="admin-panel admin-panel--output" id="adminOutputPanel" hidden>
+        <header class="admin-panel__head">
+            <h2 class="dash-chart__h">Output ready</h2>
+            <p class="admin-panel__sub">Download the new <code>trades.json</code>, then commit it to the repo at <code>data/trades.json</code> to publish. The dashboard reads it on next load.</p>
+        </header>
+        <div class="admin-output">
+            <div class="admin-output__stats" id="adminOutputStats"></div>
+            <div class="admin-output__actions">
+                <button class="btn btn--primary btn--lg" id="adminDownload">Download trades.json</button>
+                <button class="btn btn--secondary" id="adminCopyJson">Copy to clipboard</button>
+            </div>
+            <details class="admin-output__cmd">
+                <summary>Git commands to publish</summary>
+                <pre><code>cd EPIG500
+mv ~/Downloads/trades.json data/trades.json
+git add data/trades.json
+git commit -m "Update trade record (N new trades)"
+git push</code></pre>
+            </details>
+            <details class="admin-output__cmd">
+                <summary>Preview JSON</summary>
+                <pre><code id="adminJsonPreview"></code></pre>
+            </details>
+        </div>
+    </section>
+
+    <!-- Current trade table -->
+    <section class="dash-table">
+        <header class="dash-table__head">
+            <h2 class="dash-chart__h">Current trade record</h2>
+            <div class="dash-table__filters">
+                <input type="search" id="adminSearch" placeholder="Search…">
+                <span class="admin-current-count" id="adminCurrentCount">—</span>
+            </div>
+        </header>
+        <div class="dash-table__wrap">
+            <table class="dash-table__table">
+                <thead>
+                    <tr>
+                        <th>#</th><th>Date</th><th>Symbol</th><th>Side</th><th>Result</th>
+                        <th class="num">Points</th><th>Tag</th><th></th>
+                    </tr>
+                </thead>
+                <tbody id="adminCurrentBody"></tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
