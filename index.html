@@ -210,68 +210,32 @@
         </div>
         <p class="scenario-outcome" id="scenarioOutcome">Most likely terrain — earned progress with stand-down events and partial steps.</p>
 
-        <div class="ladder-canvas">
-            <svg viewBox="0 0 1100 540" class="ladder ladder--full" role="img" aria-label="The Compounding Ladder — eight-step diagram with per-step kill annotations">
-                <defs>
-                    <linearGradient id="goldGrad2" x1="0" x2="0" y1="0" y2="1">
-                        <stop offset="0%" stop-color="#E5C673"/>
-                        <stop offset="100%" stop-color="#C8A951"/>
-                    </linearGradient>
-                </defs>
-                <line x1="60" y1="430" x2="1040" y2="430" stroke="#C8A951" stroke-width="1.5" stroke-dasharray="5 5" opacity="0.6"/>
-                <text x="60" y="455" fill="#64748B" font-size="13" font-family="Source Sans 3">Risk per trade ≈ 0.5% of total NLV (constant across every step)</text>
+        <!-- Capital growth chart: active sleeve value over time, with step markers -->
+        <div class="cl-chart" id="ladderChart">
+            <div class="cl-chart__head">
+                <div class="cl-chart__legend">
+                    <span class="cl-chart__legend-item"><span class="cl-chart__legend-swatch cl-chart__legend-swatch--area"></span> Active sleeve value</span>
+                    <span class="cl-chart__legend-item"><span class="cl-chart__legend-swatch cl-chart__legend-swatch--dot"></span> Step events (contract size advances)</span>
+                </div>
+                <p class="cl-chart__axis-y">Active sleeve ($K)</p>
+            </div>
+            <div class="cl-chart__canvas">
+                <canvas id="ladderCanvas" width="1100" height="420" aria-label="Capital growth chart: active sleeve value over time with eight step markers"></canvas>
+                <div class="cl-chart__steps" id="cl-chart-steps"><!-- step badges rendered by JS --></div>
+            </div>
+            <p class="cl-chart__axis-x">Time (months from Q1 launch)</p>
 
-                <g class="ladder__steps" id="ladderSteps">
-                    <rect x="80"   y="380" width="100" height="50"  fill="#1B2A4A" data-step="1"/>
-                    <rect x="200"  y="345" width="100" height="85"  fill="#223358" data-step="2"/>
-                    <rect x="320"  y="305" width="100" height="125" fill="#293D67" data-step="3"/>
-                    <rect x="440"  y="260" width="100" height="170" fill="#314776" data-step="4"/>
-                    <rect x="560"  y="210" width="100" height="220" fill="#385285" data-step="5"/>
-                    <rect x="680"  y="155" width="100" height="275" fill="#405D94" data-step="6"/>
-                    <rect x="800"  y="95"  width="100" height="335" fill="#4768A4" data-step="7"/>
-                    <rect x="920"  y="30"  width="100" height="400" fill="url(#goldGrad2)" data-step="8"/>
-                </g>
+            <!-- Step details table appears below chart, populated by JS, single row per step -->
+            <div class="cl-step-detail" id="cl-step-detail" hidden></div>
+        </div>
 
-                <!-- per-step red kill strip (2px tall, beneath each step's label area) -->
-                <g class="ladder__kills">
-                    <rect x="80"  y="475" width="100" height="3" fill="#DC2626"/>
-                    <rect x="200" y="475" width="100" height="3" fill="#DC2626"/>
-                    <rect x="320" y="475" width="100" height="3" fill="#DC2626"/>
-                    <rect x="440" y="475" width="100" height="3" fill="#DC2626"/>
-                    <rect x="560" y="475" width="100" height="3" fill="#DC2626"/>
-                    <rect x="680" y="475" width="100" height="3" fill="#DC2626"/>
-                    <rect x="800" y="475" width="100" height="3" fill="#DC2626"/>
-                    <rect x="920" y="475" width="100" height="3" fill="#DC2626"/>
-                </g>
-                <text x="550" y="500" text-anchor="middle" fill="#DC2626" font-family="Source Sans 3" font-size="12" font-weight="600" letter-spacing="1.2px">↑ KILL CONDITIONS · SAME EIGHT GATES AT EVERY STEP ↑</text>
-                <text x="550" y="525" text-anchor="middle" fill="#64748B" font-family="Source Sans 3" font-size="11">The ladder halts when any one fires — regardless of which step has been reached.</text>
-
-                <g font-family="Source Sans 3" text-anchor="middle">
-                    <g fill="#FAF8F5">
-                        <text x="130" y="408" font-size="13" font-weight="600">Q1</text>
-                        <text x="130" y="425" font-size="11" opacity="0.85">1 /ES</text>
-                        <text x="250" y="378" font-size="13" font-weight="600">Q2–Q3</text>
-                        <text x="250" y="395" font-size="11" opacity="0.85">2 /ES</text>
-                        <text x="370" y="340" font-size="13" font-weight="600">Q4</text>
-                        <text x="370" y="357" font-size="11" opacity="0.85">3 /ES</text>
-                        <text x="490" y="295" font-size="13" font-weight="600">Y2 H1</text>
-                        <text x="490" y="312" font-size="11" opacity="0.85">4 /ES</text>
-                        <text x="610" y="245" font-size="13" font-weight="600">Y2 H2</text>
-                        <text x="610" y="262" font-size="11" opacity="0.85">5 /ES</text>
-                        <text x="730" y="190" font-size="13" font-weight="600">Y3 H1</text>
-                        <text x="730" y="207" font-size="11" opacity="0.85">6 /ES</text>
-                        <text x="850" y="130" font-size="13" font-weight="600">Y3 H2</text>
-                        <text x="850" y="147" font-size="11" opacity="0.85">7 /ES</text>
-                    </g>
-                    <g fill="#1B2A4A">
-                        <text x="970" y="65" font-size="14" font-weight="700">Y4+</text>
-                        <text x="970" y="83" font-size="12" font-weight="600">8+ /ES</text>
-                    </g>
-                </g>
-
-                <path id="ladderTrajectory" d="M 130 420 Q 500 320 970 60" fill="none" stroke="#C8A951" stroke-width="2.5" stroke-dasharray="7 6" opacity="0.9"/>
-                <polygon id="ladderArrow" points="962,52 985,68 970,82" fill="#C8A951"/>
-            </svg>
+        <!-- Tangible kill conditions rail: all 8 ED conditions as named chips -->
+        <div class="cl-kills">
+            <div class="cl-kills__head">
+                <p class="cl-kills__h">↑ All eight kill conditions are armed at every step</p>
+                <p class="cl-kills__sub">Hover or tap any chip to reveal its trigger. The ladder halts when any one fires — regardless of which step has been reached.</p>
+            </div>
+            <div class="cl-kills__chips" id="cl-kills-chips"><!-- 8 chips rendered by JS --></div>
         </div>
 
         <div class="three-col">
@@ -406,53 +370,33 @@
             <h2 class="section__h">The methodology — proven, then verified.</h2>
         </header>
 
-        <!-- Backtest summary band -->
-        <div class="backtest-band">
-            <p class="backtest-band__h">Backtest summary · 15 years of S&amp;P 500 data</p>
-            <div class="metrics metrics--compact">
-                <article class="metric">
-                    <p class="metric__label">Backtest Period</p>
-                    <p class="metric__value">15 years</p>
-                    <p class="metric__detail">Live market data, 2010–2024, every major regime.</p>
-                </article>
-                <article class="metric">
-                    <p class="metric__label">Statistical Edge</p>
-                    <p class="metric__value">PF 3.06</p>
-                    <p class="metric__detail">Net wins are 3× net losses on a per-trade basis.</p>
-                </article>
-                <article class="metric">
-                    <p class="metric__label">Robustness</p>
-                    <p class="metric__value">8 / 8 Tests Passed</p>
-                    <p class="metric__detail">Parameter sensitivity, regime decomposition, walk-forward, slippage stress.</p>
-                </article>
-                <article class="metric">
-                    <p class="metric__label">Calendar Consistency</p>
-                    <p class="metric__value">Every Year Positive</p>
-                    <p class="metric__detail">15 backtested years, including 2018 and 2022.</p>
-                </article>
-            </div>
-
-            <div class="drawdown">
-                <h3 class="drawdown__h">Drawdown profile vs. SPY (backtested)</h3>
-                <div class="drawdown__chart">
-                    <div class="drawdown__row">
-                        <span class="drawdown__name">SPY</span>
-                        <div class="drawdown__bar drawdown__bar--spy"><span class="drawdown__val">−33.7%</span></div>
-                    </div>
-                    <div class="drawdown__row">
-                        <span class="drawdown__name">Ekantik 500</span>
-                        <div class="drawdown__bar drawdown__bar--e500"><span class="drawdown__val">−9.4%</span></div>
-                    </div>
-                    <p class="drawdown__axis">Maximum drawdown, 2010–2024 (backtested)</p>
+        <!-- Methodology Provenance — 12+ years of development, 18 months of documented live execution -->
+        <div class="provenance">
+            <p class="provenance__h">Methodology Provenance</p>
+            <div class="provenance__timeline">
+                <div class="provenance__phase">
+                    <p class="provenance__phase-num">01</p>
+                    <p class="provenance__phase-h">12+ years of development</p>
+                    <p class="provenance__phase-body">Over a decade of methodology refinement — iterating on entry criteria, risk anchoring, regime behaviour, and operator discipline — to reach the point where the documented edge can be replicated trade-for-trade against a frozen process.</p>
+                </div>
+                <div class="provenance__phase">
+                    <p class="provenance__phase-num">02</p>
+                    <p class="provenance__phase-h">18 months of documented live execution</p>
+                    <p class="provenance__phase-body">227 closed trades on real capital, Apr 2023 – Oct 2024. Tagged per-trade, witnessed, and held to the published Stage 1 fidelity criteria from day one. This is the load-bearing dataset against which the 8-Test Sustainability Battery is computed below.</p>
+                </div>
+                <div class="provenance__phase">
+                    <p class="provenance__phase-num">03</p>
+                    <p class="provenance__phase-h">Battery, computed live</p>
+                    <p class="provenance__phase-body">The same eight tests that define the Stage 2 kill conditions are run, in your browser, against the 227-trade record below. Upload your own data and the battery re-runs against yours.</p>
                 </div>
             </div>
-            <p class="compliance">All performance figures above are backtested using historical market data and do not represent actual trading results. Backtested performance has inherent limitations. Past performance, whether actual or backtested, does not guarantee future results.</p>
+            <p class="compliance">Past performance does not guarantee future results. The 227-trade reference dataset represents the operator's actual live execution of the disciplined methodology over 18 months and is presented as the source artifact for the battery verdict — not as a forecast of future returns.</p>
         </div>
 
-        <!-- Gold rule transition -->
+        <!-- Transition rule -->
         <div class="gold-rule">
             <div class="gold-rule__bar"></div>
-            <p class="gold-rule__text">The above is backtested across 15 years of S&amp;P data. Below is the same battery run live on the operator's actual 227-trade record.</p>
+            <p class="gold-rule__text">The eight tests below are computed live, in your browser, against the operator's actual 227-trade record.</p>
             <div class="gold-rule__bar"></div>
         </div>
 
@@ -469,7 +413,8 @@
                 </div>
             </div>
 
-            <div class="battery__grid" id="batteryGrid"><!-- 8 cards rendered by JS --></div>
+            <p class="battery__intro">Each test measures one attribute of a sustainable edge. The bar shows the dataset's actual reading against the pass threshold — the gold fill is the headroom above it.</p>
+            <div class="battery__rows" id="batteryGrid"><!-- 8 rows rendered by JS --></div>
 
             <!-- Upload module -->
             <div class="upload-module">

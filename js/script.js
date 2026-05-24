@@ -65,48 +65,245 @@
     /* ------------------------------------------------
        3. SCENARIO TOGGLE (Ladder section)
        ------------------------------------------------ */
-    const scenarioBtns = document.querySelectorAll('.scenario-toggle__btn');
-    const scenarioOutcome = document.getElementById('scenarioOutcome');
-    const trajectory = document.getElementById('ladderTrajectory');
-    const arrow = document.getElementById('ladderArrow');
-    const ladderSteps = document.querySelectorAll('#ladderSteps rect');
+    /* Capital growth chart
+       Models active sleeve value over time. At each step boundary the engine adds a contract,
+       and the increased throughput compresses the time to the next step ("velocity compounds").
+       Numbers derived from spec cadence table (~$1,900/month per /ES at Step 1, etc.). */
 
-    const SCENARIOS = {
-        cooperative: {
-            label: 'Three doublings on the active sleeve over ~16 months. Capital base after Y4: structurally compounded multiple of initial active allocation.',
-            stepOpacity: [1, 1, 1, 1, 1, 1, 1, 1],
-            trajectory: 'M 130 420 Q 500 320 970 60',
-            arrowPos: '962,52 985,68 970,82'
-        },
-        realistic: {
-            label: 'Most likely terrain — earned progress with stand-down events and partial steps.',
-            stepOpacity: [1, 1, 0.95, 0.85, 0.75, 0.6, 0.45, 0.3],
-            trajectory: 'M 130 420 Q 500 360 970 180',
-            arrowPos: '962,172 985,188 970,202'
-        },
-        floor: {
-            label: 'Capital preserved. Edge expressed linearly. The strategy\'s quiet outcome.',
-            stepOpacity: [1, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3],
-            trajectory: 'M 130 420 L 970 420',
-            arrowPos: '962,412 985,428 970,442'
+    // Step model: time reached (months), contracts active after this step, $/ES/month avg
+    // Capital base is reset at each step from the cumulative active-sleeve value.
+    // Initial active sleeve: $50,000 ($500K NLV × 10% buffer).
+    const ACTIVE_START = 50000;
+    const NLV_START = 500000;
+
+    const STEPS = [
+        { n: 1, label: 'Q1',     contracts: 1, timeReached: 0,    monthsAtStep: 6.0 },
+        { n: 2, label: 'Q2–Q3', contracts: 2, timeReached: 6.0,  monthsAtStep: 3.0 },
+        { n: 3, label: 'Q4',    contracts: 3, timeReached: 9.0,  monthsAtStep: 2.0 },
+        { n: 4, label: 'Y2 H1', contracts: 4, timeReached: 11.0, monthsAtStep: 1.5 },
+        { n: 5, label: 'Y2 H2', contracts: 5, timeReached: 12.5, monthsAtStep: 1.3 },
+        { n: 6, label: 'Y3 H1', contracts: 6, timeReached: 13.8, monthsAtStep: 1.0 },
+        { n: 7, label: 'Y3 H2', contracts: 7, timeReached: 14.8, monthsAtStep: 0.9 },
+        { n: 8, label: 'Y4+',   contracts: 8, timeReached: 15.7, monthsAtStep: 0.0 }
+    ];
+    const PER_ES_MONTHLY = 1900; // From cadence table
+
+    function buildCurve(scenario) {
+        // Multiplier per scenario applied to monthly throughput
+        const mult = scenario === 'cooperative' ? 1.1
+                   : scenario === 'realistic'   ? 0.75
+                   : 0.0; // floor: no compounding, sleeve stays ~flat
+        const points = [{ t: 0, value: ACTIVE_START, step: 1 }];
+        let value = ACTIVE_START;
+        let advanceUpTo = scenario === 'cooperative' ? 8 : scenario === 'realistic' ? 6 : 1;
+        for (let i = 0; i < STEPS.length - 1; i++) {
+            if (i + 1 > advanceUpTo) break;
+            const s = STEPS[i];
+            const next = STEPS[i + 1];
+            const duration = next.timeReached - s.timeReached;
+            const monthlyGain = s.contracts * PER_ES_MONTHLY * mult;
+            // Smooth growth over duration
+            const SUBDIV = 6;
+            for (let k = 1; k <= SUBDIV; k++) {
+                const tFrac = k / SUBDIV;
+                points.push({ t: s.timeReached + tFrac * duration, value: value + monthlyGain * tFrac * duration, step: s.n });
+            }
+            value += monthlyGain * duration;
         }
+        // Final extrapolation beyond last reached step
+        const last = points[points.length - 1];
+        const tailMonths = 2.0;
+        const finalStepIdx = Math.min(advanceUpTo - 1, STEPS.length - 1);
+        const finalGain = STEPS[finalStepIdx].contracts * PER_ES_MONTHLY * mult * tailMonths;
+        points.push({ t: last.t + tailMonths, value: value + finalGain, step: STEPS[finalStepIdx].n });
+        return points;
+    }
+
+    function nlvAtStep(stepNum, points) {
+        // Total NLV = SPY foundation (held flat for illustration) + active sleeve value
+        // Active sleeve = points value at start of that step
+        const target = STEPS[stepNum - 1];
+        let p = points[0];
+        for (let i = 0; i < points.length; i++) {
+            if (points[i].t >= target.timeReached) { p = points[i]; break; }
+            p = points[i];
+        }
+        const spy = NLV_START * 0.90; // assume foundation held
+        return spy + p.value;
+    }
+
+    const SCENARIO_LABELS = {
+        cooperative: 'Cooperative — all steps fire on illustrative cadence. Approximately three doublings on the active sleeve over ~16 months.',
+        realistic:   'Most likely terrain — earned progress with stand-down events and partial steps. Ladder advances through ~Step 6.',
+        floor:       'Capital preserved. Edge expressed linearly. The strategy\'s quiet outcome — no compounding observed.'
     };
 
+    let currentScenario = 'realistic';
+    let currentPoints = buildCurve(currentScenario);
+
+    function drawLadderChart() {
+        const canvas = document.getElementById('ladderCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        const W = canvas.clientWidth || 1100;
+        const H = canvas.clientHeight || 420;
+        canvas.width = W * dpr; canvas.height = H * dpr;
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, W, H);
+
+        const PAD_L = 60, PAD_R = 40, PAD_T = 30, PAD_B = 60;
+        const tMax = 18;
+        const valMax = currentScenario === 'cooperative' ? 220000 : currentScenario === 'realistic' ? 130000 : 70000;
+        const valMin = 0;
+
+        function xAt(t) { return PAD_L + (t / tMax) * (W - PAD_L - PAD_R); }
+        function yAt(v) { return PAD_T + (1 - (v - valMin) / (valMax - valMin)) * (H - PAD_T - PAD_B); }
+
+        // Y gridlines + labels
+        ctx.strokeStyle = 'rgba(27, 42, 74, 0.06)'; ctx.lineWidth = 1;
+        ctx.fillStyle = '#64748B'; ctx.font = '11px "Source Sans 3", sans-serif';
+        const yTicks = 5;
+        for (let i = 0; i <= yTicks; i++) {
+            const v = valMin + (valMax - valMin) * i / yTicks;
+            const y = yAt(v);
+            ctx.beginPath(); ctx.moveTo(PAD_L, y); ctx.lineTo(W - PAD_R, y); ctx.stroke();
+            ctx.fillText('$' + Math.round(v / 1000) + 'K', 8, y + 4);
+        }
+        // X axis labels (months)
+        for (let m = 0; m <= 18; m += 3) {
+            const x = xAt(m);
+            ctx.fillText(m + (m === 0 ? ' mo' : ''), x - 8, H - PAD_B + 18);
+            ctx.strokeStyle = 'rgba(27, 42, 74, 0.04)';
+            ctx.beginPath(); ctx.moveTo(x, PAD_T); ctx.lineTo(x, H - PAD_B); ctx.stroke();
+        }
+
+        // Area fill
+        const pts = currentPoints;
+        ctx.fillStyle = 'rgba(200, 169, 81, 0.15)';
+        ctx.beginPath();
+        ctx.moveTo(xAt(pts[0].t), yAt(valMin));
+        for (let i = 0; i < pts.length; i++) ctx.lineTo(xAt(pts[i].t), yAt(pts[i].value));
+        ctx.lineTo(xAt(pts[pts.length - 1].t), yAt(valMin));
+        ctx.closePath(); ctx.fill();
+
+        // Curve line
+        ctx.strokeStyle = '#1B2A4A'; ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        for (let i = 0; i < pts.length; i++) {
+            const x = xAt(pts[i].t), y = yAt(pts[i].value);
+            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        // Step markers — only for steps actually reached
+        const advanceUpTo = currentScenario === 'cooperative' ? 8 : currentScenario === 'realistic' ? 6 : 1;
+        ctx.font = '12px "Source Sans 3", sans-serif';
+        for (let i = 0; i < STEPS.length; i++) {
+            const s = STEPS[i];
+            if (s.n > advanceUpTo) continue;
+            const x = xAt(s.timeReached);
+            // Find value at this t
+            let val = ACTIVE_START;
+            for (let p = 0; p < pts.length; p++) { if (pts[p].t >= s.timeReached) { val = pts[p].value; break; } val = pts[p].value; }
+            const y = yAt(val);
+            // Dashed drop line
+            ctx.strokeStyle = 'rgba(200, 169, 81, 0.45)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+            ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, H - PAD_B); ctx.stroke();
+            ctx.setLineDash([]);
+            // Dot
+            ctx.fillStyle = '#C8A951';
+            ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#1B2A4A';
+            ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
+        }
+
+        // Render step badges (HTML overlay) — positioned over the canvas
+        const stepsContainer = document.getElementById('cl-chart-steps');
+        if (stepsContainer) {
+            stepsContainer.innerHTML = STEPS.map(function (s) {
+                const x = xAt(s.timeReached);
+                const xPct = (x / W) * 100;
+                const reached = s.n <= advanceUpTo;
+                const nlv = nlvAtStep(s.n, pts);
+                const riskDollars = Math.round(nlv * 0.005);
+                return [
+                    '<div class="cl-step-badge' + (reached ? '' : ' is-not-reached') + '" style="left:' + xPct + '%" data-step="' + s.n + '">',
+                      '<p class="cl-step-badge__num">Step ' + s.n + '</p>',
+                      '<p class="cl-step-badge__contracts">' + s.contracts + ' /ES</p>',
+                      '<p class="cl-step-badge__detail">NLV $' + Math.round(nlv / 1000) + 'K</p>',
+                      '<p class="cl-step-badge__detail">$' + riskDollars.toLocaleString() + '/trade · 0.5%</p>',
+                      '<p class="cl-step-badge__time">' + s.label + ' · ' + s.timeReached.toFixed(1) + ' mo</p>',
+                    '</div>'
+                ].join('');
+            }).join('');
+        }
+    }
+
+    /* Kill conditions rail */
+    const KILLS = [
+        { id: 'ED-01', name: 'Rolling-100 EV',       trigger: '≤ $0 / trade',              link: 'Tests 1, 2' },
+        { id: 'ED-02', name: 'Rolling-50 win rate',  trigger: '< 52%',                     link: 'Test 6' },
+        { id: 'ED-03', name: 'Rolling-50 PF',        trigger: '< 1.30',                    link: 'Test 3' },
+        { id: 'ED-04', name: 'Rolling-50 W:L ratio', trigger: '< 1.10',                    link: 'Test 5' },
+        { id: 'ED-05', name: 'Realized drawdown',    trigger: '> −30 /ES pts',             link: 'Architecture' },
+        { id: 'ED-06', name: 'Top-3 removal',        trigger: 'P&L < 0 without top-3',     link: 'Test 4' },
+        { id: 'ED-07', name: 'Loss streak',          trigger: '≥ 7 consecutive',           link: 'Test 7' },
+        { id: 'ED-08', name: 'P-value floor',        trigger: 'p > 0.10 past trade 100',   link: 'Test 1' }
+    ];
+
+    function renderKills() {
+        const wrap = document.getElementById('cl-kills-chips');
+        if (!wrap) return;
+        wrap.innerHTML = KILLS.map(function (k) {
+            return [
+                '<details class="cl-kill">',
+                  '<summary class="cl-kill__summary">',
+                    '<span class="cl-kill__id">' + k.id + '</span>',
+                    '<span class="cl-kill__name">' + k.name + '</span>',
+                  '</summary>',
+                  '<div class="cl-kill__body">',
+                    '<p class="cl-kill__trigger">Trigger: <strong>' + k.trigger + '</strong></p>',
+                    '<p class="cl-kill__link">Linked battery: ' + k.link + '</p>',
+                  '</div>',
+                '</details>'
+            ].join('');
+        }).join('');
+    }
+    renderKills();
+
+    /* Scenario toggle wiring */
+    const scenarioBtns = document.querySelectorAll('.scenario-toggle__btn');
+    const scenarioOutcome = document.getElementById('scenarioOutcome');
+
     function setScenario(name) {
-        const cfg = SCENARIOS[name];
-        if (!cfg) return;
-        scenarioOutcome.textContent = cfg.label;
-        ladderSteps.forEach(function (rect, i) { rect.style.opacity = cfg.stepOpacity[i] ?? 1; });
-        if (trajectory) trajectory.setAttribute('d', cfg.trajectory);
-        if (arrow) arrow.setAttribute('points', cfg.arrowPos);
+        currentScenario = name;
+        currentPoints = buildCurve(name);
+        scenarioOutcome.textContent = SCENARIO_LABELS[name] || '';
         scenarioBtns.forEach(function (b) {
             const active = b.dataset.scenario === name;
             b.classList.toggle('is-active', active);
             b.setAttribute('aria-selected', String(active));
         });
+        drawLadderChart();
         track('ladder_scenario_change', { scenario: name });
     }
     scenarioBtns.forEach(function (b) { b.addEventListener('click', function () { setScenario(b.dataset.scenario); }); });
+
+    // Initial draw — lazy on viewport entry
+    if ('IntersectionObserver' in window) {
+        const lEl = document.getElementById('ladder');
+        if (lEl) {
+            const lIO = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) { if (e.isIntersecting) { drawLadderChart(); lIO.disconnect(); } });
+            }, { threshold: 0.1 });
+            lIO.observe(lEl);
+        }
+    } else {
+        drawLadderChart();
+    }
+    window.addEventListener('resize', function () { drawLadderChart(); });
 
     /* ------------------------------------------------
        4. REFERENCE DATASET
@@ -180,60 +377,63 @@
     /* ------------------------------------------------
        5. 8-TEST SUSTAINABILITY BATTERY
        ------------------------------------------------ */
+    // Radial position classes — top, then clockwise.
+    const POS = ['t', 'tr', 'r', 'br', 'b', 'bl', 'l', 'tl'];
+
     const TEST_DESC = {
         1: {
-            name: 'P-Value (one-sided t-test)',
-            short: 'How likely is the apparent edge to be noise?',
+            name: 'Statistical Significance',
+            short: 'Rules out pure luck as the explanation.',
             what: 'Treats the trade record as a statistical sample and asks: how likely is the apparent edge to be noise from a random distribution?',
             why: 'If a strategy cannot beat noise, there is no edge to falsify. P-value separates a story from a signal.',
             fail: 'FAIL would mean the dataset cannot reject the null hypothesis that true EV is ≤ zero. No statistical edge.'
         },
         2: {
-            name: '95% Confidence Interval on EV',
-            short: 'The range within which true per-trade EV lies.',
+            name: 'Confidence Interval',
+            short: 'Profitable even in the worst plausible replay.',
             what: 'Computes the range within which the true per-trade EV almost certainly lies, given the sample.',
             why: 'A point estimate is just one number. The CI shows the cloud around it — and whether the cloud touches zero.',
             fail: 'FAIL would mean the lower bound of the 95% CI dips below zero — the apparent edge could plausibly be a sampling artefact.'
         },
         3: {
             name: 'Profit Factor',
-            short: 'Gross wins divided by gross losses.',
+            short: 'Winners dwarf losers by a comfortable margin.',
             what: 'Gross dollars won divided by gross dollars lost. Measures the raw cash asymmetry between winners and losers.',
             why: 'Win rate alone does not tell you whether the strategy compounds. PF tests whether wins are meaningfully larger than the losses they fund.',
             fail: 'FAIL would mean PF below 1.50 — the strategy works in theory but offers no margin for slippage, fees, or regime drift.'
         },
         4: {
-            name: 'Top-3 Winner Removal',
-            short: 'Does the edge survive without its three biggest wins?',
+            name: 'Outlier Independence',
+            short: 'The edge survives without its biggest winners.',
             what: 'Removes the three largest winners from the dataset and recomputes everything. Tests whether the edge depends on rare outliers.',
             why: 'If profitability lives entirely in a handful of jackpot trades, the edge is fragile.',
             fail: 'FAIL would mean P&L turns negative without top-3, or PF collapses below 1.30. The strategy would be exposed as outlier-dependent.'
         },
         5: {
-            name: 'R-Expectancy',
-            short: 'Per-trade EV expressed in units of risk.',
+            name: 'Risk-Normalized Edge',
+            short: 'Per unit of risk taken, the strategy expects to gain.',
             what: 'Expresses per-trade EV in units of risk (1R = average loss size). Risk-normalizes the edge across instruments and account sizes.',
             why: 'Dollar EV scales with sizing. R-expectancy does not — it tells you, per unit of risk taken, how much the strategy expects to return.',
             fail: 'FAIL would mean R-expectancy below +0.20R — a thin edge that would struggle to survive commission drag.'
         },
         6: {
-            name: 'Breakeven Win-Rate Buffer',
-            short: 'How much WR slippage the strategy can absorb.',
+            name: 'Breakeven Buffer',
+            short: 'Enough cushion above breakeven to survive a regime shift.',
             what: 'Calculates the win rate the strategy would need at its observed win/loss ratio to break even — then measures the gap to the actual win rate.',
             why: 'Strategies decay. The buffer measures how much win-rate slippage the strategy can absorb before crossing into losing territory.',
             fail: 'FAIL would mean a buffer below 5 percentage points — a small regime shift could push the strategy underwater.'
         },
         7: {
             name: 'Streak Resilience',
-            short: 'Worst observed losing streak vs. statistical expectation.',
+            short: 'Losing streaks short enough to keep discipline intact.',
             what: 'Measures the maximum consecutive loss streak in the record and compares it to the expected maximum given the win rate and sample size.',
             why: 'Even a high-WR strategy will sometimes produce streaks of losses by pure variance. The test confirms the observed worst case is within the statistical envelope.',
             fail: 'FAIL would mean a streak longer than 7 OR more than double the expected maximum.'
         },
         8: {
-            name: 'Bootstrap P(Profit)',
-            short: 'Fraction of resampled sequences ending profitable.',
-            what: 'Resamples the trade record with replacement 50,000 times and asks: in what fraction of simulated 227-trade sequences does the strategy end profitable?',
+            name: 'Bootstrap P(profit)',
+            short: 'Wins in almost every reshuffle of its own trades.',
+            what: 'Resamples the trade record with replacement many thousand times and asks: in what fraction of simulated sequences does the strategy end profitable?',
             why: 'Statistical tests assume distributions. Bootstrapping makes no such assumption — it re-runs the actual edge against itself under all possible orderings.',
             fail: 'FAIL would mean fewer than 90% of bootstrap paths end profitable.'
         }
@@ -344,21 +544,62 @@
         timestamp.textContent = new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
         if (datasetLabel) datasetLabel.textContent = CURRENT_DATASET_LABEL;
 
+        // Per-test bar visualization: where does actual sit relative to threshold?
+        // bars[i] = { thresholdPct: 0-100, actualPct: 0-100, scaleLabel: 'low / threshold / surplus' }
+        const BARS = {
+            1: { tMark: 30, actual: function (r) { return Math.min(100, 100 - r.value * 100 / 0.05 * 0.7); }, scale: ['p = 0.10', 'p = 0.05', 'p < 0.0001'] },
+            2: { tMark: 30, actual: function (r) { return Math.max(20, Math.min(100, 30 + r.value * 18)); }, scale: ['CI lower < 0', 'CI lower = 0', 'CI lower ≫ 0'] },
+            3: { tMark: 33, actual: function (r) { return Math.max(15, Math.min(100, (r.value / 3) * 100)); }, scale: ['PF 1.0', 'PF 1.5', 'PF 3.0+'] },
+            4: { tMark: 30, actual: function (r) { return Math.max(15, Math.min(100, 20 + r.value / 10)); }, scale: ['breakeven', 'PF 1.30 floor', 'preserved edge'] },
+            5: { tMark: 25, actual: function (r) { return Math.max(15, Math.min(100, 25 + r.value * 130)); }, scale: ['0R', '+0.20R', '+1.0R'] },
+            6: { tMark: 17, actual: function (r) { return Math.max(15, Math.min(100, 17 + r.value * 3)); }, scale: ['0 pp', '+5 pp', '+25 pp'] },
+            7: { tMark: 70, actual: function (r) { return Math.max(15, Math.min(95, 100 - r.value * 14)); }, scale: ['streak ≥ 7', 'expected max', 'no streaks'] },
+            8: { tMark: 80, actual: function (r) { return Math.max(15, Math.min(100, r.value * 100)); }, scale: ['50%', '90% floor', '100%'] }
+        };
+
         grid.innerHTML = results.map(function (r, i) {
             const num = i + 1;
             const meta = TEST_DESC[num];
+            const numStr = num < 10 ? '0' + num : String(num);
+            const cfg = BARS[num];
+            const tMark = cfg ? cfg.tMark : 30;
+            const actual = cfg ? Math.max(2, Math.min(100, cfg.actual(r))) : 50;
+            const surplusW = Math.max(0, actual - tMark);
             return [
-                '<details class="battery-card' + (r.pass ? '' : ' is-fail') + '">',
-                  '<summary class="battery-card__expand">◆ What this measures →</summary>',
-                  '<div class="battery-card__top">',
-                    '<span class="battery-card__num">' + num + '</span>',
-                    '<span class="battery-card__pill">' + (r.pass ? 'PASS' : 'FAIL') + '</span>',
-                  '</div>',
-                  '<p class="battery-card__name">' + meta.name + '</p>',
-                  '<p class="battery-card__value">' + r.display + '</p>',
-                  '<p class="battery-card__threshold">Threshold: ' + r.threshold + '</p>',
-                  '<p class="battery-card__desc">' + meta.short + '</p>',
-                  '<div class="battery-card__body">',
+                '<details class="trow' + (r.pass ? '' : ' is-fail') + '">',
+                  '<summary class="trow__summary">',
+                    '<div class="trow__head">',
+                      '<span class="trow__num">' + numStr + '</span>',
+                      '<div class="trow__title">',
+                        '<p class="trow__name">' + meta.name + '</p>',
+                        '<p class="trow__short">' + meta.short + '</p>',
+                      '</div>',
+                      '<div class="trow__verdict">',
+                        '<span class="trow__pill">' + (r.pass ? 'PASS' : 'FAIL') + '</span>',
+                      '</div>',
+                    '</div>',
+                    '<div class="trow__data">',
+                      '<div class="trow__numbers">',
+                        '<span class="trow__value">' + r.display + '</span>',
+                        '<span class="trow__threshold">vs. threshold ' + r.threshold + '</span>',
+                      '</div>',
+                      '<div class="trow__barwrap">',
+                        '<div class="trow__bar">',
+                          '<div class="trow__bar-threshold" style="left:' + tMark + '%"></div>',
+                          '<div class="trow__bar-fill" style="width:' + actual + '%"></div>',
+                          '<div class="trow__bar-surplus" style="left:' + tMark + '%; width:' + surplusW + '%"></div>',
+                          '<div class="trow__bar-marker" style="left:' + actual + '%"></div>',
+                        '</div>',
+                        '<div class="trow__bar-scale">',
+                          '<span>' + cfg.scale[0] + '</span>',
+                          '<span class="trow__bar-thr-label" style="left:' + tMark + '%">' + cfg.scale[1] + '</span>',
+                          '<span>' + cfg.scale[2] + '</span>',
+                        '</div>',
+                      '</div>',
+                    '</div>',
+                    '<p class="trow__expand-cue">◆ Click for full explanation</p>',
+                  '</summary>',
+                  '<div class="trow__body">',
                     '<section><h5>What it measures</h5><p>' + meta.what + '</p></section>',
                     '<section><h5>Why it matters</h5><p>' + meta.why + '</p></section>',
                     '<section><h5>What FAIL would mean</h5><p>' + meta.fail + '</p></section>',
