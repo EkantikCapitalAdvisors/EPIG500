@@ -199,7 +199,7 @@
         <header class="section__header section__header--center">
             <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Mechanism</p>
             <h2 class="section__h section__h--lg">The Compounding Ladder</h2>
-            <p class="section__sub">Eight earned steps. Constant 0.5% risk anchored to total NLV. Every rung rated against the same eight kill conditions.</p>
+            <p class="section__sub">Starting at <strong>$100K NLV</strong>. The rule: every <strong>$5,000 in cumulative profit</strong> earns one additional /ES contract. Risk anchored at 0.5% of total NLV at every step. One-year horizon.</p>
         </header>
 
         <!-- Scenario toggle -->
@@ -208,25 +208,22 @@
             <button class="scenario-toggle__btn is-active" data-scenario="realistic" role="tab" aria-selected="true">Realistic</button>
             <button class="scenario-toggle__btn" data-scenario="floor" role="tab" aria-selected="false">Floor</button>
         </div>
-        <p class="scenario-outcome" id="scenarioOutcome">Most likely terrain — earned progress with stand-down events and partial steps.</p>
+        <p class="scenario-outcome" id="scenarioOutcome">Realistic — published reference cadence applied unmodified. Most likely terrain.</p>
 
-        <!-- Capital growth chart: active sleeve value over time, with step markers -->
+        <!-- Capital growth chart: NLV over 1 year with step markers -->
         <div class="cl-chart" id="ladderChart">
             <div class="cl-chart__head">
                 <div class="cl-chart__legend">
-                    <span class="cl-chart__legend-item"><span class="cl-chart__legend-swatch cl-chart__legend-swatch--area"></span> Active sleeve value</span>
-                    <span class="cl-chart__legend-item"><span class="cl-chart__legend-swatch cl-chart__legend-swatch--dot"></span> Step events (contract size advances)</span>
+                    <span class="cl-chart__legend-item"><span class="cl-chart__legend-swatch cl-chart__legend-swatch--area"></span> NLV growth</span>
+                    <span class="cl-chart__legend-item"><span class="cl-chart__legend-swatch cl-chart__legend-swatch--dot"></span> Step events (+1 /ES per $5K profit)</span>
                 </div>
-                <p class="cl-chart__axis-y">Active sleeve ($K)</p>
+                <p class="cl-chart__axis-y">NLV ($K)</p>
             </div>
             <div class="cl-chart__canvas">
-                <canvas id="ladderCanvas" width="1100" height="420" aria-label="Capital growth chart: active sleeve value over time with eight step markers"></canvas>
+                <canvas id="ladderCanvas" width="1100" height="420" aria-label="Compounding Ladder: NLV growth over 12 months with step markers at each $5K profit milestone"></canvas>
                 <div class="cl-chart__steps" id="cl-chart-steps"><!-- step badges rendered by JS --></div>
             </div>
-            <p class="cl-chart__axis-x">Time (months from Q1 launch)</p>
-
-            <!-- Step details table appears below chart, populated by JS, single row per step -->
-            <div class="cl-step-detail" id="cl-step-detail" hidden></div>
+            <p class="cl-chart__axis-x">Months from launch (0 → 12)</p>
         </div>
 
         <!-- Tangible kill conditions rail: all 8 ED conditions as named chips -->
@@ -253,28 +250,19 @@
             </article>
         </div>
 
-        <!-- Cadence projection -->
+        <!-- Step cadence: dynamic table reflecting the current scenario -->
         <div class="cadence">
-            <h3 class="cadence__h">Reference-data cadence projection</h3>
-            <p class="cadence__sub">Illustrative projection of how the ladder's structural cadence would express itself if the reference dataset's monthly cadence repeated under continuous protocol execution. Not a forecast.</p>
+            <h3 class="cadence__h">Step-by-step cadence (current scenario)</h3>
+            <p class="cadence__sub">Every transition shown below requires the prior step to have accumulated $5,000 in verified profit. The time-to-next-step shrinks as the engine adds contracts — this is the velocity-compounds principle made concrete.</p>
             <div class="cadence__table-wrap">
                 <table class="cadence__table">
                     <thead>
-                        <tr><th>Step</th><th>From → To</th><th>Avg Monthly P&amp;L (active sleeve)</th><th>Projected Time</th></tr>
+                        <tr><th>Step transition</th><th>Cumulative profit</th><th>NLV (start → end)</th><th>Time to next</th></tr>
                     </thead>
-                    <tbody>
-                        <tr><td>1 → 2</td><td>1 /ES → 2 /ES</td><td>~$1,900 / 1 ES</td><td>~6 months</td></tr>
-                        <tr><td>2 → 3</td><td>2 /ES → 3 /ES</td><td>~$3,800 / 2 ES</td><td>~3 months</td></tr>
-                        <tr><td>3 → 4</td><td>3 /ES → 4 /ES</td><td>~$5,700 / 3 ES</td><td>~2 months</td></tr>
-                        <tr><td>4 → 5</td><td>4 /ES → 5 /ES</td><td>~$7,600 / 4 ES</td><td>~1.5 months</td></tr>
-                        <tr><td>5 → 6</td><td>5 /ES → 6 /ES</td><td>~$9,500 / 5 ES</td><td>~1.3 months</td></tr>
-                        <tr><td>6 → 7</td><td>6 /ES → 7 /ES</td><td>~$11,400 / 6 ES</td><td>~1 month</td></tr>
-                        <tr><td>7 → 8</td><td>7 /ES → 8 /ES</td><td>~$13,300 / 7 ES</td><td>~0.9 months</td></tr>
-                        <tr class="cadence__total"><td>Cumulative</td><td>1 /ES → 8 /ES</td><td>Velocity-compounded</td><td>~16 months (illustrative)</td></tr>
-                    </tbody>
+                    <tbody id="cl-cadence-tbody"><!-- rendered by JS --></tbody>
                 </table>
             </div>
-            <p class="compliance">Hypothetical and projected. Derived from the reference dataset's monthly cadence under assumed continuous protocol execution. Real markets introduce friction, regime changes, and stand-down events that may materially extend or prevent this trajectory. The Falsifiability Gate (Section H) supersedes all ladder logic — if rolling-100 expectancy crosses zero, or any of the eight Stage-2 kill conditions fire, the ladder halts regardless of which step has been reached.</p>
+            <p class="compliance">Hypothetical and illustrative. The $1,900/month-per-/ES throughput assumption is taken from the 227-trade reference dataset's monthly cadence under realistic conditions. Real markets introduce friction, regime changes, and stand-down events that may materially extend or prevent this trajectory. The Falsifiability Gate supersedes all ladder logic — if rolling-100 expectancy crosses zero, or any of the eight Stage-2 kill conditions fire, the ladder halts regardless of which step has been reached.</p>
         </div>
     </div>
 </section>

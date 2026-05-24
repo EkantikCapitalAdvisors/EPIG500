@@ -2381,14 +2381,9 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     letter-spacing: 0.3px;
 }
 
-/* Alternate badge positioning to reduce overlap on narrow viewports */
-.cl-step-badge[data-step="2"],
-.cl-step-badge[data-step="4"],
-.cl-step-badge[data-step="6"],
-.cl-step-badge[data-step="8"] {
-    bottom: auto;
-    top: 8px;
-}
+/* Alternate badge positioning to reduce overlap as steps cluster left-to-right */
+.cl-step-badge--top { bottom: auto; top: 8px; }
+.cl-step-badge--bot { /* default: bottom anchored */ }
 
 /* Kill conditions rail */
 .cl-kills {
