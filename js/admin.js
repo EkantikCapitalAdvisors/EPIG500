@@ -62,15 +62,12 @@
         }).join('');
     }
 
-    /* ---------- Tabs ---------- */
-    const tabs = document.querySelectorAll('.admin-tab');
-    const panels = document.querySelectorAll('.admin-panel__body');
-    tabs.forEach(function (t) {
-        t.addEventListener('click', function () {
-            tabs.forEach(function (x) { x.classList.toggle('is-active', x === t); });
-            panels.forEach(function (p) { p.hidden = p.dataset.panel !== t.dataset.mode; });
-        });
-    });
+    /* ---------- Strategy toggle ---------- */
+    function currentStrategy() {
+        const r = document.querySelector('input[name="strategy"]:checked');
+        return r ? r.value : 'futures';
+    }
+    function defaultSymbol() { return currentStrategy() === 'options' ? 'SPX' : '/ES'; }
 
     /* ---------- Status ---------- */
     function status(msg, level) {
@@ -154,7 +151,22 @@
 
     function handleUpload(text, filename) {
         try {
-            // 1. Ekantik journal format detection (date + MO1:s/b/sl/tp + result line)
+            // 0. Discord HTML export (DiscordChatExporter) — strip to journal text first
+            if ((filename && /\.html?$/i.test(filename)) || /class=["']?chatlog__/i.test(text)) {
+                const journal = discordHtmlToJournal(text);
+                if (!journal) throw new Error('Could not extract messages from the Discord HTML export.');
+                if (!looksLikeJournal(journal)) throw new Error('Discord export parsed, but no F##/M##: result lines found.');
+                const parsed = parseEkantikJournal(journal);
+                if (!parsed.length) throw new Error('Discord export had no complete trade blocks.');
+                const startId = CURRENT.trades.length + STAGED.length + 1;
+                parsed.forEach(function (t, i) { t.id = startId + i; });
+                STAGED = STAGED.concat(parsed);
+                renderPreview(); renderKpis();
+                status('✓ Imported ' + parsed.length + ' trade ' + (parsed.length === 1 ? 'block' : 'blocks') + ' from Discord HTML export.', 'success');
+                return;
+            }
+
+            // 1. Ekantik journal format detection (date + label:s/b/sl/tp + result line)
             if (looksLikeJournal(text)) {
                 const parsed = parseEkantikJournal(text);
                 if (!parsed.length) throw new Error('Journal format detected but no complete trade blocks parsed.');
@@ -210,12 +222,82 @@
        LABEL is anything matching M\w+ (e.g. MO1, M01, MO2, MES, etc.)
        Multiple trades may be separated by blank lines and/or new date headers.
     */
+    // Prefix is now any letter+word (M1, MO1, F1, F##, MES, SPX, etc.)
     const JOURNAL_DATE_RE   = /\b(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+(\d{1,2})[.:](\d{2})\s*(AM|PM|am|pm)?\b/;
-    const JOURNAL_ENTRY_RE  = /^\s*M\w*\s*:\s*([sbSB])\s*(\d+(?:\.\d+)?)/m;
-    const JOURNAL_RESULT_RE = /^\s*M\w*\s*:\s*([+-]\d+(?:\.\d+)?)\s+([Hh][23]|BE|be)/m;
+    const JOURNAL_ENTRY_RE  = /^\s*[A-Za-z]\w*\s*:\s*([sbSB])\s*(\d+(?:\.\d+)?)/m;
+    const JOURNAL_RESULT_RE = /^\s*[A-Za-z]\w*\s*:\s*([+-]?\d+(?:\.\d+)?)\s+([Hh][23]|BE|be)\b/m;
+    const JOURNAL_SL_RE     = /^\s*[A-Za-z]\w*\s*:\s*sl\s*(\d+(?:\.\d+)?)/im;
+    const JOURNAL_TP_RE     = /^\s*[A-Za-z]\w*\s*:\s*tp\s*(\d+(?:\.\d+)?)/im;
 
     function looksLikeJournal(text) {
         return JOURNAL_DATE_RE.test(text) && JOURNAL_RESULT_RE.test(text);
+    }
+
+    /* DiscordChatExporter HTML → flattened journal text
+       Walks the parsed DOM, finds each message group's timestamp + content,
+       and emits "M/D/YY h.mm AM\n<content>\n\n" so the existing journal
+       parser handles the rest. Falls back to scraping any message-like text.
+    */
+    function discordHtmlToJournal(html) {
+        let doc;
+        try { doc = new DOMParser().parseFromString(html, 'text/html'); }
+        catch (e) { return null; }
+        if (!doc || !doc.body) return null;
+
+        const blocks = [];
+        // DiscordChatExporter "Exclusive" template (most common): chatlog__message-group
+        let groups = doc.querySelectorAll('.chatlog__message-group, [class*="chatlog__message-group"]');
+        if (!groups.length) groups = doc.querySelectorAll('[class*="messageGroup"]');
+        if (!groups.length) {
+            // Fallback: treat every message element independently
+            const msgs = doc.querySelectorAll('[class*="chatlog__message"], [class*="messageContent"]');
+            msgs.forEach(function (m) {
+                const text = (m.textContent || '').trim();
+                if (text) blocks.push(text);
+            });
+            return blocks.join('\n\n');
+        }
+
+        groups.forEach(function (g) {
+            // Timestamp on the group or first message
+            const tsEl = g.querySelector('[class*="timestamp"], [data-timestamp], time');
+            let tsText = '';
+            if (tsEl) {
+                tsText = (tsEl.getAttribute('title') || tsEl.getAttribute('data-timestamp') || tsEl.textContent || '').trim();
+            }
+            const tsFormatted = formatDiscordTs(tsText);
+
+            // Collect all message content within the group
+            const msgs = g.querySelectorAll('[class*="messageContent"], [class*="chatlog__content"], [class*="markup"]');
+            const lines = [];
+            msgs.forEach(function (m) {
+                const text = (m.textContent || '').replace(/\s+\n/g, '\n').trim();
+                if (text) lines.push(text);
+            });
+            if (!lines.length) return;
+
+            if (tsFormatted) blocks.push(tsFormatted + '\n' + lines.join('\n'));
+            else             blocks.push(lines.join('\n'));
+        });
+        return blocks.join('\n\n');
+    }
+
+    /* Convert various Discord timestamp shapes into the M/D/YY h.mm AM journal header */
+    function formatDiscordTs(raw) {
+        if (!raw) return '';
+        // Try ISO-ish (DiscordChatExporter "title" attribute is usually "Friday, May 19, 2026 12:09 PM")
+        const d = new Date(raw);
+        if (!isNaN(d.getTime())) {
+            const mm = d.getMonth() + 1;
+            const dd = d.getDate();
+            const yy = String(d.getFullYear()).slice(-2);
+            let h = d.getHours();
+            const min = String(d.getMinutes()).padStart(2, '0');
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12; if (h === 0) h = 12;
+            return mm + '/' + dd + '/' + yy + ' ' + h + '.' + min + ' ' + ampm;
+        }
+        return raw; // emit as-is; journal regex may still match if it's already close
     }
 
     function parseEkantikJournal(text) {
@@ -259,23 +341,28 @@
             const entry = em ? parseFloat(em[2]) : null;
 
             // Stop loss / trailing profit (optional, captured for the record)
-            const slMatch = block.match(/^\s*M\w*\s*:\s*sl\s*(\d+(?:\.\d+)?)/im);
-            const tpMatch = block.match(/^\s*M\w*\s*:\s*tp\s*(\d+(?:\.\d+)?)/im);
+            const slMatch = block.match(JOURNAL_SL_RE);
+            const tpMatch = block.match(JOURNAL_TP_RE);
 
             // Result
             const pts = parseFloat(rm[1]);
             let tag = rm[2].toUpperCase();
             if (tag === 'H1') tag = 'H3'; // OP-04: per-trade H1 is itself a breach
 
+            const sym = defaultSymbol();
+            const isOptions = currentStrategy() === 'options';
+            // Options: pts ARE dollars-per-contract on SPX; futures: pts × $50 = $/contract (ES) or $5 (MES)
+            const dollarMult = isOptions ? 1 : 50;
             trades.push({
                 timestamp: ts,
-                symbol: '/ES',
+                symbol: sym,
                 side: side,
                 result: pts > 0 ? 'W' : pts < 0 ? 'L' : 'BE',
                 pts: Math.round(pts * 100) / 100,
-                dollars: Math.round(pts * 50 * 100) / 100,
+                dollars: Math.round(pts * dollarMult * 100) / 100,
                 tag: tag,
                 period: 'pre_reg',
+                strategy: currentStrategy(),
                 entry: entry,
                 sl: slMatch ? parseFloat(slMatch[1]) : null,
                 tp: tpMatch ? parseFloat(tpMatch[1]) : null
@@ -290,15 +377,17 @@
         fr.onload = function () { handleUpload(fr.result, f.name); };
         fr.readAsText(f);
     });
-    const drop = document.querySelector('.upload-drop');
-    ['dragenter','dragover'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('is-dragover'); }); });
-    ['dragleave','drop'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('is-dragover'); }); });
-    drop.addEventListener('drop', function (e) {
-        const f = e.dataTransfer.files[0]; if (!f) return;
-        const fr = new FileReader();
-        fr.onload = function () { handleUpload(fr.result, f.name); };
-        fr.readAsText(f);
-    });
+    const drop = document.querySelector('.discord-drop');
+    if (drop) {
+        ['dragenter','dragover'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('is-dragover'); }); });
+        ['dragleave','drop'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('is-dragover'); }); });
+        drop.addEventListener('drop', function (e) {
+            const f = e.dataTransfer.files[0]; if (!f) return;
+            const fr = new FileReader();
+            fr.onload = function () { handleUpload(fr.result, f.name); };
+            fr.readAsText(f);
+        });
+    }
     document.getElementById('adminPasteBtn').addEventListener('click', function () {
         const text = document.getElementById('adminPaste').value;
         if (!text.trim()) { status('Paste some CSV or JSON first.', 'error'); return; }
