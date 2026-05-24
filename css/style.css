@@ -1773,3 +1773,59 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .ref-actions .btn { width: 100%; }
     .upload-module__tabs { flex-wrap: wrap; }
 }
+
+/* ================================================
+   METHODOLOGY PROVENANCE (replaces backtest band)
+   ================================================ */
+.provenance {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: var(--s-8);
+    margin-bottom: var(--s-8);
+}
+.provenance__h {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 22px;
+    color: var(--navy);
+    margin-bottom: var(--s-6);
+    padding-bottom: var(--s-4);
+    border-bottom: 1px solid var(--line);
+}
+.provenance__timeline {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-6);
+    margin-bottom: var(--s-6);
+}
+.provenance__phase {
+    padding: var(--s-6);
+    background: var(--ivory);
+    border-left: 3px solid var(--gold);
+    border-radius: var(--radius);
+}
+.provenance__phase-num {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--gold-deep);
+    letter-spacing: 1.5px;
+    margin-bottom: var(--s-2);
+}
+.provenance__phase-h {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--navy);
+    margin-bottom: var(--s-3);
+    line-height: 1.3;
+}
+.provenance__phase-body {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--slate-dark);
+}
+@media (max-width: 768px) {
+    .provenance__timeline { grid-template-columns: 1fr; }
+}

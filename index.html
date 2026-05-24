@@ -406,53 +406,33 @@
             <h2 class="section__h">The methodology — proven, then verified.</h2>
         </header>
 
-        <!-- Backtest summary band -->
-        <div class="backtest-band">
-            <p class="backtest-band__h">Backtest summary · 15 years of S&amp;P 500 data</p>
-            <div class="metrics metrics--compact">
-                <article class="metric">
-                    <p class="metric__label">Backtest Period</p>
-                    <p class="metric__value">15 years</p>
-                    <p class="metric__detail">Live market data, 2010–2024, every major regime.</p>
-                </article>
-                <article class="metric">
-                    <p class="metric__label">Statistical Edge</p>
-                    <p class="metric__value">PF 3.06</p>
-                    <p class="metric__detail">Net wins are 3× net losses on a per-trade basis.</p>
-                </article>
-                <article class="metric">
-                    <p class="metric__label">Robustness</p>
-                    <p class="metric__value">8 / 8 Tests Passed</p>
-                    <p class="metric__detail">Parameter sensitivity, regime decomposition, walk-forward, slippage stress.</p>
-                </article>
-                <article class="metric">
-                    <p class="metric__label">Calendar Consistency</p>
-                    <p class="metric__value">Every Year Positive</p>
-                    <p class="metric__detail">15 backtested years, including 2018 and 2022.</p>
-                </article>
-            </div>
-
-            <div class="drawdown">
-                <h3 class="drawdown__h">Drawdown profile vs. SPY (backtested)</h3>
-                <div class="drawdown__chart">
-                    <div class="drawdown__row">
-                        <span class="drawdown__name">SPY</span>
-                        <div class="drawdown__bar drawdown__bar--spy"><span class="drawdown__val">−33.7%</span></div>
-                    </div>
-                    <div class="drawdown__row">
-                        <span class="drawdown__name">Ekantik 500</span>
-                        <div class="drawdown__bar drawdown__bar--e500"><span class="drawdown__val">−9.4%</span></div>
-                    </div>
-                    <p class="drawdown__axis">Maximum drawdown, 2010–2024 (backtested)</p>
+        <!-- Methodology Provenance — 12+ years of development, 18 months of documented live execution -->
+        <div class="provenance">
+            <p class="provenance__h">Methodology Provenance</p>
+            <div class="provenance__timeline">
+                <div class="provenance__phase">
+                    <p class="provenance__phase-num">01</p>
+                    <p class="provenance__phase-h">12+ years of development</p>
+                    <p class="provenance__phase-body">Over a decade of methodology refinement — iterating on entry criteria, risk anchoring, regime behaviour, and operator discipline — to reach the point where the documented edge can be replicated trade-for-trade against a frozen process.</p>
+                </div>
+                <div class="provenance__phase">
+                    <p class="provenance__phase-num">02</p>
+                    <p class="provenance__phase-h">18 months of documented live execution</p>
+                    <p class="provenance__phase-body">227 closed trades on real capital, Apr 2023 – Oct 2024. Tagged per-trade, witnessed, and held to the published Stage 1 fidelity criteria from day one. This is the load-bearing dataset against which the 8-Test Sustainability Battery is computed below.</p>
+                </div>
+                <div class="provenance__phase">
+                    <p class="provenance__phase-num">03</p>
+                    <p class="provenance__phase-h">Battery, computed live</p>
+                    <p class="provenance__phase-body">The same eight tests that define the Stage 2 kill conditions are run, in your browser, against the 227-trade record below. Upload your own data and the battery re-runs against yours.</p>
                 </div>
             </div>
-            <p class="compliance">All performance figures above are backtested using historical market data and do not represent actual trading results. Backtested performance has inherent limitations. Past performance, whether actual or backtested, does not guarantee future results.</p>
+            <p class="compliance">Past performance does not guarantee future results. The 227-trade reference dataset represents the operator's actual live execution of the disciplined methodology over 18 months and is presented as the source artifact for the battery verdict — not as a forecast of future returns.</p>
         </div>
 
-        <!-- Gold rule transition -->
+        <!-- Transition rule -->
         <div class="gold-rule">
             <div class="gold-rule__bar"></div>
-            <p class="gold-rule__text">The above is backtested across 15 years of S&amp;P data. Below is the same battery run live on the operator's actual 227-trade record.</p>
+            <p class="gold-rule__text">The eight tests below are computed live, in your browser, against the operator's actual 227-trade record.</p>
             <div class="gold-rule__bar"></div>
         </div>
 
