@@ -449,25 +449,8 @@
                 </div>
             </div>
 
-            <div class="battery__radial" id="batteryRadial" aria-label="The eight attributes of a sustainable edge">
-                <svg class="battery__spokes" viewBox="0 0 800 800" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
-                    <g stroke="#C8A951" stroke-width="1" stroke-dasharray="3 4" opacity="0.5" fill="none">
-                        <line x1="400" y1="400" x2="400" y2="120"/>
-                        <line x1="400" y1="400" x2="598" y2="202"/>
-                        <line x1="400" y1="400" x2="680" y2="400"/>
-                        <line x1="400" y1="400" x2="598" y2="598"/>
-                        <line x1="400" y1="400" x2="400" y2="680"/>
-                        <line x1="400" y1="400" x2="202" y2="598"/>
-                        <line x1="400" y1="400" x2="120" y2="400"/>
-                        <line x1="400" y1="400" x2="202" y2="202"/>
-                    </g>
-                </svg>
-                <div class="battery__hub">
-                    <p class="battery__hub-eyebrow">The eight attributes of</p>
-                    <p class="battery__hub-h">A Sustainable Edge</p>
-                </div>
-                <div class="battery__cards" id="batteryGrid"><!-- 8 cards rendered by JS --></div>
-            </div>
+            <p class="battery__intro">Each test measures one attribute of a sustainable edge. The bar shows the dataset's actual reading against the pass threshold — the gold fill is the headroom above it.</p>
+            <div class="battery__rows" id="batteryGrid"><!-- 8 rows rendered by JS --></div>
 
             <!-- Upload module -->
             <div class="upload-module">

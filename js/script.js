@@ -347,24 +347,62 @@
         timestamp.textContent = new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
         if (datasetLabel) datasetLabel.textContent = CURRENT_DATASET_LABEL;
 
+        // Per-test bar visualization: where does actual sit relative to threshold?
+        // bars[i] = { thresholdPct: 0-100, actualPct: 0-100, scaleLabel: 'low / threshold / surplus' }
+        const BARS = {
+            1: { tMark: 30, actual: function (r) { return Math.min(100, 100 - r.value * 100 / 0.05 * 0.7); }, scale: ['p = 0.10', 'p = 0.05', 'p < 0.0001'] },
+            2: { tMark: 30, actual: function (r) { return Math.max(20, Math.min(100, 30 + r.value * 18)); }, scale: ['CI lower < 0', 'CI lower = 0', 'CI lower ≫ 0'] },
+            3: { tMark: 33, actual: function (r) { return Math.max(15, Math.min(100, (r.value / 3) * 100)); }, scale: ['PF 1.0', 'PF 1.5', 'PF 3.0+'] },
+            4: { tMark: 30, actual: function (r) { return Math.max(15, Math.min(100, 20 + r.value / 10)); }, scale: ['breakeven', 'PF 1.30 floor', 'preserved edge'] },
+            5: { tMark: 25, actual: function (r) { return Math.max(15, Math.min(100, 25 + r.value * 130)); }, scale: ['0R', '+0.20R', '+1.0R'] },
+            6: { tMark: 17, actual: function (r) { return Math.max(15, Math.min(100, 17 + r.value * 3)); }, scale: ['0 pp', '+5 pp', '+25 pp'] },
+            7: { tMark: 70, actual: function (r) { return Math.max(15, Math.min(95, 100 - r.value * 14)); }, scale: ['streak ≥ 7', 'expected max', 'no streaks'] },
+            8: { tMark: 80, actual: function (r) { return Math.max(15, Math.min(100, r.value * 100)); }, scale: ['50%', '90% floor', '100%'] }
+        };
+
         grid.innerHTML = results.map(function (r, i) {
             const num = i + 1;
             const meta = TEST_DESC[num];
-            const pos = POS[i] || '';
             const numStr = num < 10 ? '0' + num : String(num);
+            const cfg = BARS[num];
+            const tMark = cfg ? cfg.tMark : 30;
+            const actual = cfg ? Math.max(2, Math.min(100, cfg.actual(r))) : 50;
+            const surplusW = Math.max(0, actual - tMark);
             return [
-                '<details class="battery-card battery-card--' + pos + (r.pass ? '' : ' is-fail') + '">',
-                  '<summary class="battery-card__summary">',
-                    '<p class="battery-card__num">' + numStr + '</p>',
-                    '<p class="battery-card__name">' + meta.name + '</p>',
-                    '<p class="battery-card__short">' + meta.short + '</p>',
-                    '<div class="battery-card__meta">',
-                      '<span class="battery-card__pill">' + (r.pass ? 'PASS' : 'FAIL') + '</span>',
-                      '<span class="battery-card__value">' + r.display + '</span>',
+                '<details class="trow' + (r.pass ? '' : ' is-fail') + '">',
+                  '<summary class="trow__summary">',
+                    '<div class="trow__head">',
+                      '<span class="trow__num">' + numStr + '</span>',
+                      '<div class="trow__title">',
+                        '<p class="trow__name">' + meta.name + '</p>',
+                        '<p class="trow__short">' + meta.short + '</p>',
+                      '</div>',
+                      '<div class="trow__verdict">',
+                        '<span class="trow__pill">' + (r.pass ? 'PASS' : 'FAIL') + '</span>',
+                      '</div>',
                     '</div>',
+                    '<div class="trow__data">',
+                      '<div class="trow__numbers">',
+                        '<span class="trow__value">' + r.display + '</span>',
+                        '<span class="trow__threshold">vs. threshold ' + r.threshold + '</span>',
+                      '</div>',
+                      '<div class="trow__barwrap">',
+                        '<div class="trow__bar">',
+                          '<div class="trow__bar-threshold" style="left:' + tMark + '%"></div>',
+                          '<div class="trow__bar-fill" style="width:' + actual + '%"></div>',
+                          '<div class="trow__bar-surplus" style="left:' + tMark + '%; width:' + surplusW + '%"></div>',
+                          '<div class="trow__bar-marker" style="left:' + actual + '%"></div>',
+                        '</div>',
+                        '<div class="trow__bar-scale">',
+                          '<span>' + cfg.scale[0] + '</span>',
+                          '<span class="trow__bar-thr-label" style="left:' + tMark + '%">' + cfg.scale[1] + '</span>',
+                          '<span>' + cfg.scale[2] + '</span>',
+                        '</div>',
+                      '</div>',
+                    '</div>',
+                    '<p class="trow__expand-cue">◆ Click for full explanation</p>',
                   '</summary>',
-                  '<div class="battery-card__body">',
-                    '<p class="battery-card__threshold">Threshold: <strong>' + r.threshold + '</strong></p>',
+                  '<div class="trow__body">',
                     '<section><h5>What it measures</h5><p>' + meta.what + '</p></section>',
                     '<section><h5>Why it matters</h5><p>' + meta.why + '</p></section>',
                     '<section><h5>What FAIL would mean</h5><p>' + meta.fail + '</p></section>',
