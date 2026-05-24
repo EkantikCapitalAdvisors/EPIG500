@@ -174,7 +174,7 @@
             ]
         },
         cooperative: {
-            label: 'Cooperative — 1 /ES until \\u2248$5K profit buffer is built, then a single jump to the 4 /ES ceiling and hold to year-end.',
+            label: 'Cooperative — 1 /ES until ≈$5K profit buffer is built, then a single jump to the 4 /ES ceiling and hold to year-end.',
             transitions: [
                 { startMonth: BUFFER_MONTHS, contracts: 1 },
                 { startMonth: COOP_SCALE_T,  contracts: 4 }  // buffer-built jump to ceiling
@@ -240,8 +240,8 @@
 
         const steps = currentSteps;
         const pts = currentPoints;
-        const W = 1100, H = 380;
-        const PAD_L = 70, PAD_R = 70, PAD_T = 30, PAD_B = 50;
+        const W = 1100, H = 400;
+        const PAD_L = 70, PAD_R = 70, PAD_T = 36, PAD_B = 70;
         const innerW = W - PAD_L - PAD_R;
         const innerH = H - PAD_T - PAD_B;
 
@@ -313,11 +313,10 @@
         parts.push('<path d="' + spyTopLine + '" fill="none" stroke="white" stroke-width="0.8" opacity="0.5"/>');
         parts.push('<path d="' + cashTopLine + '" fill="none" stroke="white" stroke-width="0.8" opacity="0.5"/>');
 
-        // 60-day engine-buffer marker — vertical dashed line + label (applies only to engine; SPY runs from day 1)
+        // 60-day engine-buffer marker — vertical dashed line + label below the X axis (applies only to engine; SPY runs from day 1)
         const xBuf = xAt(BUFFER_MONTHS);
-        parts.push('<line x1="' + xBuf + '" y1="' + PAD_T + '" x2="' + xBuf + '" y2="' + (H - PAD_B) + '" stroke="#475569" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>');
-        parts.push('<text x="' + (xBuf + 6) + '" y="' + (PAD_T + 12) + '" font-size="10" font-weight="700" fill="#475569" font-family="Source Sans 3" letter-spacing="1">ENGINE BEGINS</text>');
-        parts.push('<text x="' + (xBuf + 6) + '" y="' + (PAD_T + 26) + '" font-size="10" fill="#64748B" font-family="Source Sans 3">after 60-day buffer</text>');
+        parts.push('<line x1="' + xBuf + '" y1="' + PAD_T + '" x2="' + xBuf + '" y2="' + (H - PAD_B + 6) + '" stroke="#475569" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>');
+        parts.push('<text x="' + xBuf + '" y="' + (H - PAD_B + 38) + '" text-anchor="middle" font-size="10" font-weight="700" fill="#475569" font-family="Source Sans 3" letter-spacing="1">↑ ENGINE BEGINS · after 60-day buffer</text>');
 
         // Build the stair-step path
         // Walk through steps: at each step, horizontal segment from prev time to current time at current contract level
@@ -332,12 +331,15 @@
             parts.push('<text x="' + (x + 37) + '" y="' + (yTop - 30) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#C8A951" font-family="Source Sans 3">' + s.contracts + ' /ES</text>');
         });
 
-        // Layer legend (top-left, inside chart)
-        const legendY = PAD_T + 8;
-        parts.push('<g class="cl-legend" font-family="Source Sans 3" font-size="11" fill="#FAF8F5">');
-        parts.push('<rect x="' + (PAD_L + 8) + '" y="' + legendY + '" width="14" height="10" fill="#C8A951"/><text x="' + (PAD_L + 26) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">Engine profit</text>');
-        parts.push('<rect x="' + (PAD_L + 130) + '" y="' + legendY + '" width="14" height="10" fill="#94A3B8" fill-opacity="0.7"/><text x="' + (PAD_L + 148) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">Cash buffer (10%)</text>');
-        parts.push('<rect x="' + (PAD_L + 268) + '" y="' + legendY + '" width="14" height="10" fill="#1B2A4A" fill-opacity="0.85"/><text x="' + (PAD_L + 286) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">SPY foundation (90% · 10% annualized)</text>');
+        // Layer legend — above the plot area, stays out of the chart interior
+        const legendY = 14;
+        parts.push('<g class="cl-legend" font-family="Source Sans 3" font-size="11">');
+        parts.push('<rect x="' + PAD_L + '" y="' + legendY + '" width="12" height="10" fill="#1B2A4A" fill-opacity="0.85"/>');
+        parts.push('<text x="' + (PAD_L + 18) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">SPY foundation · 90% · 10%/yr</text>');
+        parts.push('<rect x="' + (PAD_L + 220) + '" y="' + legendY + '" width="12" height="10" fill="#94A3B8" fill-opacity="0.7"/>');
+        parts.push('<text x="' + (PAD_L + 238) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">Cash buffer · 10%</text>');
+        parts.push('<rect x="' + (PAD_L + 360) + '" y="' + legendY + '" width="12" height="10" fill="#C8A951"/>');
+        parts.push('<text x="' + (PAD_L + 378) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">Engine profit</text>');
         parts.push('</g>');
 
         // Year-end stacked breakdown callout on the right
@@ -517,6 +519,7 @@
     function setScenario(name) {
         currentScenario = name;
         currentPoints = buildCurve(name);
+        currentSteps  = buildSteps(name);
         scenarioOutcome.textContent = SCENARIO_LABELS[name] || '';
         scenarioBtns.forEach(function (b) {
             const active = b.dataset.scenario === name;
