@@ -48,6 +48,7 @@
         .eq-legend__swatch { width: 18px; height: 4px; border-radius: 2px; }
         .eq-svg { width: 100%; height: auto; aspect-ratio: 1100 / 480; }
         .eq-callout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); }
+        @media (min-width: 900px) { .eq-callout { grid-template-columns: repeat(6, 1fr); } }
         .eq-callout__item { padding: 12px 16px; background: var(--ivory); border-radius: 4px; border-left: 3px solid var(--gold); }
         .eq-callout__label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--slate); font-weight: 700; margin-bottom: 4px; }
         .eq-callout__value { font-family: var(--font-serif); font-weight: 700; font-size: 18px; color: var(--navy); }
@@ -133,149 +134,180 @@
 
     <!-- ============ ASPIRATIONAL EQUITY CURVE ============ -->
     <h2>The aspirational equity curve</h2>
-    <p class="eyebrow"><span class="diamond">◆</span> What 12 months might look like</p>
-    <p class="sub">Translated from the hand-drawn vision. Stair-step appreciation — small drawdowns clipped by the daily and weekly caps, recoveries fully visible, occasional plateau periods when the cadence rules force a sit-down or size reduction. This is the <em>shape</em> the discipline framework is engineered to produce, not a forecast of any specific year's return.</p>
+    <p class="eyebrow"><span class="diamond">◆</span> What 12 months might look like — risk capital + SPY overlay</p>
+    <p class="sub">Two layers, both shown. <strong>Risk capital (the 10% sleeve)</strong> climbs in stair-steps whose <em>size grows</em> as position scaling up unlocks larger throughput per cycle. Target: <strong>+26% on risk capital</strong> by year-end. <strong>SPY foundation (the 90% sleeve)</strong> compounds at the 20-year S&amp;P historical average (~10%/yr). Combined, the portfolio NLV grows by ~<strong>+11.6%</strong>. The hard constraint: never lose more than <strong>5% of risk capital</strong> from any peak — the trailing floor ratchets up with every new high-water mark.</p>
 
     <div class="eq-section">
         <div class="eq-legend">
-            <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: #1B2A4A;"></span> Equity curve (stair-step appreciation)</span>
-            <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: rgba(200,169,81,0.4); border: 1px solid var(--gold);"></span> Cumulative profit zone</span>
-            <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: repeating-linear-gradient(90deg, var(--signal) 0 6px, transparent 6px 10px);"></span> Trailing daily floor (HWM − 0.5% NLV)</span>
-            <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: var(--gold); border-radius: 50%; width: 10px; height: 10px;"></span> OP-05 sit-down event</span>
+            <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: #1B2A4A;"></span> Risk capital return · stair-step, sized up by buffer</span>
+            <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: rgba(200,169,81,0.5); border: 1px solid var(--gold);"></span> Cumulative profit (RC)</span>
+            <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: #5B7CA8;"></span> SPY foundation · 10%/yr historical</span>
+            <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: repeating-linear-gradient(90deg, var(--signal) 0 6px, transparent 6px 10px);"></span> Trailing floor (HWM − 5% RC)</span>
+            <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: var(--gold); border-radius: 50%; width: 10px; height: 10px;"></span> Position scale-up event</span>
         </div>
 
-        <svg class="eq-svg" viewBox="0 0 1100 480" role="img" aria-label="Aspirational equity curve over 12 months, stair-step pattern with adverse-drawdown floor">
+        <svg class="eq-svg" viewBox="0 0 1100 480" role="img" aria-label="Aspirational equity curve over 12 months: risk capital reaches +26%, SPY foundation reaches +10%, combined NLV +11.6%, with trailing floor at HWM minus 5% risk capital">
             <defs>
                 <linearGradient id="profitGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#C8A951" stop-opacity="0.4"/>
+                    <stop offset="0%" stop-color="#C8A951" stop-opacity="0.5"/>
                     <stop offset="100%" stop-color="#C8A951" stop-opacity="0.05"/>
                 </linearGradient>
-                <pattern id="advHatch" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
-                    <line x1="0" y1="0" x2="0" y2="8" stroke="#DC2626" stroke-width="1.2" opacity="0.15"/>
-                </pattern>
+                <linearGradient id="spyGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#5B7CA8" stop-opacity="0.25"/>
+                    <stop offset="100%" stop-color="#5B7CA8" stop-opacity="0.04"/>
+                </linearGradient>
             </defs>
 
-            <!-- Grid + Y axis (% returns). Scale: top y=40 = +12%, bottom y=420 = -2% -->
+            <!-- Y axis: +30% to -8%, total 38% range, 360px tall. 0% line at y = 60 + (30/38)*360 = 344 -->
             <g font-family="Source Sans 3" font-size="11" fill="#64748B">
-                <line x1="60" y1="40"  x2="1060" y2="40"  stroke="rgba(27,42,74,0.06)"/><text x="48" y="44" text-anchor="end">+12%</text>
-                <line x1="60" y1="95"  x2="1060" y2="95"  stroke="rgba(27,42,74,0.06)"/><text x="48" y="99" text-anchor="end">+10%</text>
-                <line x1="60" y1="150" x2="1060" y2="150" stroke="rgba(27,42,74,0.06)"/><text x="48" y="154" text-anchor="end">+8%</text>
-                <line x1="60" y1="205" x2="1060" y2="205" stroke="rgba(27,42,74,0.06)"/><text x="48" y="209" text-anchor="end">+6%</text>
-                <line x1="60" y1="260" x2="1060" y2="260" stroke="rgba(27,42,74,0.06)"/><text x="48" y="264" text-anchor="end">+4%</text>
-                <line x1="60" y1="315" x2="1060" y2="315" stroke="rgba(27,42,74,0.06)"/><text x="48" y="319" text-anchor="end">+2%</text>
-                <line x1="60" y1="370" x2="1060" y2="370" stroke="#1B2A4A" stroke-opacity="0.4" stroke-dasharray="4 4"/><text x="48" y="374" text-anchor="end" font-weight="600">0% start</text>
-                <line x1="60" y1="395" x2="1060" y2="395" stroke="rgba(220,38,38,0.3)" stroke-dasharray="3 3"/><text x="48" y="399" text-anchor="end" fill="#DC2626">−1%</text>
-                <line x1="60" y1="420" x2="1060" y2="420" stroke="rgba(220,38,38,0.3)" stroke-dasharray="3 3"/><text x="48" y="424" text-anchor="end" fill="#DC2626">−2%</text>
+                <line x1="80" y1="60"  x2="1020" y2="60"  stroke="rgba(27,42,74,0.06)"/><text x="68" y="64" text-anchor="end">+30%</text>
+                <line x1="80" y1="118" x2="1020" y2="118" stroke="rgba(27,42,74,0.06)"/><text x="68" y="122" text-anchor="end">+25%</text>
+                <line x1="80" y1="175" x2="1020" y2="175" stroke="rgba(27,42,74,0.06)"/><text x="68" y="179" text-anchor="end">+20%</text>
+                <line x1="80" y1="231" x2="1020" y2="231" stroke="rgba(27,42,74,0.06)"/><text x="68" y="235" text-anchor="end">+15%</text>
+                <line x1="80" y1="288" x2="1020" y2="288" stroke="rgba(27,42,74,0.06)"/><text x="68" y="292" text-anchor="end">+10%</text>
+                <line x1="80" y1="320" x2="1020" y2="320" stroke="rgba(27,42,74,0.06)"/><text x="68" y="324" text-anchor="end">+5%</text>
+                <line x1="80" y1="344" x2="1020" y2="344" stroke="#1B2A4A" stroke-opacity="0.4" stroke-dasharray="4 4"/><text x="68" y="348" text-anchor="end" font-weight="600">0% start</text>
+                <line x1="80" y1="392" x2="1020" y2="392" stroke="rgba(220,38,38,0.25)" stroke-dasharray="3 3"/><text x="68" y="396" text-anchor="end" fill="#DC2626">−5% RC</text>
             </g>
 
             <!-- X axis (months) -->
             <g font-family="Source Sans 3" font-size="11" fill="#64748B">
-                <line x1="60" y1="430" x2="1060" y2="430" stroke="rgba(27,42,74,0.2)"/>
-                <text x="60"   y="450" text-anchor="middle">0 mo</text>
-                <text x="227"  y="450" text-anchor="middle">2</text>
-                <text x="393"  y="450" text-anchor="middle">4</text>
-                <text x="560"  y="450" text-anchor="middle">6</text>
-                <text x="727"  y="450" text-anchor="middle">8</text>
-                <text x="893"  y="450" text-anchor="middle">10</text>
-                <text x="1060" y="450" text-anchor="middle">12</text>
+                <line x1="80" y1="420" x2="1020" y2="420" stroke="rgba(27,42,74,0.2)"/>
+                <text x="80"   y="440" text-anchor="middle">0 mo</text>
+                <text x="237"  y="440" text-anchor="middle">2</text>
+                <text x="393"  y="440" text-anchor="middle">4</text>
+                <text x="550"  y="440" text-anchor="middle">6</text>
+                <text x="707"  y="440" text-anchor="middle">8</text>
+                <text x="863"  y="440" text-anchor="middle">10</text>
+                <text x="1020" y="440" text-anchor="middle">12</text>
             </g>
 
-            <!-- ASPIRATIONAL EQUITY CURVE — stair-step climbing 0% → +10% over 12 months
-                 Scale: y=370 is 0%, y=40 is +12%, so each 1% = 27.5px.
-                 Points format: each step rises ~1-2%, with a brief dip between. -->
+            <!-- ============== SPY FOUNDATION OVERLAY (10%/yr smooth compound) ============== -->
+            <!-- Monthly compound: y(t) = (30 - 10*[(1.10)^(t/12)-1]/0.10... simpler: 0% to 10% over 0..12mo, slight convexity -->
+            <!-- Compounded SPY values per month, scaled to y -->
+            <!-- mo 0: 0% → y=344; mo 3: 2.41% → y=316; mo 6: 4.88% → y=288; mo 9: 7.41% → y=259; mo 12: 10% → y=229 -->
+            <path d="M 80,344 L 80,344
+                Q 200,341 237,338
+                Q 350,328 393,322
+                Q 470,309 550,295
+                Q 650,277 707,266
+                Q 800,247 863,235
+                Q 950,217 1020,205
+                L 1020,420 L 80,420 Z" fill="url(#spyGrad)"/>
+            <path d="M 80,344
+                Q 200,341 237,338
+                Q 350,328 393,322
+                Q 470,309 550,295
+                Q 650,277 707,266
+                Q 800,247 863,235
+                Q 950,217 1020,205"
+                fill="none" stroke="#5B7CA8" stroke-width="1.8" stroke-dasharray="0"/>
 
-            <!-- Profit zone fill (under the equity curve) -->
-            <path d="
-                M 60,370
-                L 100,378 L 130,378
-                L 130,343 L 175,343 L 195,358 L 195,330
-                L 250,330 L 280,343 L 280,302
-                L 340,302 L 365,316 L 365,275
-                L 420,275 L 445,288 L 445,247
-                L 510,247 L 540,260 L 540,220
-                L 605,220 L 635,233 L 635,192
-                L 705,192 L 735,205 L 735,165
-                L 810,165 L 840,178 L 840,137
-                L 920,137 L 955,150 L 955,110
-                L 1060,110
-                L 1060,370 L 60,370 Z
-            " fill="url(#profitGrad)"/>
+            <!-- ============== RISK CAPITAL CURVE — stair-step with POSITION SIZING UP ============== -->
+            <!-- Steps grow visibly larger left-to-right. 4 scaling events at months 3, 6, 9 (gold dots).
+                 Each phase: small dip → new high. Step deltas grow: ~1.5% → 2.5% → 3.5% → 4.5%
+                 Y mapping: yAt(v) = 344 - v * 11.45 (so +26% = y=46.3)
+                 Cumulative: mo1=+1, mo2=+2.5, mo3=+4, mo4=+6.5, mo5=+9, mo6=+12, mo7=+15, mo8=+18, mo9=+21, mo10=+23.5, mo11=+25, mo12=+26 -->
+            <path d="M 80,344
+                L 105,350 L 130,332   L 160,338 L 195,321
+                L 230,326 L 260,309   L 285,313 L 315,298
+                L 345,303 L 393,275   L 425,281 L 460,261
+                L 495,267 L 545,238   L 580,244 L 615,221
+                L 650,226 L 700,200   L 730,206 L 760,184
+                L 795,189 L 863,163   L 895,168 L 925,151
+                L 960,156 L 990,144   L 1020,138
+                L 1020,420 L 80,420 Z" fill="url(#profitGrad)"/>
+            <path d="M 80,344
+                L 105,350 L 130,332   L 160,338 L 195,321
+                L 230,326 L 260,309   L 285,313 L 315,298
+                L 345,303 L 393,275   L 425,281 L 460,261
+                L 495,267 L 545,238   L 580,244 L 615,221
+                L 650,226 L 700,200   L 730,206 L 760,184
+                L 795,189 L 863,163   L 895,168 L 925,151
+                L 960,156 L 990,144   L 1020,138"
+                fill="none" stroke="#1B2A4A" stroke-width="2.4" stroke-linejoin="round"/>
 
-            <!-- TRAILING DRAWDOWN FLOOR — high-water mark minus 0.5% NLV.
-                 The floor mirrors the equity peaks, offset down by 13.75px (0.5% × 27.5px/%).
-                 As equity rises, the floor "ratchets up". Never below -0.5% from start. -->
-            <path d="
-                M 60,384
-                L 130,384
-                L 130,357 L 195,357
-                L 195,344 L 280,344
-                L 280,316 L 365,316
-                L 365,289 L 445,289
-                L 445,261 L 540,261
-                L 540,234 L 635,234
-                L 635,206 L 735,206
-                L 735,179 L 840,179
-                L 840,151 L 955,151
-                L 955,124 L 1060,124
-            " fill="none" stroke="#DC2626" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.8"/>
+            <!-- ============== TRAILING FLOOR — HWM minus 5% RC, ratchets up with each new peak ============== -->
+            <!-- Peak progression: ~+0% then +1% (y=333), +2.5% (y=315), +4% (y=298), +6.5% (y=270), +9% (y=241), +12% (y=207), +15% (y=172), +18% (y=138), +21% (y=104), +23.5% (y=75), +26% (y=46)
+                 Floor = peak - 5%, so floor y values: 333+57=390 (at start, capped at -5%), 315+57=372, 298+57=355, 270+57=327, 241+57=298, 207+57=264, 172+57=229, 138+57=195, 104+57=161, 75+57=132, 46+57=103 -->
+            <path d="M 80,392
+                L 195,392   L 195,378
+                L 285,378   L 285,366
+                L 393,366   L 393,343
+                L 545,343   L 545,315
+                L 700,315   L 700,281
+                L 863,281   L 863,246
+                L 990,246   L 990,213
+                L 1020,213"
+                fill="none" stroke="#DC2626" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.85"/>
 
-            <!-- The stair-step equity line itself -->
-            <path d="
-                M 60,370
-                L 100,378 L 130,378
-                L 130,343 L 175,343 L 195,358 L 195,330
-                L 250,330 L 280,343 L 280,302
-                L 340,302 L 365,316 L 365,275
-                L 420,275 L 445,288 L 445,247
-                L 510,247 L 540,260 L 540,220
-                L 605,220 L 635,233 L 635,192
-                L 705,192 L 735,205 L 735,165
-                L 810,165 L 840,178 L 840,137
-                L 920,137 L 955,150 L 955,110
-                L 1060,110
-            " fill="none" stroke="#1B2A4A" stroke-width="2.4" stroke-linejoin="round"/>
+            <!-- Position scale-up event markers (gold dots) at months 3, 5, 7, 9 -->
+            <circle cx="393" cy="275" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>
+            <circle cx="545" cy="238" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>
+            <circle cx="700" cy="200" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>
+            <circle cx="863" cy="163" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>
 
-            <!-- Cadence-rule plateau markers — gold dots at OP-05 sit-down points -->
-            <circle cx="195" cy="358" r="5" fill="#C8A951" stroke="white" stroke-width="2"/>
-            <circle cx="445" cy="288" r="5" fill="#C8A951" stroke="white" stroke-width="2"/>
-            <circle cx="735" cy="205" r="5" fill="#C8A951" stroke="white" stroke-width="2"/>
-
-            <!-- Annotations -->
-            <g font-family="Source Sans 3" font-size="10" fill="#A88A38" font-weight="600">
-                <text x="195" y="378" text-anchor="middle">OP-05 sit-down</text>
-                <text x="445" y="308" text-anchor="middle">OP-05 sit-down</text>
-                <text x="735" y="225" text-anchor="middle">OP-05 sit-down</text>
+            <!-- Position scale annotations: 1 → 2 → 3 → 4 → 5 contracts -->
+            <g font-family="Source Sans 3" font-size="10" fill="#A88A38" font-weight="700">
+                <text x="200" y="290" text-anchor="middle">pos: 1</text>
+                <text x="395" y="266" text-anchor="middle">↑ 2</text>
+                <text x="547" y="229" text-anchor="middle">↑ 3</text>
+                <text x="702" y="191" text-anchor="middle">↑ 4</text>
+                <text x="865" y="154" text-anchor="middle">↑ 5</text>
             </g>
-            <!-- Floor label — points to the trailing red dashed line -->
+
+            <!-- SPY label -->
+            <g font-family="Source Sans 3" font-size="10" fill="#5B7CA8" font-weight="700">
+                <text x="870" y="222" text-anchor="start">SPY 90% · +10%</text>
+            </g>
+            <!-- Floor label -->
             <g font-family="Source Sans 3" font-size="10" fill="#DC2626" font-weight="700">
-                <text x="950" y="118" text-anchor="end">↗ trailing floor: HWM − 0.5% NLV</text>
+                <text x="1020" y="208" text-anchor="end">↗ floor: HWM − 5% RC</text>
             </g>
 
-            <!-- End-of-year callout -->
-            <rect x="950" y="50" width="110" height="40" rx="4" fill="#1B2A4A"/>
-            <text x="1005" y="66" text-anchor="middle" font-size="10" font-weight="700" fill="#C8A951" font-family="Source Sans 3" letter-spacing="1">YEAR-END</text>
-            <text x="1005" y="83" text-anchor="middle" font-size="14" font-weight="700" fill="white" font-family="Source Sans 3">~+10%</text>
+            <!-- Year-end callout box (top right) -->
+            <rect x="900" y="60" width="120" height="58" rx="4" fill="#1B2A4A"/>
+            <text x="960" y="78" text-anchor="middle" font-size="10" font-weight="700" fill="#C8A951" font-family="Source Sans 3" letter-spacing="1">YEAR-END · RC</text>
+            <text x="960" y="98" text-anchor="middle" font-size="18" font-weight="700" fill="white" font-family="Source Sans 3">+26%</text>
+            <text x="960" y="113" text-anchor="middle" font-size="10" fill="#94A3B8" font-family="Source Sans 3">target</text>
+
+            <!-- Combined NLV callout (below year-end RC) -->
+            <rect x="900" y="125" width="120" height="44" rx="4" fill="#FAF8F5" stroke="#C8A951"/>
+            <text x="960" y="143" text-anchor="middle" font-size="10" font-weight="700" fill="#A88A38" font-family="Source Sans 3" letter-spacing="1">COMBINED NLV</text>
+            <text x="960" y="161" text-anchor="middle" font-size="14" font-weight="700" fill="#1B2A4A" font-family="Source Sans 3">+11.6%</text>
 
             <!-- Title overlay -->
-            <text x="70" y="30" font-family="Source Sans 3" font-size="11" font-weight="600" fill="#1B2A4A" letter-spacing="1">RISK CAPITAL RETURN · % from start</text>
+            <text x="90" y="40" font-family="Source Sans 3" font-size="11" font-weight="600" fill="#1B2A4A" letter-spacing="1">RETURN % FROM START · risk capital (navy) + SPY foundation (slate)</text>
         </svg>
 
         <div class="eq-callout">
             <div class="eq-callout__item">
-                <p class="eq-callout__label">Trailing floor</p>
-                <p class="eq-callout__value">HWM − 0.5% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">ratchets up with each new peak</span></p>
+                <p class="eq-callout__label">Risk capital target</p>
+                <p class="eq-callout__value">+26% / year<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">stair-step, position-sizing-up</span></p>
+            </div>
+            <div class="eq-callout__item">
+                <p class="eq-callout__label">SPY foundation</p>
+                <p class="eq-callout__value">+10% / year<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">20-yr historical S&amp;P 500 avg</span></p>
+            </div>
+            <div class="eq-callout__item">
+                <p class="eq-callout__label">Combined NLV</p>
+                <p class="eq-callout__value">+11.6%<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">90% × 10% + 10% × 26%</span></p>
+            </div>
+            <div class="eq-callout__item">
+                <p class="eq-callout__label">Hard constraint</p>
+                <p class="eq-callout__value">−5% RC max<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">from any high-water mark</span></p>
+            </div>
+            <div class="eq-callout__item">
+                <p class="eq-callout__label">Position scaling</p>
+                <p class="eq-callout__value">1 → 5 /ES<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">each level earned by profit buffer</span></p>
             </div>
             <div class="eq-callout__item">
                 <p class="eq-callout__label">Step shape</p>
-                <p class="eq-callout__value">+1–2% per cycle<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">brief dip then new high</span></p>
-            </div>
-            <div class="eq-callout__item">
-                <p class="eq-callout__label">Sit-down events</p>
-                <p class="eq-callout__value">~3 per year (illustrative)<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">at OP-05 weekly triggers</span></p>
+                <p class="eq-callout__value">growing larger<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">more contracts → bigger profit per cycle</span></p>
             </div>
         </div>
 
-        <p class="compliance">Aspirational and illustrative. The curve shows the <em>shape</em> the cadence rules are engineered to produce — bounded drawdowns, stair-step recovery, plateau periods at OP-05 sit-down triggers — not a forecast of any specific year's return. The red dashed line is the <strong>trailing daily floor</strong>: at any point in time, the worst the engine is allowed to lose intraday is 0.5% NLV plus whatever profit has been earned since the previous high-water mark. The floor ratchets up automatically as the equity curve climbs; it never gives back unrealized gains in excess of the 0.5% base. Live performance will look different. Markets can gap and slip; nothing on this page is a guarantee.</p>
+        <p class="compliance">Aspirational and illustrative. The chart shows the <em>shape</em> the discipline framework is engineered to produce — bounded drawdowns capped at −5% of risk capital from any peak, stair-step appreciation with position-sizing-up as profit buffer accumulates, and SPY foundation compounding at the 20-year historical average. Numbers shown (+26% RC, +10% SPY, +11.6% combined NLV) are targets, not forecasts; live performance will look different. The trailing floor at HWM − 5% RC is the operational ceiling — it ratchets up with every new high-water mark, but markets can gap and slip; nothing on this page is a guarantee. Risk capital denominator: the 10% cash sleeve. A 5% loss on risk capital = 0.5% loss on total NLV.</p>
     </div>
 
     <div style="margin-top: 80px; padding: 24px; background: var(--white); border: 1px dashed var(--gold); border-radius: 8px;">
