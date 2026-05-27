@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260527d">
+    <link rel="stylesheet" href="css/style.css?v=20260527e">
 
     <script type="application/ld+json">
     {
@@ -213,7 +213,7 @@
         <header class="section__header section__header--center">
             <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Mechanism + The Discipline</p>
             <h2 class="section__h section__h--lg">The Compounding Ladder</h2>
-            <p class="section__sub">Starting at <strong>$100K NLV</strong>. <strong>90% allocated to SPY</strong> (assumed +10%/yr at the 20-year S&amp;P historical average, also serving as portfolio-margin collateral). <strong>10% held in cash and opportunistically deployed</strong> through the /ES futures engine, with per-trade risk scaling <strong>0.5% → 2% of NLV</strong> based on the profit buffer earned. Position size capped at <strong>4 /ES maximum</strong>. The cadence rules that bound drawdown are listed first — they govern the engine whichever way the year plays out.</p>
+            <p class="section__sub">Starting at <strong>$100K NLV</strong>. <strong>90% allocated to SPY</strong> (assumed +10%/yr at the 20-year S&amp;P historical average, also serving as portfolio-margin collateral). <strong>10% held in cash and opportunistically deployed</strong> through the /ES futures engine. <strong>Per-contract risk fixed at 0.5% NLV</strong>; total per-trade exposure scales <strong>0.5% → 2%</strong> as contract count grows <strong>1 → 4</strong> with the earned profit buffer. The cadence rules that bound drawdown are listed first — they govern the engine whichever way the year plays out.</p>
         </header>
 
         <!-- Theoretical disclaimer banner — leading so investors can't miss it -->
@@ -238,7 +238,7 @@
                 </div>
                 <div class="rm-rule">
                     <p class="rm-rule__h"><span class="op">OP-03</span> Trailing daily cap <em class="rm-new">v1.2</em></p>
-                    <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. Per-trade exposure scales <strong>0.5% → 2% of NLV</strong> as the profit buffer compounds; the daily floor ratchets up with every new peak. Tight when the buffer is thin, wider once profit has earned the room. Replaces the v1.0 fixed −12 ES pts cap.</p>
+                    <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. <strong>Per-contract risk is fixed at 0.5% NLV</strong>; total per-trade exposure scales 0.5% → 2% as contracts scale 1 → 4 with the profit buffer. The daily floor ratchets up with every new peak. Replaces the v1.0 fixed −12 ES pts cap.</p>
                 </div>
                 <div class="rm-rule">
                     <p class="rm-rule__h"><span class="op">·</span> Auto-resume</p>
@@ -380,7 +380,7 @@
                 <div class="eq-callout__item"><p class="eq-callout__label">Combined target</p><p class="eq-callout__value">+35% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">engine + SPY, stacked</span></p></div>
                 <div class="eq-callout__item"><p class="eq-callout__label">Hard constraint</p><p class="eq-callout__value">−5% NLV max<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">from any high-water mark</span></p></div>
                 <div class="eq-callout__item"><p class="eq-callout__label">Position scaling</p><p class="eq-callout__value">1 → 4 /ES<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">earned by profit buffer · cap at 4</span></p></div>
-                <div class="eq-callout__item"><p class="eq-callout__label">Per-trade risk</p><p class="eq-callout__value">0.5% → 2% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">scaled by profit buffer · SPY-collateralized</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Per-contract risk</p><p class="eq-callout__value">0.5% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">fixed architectural anchor · scales via 1 → 4 contracts</span></p></div>
             </div>
         </div>
 
@@ -396,7 +396,7 @@
         <div class="three-col">
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Disciplined Risk</p>
-                <p>Per-trade risk starts at <strong>0.5% of total NLV</strong> (one trade's exposure at the architectural anchor) and scales up to a <strong>ceiling of 2%</strong> only after the profit buffer has compounded enough to absorb it. The dollar amount grows two ways: as the capital base grows AND as the buffer earns the right to wider stops. The risk envelope is bounded; it doesn't escalate arbitrarily.</p>
+                <p>Risk is anchored <em>per contract</em> at <strong>0.5% of total NLV</strong> — fixed, architectural, never escalated. Total per-trade exposure scales only via <strong>contract count</strong>: 1 /ES = 0.5%, 2 /ES = 1%, 3 /ES = 1.5%, 4 /ES = 2% (the architectural ceiling). Each additional contract is earned by accumulated profit buffer, never assumed. The dollar amount grows two ways — the capital base grows, AND the contract count grows — but the per-contract percentage never changes.</p>
             </article>
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Earned Leverage</p>
@@ -408,7 +408,7 @@
             </article>
         </div>
 
-        <p class="compliance">Aspirational and illustrative. <strong>Composition:</strong> the equity curve above is the result of two stacked layers — <strong>(a) 90% allocated to SPY</strong> compounding at the 20-year S&amp;P historical average (~10%/yr) and (b) <strong>10% held in cash, opportunistically deployed</strong> through the /ES futures engine. The SPY position doubles as portfolio-margin collateral, so the engine sizes against total NLV. <strong>Per-trade risk scales from 0.5% to 2% of NLV</strong> driven by the profit buffer earned — the floor starts tight (one trade's exposure at the architectural anchor) and only widens once accumulated profit has earned the right to absorb it. Headline targets (+26% engine NLV, +9% SPY NLV, +35% combined) are targets, not forecasts. <strong>Engine throughput:</strong> ~$1,480/month/ES, derived from the 227-trade reference dataset. The trailing floor at HWM − 5% NLV ratchets up with every new peak, but markets can gap and slip; nothing on this page is a guarantee. Only 6 post-restart trades exist on the live record so far — a statistically meaningful track record on this exact framework will take many more closed trades to accumulate.</p>
+        <p class="compliance">Aspirational and illustrative. <strong>Composition:</strong> the equity curve above is the result of two stacked layers — <strong>(a) 90% allocated to SPY</strong> compounding at the 20-year S&amp;P historical average (~10%/yr) and (b) <strong>10% held in cash, opportunistically deployed</strong> through the /ES futures engine. The SPY position doubles as portfolio-margin collateral, so the engine sizes against total NLV. <strong>Per-contract risk is fixed at 0.5% NLV</strong> — the architectural anchor never changes. Total per-trade exposure scales 0.5% → 2% only via contract count growing 1 → 4 as the profit buffer earns each next contract. Headline targets (+26% engine NLV, +9% SPY NLV, +35% combined) are targets, not forecasts. <strong>Engine throughput:</strong> ~$1,480/month/ES, derived from the 227-trade reference dataset. The trailing floor at HWM − 5% NLV ratchets up with every new peak, but markets can gap and slip; nothing on this page is a guarantee. Only 6 post-restart trades exist on the live record so far — a statistically meaningful track record on this exact framework will take many more closed trades to accumulate.</p>
 
         <!-- Tangible kill conditions rail: all 8 ED conditions as named chips -->
         <div class="cl-kills">
@@ -422,7 +422,7 @@
         <div class="three-col">
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Disciplined Risk</p>
-                <p>Per-trade risk starts at <strong>0.5% of total NLV</strong> (one trade's exposure at the architectural anchor) and scales up to a <strong>ceiling of 2%</strong> only after the profit buffer has compounded enough to absorb it. The dollar amount grows two ways: as the capital base grows AND as the buffer earns the right to wider stops. The risk envelope is bounded; it doesn't escalate arbitrarily.</p>
+                <p>Risk is anchored <em>per contract</em> at <strong>0.5% of total NLV</strong> — fixed, architectural, never escalated. Total per-trade exposure scales only via <strong>contract count</strong>: 1 /ES = 0.5%, 2 /ES = 1%, 3 /ES = 1.5%, 4 /ES = 2% (the architectural ceiling). Each additional contract is earned by accumulated profit buffer, never assumed. The dollar amount grows two ways — the capital base grows, AND the contract count grows — but the per-contract percentage never changes.</p>
             </article>
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Earned Leverage</p>
@@ -1022,6 +1022,6 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260527d"></script>
+<script src="js/script.js?v=20260527e"></script>
 </body>
 </html>
