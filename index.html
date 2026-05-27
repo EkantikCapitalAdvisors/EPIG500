@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260527b">
+    <link rel="stylesheet" href="css/style.css?v=20260527c">
 
     <script type="application/ld+json">
     {
@@ -281,47 +281,134 @@
             </article>
         </div>
 
-        <!-- Section break + scenario chart heading -->
+        <!-- Section break + aspirational equity curve -->
         <header class="section__header" style="margin-top: var(--s-12); margin-bottom: var(--s-4);">
-            <p class="eyebrow"><span class="diamond">◆</span> The mechanism · three scenarios</p>
-            <h3 class="section__h section__h--mid">What the engine does over 12 months</h3>
-            <p class="section__sub">Three illustrative paths under the cadence above. <strong>Cooperative</strong> = full scaling 1 → 4 /ES. <strong>Realistic</strong> = mid-year switch to 2 /ES. <strong>Floor</strong> = 1 /ES throughout. All three include the 60-day buffer up front. Hard constraint across all scenarios: trailing floor at HWM − 5% NLV (never lose more than 5% of total portfolio from any peak).</p>
+            <p class="eyebrow"><span class="diamond">◆</span> What 12 months might look like</p>
+            <h3 class="section__h section__h--mid">Aspirational equity curve · engine + SPY overlay</h3>
+            <p class="section__sub">One illustrative path under the cadence above. <strong>Engine contributes +26% on total NLV</strong> via gradual scaling 1 → 4 /ES as the profit buffer compounds. <strong>SPY foundation</strong> (90% × 10%/yr historical) adds +9%. <strong>Combined target: +35% NLV.</strong> Hard constraint: trailing floor at HWM − 5% NLV (never lose more than 5% of total portfolio from any peak).</p>
         </header>
 
-        <!-- Scenario toggle -->
-        <div class="scenario-toggle" role="tablist" aria-label="Ladder scenario">
-            <button class="scenario-toggle__btn" data-scenario="cooperative" role="tab" aria-selected="false">Cooperative</button>
-            <button class="scenario-toggle__btn is-active" data-scenario="realistic" role="tab" aria-selected="true">Realistic</button>
-            <button class="scenario-toggle__btn" data-scenario="floor" role="tab" aria-selected="false">Floor</button>
-        </div>
-        <p class="scenario-outcome" id="scenarioOutcome">Realistic — published reference cadence applied unmodified. Most likely terrain.</p>
-
-        <!-- Compounding Ladder — staircase visualization + summary + acceleration -->
-        <div class="cl-chart" id="ladderChart">
-            <!-- Headline metric strip — the answer first -->
-            <div class="cl-hero" id="cl-hero"><!-- rendered by JS --></div>
-
-            <!-- Staircase: time on X, contracts active on Y -->
-            <div class="cl-stairs">
-                <p class="cl-axis-y-label">Portfolio NLV ($K)</p>
-                <svg id="cl-stairs-svg" viewBox="0 0 1100 400" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Portfolio composition: SPY foundation + cash buffer + engine overlay over 12 months">
-                    <!-- rendered by JS -->
-                </svg>
-                <p class="cl-axis-x-label">Months from launch · 0 → 12</p>
+        <div class="eq-section">
+            <div class="eq-legend">
+                <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: #1B2A4A;"></span> Engine contribution · % of total NLV · stair-step, sized up by buffer</span>
+                <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: #5B7CA8;"></span> SPY foundation · 90% × 10%/yr = +9% NLV</span>
+                <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: repeating-linear-gradient(90deg, var(--signal) 0 6px, transparent 6px 10px);"></span> Trailing floor (HWM − 5% NLV)</span>
+                <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: var(--gold); border-radius: 50%; width: 10px; height: 10px;"></span> Position scale-up</span>
             </div>
 
-            <!-- Three summary cards -->
-            <div class="cl-summary" id="cl-summary"><!-- rendered by JS --></div>
+            <svg class="eq-svg" viewBox="0 0 1100 480" role="img" aria-label="Aspirational equity curve over 12 months: engine contributes +26% NLV via 1 to 4 ES scaling, SPY foundation +9% NLV, combined +35% NLV, trailing floor HWM minus 5% NLV">
+                <defs>
+                    <linearGradient id="rmProfitGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#C8A951" stop-opacity="0.5"/>
+                        <stop offset="100%" stop-color="#C8A951" stop-opacity="0.05"/>
+                    </linearGradient>
+                    <linearGradient id="rmSpyGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5B7CA8" stop-opacity="0.25"/>
+                        <stop offset="100%" stop-color="#5B7CA8" stop-opacity="0.04"/>
+                    </linearGradient>
+                </defs>
 
-            <!-- Time-between-steps acceleration bars -->
-            <div class="cl-accel">
-                <div class="cl-accel__head">
-                    <h3 class="cl-accel__h">Time at each contract level</h3>
-                    <p class="cl-accel__sub">The year breaks into the 60-day buffer plus one or two trading segments at fixed contract counts. No fractional scaling. No more than 4 /ES at any point.</p>
-                </div>
-                <div class="cl-accel__bars" id="cl-accel-bars"><!-- rendered by JS --></div>
+                <g font-family="Source Sans 3" font-size="11" fill="#64748B">
+                    <line x1="80" y1="60"  x2="1020" y2="60"  stroke="rgba(27,42,74,0.06)"/><text x="68" y="64" text-anchor="end">+40%</text>
+                    <line x1="80" y1="98"  x2="1020" y2="98"  stroke="rgba(27,42,74,0.06)"/><text x="68" y="102" text-anchor="end">+35%</text>
+                    <line x1="80" y1="135" x2="1020" y2="135" stroke="rgba(27,42,74,0.06)"/><text x="68" y="139" text-anchor="end">+30%</text>
+                    <line x1="80" y1="173" x2="1020" y2="173" stroke="rgba(27,42,74,0.06)"/><text x="68" y="177" text-anchor="end">+25%</text>
+                    <line x1="80" y1="210" x2="1020" y2="210" stroke="rgba(27,42,74,0.06)"/><text x="68" y="214" text-anchor="end">+20%</text>
+                    <line x1="80" y1="248" x2="1020" y2="248" stroke="rgba(27,42,74,0.06)"/><text x="68" y="252" text-anchor="end">+15%</text>
+                    <line x1="80" y1="285" x2="1020" y2="285" stroke="rgba(27,42,74,0.06)"/><text x="68" y="289" text-anchor="end">+10%</text>
+                    <line x1="80" y1="323" x2="1020" y2="323" stroke="rgba(27,42,74,0.06)"/><text x="68" y="327" text-anchor="end">+5%</text>
+                    <line x1="80" y1="360" x2="1020" y2="360" stroke="#1B2A4A" stroke-opacity="0.4" stroke-dasharray="4 4"/><text x="68" y="364" text-anchor="end" font-weight="600">0% start</text>
+                    <line x1="80" y1="398" x2="1020" y2="398" stroke="rgba(220,38,38,0.3)" stroke-dasharray="3 3"/><text x="68" y="402" text-anchor="end" fill="#DC2626">−5% NLV</text>
+                </g>
+
+                <g font-family="Source Sans 3" font-size="11" fill="#64748B">
+                    <line x1="80" y1="420" x2="1020" y2="420" stroke="rgba(27,42,74,0.2)"/>
+                    <text x="80"   y="440" text-anchor="middle">0 mo</text>
+                    <text x="237"  y="440" text-anchor="middle">2</text>
+                    <text x="393"  y="440" text-anchor="middle">4</text>
+                    <text x="550"  y="440" text-anchor="middle">6</text>
+                    <text x="707"  y="440" text-anchor="middle">8</text>
+                    <text x="863"  y="440" text-anchor="middle">10</text>
+                    <text x="1020" y="440" text-anchor="middle">12</text>
+                </g>
+
+                <!-- SPY foundation overlay -->
+                <path d="M 80,360 Q 200,358 237,355 Q 350,348 393,344 Q 470,335 550,325 Q 650,313 707,304 Q 800,287 863,275 Q 950,256 1020,247 L 1020,420 L 80,420 Z" fill="url(#rmSpyGrad)"/>
+                <path d="M 80,360 Q 200,358 237,355 Q 350,348 393,344 Q 470,335 550,325 Q 650,313 707,304 Q 800,287 863,275 Q 950,256 1020,247" fill="none" stroke="#5B7CA8" stroke-width="1.8"/>
+
+                <!-- Engine curve · stair-step 0% → +26% NLV with 4-contract cap (1 → 2 → 3 → 4)
+                     Phases: pos 1 (mo 2–5, reach +3%), pos 2 (mo 5–7, reach +8%), pos 3 (mo 7–9, reach +14%), pos 4 (mo 9–12, reach +26%)
+                     Y scale: yAt(v) = 360 - v×7.5. 0%=360, 3%=338, 8%=300, 14%=255, 20%=210, 26%=165 -->
+                <path d="M 80,360 L 105,363 L 130,357 L 160,360 L 195,353 L 230,355 L 260,348 L 285,350 L 315,341 L 345,344 L 393,330 L 425,333 L 460,323 L 495,326 L 545,308 L 580,311 L 615,294 L 650,297 L 700,270 L 730,273 L 760,251 L 795,254 L 863,225 L 895,229 L 925,209 L 960,213 L 990,188 L 1020,165 L 1020,420 L 80,420 Z" fill="url(#rmProfitGrad)"/>
+                <path d="M 80,360 L 105,363 L 130,357 L 160,360 L 195,353 L 230,355 L 260,348 L 285,350 L 315,341 L 345,344 L 393,330 L 425,333 L 460,323 L 495,326 L 545,308 L 580,311 L 615,294 L 650,297 L 700,270 L 730,273 L 760,251 L 795,254 L 863,225 L 895,229 L 925,209 L 960,213 L 990,188 L 1020,165" fill="none" stroke="#1B2A4A" stroke-width="2.4" stroke-linejoin="round"/>
+
+                <!-- Trailing floor — HWM minus 5% NLV, ratchets up with each new peak -->
+                <path d="M 80,398 L 195,398 L 195,386 L 285,386 L 285,379 L 393,379 L 393,368 L 545,368 L 545,353 L 700,353 L 700,338 L 863,338 L 863,315 L 1020,266" fill="none" stroke="#DC2626" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.85"/>
+
+                <!-- Position scale-up dots at 1 → 2 → 3 → 4 (gold) -->
+                <circle cx="393" cy="330" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>
+                <circle cx="545" cy="308" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>
+                <circle cx="700" cy="270" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>
+
+                <g font-family="Source Sans 3" font-size="10" fill="#A88A38" font-weight="700">
+                    <text x="200" y="345" text-anchor="middle">pos: 1</text>
+                    <text x="395" y="320" text-anchor="middle">↑ 2</text>
+                    <text x="547" y="298" text-anchor="middle">↑ 3</text>
+                    <text x="702" y="260" text-anchor="middle">↑ 4 /ES (cap)</text>
+                </g>
+
+                <g font-family="Source Sans 3" font-size="10" fill="#5B7CA8" font-weight="700"><text x="940" y="265" text-anchor="end">SPY foundation · +9% NLV</text></g>
+                <g font-family="Source Sans 3" font-size="10" fill="#DC2626" font-weight="700"><text x="1020" y="282" text-anchor="end">↗ floor: HWM − 5% NLV</text></g>
+
+                <!-- Year-end engine callout -->
+                <rect x="880" y="60" width="140" height="56" rx="4" fill="#1B2A4A"/>
+                <text x="950" y="78" text-anchor="middle" font-size="10" font-weight="700" fill="#C8A951" font-family="Source Sans 3" letter-spacing="1">YEAR-END · ENGINE</text>
+                <text x="950" y="98" text-anchor="middle" font-size="20" font-weight="700" fill="white" font-family="Source Sans 3">+26% NLV</text>
+                <text x="950" y="112" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="Source Sans 3">theoretical target</text>
+
+                <!-- Combined NLV callout -->
+                <rect x="880" y="124" width="140" height="50" rx="4" fill="#C8A951"/>
+                <text x="950" y="142" text-anchor="middle" font-size="10" font-weight="700" fill="#1B2A4A" font-family="Source Sans 3" letter-spacing="1">COMBINED · NLV</text>
+                <text x="950" y="162" text-anchor="middle" font-size="18" font-weight="700" fill="#1B2A4A" font-family="Source Sans 3">+35%</text>
+
+                <text x="90" y="40" font-family="Source Sans 3" font-size="11" font-weight="600" fill="#1B2A4A" letter-spacing="1">RETURN % OF TOTAL NLV · engine (navy) + SPY (slate)</text>
+            </svg>
+
+            <div class="eq-callout">
+                <div class="eq-callout__item"><p class="eq-callout__label">Engine contribution</p><p class="eq-callout__value">+26% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">target · full-portfolio margin</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">SPY foundation</p><p class="eq-callout__value">+9% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">90% × 10%/yr historical</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Combined target</p><p class="eq-callout__value">+35% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">engine + SPY, stacked</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Hard constraint</p><p class="eq-callout__value">−5% NLV max<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">from any high-water mark</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Position scaling</p><p class="eq-callout__value">1 → 4 /ES<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">earned by profit buffer · cap at 4</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Per-trade risk</p><p class="eq-callout__value">0.5% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">SPY-collateralized · full portfolio</span></p></div>
             </div>
         </div>
+
+        <!-- Tangible kill conditions rail: all 8 ED conditions as named chips -->
+        <div class="cl-kills">
+            <div class="cl-kills__head">
+                <p class="cl-kills__h">↑ All eight kill conditions are armed at every step</p>
+                <p class="cl-kills__sub">Hover or tap any chip to reveal its trigger. The ladder halts when any one fires — regardless of which step has been reached.</p>
+            </div>
+            <div class="cl-kills__chips" id="cl-kills-chips"><!-- 8 chips rendered by JS --></div>
+        </div>
+
+        <div class="three-col">
+            <article class="explainer">
+                <p class="eyebrow"><span class="diamond">◆</span> Disciplined Risk</p>
+                <p>Risk per trade stays anchored at approximately 0.5% of <em>total NLV</em>. At every step. The dollar amount grows because the capital base grows. The percentage never escalates.</p>
+            </article>
+            <article class="explainer">
+                <p class="eyebrow"><span class="diamond">◆</span> Earned Leverage</p>
+                <p>Position size increases only when verified profits compound the base. The second contract is paid for by the first. Scale is <em>earned</em> — never borrowed, never assumed.</p>
+            </article>
+            <article class="explainer">
+                <p class="eyebrow"><span class="diamond">◆</span> Velocity Compounds</p>
+                <p>Each step shortens the time to the next as throughput grows linearly with contract count. By the 4-/ES ceiling, the engine is doing the heavy lifting and dollar outcomes climb non-linearly.</p>
+            </article>
+        </div>
+
+        <p class="compliance">Aspirational and illustrative. Architectural note: the 10% cash sleeve absorbs futures settlement; the 90% SPY position serves as portfolio-margin collateral, so the engine sizes against <strong>total NLV</strong> at 0.5% per trade. Headline targets (+26% engine NLV, +9% SPY NLV, +35% combined) are targets, not forecasts. <strong>SPY assumption:</strong> 90% × 10% annualized — the rough 20-year historical S&amp;P average. <strong>Engine throughput:</strong> ~$1,480/month/ES, derived from the 227-trade reference dataset. The trailing floor at HWM − 5% NLV ratchets up with every new peak, but markets can gap and slip; nothing on this page is a guarantee. Only 6 post-restart trades exist on the live record so far — a statistically meaningful track record on this exact framework will take many more closed trades to accumulate.</p>
 
         <!-- Tangible kill conditions rail: all 8 ED conditions as named chips -->
         <div class="cl-kills">
@@ -347,20 +434,6 @@
             </article>
         </div>
 
-        <!-- Cadence breakdown: dynamic table reflecting the current scenario -->
-        <div class="cadence">
-            <h3 class="cadence__h">Year breakdown (current scenario)</h3>
-            <p class="cadence__sub">The buffer is mandatory across all three scenarios. The scaling segment(s) below depend on which path you've selected. No row is generated for contract levels you never reach.</p>
-            <div class="cadence__table-wrap">
-                <table class="cadence__table">
-                    <thead>
-                        <tr><th>Window</th><th>Engine</th><th>SPY contribution</th><th>Engine contribution</th></tr>
-                    </thead>
-                    <tbody id="cl-cadence-tbody"><!-- rendered by JS --></tbody>
-                </table>
-            </div>
-            <p class="compliance">Hypothetical and illustrative. <strong>SPY assumption:</strong> the 90% foundation is modeled at 10% annualized — the rough 20-year historical average of the S&amp;P 500 total return. Future SPY performance may be higher, lower, or negative; this is not a forecast. <strong>Engine throughput:</strong> ~$1,480/month/ES, derived from the 227-trade reference dataset (+$26,662.50 per /ES ÷ 18 calendar months, Apr 2023 – Oct 2024). Calendar-month average, not active-day extrapolation. Real markets introduce friction, regime changes, and stand-down events that may materially extend or prevent this trajectory. The Falsifiability Gate supersedes all ladder logic — if rolling-100 expectancy crosses zero, or any of the eight Stage-2 kill conditions fire, the engine halts regardless of which level has been reached.</p>
-        </div>
     </div>
 </section>
 
@@ -949,6 +1022,6 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260527b"></script>
+<script src="js/script.js?v=20260527c"></script>
 </body>
 </html>
