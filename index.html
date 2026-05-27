@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260524g">
+    <link rel="stylesheet" href="css/style.css?v=20260527b">
 
     <script type="application/ld+json">
     {
@@ -206,13 +206,86 @@
     </div>
 </section>
 
-<!-- ============ 3. THE COMPOUNDING LADDER ============ -->
+
+<!-- ============ 3. COMPOUNDING LADDER + RISK MANAGEMENT CADENCE ============ -->
 <section class="section section--white" id="ladder">
     <div class="container">
         <header class="section__header section__header--center">
-            <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Mechanism</p>
+            <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Mechanism + The Discipline</p>
             <h2 class="section__h section__h--lg">The Compounding Ladder</h2>
-            <p class="section__sub">Starting at <strong>$100K NLV</strong> — <strong>90% SPY foundation + 10% cash buffer</strong>. SPY compounds at the 20-year S&amp;P historical average (~10%/yr) throughout. The /ES engine sits on top: 60-day no-trading buffer, then 1 /ES with one of three scaling paths capped at <strong>4 /ES maximum</strong>. Risk anchored at 0.5% of total NLV.</p>
+            <p class="section__sub">Starting at <strong>$100K NLV</strong> — <strong>90% SPY foundation + 10% cash buffer</strong>. SPY (which doubles as portfolio-margin collateral) compounds at the 20-year S&amp;P historical average (~10%/yr) throughout. The /ES engine sits on top, sized at 0.5% of total NLV per trade, with scaling capped at <strong>4 /ES maximum</strong>. Three scenarios shown below. The cadence rules that bound drawdown are listed first — they govern the engine whichever scenario plays out.</p>
+        </header>
+
+        <!-- Theoretical disclaimer banner — leading so investors can't miss it -->
+        <div class="theoretical-banner">
+            <p class="theoretical-banner__h"><span class="diamond">◆</span> Theoretical · 6 pre-registration trades to date</p>
+            <p class="theoretical-banner__body">The cadence rules, position-scaling logic, and target returns shown below are <strong>design intent</strong> — engineered, not yet demonstrated. The reference dataset (227 trades, Apr 2023 – Oct 2024) supports the underlying methodology; the rules below extend it. <strong>Only 6 post-restart trades exist on the live record so far.</strong> A statistically meaningful track record on this exact framework will take many more closed trades to accumulate. Pre-registration participants will see every trade as it happens; nothing on this page constitutes a forecast or guarantee.</p>
+        </div>
+
+        <!-- Three-panel risk-management cadence -->
+        <header class="section__header" style="margin-top: var(--s-12); margin-bottom: var(--s-4);">
+            <p class="eyebrow"><span class="diamond">◆</span> Risk Management Cadence · governs the engine</p>
+            <h3 class="section__h section__h--mid">The discipline that bounds drawdown</h3>
+        </header>
+        <div class="rm-grid">
+
+            <article class="rm-card rm-card--gold">
+                <span class="rm-card__cadence">Daily</span>
+                <h3 class="rm-card__h">One day, one shot</h3>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-02</span> One-loss daily rule</p>
+                    <p class="rm-rule__body">After any closed losing trade, no further entries that session. The day ends on the first loss — regardless of setup quality, conviction, or remaining time.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-03</span> Trailing daily cap <em class="rm-new">v1.2</em></p>
+                    <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. Starts at <strong>−0.5% of NLV</strong> (one trade's worth of risk) and <strong>ratchets up</strong> as accumulated profit creates buffer. Replaces the v1.0 fixed −12 ES pts cap.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">·</span> Auto-resume</p>
+                    <p class="rm-rule__body">Engine resumes at standard sizing on the <strong>next trading session</strong>. No witness review required for an isolated daily-cap event.</p>
+                </div>
+            </article>
+
+            <article class="rm-card">
+                <span class="rm-card__cadence">Weekly</span>
+                <h3 class="rm-card__h">Two strikes, sit down</h3>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-05</span> Weekly sit-down trigger <em class="rm-new">v1.2</em></p>
+                    <p class="rm-rule__body"><strong>2–3 consecutive losing days within a single week</strong> halts trading for the remainder of that week. Engine resumes Monday with standard sizing pending witness review.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">·</span> Witness audit</p>
+                    <p class="rm-rule__body">Witness reviews the loss cluster during the sit-down: process breach (H2) or variance (H3)? Trade attribution log filed within 48 hours.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">·</span> Logged, not killed</p>
+                    <p class="rm-rule__body">A single weekly sit-down is a Tier-1 event — logged in the Discord journal, investor disclosure within 7 days. No size reduction yet.</p>
+                </div>
+            </article>
+
+            <article class="rm-card rm-card--signal">
+                <span class="rm-card__cadence">Bi-weekly · Recovery</span>
+                <h3 class="rm-card__h">Two losing weeks → reduce</h3>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-06</span> Size reduction <em class="rm-new">v1.2</em></p>
+                    <p class="rm-rule__body"><strong>2nd consecutive losing week</strong> → engine sizing cuts to <strong>1/5 of normal</strong> (e.g. 1 /MES instead of 1 /ES). Daily filing under witness oversight for the duration.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-07</span> Reinstatement <em class="rm-new">v1.2</em></p>
+                    <p class="rm-rule__body">Standard sizing reinstates only after <strong>5 good trades</strong> at reduced size — defined as 5 closed trades with no OP breach and net positive P&amp;L. Witness countersignature on resumption.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">·</span> Escalation</p>
+                    <p class="rm-rule__body">If reduced-size window produces a 3rd consecutive losing week, escalates to Stage-1 Tier-2 cessation. Stage-2 (Edge Gate) is independent and may fire at any time.</p>
+                </div>
+            </article>
+        </div>
+
+        <!-- Section break + scenario chart heading -->
+        <header class="section__header" style="margin-top: var(--s-12); margin-bottom: var(--s-4);">
+            <p class="eyebrow"><span class="diamond">◆</span> The mechanism · three scenarios</p>
+            <h3 class="section__h section__h--mid">What the engine does over 12 months</h3>
+            <p class="section__sub">Three illustrative paths under the cadence above. <strong>Cooperative</strong> = full scaling 1 → 4 /ES. <strong>Realistic</strong> = mid-year switch to 2 /ES. <strong>Floor</strong> = 1 /ES throughout. All three include the 60-day buffer up front. Hard constraint across all scenarios: trailing floor at HWM − 5% NLV (never lose more than 5% of total portfolio from any peak).</p>
         </header>
 
         <!-- Scenario toggle -->
@@ -527,7 +600,7 @@
                     <p class="period__range">May 2026 → product launch</p>
                 </div>
                 <p class="period__h">Pre-registration live publication</p>
-                <p class="period__body">Every trade on the restarted strategy published to the live dashboard within 24 hours of close. Tagged H2 or H3 per OP-04. Witnessed per the locked Falsifiability Protocol v1.1. By product launch, pre-registrants see the 227 historical trades plus every pre-registration trade — all on the same, witnessed methodology.</p>
+                <p class="period__body">Every trade on the restarted strategy published to the live dashboard within 24 hours of close. Tagged H2 or H3 per OP-04. Witnessed per the locked Falsifiability Protocol v1.2. By product launch, pre-registrants see the 227 historical trades plus every pre-registration trade — all on the same, witnessed methodology.</p>
                 <div class="period__actions">
                     <a href="/dashboard.html" target="_blank" rel="noopener" class="btn btn--primary btn--sm">Open live dashboard ↗</a>
                 </div>
@@ -555,8 +628,8 @@
         <!-- Locked operational charter — published as pre-commitment artifact -->
         <div class="protocol-card">
             <div class="protocol-card__meta">
-                <p class="protocol-card__doc">Doc Ref: <code>FP-MOPS-V1.1-2026-05</code></p>
-                <p class="protocol-card__version">v1.1 · ED-05 split into warning + hard kill, bootstrap-derived · Locked operational charter</p>
+                <p class="protocol-card__doc">Doc Ref: <code>FP-MOPS-V1.2-2026-05</code></p>
+                <p class="protocol-card__version">v1.2 · Cadence rules (OP-03 trailing · OP-05/06/07) + ED-05 split · Locked operational charter</p>
             </div>
             <div class="protocol-card__body">
                 <p class="protocol-card__h"><span class="diamond">◆</span> The Falsifiability Protocol</p>
@@ -866,7 +939,7 @@
                     <li><a href="#">Terms of Use</a></li>
                     <li><a href="#">Marketing Disclosures</a></li>
                     <li><a href="#">Mission Vow &amp; Structure</a></li>
-                    <li><a href="/falsifiability-protocol.html">Falsifiability Protocol v1.1</a></li>
+                    <li><a href="/falsifiability-protocol.html">Falsifiability Protocol v1.2</a></li>
                 </ul>
             </div>
         </div>
@@ -876,6 +949,6 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260524g"></script>
+<script src="js/script.js?v=20260527b"></script>
 </body>
 </html>
