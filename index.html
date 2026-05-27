@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260527e">
+    <link rel="stylesheet" href="css/style.css?v=20260527f">
 
     <script type="application/ld+json">
     {
@@ -54,7 +54,6 @@
             <a href="#how">How It Works</a>
             <a href="#ladder">The Ladder</a>
             <a href="#battery">The Proof</a>
-            <a href="#reference">Dataset</a>
             <a href="#continuity">Continuity</a>
             <a href="#falsifiability">Falsifiability</a>
             <a href="#founding">Founding</a>
@@ -71,7 +70,7 @@
         <a href="#how">How It Works</a>
         <a href="#ladder">The Ladder</a>
         <a href="#battery">The Proof</a>
-        <a href="#reference">Dataset</a>
+        <a href="/dashboard.html">Live Dashboard</a>
         <a href="#falsifiability">Falsifiability</a>
         <a href="#founding">Founding</a>
         <a href="#faq">FAQ</a>
@@ -110,10 +109,10 @@
                     <p class="proof-tile__value">8 / 8 PASS</p>
                     <p class="proof-tile__anchor">◆ See the live battery →</p>
                 </a>
-                <a href="#reference" class="proof-tile">
-                    <p class="proof-tile__label">Reference sample</p>
-                    <p class="proof-tile__value">227 trades · 18 months</p>
-                    <p class="proof-tile__anchor">◆ Audit the dataset →</p>
+                <a href="/dashboard.html" target="_blank" rel="noopener" class="proof-tile">
+                    <p class="proof-tile__label">Reference + live record</p>
+                    <p class="proof-tile__value">227 + N trades</p>
+                    <p class="proof-tile__anchor">◆ Open the dashboard ↗</p>
                 </a>
                 <a href="#falsifiability" class="proof-tile">
                     <p class="proof-tile__label">Live falsifiability</p>
@@ -582,57 +581,6 @@
     </div>
 </section>
 
-<!-- ============ 7. REFERENCE DATASET ============ -->
-<section class="section section--white" id="reference">
-    <div class="container">
-        <header class="section__header">
-            <p class="eyebrow"><span class="diamond">◆</span> The Source</p>
-            <h2 class="section__h">The Reference Dataset — 227 Trades, Apr 2023 – Oct 2024.</h2>
-            <p class="section__sub">The historical operator record from which the strategy's edge was derived. The dataset against which the 8-Test Battery returns 8/8 PASS.</p>
-        </header>
-
-        <div class="ref-stats">
-            <div class="ref-stat"><p class="ref-stat__label">Trades</p><p class="ref-stat__value">227</p></div>
-            <div class="ref-stat"><p class="ref-stat__label">Win Rate</p><p class="ref-stat__value">60.3%</p></div>
-            <div class="ref-stat"><p class="ref-stat__label">EV / trade</p><p class="ref-stat__value">+2.38 pts</p></div>
-            <div class="ref-stat"><p class="ref-stat__label">Profit Factor</p><p class="ref-stat__value">1.99</p></div>
-            <div class="ref-stat"><p class="ref-stat__label">Max DD</p><p class="ref-stat__value">−29.0 pts</p></div>
-            <div class="ref-stat"><p class="ref-stat__label">Date Range</p><p class="ref-stat__value">Apr '23 – Oct '24</p></div>
-        </div>
-
-        <div class="ref-detail-grid">
-            <div class="ref-detail">
-                <h3 class="ref-detail__h">Detailed summary</h3>
-                <dl class="ref-detail__list">
-                    <div><dt>Sample size</dt><dd>227 closed trades</dd></div>
-                    <div><dt>Trading days observed</dt><dd>96 days</dd></div>
-                    <div><dt>Win rate</dt><dd>60.3% (135 W / 89 L / 3 BE)</dd></div>
-                    <div><dt>Average win</dt><dd>+7.96 pts (+$397.80 per /ES)</dd></div>
-                    <div><dt>Average loss</dt><dd>−6.08 pts (−$303.80 per /ES)</dd></div>
-                    <div><dt>Win:Loss ratio</dt><dd>1.31</dd></div>
-                    <div><dt>EV per trade</dt><dd>+2.38 pts (+$119.00 per /ES)</dd></div>
-                    <div><dt>Profit factor</dt><dd>1.99</dd></div>
-                    <div><dt>Total P&amp;L</dt><dd>+533.25 pts (+$26,662.50 per /ES)</dd></div>
-                    <div><dt>Max DD (unrestricted)</dt><dd>−37.5 pts</dd></div>
-                    <div><dt>Max DD (with v2 falsifiability)</dt><dd>−29.0 pts</dd></div>
-                </dl>
-            </div>
-
-            <div class="ref-chart">
-                <h3 class="ref-detail__h">Equity curve</h3>
-                <canvas id="equityCurve" width="600" height="280" aria-label="Cumulative equity curve of the 227-trade reference dataset"></canvas>
-                <p class="ref-chart__caption">Cumulative P&amp;L in /ES points across 227 closed trades, Apr 2023 – Oct 2024.</p>
-            </div>
-        </div>
-
-        <div class="ref-actions">
-            <button class="btn btn--primary" id="downloadCleanCsv">Download CSV (clean)</button>
-            <button class="btn btn--secondary" id="downloadMaeMfeCsv">Download CSV (with MAE/MFE)</button>
-            <a href="#battery" class="btn btn--secondary">◆ Run the battery on this dataset →</a>
-        </div>
-        <p class="compliance">The reference dataset is presented as the source of record for the 8-Test Battery's reference verdict. Computed from the reference dataset; sample is pre-asymptotic at this size; realized EV in any future live period may differ materially.</p>
-    </div>
-</section>
 
 <!-- ============ SIGNAL CONTINUITY ============ -->
 <section class="section section--ivory" id="continuity">
@@ -898,7 +846,7 @@
             <details class="faq__item"><summary>How does the methodology treat an investor's SPY position?</summary><div class="faq__body"><p>Inside the proposed sub-account, the SPY allocation serves two purposes: ongoing market exposure (dividends and capital appreciation) and margin collateral for the active sleeve. The methodology does not trade SPY — it sits passively while the futures overlay operates against it.</p></div></details>
             <details class="faq__item"><summary>What is the proposed fee structure?</summary><div class="faq__body"><p>The structure documented for launch: 6% high-watermark hurdle plus 25% of profits above that hurdle. In any period where the strategy delivers less than 6%, no performance fee would be charged. The hurdle resets annually to the peak.</p></div></details>
             <details class="faq__item"><summary>How would an investor know if the strategy has stopped working?</summary><div class="faq__body"><p>Ekantik 500 publishes two falsifiability gates — both binding, both observable in real time. The Fidelity Layer (four operator-discipline criteria) and the Expression Layer (eight statistical kill conditions) define exactly when the strategy stops. If any gate fires, participants would receive notification within 24 hours, the active engine would immediately reduce to zero new exposure, and the trigger condition would be published.</p></div></details>
-            <details class="faq__item"><summary>Can I see the underlying trade record?</summary><div class="faq__body"><p>Yes. The reference dataset — 227 closed trades from April 2023 through October 2024 — is downloadable as a CSV from the Reference Dataset section. The same battery you can run on this data, you can run on your own.</p></div></details>
+            <details class="faq__item"><summary>Can I see the underlying trade record?</summary><div class="faq__body"><p>Yes. The reference dataset — 227 closed trades from April 2023 through October 2024 — plus every pre-registration trade since the May 2026 restart, is published on the <a href="/dashboard.html">live dashboard</a> and exportable as CSV from there. The same battery you can run on this data, you can run on your own.</p></div></details>
             <details class="faq__item"><summary>Why does the reference dataset end in October 2024? What happened between then and the May 2026 restart?</summary><div class="faq__body"><p>During the Nov 2024 – Apr 2026 window, the operator suspended the Majority Opinion Predisposal Strategy entirely and shifted full focus to developing a separate scalping methodology — the Ekantik Accelerator — publicly demonstrated at <a href="https://accelerator.ekantikcapital.com/" target="_blank" rel="noopener">accelerator.ekantikcapital.com</a>. <strong>No trades exist for that 18-month window.</strong> We do not backfill, infer, or estimate the gap; it is named as a gap. Two things bridge it for pre-registrants: (1) the Accelerator work is publicly verifiable evidence of where the operator's time went; (2) every trade on the restarted strategy is published to the live dashboard within 24 hours of close during pre-registration, witnessed and tagged per the locked Falsifiability Protocol. By product launch, pre-registrants will have seen a continuous live record from restart forward — the original 227 historical trades plus every pre-registration trade, on the same methodology.</p></div></details>
             <details class="faq__item"><summary>What is the difference between the methodology development and the reference dataset?</summary><div class="faq__body"><p>The methodology represents 12+ years of development and refinement. The reference dataset is the operator's actual live trading record on the matured methodology over 18 months, showing real-world execution against the design. The methodology answers "is the architecture sound in principle?"; the reference dataset answers "does the operator execute the architecture in practice?"</p></div></details>
             <details class="faq__item"><summary>Will there be a lock-up at launch?</summary><div class="faq__body"><p>The proposed structure: no lock-up. Capital would be withdrawable at any time subject to ordinary settlement timelines at the custodian.</p></div></details>
@@ -1022,6 +970,6 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260527e"></script>
+<script src="js/script.js?v=20260527f"></script>
 </body>
 </html>
