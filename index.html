@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260524g">
+    <link rel="stylesheet" href="css/style.css?v=20260527a">
 
     <script type="application/ld+json">
     {
@@ -52,6 +52,7 @@
         </a>
         <nav class="nav__links" aria-label="Primary">
             <a href="#how">How It Works</a>
+            <a href="#risk-management">Risk Cadence</a>
             <a href="#ladder">The Ladder</a>
             <a href="#battery">The Proof</a>
             <a href="#reference">Dataset</a>
@@ -69,6 +70,7 @@
     </div>
     <div class="nav__mobile" id="navMobile">
         <a href="#how">How It Works</a>
+        <a href="#risk-management">Risk Cadence</a>
         <a href="#ladder">The Ladder</a>
         <a href="#battery">The Proof</a>
         <a href="#reference">Dataset</a>
@@ -202,6 +204,177 @@
                     <li><h3>No lock-up (proposed)</h3><p>Capital will be withdrawable at any time subject to ordinary broker settlement timelines.</p></li>
                 </ol>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ RISK MANAGEMENT CADENCE + ASPIRATIONAL RETURNS ============ -->
+<section class="section section--white" id="risk-management">
+    <div class="container">
+        <header class="section__header section__header--center">
+            <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> Risk Management Cadence · Theoretical Design</p>
+            <h2 class="section__h section__h--lg">The discipline that bounds drawdown</h2>
+            <p class="section__sub">Three timeframes of risk rules that tighten exposure as losses cluster — and a single architectural number that anchors the targets below: <strong>position sizing scales with the profit buffer the engine earns</strong>. Below: the cadence framework, then the aspirational curve it's engineered to produce.</p>
+        </header>
+
+        <!-- Theoretical disclaimer banner — leading so investors can't miss it -->
+        <div class="theoretical-banner">
+            <p class="theoretical-banner__h"><span class="diamond">◆</span> Theoretical · 6 pre-registration trades to date</p>
+            <p class="theoretical-banner__body">The cadence rules, position-scaling logic, and target returns shown below are <strong>design intent</strong> — engineered, not yet demonstrated. The reference dataset (227 trades, Apr 2023 – Oct 2024) supports the underlying methodology; the rules below extend it. <strong>Only 6 post-restart trades exist on the live record so far.</strong> A statistically meaningful track record on this exact framework will take many more closed trades to accumulate. Pre-registration participants will see every trade as it happens; nothing on this page constitutes a forecast or guarantee.</p>
+        </div>
+
+        <!-- Three-panel cadence -->
+        <div class="rm-grid">
+
+            <article class="rm-card rm-card--gold">
+                <span class="rm-card__cadence">Daily</span>
+                <h3 class="rm-card__h">One day, one shot</h3>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-02</span> One-loss daily rule</p>
+                    <p class="rm-rule__body">After any closed losing trade, no further entries that session. The day ends on the first loss — regardless of setup quality, conviction, or remaining time.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-03</span> Trailing daily cap <em class="rm-new">v1.2</em></p>
+                    <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. Starts at <strong>−0.5% of NLV</strong> (one trade's worth of risk) and <strong>ratchets up</strong> as accumulated profit creates buffer. Replaces the v1.0 fixed −12 ES pts cap.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">·</span> Auto-resume</p>
+                    <p class="rm-rule__body">Engine resumes at standard sizing on the <strong>next trading session</strong>. No witness review required for an isolated daily-cap event.</p>
+                </div>
+            </article>
+
+            <article class="rm-card">
+                <span class="rm-card__cadence">Weekly</span>
+                <h3 class="rm-card__h">Two strikes, sit down</h3>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-05</span> Weekly sit-down trigger <em class="rm-new">v1.2</em></p>
+                    <p class="rm-rule__body"><strong>2–3 consecutive losing days within a single week</strong> halts trading for the remainder of that week. Engine resumes Monday with standard sizing pending witness review.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">·</span> Witness audit</p>
+                    <p class="rm-rule__body">Witness reviews the loss cluster during the sit-down: process breach (H2) or variance (H3)? Trade attribution log filed within 48 hours.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">·</span> Logged, not killed</p>
+                    <p class="rm-rule__body">A single weekly sit-down is a Tier-1 event — logged in the Discord journal, investor disclosure within 7 days. No size reduction yet.</p>
+                </div>
+            </article>
+
+            <article class="rm-card rm-card--signal">
+                <span class="rm-card__cadence">Bi-weekly · Recovery</span>
+                <h3 class="rm-card__h">Two losing weeks → reduce</h3>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-06</span> Size reduction <em class="rm-new">v1.2</em></p>
+                    <p class="rm-rule__body"><strong>2nd consecutive losing week</strong> → engine sizing cuts to <strong>1/5 of normal</strong> (e.g. 1 /MES instead of 1 /ES). Daily filing under witness oversight for the duration.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-07</span> Reinstatement <em class="rm-new">v1.2</em></p>
+                    <p class="rm-rule__body">Standard sizing reinstates only after <strong>5 good trades</strong> at reduced size — defined as 5 closed trades with no OP breach and net positive P&amp;L. Witness countersignature on resumption.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">·</span> Escalation</p>
+                    <p class="rm-rule__body">If reduced-size window produces a 3rd consecutive losing week, escalates to Stage-1 Tier-2 cessation. Stage-2 (Edge Gate) is independent and may fire at any time.</p>
+                </div>
+            </article>
+        </div>
+
+        <!-- Aspirational equity curve -->
+        <header class="section__header" style="margin-top: var(--s-16);">
+            <p class="eyebrow"><span class="diamond">◆</span> Aspirational equity curve</p>
+            <h3 class="section__h section__h--mid">What 12 months might look like — engine on full-portfolio collateral + SPY overlay</h3>
+            <p class="section__sub">The architectural point first: the 10% cash sleeve isn't isolated risk capital. SPY (90%) serves as <strong>portfolio-margin collateral</strong> for the engine, so position sizing is anchored at <strong>0.5% of total NLV</strong> per trade. The engine therefore contributes to total NLV directly — not just to the 10% sleeve.</p>
+        </header>
+
+        <div class="eq-section">
+            <div class="eq-legend">
+                <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: #1B2A4A;"></span> Engine contribution · % of NLV · stair-step, sized up by buffer</span>
+                <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: #5B7CA8;"></span> SPY foundation · 90% × 10%/yr = +9% NLV</span>
+                <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: repeating-linear-gradient(90deg, var(--signal) 0 6px, transparent 6px 10px);"></span> Trailing floor (HWM − 5% NLV)</span>
+                <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: var(--gold); border-radius: 50%; width: 10px; height: 10px;"></span> Position scale-up</span>
+            </div>
+
+            <svg class="eq-svg" viewBox="0 0 1100 480" role="img" aria-label="Aspirational equity curve over 12 months: engine contributes +26% NLV, SPY foundation +9% NLV, combined +35% NLV, trailing floor HWM minus 5% NLV">
+                <defs>
+                    <linearGradient id="rmProfitGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#C8A951" stop-opacity="0.5"/>
+                        <stop offset="100%" stop-color="#C8A951" stop-opacity="0.05"/>
+                    </linearGradient>
+                    <linearGradient id="rmSpyGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#5B7CA8" stop-opacity="0.25"/>
+                        <stop offset="100%" stop-color="#5B7CA8" stop-opacity="0.04"/>
+                    </linearGradient>
+                </defs>
+
+                <g font-family="Source Sans 3" font-size="11" fill="#64748B">
+                    <line x1="80" y1="60"  x2="1020" y2="60"  stroke="rgba(27,42,74,0.06)"/><text x="68" y="64" text-anchor="end">+40%</text>
+                    <line x1="80" y1="98"  x2="1020" y2="98"  stroke="rgba(27,42,74,0.06)"/><text x="68" y="102" text-anchor="end">+35%</text>
+                    <line x1="80" y1="135" x2="1020" y2="135" stroke="rgba(27,42,74,0.06)"/><text x="68" y="139" text-anchor="end">+30%</text>
+                    <line x1="80" y1="173" x2="1020" y2="173" stroke="rgba(27,42,74,0.06)"/><text x="68" y="177" text-anchor="end">+25%</text>
+                    <line x1="80" y1="210" x2="1020" y2="210" stroke="rgba(27,42,74,0.06)"/><text x="68" y="214" text-anchor="end">+20%</text>
+                    <line x1="80" y1="248" x2="1020" y2="248" stroke="rgba(27,42,74,0.06)"/><text x="68" y="252" text-anchor="end">+15%</text>
+                    <line x1="80" y1="285" x2="1020" y2="285" stroke="rgba(27,42,74,0.06)"/><text x="68" y="289" text-anchor="end">+10%</text>
+                    <line x1="80" y1="323" x2="1020" y2="323" stroke="rgba(27,42,74,0.06)"/><text x="68" y="327" text-anchor="end">+5%</text>
+                    <line x1="80" y1="360" x2="1020" y2="360" stroke="#1B2A4A" stroke-opacity="0.4" stroke-dasharray="4 4"/><text x="68" y="364" text-anchor="end" font-weight="600">0% start</text>
+                    <line x1="80" y1="398" x2="1020" y2="398" stroke="rgba(220,38,38,0.3)" stroke-dasharray="3 3"/><text x="68" y="402" text-anchor="end" fill="#DC2626">−5% NLV</text>
+                </g>
+
+                <g font-family="Source Sans 3" font-size="11" fill="#64748B">
+                    <line x1="80" y1="420" x2="1020" y2="420" stroke="rgba(27,42,74,0.2)"/>
+                    <text x="80"   y="440" text-anchor="middle">0 mo</text>
+                    <text x="237"  y="440" text-anchor="middle">2</text>
+                    <text x="393"  y="440" text-anchor="middle">4</text>
+                    <text x="550"  y="440" text-anchor="middle">6</text>
+                    <text x="707"  y="440" text-anchor="middle">8</text>
+                    <text x="863"  y="440" text-anchor="middle">10</text>
+                    <text x="1020" y="440" text-anchor="middle">12</text>
+                </g>
+
+                <path d="M 80,360 Q 200,358 237,355 Q 350,348 393,344 Q 470,335 550,325 Q 650,313 707,304 Q 800,287 863,275 Q 950,256 1020,247 L 1020,420 L 80,420 Z" fill="url(#rmSpyGrad)"/>
+                <path d="M 80,360 Q 200,358 237,355 Q 350,348 393,344 Q 470,335 550,325 Q 650,313 707,304 Q 800,287 863,275 Q 950,256 1020,247" fill="none" stroke="#5B7CA8" stroke-width="1.8"/>
+
+                <path d="M 80,360 L 105,363 L 130,357 L 160,360 L 195,353 L 230,355 L 260,348 L 285,350 L 315,341 L 345,344 L 393,330 L 425,333 L 460,323 L 495,326 L 545,308 L 580,311 L 615,294 L 650,297 L 700,270 L 730,273 L 760,251 L 795,254 L 863,225 L 895,229 L 925,209 L 960,213 L 990,180 L 1020,165 L 1020,420 L 80,420 Z" fill="url(#rmProfitGrad)"/>
+                <path d="M 80,360 L 105,363 L 130,357 L 160,360 L 195,353 L 230,355 L 260,348 L 285,350 L 315,341 L 345,344 L 393,330 L 425,333 L 460,323 L 495,326 L 545,308 L 580,311 L 615,294 L 650,297 L 700,270 L 730,273 L 760,251 L 795,254 L 863,225 L 895,229 L 925,209 L 960,213 L 990,180 L 1020,165" fill="none" stroke="#1B2A4A" stroke-width="2.4" stroke-linejoin="round"/>
+
+                <path d="M 80,398 L 195,398 L 195,386 L 285,386 L 285,379 L 393,379 L 393,368 L 545,368 L 545,353 L 700,353 L 700,338 L 863,338 L 863,315 L 990,315 L 990,293 L 1020,266" fill="none" stroke="#DC2626" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.85"/>
+
+                <circle cx="393" cy="330" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>
+                <circle cx="545" cy="308" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>
+                <circle cx="700" cy="270" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>
+                <circle cx="863" cy="225" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>
+
+                <g font-family="Source Sans 3" font-size="10" fill="#A88A38" font-weight="700">
+                    <text x="200" y="345" text-anchor="middle">pos: 1</text>
+                    <text x="395" y="320" text-anchor="middle">↑ 2</text>
+                    <text x="547" y="298" text-anchor="middle">↑ 3</text>
+                    <text x="702" y="260" text-anchor="middle">↑ 4</text>
+                    <text x="865" y="215" text-anchor="middle">↑ 5</text>
+                </g>
+
+                <g font-family="Source Sans 3" font-size="10" fill="#5B7CA8" font-weight="700"><text x="940" y="265" text-anchor="end">SPY foundation · +9% NLV</text></g>
+                <g font-family="Source Sans 3" font-size="10" fill="#DC2626" font-weight="700"><text x="1020" y="282" text-anchor="end">↗ floor: HWM − 5% NLV</text></g>
+
+                <rect x="880" y="60" width="140" height="56" rx="4" fill="#1B2A4A"/>
+                <text x="950" y="78" text-anchor="middle" font-size="10" font-weight="700" fill="#C8A951" font-family="Source Sans 3" letter-spacing="1">YEAR-END · ENGINE</text>
+                <text x="950" y="98" text-anchor="middle" font-size="20" font-weight="700" fill="white" font-family="Source Sans 3">+26% NLV</text>
+                <text x="950" y="112" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="Source Sans 3">theoretical target</text>
+
+                <rect x="880" y="124" width="140" height="50" rx="4" fill="#C8A951"/>
+                <text x="950" y="142" text-anchor="middle" font-size="10" font-weight="700" fill="#1B2A4A" font-family="Source Sans 3" letter-spacing="1">COMBINED · NLV</text>
+                <text x="950" y="162" text-anchor="middle" font-size="18" font-weight="700" fill="#1B2A4A" font-family="Source Sans 3">+35%</text>
+
+                <text x="90" y="40" font-family="Source Sans 3" font-size="11" font-weight="600" fill="#1B2A4A" letter-spacing="1">RETURN % OF TOTAL NLV · engine (navy) + SPY (slate)</text>
+            </svg>
+
+            <div class="eq-callout">
+                <div class="eq-callout__item"><p class="eq-callout__label">Engine contribution</p><p class="eq-callout__value">+26% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">target · full-portfolio margin</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">SPY foundation</p><p class="eq-callout__value">+9% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">90% × 10%/yr historical</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Combined target</p><p class="eq-callout__value">+35% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">engine + SPY, stacked</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Hard constraint</p><p class="eq-callout__value">−5% NLV max<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">from any high-water mark</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Position scaling</p><p class="eq-callout__value">1 → 5 /ES<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">earned by profit buffer</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Per-trade risk</p><p class="eq-callout__value">0.5% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">SPY-collateralized · full portfolio</span></p></div>
+            </div>
+
+            <p class="compliance"><strong>Theoretical · aspirational.</strong> Only 6 post-restart trades exist on the live record so far — the cadence rules, position-scaling logic, and headline targets shown here are <em>design intent</em>, not demonstrated outcomes. Architectural note: the 10% cash sleeve absorbs futures settlement; the 90% SPY position serves as portfolio-margin collateral, so the engine sizes against total NLV at 0.5% per trade. Numbers shown (+26% engine NLV, +9% SPY NLV, +35% combined) are targets, not forecasts. The trailing floor at HWM − 5% NLV ratchets up with every new peak, but markets can gap and slip; nothing on this page is a guarantee. A statistically meaningful track record on this exact framework will take many more closed trades to accumulate.</p>
         </div>
     </div>
 </section>
@@ -527,7 +700,7 @@
                     <p class="period__range">May 2026 → product launch</p>
                 </div>
                 <p class="period__h">Pre-registration live publication</p>
-                <p class="period__body">Every trade on the restarted strategy published to the live dashboard within 24 hours of close. Tagged H2 or H3 per OP-04. Witnessed per the locked Falsifiability Protocol v1.1. By product launch, pre-registrants see the 227 historical trades plus every pre-registration trade — all on the same, witnessed methodology.</p>
+                <p class="period__body">Every trade on the restarted strategy published to the live dashboard within 24 hours of close. Tagged H2 or H3 per OP-04. Witnessed per the locked Falsifiability Protocol v1.2. By product launch, pre-registrants see the 227 historical trades plus every pre-registration trade — all on the same, witnessed methodology.</p>
                 <div class="period__actions">
                     <a href="/dashboard.html" target="_blank" rel="noopener" class="btn btn--primary btn--sm">Open live dashboard ↗</a>
                 </div>
@@ -555,8 +728,8 @@
         <!-- Locked operational charter — published as pre-commitment artifact -->
         <div class="protocol-card">
             <div class="protocol-card__meta">
-                <p class="protocol-card__doc">Doc Ref: <code>FP-MOPS-V1.1-2026-05</code></p>
-                <p class="protocol-card__version">v1.1 · ED-05 split into warning + hard kill, bootstrap-derived · Locked operational charter</p>
+                <p class="protocol-card__doc">Doc Ref: <code>FP-MOPS-V1.2-2026-05</code></p>
+                <p class="protocol-card__version">v1.2 · Cadence rules (OP-03 trailing · OP-05/06/07) + ED-05 split · Locked operational charter</p>
             </div>
             <div class="protocol-card__body">
                 <p class="protocol-card__h"><span class="diamond">◆</span> The Falsifiability Protocol</p>
@@ -866,7 +1039,7 @@
                     <li><a href="#">Terms of Use</a></li>
                     <li><a href="#">Marketing Disclosures</a></li>
                     <li><a href="#">Mission Vow &amp; Structure</a></li>
-                    <li><a href="/falsifiability-protocol.html">Falsifiability Protocol v1.1</a></li>
+                    <li><a href="/falsifiability-protocol.html">Falsifiability Protocol v1.2</a></li>
                 </ul>
             </div>
         </div>
@@ -876,6 +1049,6 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260524g"></script>
+<script src="js/script.js?v=20260527a"></script>
 </body>
 </html>

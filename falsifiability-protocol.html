@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Majority Opinion Predisposal Strategy — Falsifiability Protocol v1.1 · Ekantik Capital Advisors</title>
+<title>Majority Opinion Predisposal Strategy — Falsifiability Protocol v1.2 · Ekantik Capital Advisors</title>
 <style>
   :root {
     --navy: #1B2A4A;
@@ -254,7 +254,7 @@
   <div class="firm-tag">Ekantik Capital Advisors LLC</div>
 
   <h1 class="protocol-title">Falsifiability Protocol</h1>
-  <p class="protocol-subtitle">A pre-committed operational charter · v1.1 · Majority Opinion Predisposal Strategy</p>
+  <p class="protocol-subtitle">A pre-committed operational charter · v1.2 · Majority Opinion Predisposal Strategy</p>
 
   <p class="lead">
     Governing the Majority Opinion Predisposal Strategy on ES &amp; MES futures within the Ekantik 500 active engine. Issued by the operator. Witness-locked. Publicly disclosed. Modification subject to a 48-hour cool-off and written justification.
@@ -262,8 +262,8 @@
 
   <table class="meta">
     <tr><td>Document</td><td>Falsifiability Protocol · Locked Operational Charter</td></tr>
-    <tr><td>Version</td><td>1.1 — ED-05 drawdown ceiling split into ED-05a (warning, −45 pts) + ED-05b (hard kill, −75 pts), both derived from bootstrap analysis of the reference dataset. All other gates unchanged from v1.0.</td></tr>
-    <tr><td>Reference</td><td>FP-MOPS-V1.1-2026-05</td></tr>
+    <tr><td>Version</td><td>1.2 — Fidelity Layer expanded from four to seven criteria. OP-03 reframed as a <strong>trailing daily cap</strong> (starts at −0.5% NLV, ratchets up with profit buffer); the v1.0 fixed −12 ES point cap is retired. Added <strong>OP-05</strong> (weekly sit-down after 2–3 consecutive losing days), <strong>OP-06</strong> (bi-weekly size reduction to 1/5 after 2nd consecutive losing week), <strong>OP-07</strong> (reinstatement only after 5 good trades at reduced size, witness-countersigned). ED-05 warning/hard-kill split unchanged from v1.1. v1.0 Expression Layer (ED-01..ED-08) unchanged.</td></tr>
+    <tr><td>Reference</td><td>FP-MOPS-V1.2-2026-05</td></tr>
     <tr><td>Strategy</td><td>Majority Opinion Predisposal Strategy · ES / MES Futures</td></tr>
     <tr><td>Vehicle</td><td>Ekantik 500 · Active /ES Engine Layer</td></tr>
     <tr><td>Issuing entity</td><td>Ekantik Capital Advisors LLC · Maple Grove, MN</td></tr>
@@ -382,7 +382,7 @@
   </ul>
 
   <!-- ============== ARTICLE V — FIDELITY LAYER ============== -->
-  <h2 class="article-h"><span class="article-label">Article V</span>The Fidelity Layer — Four Criteria</h2>
+  <h2 class="article-h"><span class="article-label">Article V</span>The Fidelity Layer — Seven Criteria</h2>
 
   <p>Is the published method what is actually running? Each criterion is pre-committed, observable, binary-checkable, and time-bounded — mapping to a distinct layer of operator fidelity: substrate, intraday, structural, cognitive.</p>
 
@@ -410,15 +410,15 @@
     <strong>Verification:</strong> witness audits the daily trade log monthly; flagged trades disqualified from edge statistics and logged H2.
   </div>
 
-  <!-- OP-03 -->
-  <h3 class="crit-h"><span class="crit-label">OP-03</span>Daily −12 Point Cap</h3>
+  <!-- OP-03 (reframed in v1.2) -->
+  <h3 class="crit-h"><span class="crit-label">OP-03</span>Trailing Daily Cap <em class="gold" style="font-style: normal; font-size: 13px;">(v1.2)</em></h3>
 
   <p>
-    Cumulative same-day P&amp;L cannot reach −12 ES points. In practice this fires only as a backstop to OP-02, when the first trade of the session is a single &gt;−12 pt loss (slipped stop, gap, structural break). When the cap fires, the session closes regardless of which rule triggered.
+    Cumulative same-day P&amp;L is bounded by a <strong>trailing high-water mark</strong> floor. The floor starts at <strong>−0.5% of NLV</strong> (one trade's worth of risk at the architectural anchor) and <strong>ratchets up automatically</strong> as accumulated profit creates buffer above the prior peak. Replaces the v1.0 fixed −12 ES point cap, which did not scale with account size or with realized profit.
   </p>
 
   <div class="crit-meta">
-    <strong>Breach:</strong> any session in which cumulative P&amp;L breached −12 pts and a subsequent entry was taken.<br>
+    <strong>Breach:</strong> same-day cumulative P&amp;L pierces <code class="inline">HWM − (0.5% NLV + retained profit since prior peak)</code>.<br>
     <strong>Threshold:</strong> <span class="red">zero breaches per calendar quarter.</span><br>
     <strong>Verification:</strong> automated daily-cumulative report against the public trade log; witness reviews monthly.
   </div>
@@ -436,6 +436,45 @@
     <strong>Verification:</strong> witness audits the attribution log monthly.
   </div>
 
+  <!-- OP-05 (new in v1.2) -->
+  <h3 class="crit-h"><span class="crit-label">OP-05</span>Weekly Sit-Down Trigger <em class="gold" style="font-style: normal; font-size: 13px;">(v1.2)</em></h3>
+
+  <p>
+    <strong>2–3 consecutive losing trading days within a single calendar week</strong> triggers a mandatory sit-down for the remainder of that week. The engine resumes on the following Monday at standard sizing, pending witness review of the loss cluster. This is the bridge between the intraday discipline (OP-02 / OP-03) and the structural cessation rules (Tier 2 / Tier 3): it dampens variance clustering before it escalates.
+  </p>
+
+  <div class="crit-meta">
+    <strong>Breach:</strong> any entry placed during a triggered sit-down window before Monday resumption.<br>
+    <strong>Threshold:</strong> <span class="red">zero breaches, period.</span><br>
+    <strong>Verification:</strong> witness audits the daily trade log weekly; flagged sit-down events disclosed to investors within 7 days.
+  </div>
+
+  <!-- OP-06 (new in v1.2) -->
+  <h3 class="crit-h"><span class="crit-label">OP-06</span>Bi-Weekly Size Reduction <em class="gold" style="font-style: normal; font-size: 13px;">(v1.2)</em></h3>
+
+  <p>
+    A <strong>second consecutive losing week</strong> (where "losing week" is any week ending net-negative on closed trades) triggers an immediate sizing reduction to <strong>1/5 of normal</strong> — for example 1 /MES in place of 1 /ES. The reduction holds until OP-07 reinstatement conditions are met. Daily filings transition to witness oversight for the duration of the reduction window.
+  </p>
+
+  <div class="crit-meta">
+    <strong>Breach:</strong> any entry sized above the 1/5 reduction during an active OP-06 window.<br>
+    <strong>Threshold:</strong> <span class="red">zero breaches, period.</span><br>
+    <strong>Verification:</strong> witness countersigns each entry during the reduction window. Per-trade size logged against the OP-06 cap.
+  </div>
+
+  <!-- OP-07 (new in v1.2) -->
+  <h3 class="crit-h"><span class="crit-label">OP-07</span>Reinstatement Gate <em class="gold" style="font-style: normal; font-size: 13px;">(v1.2)</em></h3>
+
+  <p>
+    Standard sizing reinstates only after <strong>5 good trades</strong> at the OP-06 reduced size. A "good trade" is a closed trade with: no OP-rule breach; correct H2/H3 attribution per OP-04; and contribution to a net-positive cumulative P&amp;L across the 5-trade window. Witness countersigns the reinstatement event. If the OP-06 window produces a third consecutive losing week, escalation to Stage-1 Tier-2 cessation is automatic.
+  </p>
+
+  <div class="crit-meta">
+    <strong>Breach:</strong> standard sizing resumed before the 5-good-trade window is verifiably complete and countersigned.<br>
+    <strong>Threshold:</strong> <span class="red">zero breaches, period.</span><br>
+    <strong>Verification:</strong> witness review of the 5-trade good-window, with the countersignature artifact retrievable from the public page.
+  </div>
+
   <!-- ============== ARTICLE VI — TIER LADDER ============== -->
   <h2 class="article-h"><span class="article-label">Article VI</span>The Fidelity Layer — Three-Tier Stand-Down</h2>
 
@@ -451,13 +490,13 @@
     <tbody>
       <tr>
         <td><span class="tier">T1</span><span class="tier-label">Logged breach</span></td>
-        <td>Single isolated breach of OP-02 or OP-04.</td>
+        <td>Single isolated breach of OP-02, OP-04, or OP-05 (weekly sit-down event).</td>
         <td>Logged within 24h + Discord entry. Witness review within 7 days, written corrective action. Counter resets to zero. No size or operational change.</td>
         <td>Immediate; counter restarts at zero.</td>
       </tr>
       <tr>
         <td><span class="tier">T2</span><span class="tier-label">Conditions reduced</span></td>
-        <td>2+ breaches of OP-02 or OP-03 in rolling 30 trades. Or OP-04 H1 misapplication.</td>
+        <td>2+ breaches of OP-02 or OP-03 in rolling 30 trades. OP-04 H1 misapplication. OP-06 automatic trigger (2nd consecutive losing week). OP-07 reinstatement breach.</td>
         <td>Position cut to minimum sizing (1 MES, no scaling, no /ES) for next 20 qualified trades. Daily filing under witness oversight. Counter resets. Trading continues at reduced conditions.</td>
         <td>20 clean minimum-size trades + witness countersignature.</td>
       </tr>
@@ -508,7 +547,7 @@
   </div>
 
   <footer>
-    Falsifiability Protocol · v1.1 · Doc Ref FP-MOPS-V1.1-2026-05<span class="dot">·</span>Ekantik Capital Advisors LLC · Maple Grove, MN<span class="dot">·</span>Public — epig500.ekantikcapital.com<span class="dot">·</span>© 2026 Ekantik Capital Advisors LLC. All rights reserved.
+    Falsifiability Protocol · v1.2 · Doc Ref FP-MOPS-V1.2-2026-05<span class="dot">·</span>Ekantik Capital Advisors LLC · Maple Grove, MN<span class="dot">·</span>Public — epig500.ekantikcapital.com<span class="dot">·</span>© 2026 Ekantik Capital Advisors LLC. All rights reserved.
   </footer>
 
 </div>
