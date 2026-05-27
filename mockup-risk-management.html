@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockup · Risk Management Cadence + Aspirational Equity Curve</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #1B2A4A; --navy-deep: #131E36; --navy-soft: #243A66;
+            --gold: #C8A951; --gold-bright: #E5C673; --gold-deep: #A88A38;
+            --ivory: #FAF8F5; --white: #FFFFFF;
+            --slate: #64748B; --slate-dark: #475569;
+            --forest: #2D5016; --signal: #DC2626;
+            --line: rgba(27, 42, 74, 0.12);
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-sans:  'Source Sans 3', system-ui, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-sans); font-size: 16px; line-height: 1.6; color: var(--navy); background: var(--ivory); padding: 60px 24px; }
+        .container { max-width: 1180px; margin: 0 auto; }
+        .mockup-banner { background: var(--gold); color: var(--navy); padding: 12px 24px; border-radius: 4px; font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; text-align: center; margin-bottom: 40px; }
+        h1 { font-family: var(--font-serif); font-size: 36px; font-weight: 700; color: var(--navy); line-height: 1.2; margin-bottom: 8px; }
+        h2 { font-family: var(--font-serif); font-size: 28px; font-weight: 700; color: var(--navy); margin: 60px 0 12px; line-height: 1.2; }
+        h3 { font-family: var(--font-serif); font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+        .eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--gold-deep); margin-bottom: 8px; }
+        .eyebrow .diamond { color: var(--gold); margin-right: 6px; }
+        .sub { font-size: 17px; color: var(--slate-dark); max-width: 800px; line-height: 1.65; }
+        .compliance { font-size: 12px; color: var(--slate); line-height: 1.55; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line); max-width: 900px; }
+
+        /* === Risk cadence three panels === */
+        .rm-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
+        .rm-card { background: var(--white); border: 1px solid var(--line); border-top: 4px solid var(--navy); border-radius: 4px; padding: 24px; }
+        .rm-card--gold { border-top-color: var(--gold); }
+        .rm-card--signal { border-top-color: var(--signal); }
+        .rm-card__cadence { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: var(--slate); text-transform: uppercase; padding: 3px 8px; background: var(--ivory); border-radius: 2px; margin-bottom: 16px; }
+        .rm-rule { padding: 12px 0; border-bottom: 1px dashed var(--line); }
+        .rm-rule:last-child { border-bottom: 0; }
+        .rm-rule__h { font-weight: 700; color: var(--navy); font-size: 14px; margin-bottom: 4px; }
+        .rm-rule__h .op { font-family: var(--font-serif); font-weight: 700; font-size: 11px; color: var(--gold-deep); letter-spacing: 1px; margin-right: 8px; padding: 2px 6px; background: rgba(200, 169, 81, 0.1); border-radius: 2px; }
+        .rm-rule__body { font-size: 13px; color: var(--slate-dark); line-height: 1.6; }
+        .rm-rule__body strong { color: var(--navy); }
+
+        /* === Aspirational equity curve === */
+        .eq-section { background: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: 32px; margin-top: 32px; }
+        .eq-legend { display: flex; gap: 32px; flex-wrap: wrap; font-size: 12px; color: var(--slate-dark); margin-bottom: 24px; }
+        .eq-legend__item { display: inline-flex; align-items: center; gap: 8px; }
+        .eq-legend__swatch { width: 18px; height: 4px; border-radius: 2px; }
+        .eq-svg { width: 100%; height: auto; aspect-ratio: 1100 / 480; }
+        .eq-callout { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); }
+        .eq-callout__item { padding: 12px 16px; background: var(--ivory); border-radius: 4px; border-left: 3px solid var(--gold); }
+        .eq-callout__label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--slate); font-weight: 700; margin-bottom: 4px; }
+        .eq-callout__value { font-family: var(--font-serif); font-weight: 700; font-size: 18px; color: var(--navy); }
+
+        @media (max-width: 800px) {
+            .rm-grid { grid-template-columns: 1fr; }
+            .eq-callout { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="mockup-banner">◆ Mockup preview — not yet on the live site</div>
+
+    <h1>Section preview: Risk Management Cadence + Aspirational Equity Curve</h1>
+    <p class="sub" style="margin-top: 8px;">Translated from your whiteboard sketch. Review the layout below; nothing here is committed to the production page yet. After your sign-off I'll wire it into the landing page between <em>How It Works</em> and <em>The Compounding Ladder</em>, and add the new rules as OP-05..OP-07 in Falsifiability Protocol v1.2.</p>
+
+    <!-- ============ RISK MANAGEMENT CADENCE ============ -->
+    <h2>Risk Management Cadence</h2>
+    <p class="eyebrow"><span class="diamond">◆</span> Daily · Weekly · Recovery</p>
+    <p class="sub">The Fidelity Layer (OP-01..OP-04) governs <em>whether the published method is running</em>. The cadence below governs <em>how aggressively the engine deploys when it is running</em> — a dampener tier between &quot;normal&quot; and &quot;cessation.&quot; Three timeframes; rules tighten as losses cluster; sizing reinstates only on observed recovery.</p>
+
+    <div class="rm-grid">
+
+        <!-- DAILY -->
+        <article class="rm-card rm-card--gold">
+            <span class="rm-card__cadence">Daily</span>
+            <h3>One day, one shot</h3>
+            <div class="rm-rule">
+                <p class="rm-rule__h"><span class="op">OP-02</span> One-loss daily rule</p>
+                <p class="rm-rule__body">After any closed losing trade, no further entries that session. The day ends on the first loss — regardless of setup quality, conviction, or remaining time.</p>
+            </div>
+            <div class="rm-rule">
+                <p class="rm-rule__h"><span class="op">OP-03</span> Trailing daily cap</p>
+                <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. <strong>Starts at −0.5% of NLV</strong> (one trade's worth of risk) and <strong>ratchets up</strong> as accumulated profit creates buffer. Same-day P&amp;L cannot pierce <code>HWM − (0.5% NLV + retained profit since prior peak)</code>. Replaces the v1.0 fixed −12 ES pts cap.</p>
+            </div>
+            <div class="rm-rule">
+                <p class="rm-rule__h"><span class="op">·</span> Auto-resume</p>
+                <p class="rm-rule__body">Engine resumes at standard sizing on the <strong>next trading session</strong>. No witness review required for an isolated daily-cap event.</p>
+            </div>
+        </article>
+
+        <!-- WEEKLY -->
+        <article class="rm-card">
+            <span class="rm-card__cadence">Weekly</span>
+            <h3>Two strikes, sit down</h3>
+            <div class="rm-rule">
+                <p class="rm-rule__h"><span class="op">OP-05</span> Weekly sit-down trigger <em style="color: var(--gold-deep); font-size: 11px;">(NEW)</em></p>
+                <p class="rm-rule__body"><strong>2–3 consecutive losing days within a single week</strong> halts trading for the remainder of that week. Engine resumes Monday with standard sizing pending witness review.</p>
+            </div>
+            <div class="rm-rule">
+                <p class="rm-rule__h"><span class="op">·</span> Witness audit</p>
+                <p class="rm-rule__body">During the sit-down, witness reviews the loss cluster: process breach (H2) or variance (H3)? Trade attribution log filed within 48 hours.</p>
+            </div>
+            <div class="rm-rule">
+                <p class="rm-rule__h"><span class="op">·</span> Logged, not killed</p>
+                <p class="rm-rule__body">A single weekly sit-down is a Tier-1 event — logged in the Discord journal, investor disclosure within 7 days. No size reduction yet.</p>
+            </div>
+        </article>
+
+        <!-- RECOVERY / REDUCTION -->
+        <article class="rm-card rm-card--signal">
+            <span class="rm-card__cadence">Bi-weekly · Recovery</span>
+            <h3>Two losing weeks → reduce</h3>
+            <div class="rm-rule">
+                <p class="rm-rule__h"><span class="op">OP-06</span> Size reduction <em style="color: var(--gold-deep); font-size: 11px;">(NEW)</em></p>
+                <p class="rm-rule__body"><strong>2nd consecutive losing week</strong> → engine sizing cuts to <strong>1/5 of normal</strong> (e.g. 1 /MES instead of 1 /ES). Daily filing under witness oversight for the duration.</p>
+            </div>
+            <div class="rm-rule">
+                <p class="rm-rule__h"><span class="op">OP-07</span> Reinstatement <em style="color: var(--gold-deep); font-size: 11px;">(NEW)</em></p>
+                <p class="rm-rule__body">Standard sizing reinstates only after <strong>5 good trades</strong> at reduced size — defined as 5 closed trades with no OP breach and net positive P&amp;L. Witness countersignature on resumption.</p>
+            </div>
+            <div class="rm-rule">
+                <p class="rm-rule__h"><span class="op">·</span> Escalation</p>
+                <p class="rm-rule__body">If reduced-size window produces a 3rd consecutive losing week, escalates to Stage-1 Tier-2 cessation. Stage-2 (Edge Gate) is independent and may fire at any time.</p>
+            </div>
+        </article>
+    </div>
+
+    <p class="compliance">The cadence rules above operate independently of the Stage-2 Edge Gate (ED-01..ED-08). Stage-2 measures the edge across a 100-trade rolling window; the cadence above measures variance clustering at intraday/weekly horizons. Both run in parallel. Either can pause or halt the engine.</p>
+
+    <!-- ============ ASPIRATIONAL EQUITY CURVE ============ -->
+    <h2>The aspirational equity curve</h2>
+    <p class="eyebrow"><span class="diamond">◆</span> What 12 months might look like</p>
+    <p class="sub">Translated from the hand-drawn vision. Stair-step appreciation — small drawdowns clipped by the daily and weekly caps, recoveries fully visible, occasional plateau periods when the cadence rules force a sit-down or size reduction. This is the <em>shape</em> the discipline framework is engineered to produce, not a forecast of any specific year's return.</p>
+
+    <div class="eq-section">
+        <div class="eq-legend">
+            <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: #1B2A4A;"></span> Equity curve (stair-step appreciation)</span>
+            <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: rgba(200,169,81,0.4); border: 1px solid var(--gold);"></span> Cumulative profit zone</span>
+            <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: repeating-linear-gradient(90deg, var(--signal) 0 6px, transparent 6px 10px);"></span> Trailing daily floor (HWM − 0.5% NLV)</span>
+            <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: var(--gold); border-radius: 50%; width: 10px; height: 10px;"></span> OP-05 sit-down event</span>
+        </div>
+
+        <svg class="eq-svg" viewBox="0 0 1100 480" role="img" aria-label="Aspirational equity curve over 12 months, stair-step pattern with adverse-drawdown floor">
+            <defs>
+                <linearGradient id="profitGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#C8A951" stop-opacity="0.4"/>
+                    <stop offset="100%" stop-color="#C8A951" stop-opacity="0.05"/>
+                </linearGradient>
+                <pattern id="advHatch" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+                    <line x1="0" y1="0" x2="0" y2="8" stroke="#DC2626" stroke-width="1.2" opacity="0.15"/>
+                </pattern>
+            </defs>
+
+            <!-- Grid + Y axis (% returns). Scale: top y=40 = +12%, bottom y=420 = -2% -->
+            <g font-family="Source Sans 3" font-size="11" fill="#64748B">
+                <line x1="60" y1="40"  x2="1060" y2="40"  stroke="rgba(27,42,74,0.06)"/><text x="48" y="44" text-anchor="end">+12%</text>
+                <line x1="60" y1="95"  x2="1060" y2="95"  stroke="rgba(27,42,74,0.06)"/><text x="48" y="99" text-anchor="end">+10%</text>
+                <line x1="60" y1="150" x2="1060" y2="150" stroke="rgba(27,42,74,0.06)"/><text x="48" y="154" text-anchor="end">+8%</text>
+                <line x1="60" y1="205" x2="1060" y2="205" stroke="rgba(27,42,74,0.06)"/><text x="48" y="209" text-anchor="end">+6%</text>
+                <line x1="60" y1="260" x2="1060" y2="260" stroke="rgba(27,42,74,0.06)"/><text x="48" y="264" text-anchor="end">+4%</text>
+                <line x1="60" y1="315" x2="1060" y2="315" stroke="rgba(27,42,74,0.06)"/><text x="48" y="319" text-anchor="end">+2%</text>
+                <line x1="60" y1="370" x2="1060" y2="370" stroke="#1B2A4A" stroke-opacity="0.4" stroke-dasharray="4 4"/><text x="48" y="374" text-anchor="end" font-weight="600">0% start</text>
+                <line x1="60" y1="395" x2="1060" y2="395" stroke="rgba(220,38,38,0.3)" stroke-dasharray="3 3"/><text x="48" y="399" text-anchor="end" fill="#DC2626">−1%</text>
+                <line x1="60" y1="420" x2="1060" y2="420" stroke="rgba(220,38,38,0.3)" stroke-dasharray="3 3"/><text x="48" y="424" text-anchor="end" fill="#DC2626">−2%</text>
+            </g>
+
+            <!-- X axis (months) -->
+            <g font-family="Source Sans 3" font-size="11" fill="#64748B">
+                <line x1="60" y1="430" x2="1060" y2="430" stroke="rgba(27,42,74,0.2)"/>
+                <text x="60"   y="450" text-anchor="middle">0 mo</text>
+                <text x="227"  y="450" text-anchor="middle">2</text>
+                <text x="393"  y="450" text-anchor="middle">4</text>
+                <text x="560"  y="450" text-anchor="middle">6</text>
+                <text x="727"  y="450" text-anchor="middle">8</text>
+                <text x="893"  y="450" text-anchor="middle">10</text>
+                <text x="1060" y="450" text-anchor="middle">12</text>
+            </g>
+
+            <!-- ASPIRATIONAL EQUITY CURVE — stair-step climbing 0% → +10% over 12 months
+                 Scale: y=370 is 0%, y=40 is +12%, so each 1% = 27.5px.
+                 Points format: each step rises ~1-2%, with a brief dip between. -->
+
+            <!-- Profit zone fill (under the equity curve) -->
+            <path d="
+                M 60,370
+                L 100,378 L 130,378
+                L 130,343 L 175,343 L 195,358 L 195,330
+                L 250,330 L 280,343 L 280,302
+                L 340,302 L 365,316 L 365,275
+                L 420,275 L 445,288 L 445,247
+                L 510,247 L 540,260 L 540,220
+                L 605,220 L 635,233 L 635,192
+                L 705,192 L 735,205 L 735,165
+                L 810,165 L 840,178 L 840,137
+                L 920,137 L 955,150 L 955,110
+                L 1060,110
+                L 1060,370 L 60,370 Z
+            " fill="url(#profitGrad)"/>
+
+            <!-- TRAILING DRAWDOWN FLOOR — high-water mark minus 0.5% NLV.
+                 The floor mirrors the equity peaks, offset down by 13.75px (0.5% × 27.5px/%).
+                 As equity rises, the floor "ratchets up". Never below -0.5% from start. -->
+            <path d="
+                M 60,384
+                L 130,384
+                L 130,357 L 195,357
+                L 195,344 L 280,344
+                L 280,316 L 365,316
+                L 365,289 L 445,289
+                L 445,261 L 540,261
+                L 540,234 L 635,234
+                L 635,206 L 735,206
+                L 735,179 L 840,179
+                L 840,151 L 955,151
+                L 955,124 L 1060,124
+            " fill="none" stroke="#DC2626" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.8"/>
+
+            <!-- The stair-step equity line itself -->
+            <path d="
+                M 60,370
+                L 100,378 L 130,378
+                L 130,343 L 175,343 L 195,358 L 195,330
+                L 250,330 L 280,343 L 280,302
+                L 340,302 L 365,316 L 365,275
+                L 420,275 L 445,288 L 445,247
+                L 510,247 L 540,260 L 540,220
+                L 605,220 L 635,233 L 635,192
+                L 705,192 L 735,205 L 735,165
+                L 810,165 L 840,178 L 840,137
+                L 920,137 L 955,150 L 955,110
+                L 1060,110
+            " fill="none" stroke="#1B2A4A" stroke-width="2.4" stroke-linejoin="round"/>
+
+            <!-- Cadence-rule plateau markers — gold dots at OP-05 sit-down points -->
+            <circle cx="195" cy="358" r="5" fill="#C8A951" stroke="white" stroke-width="2"/>
+            <circle cx="445" cy="288" r="5" fill="#C8A951" stroke="white" stroke-width="2"/>
+            <circle cx="735" cy="205" r="5" fill="#C8A951" stroke="white" stroke-width="2"/>
+
+            <!-- Annotations -->
+            <g font-family="Source Sans 3" font-size="10" fill="#A88A38" font-weight="600">
+                <text x="195" y="378" text-anchor="middle">OP-05 sit-down</text>
+                <text x="445" y="308" text-anchor="middle">OP-05 sit-down</text>
+                <text x="735" y="225" text-anchor="middle">OP-05 sit-down</text>
+            </g>
+            <!-- Floor label — points to the trailing red dashed line -->
+            <g font-family="Source Sans 3" font-size="10" fill="#DC2626" font-weight="700">
+                <text x="950" y="118" text-anchor="end">↗ trailing floor: HWM − 0.5% NLV</text>
+            </g>
+
+            <!-- End-of-year callout -->
+            <rect x="950" y="50" width="110" height="40" rx="4" fill="#1B2A4A"/>
+            <text x="1005" y="66" text-anchor="middle" font-size="10" font-weight="700" fill="#C8A951" font-family="Source Sans 3" letter-spacing="1">YEAR-END</text>
+            <text x="1005" y="83" text-anchor="middle" font-size="14" font-weight="700" fill="white" font-family="Source Sans 3">~+10%</text>
+
+            <!-- Title overlay -->
+            <text x="70" y="30" font-family="Source Sans 3" font-size="11" font-weight="600" fill="#1B2A4A" letter-spacing="1">RISK CAPITAL RETURN · % from start</text>
+        </svg>
+
+        <div class="eq-callout">
+            <div class="eq-callout__item">
+                <p class="eq-callout__label">Trailing floor</p>
+                <p class="eq-callout__value">HWM − 0.5% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">ratchets up with each new peak</span></p>
+            </div>
+            <div class="eq-callout__item">
+                <p class="eq-callout__label">Step shape</p>
+                <p class="eq-callout__value">+1–2% per cycle<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">brief dip then new high</span></p>
+            </div>
+            <div class="eq-callout__item">
+                <p class="eq-callout__label">Sit-down events</p>
+                <p class="eq-callout__value">~3 per year (illustrative)<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">at OP-05 weekly triggers</span></p>
+            </div>
+        </div>
+
+        <p class="compliance">Aspirational and illustrative. The curve shows the <em>shape</em> the cadence rules are engineered to produce — bounded drawdowns, stair-step recovery, plateau periods at OP-05 sit-down triggers — not a forecast of any specific year's return. The red dashed line is the <strong>trailing daily floor</strong>: at any point in time, the worst the engine is allowed to lose intraday is 0.5% NLV plus whatever profit has been earned since the previous high-water mark. The floor ratchets up automatically as the equity curve climbs; it never gives back unrealized gains in excess of the 0.5% base. Live performance will look different. Markets can gap and slip; nothing on this page is a guarantee.</p>
+    </div>
+
+    <div style="margin-top: 80px; padding: 24px; background: var(--white); border: 1px dashed var(--gold); border-radius: 8px;">
+        <h3>Next step</h3>
+        <p style="font-size: 14px; color: var(--slate-dark); line-height: 1.7;">
+            If this layout works for you, I'll:<br>
+            1. Add the Risk Management Cadence section to <code>index.html</code> between How It Works and the Compounding Ladder<br>
+            2. Add the equity-curve SVG into the same section (or as its own subsection)<br>
+            3. Bump the Falsifiability Protocol to <strong>v1.2</strong> and add OP-05, OP-06, OP-07 (currently shown as &quot;NEW&quot; badges above)<br>
+            4. Update OP-03 from −12 ES pts → −6% NLV per your decision<br>
+            5. Cross-link the new rules into the existing Stage-1 tier table<br><br>
+            Reply with <strong>&quot;ship it&quot;</strong> or tell me what to change first.
+        </p>
+    </div>
+
+</div>
+</body>
+</html>
