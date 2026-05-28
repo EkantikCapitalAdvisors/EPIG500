@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260527d">
+    <link rel="stylesheet" href="css/style.css?v=20260527h">
 
     <script type="application/ld+json">
     {
@@ -54,7 +54,6 @@
             <a href="#how">How It Works</a>
             <a href="#ladder">The Ladder</a>
             <a href="#battery">The Proof</a>
-            <a href="#reference">Dataset</a>
             <a href="#continuity">Continuity</a>
             <a href="#falsifiability">Falsifiability</a>
             <a href="#founding">Founding</a>
@@ -71,7 +70,7 @@
         <a href="#how">How It Works</a>
         <a href="#ladder">The Ladder</a>
         <a href="#battery">The Proof</a>
-        <a href="#reference">Dataset</a>
+        <a href="/dashboard.html">Live Dashboard</a>
         <a href="#falsifiability">Falsifiability</a>
         <a href="#founding">Founding</a>
         <a href="#faq">FAQ</a>
@@ -110,10 +109,10 @@
                     <p class="proof-tile__value">8 / 8 PASS</p>
                     <p class="proof-tile__anchor">◆ See the live battery →</p>
                 </a>
-                <a href="#reference" class="proof-tile">
-                    <p class="proof-tile__label">Reference sample</p>
-                    <p class="proof-tile__value">227 trades · 18 months</p>
-                    <p class="proof-tile__anchor">◆ Audit the dataset →</p>
+                <a href="/dashboard.html" target="_blank" rel="noopener" class="proof-tile">
+                    <p class="proof-tile__label">Reference + live record</p>
+                    <p class="proof-tile__value">227 + N trades</p>
+                    <p class="proof-tile__anchor">◆ Open the dashboard ↗</p>
                 </a>
                 <a href="#falsifiability" class="proof-tile">
                     <p class="proof-tile__label">Live falsifiability</p>
@@ -198,7 +197,7 @@
                     <li><h3>Limited trading authority (proposed)</h3><p>To be granted via a one-page Letter of Direction. Authority strictly bounded to futures and options activity. Revocable at any time.</p></li>
                     <li><h3>Pure-booster funding</h3><p>SPY foundation, 10% cash buffer for operational settlement, and the active /ES overlay on top.</p></li>
                     <li><h3>Real-time transparency</h3><p>Read-only broker access will expose every trade, every position, every dollar — the same transparency the operator already applies to the published reference dataset.</p></li>
-                    <li><h3>Performance fee structure (proposed)</h3><p>6% high-watermark hurdle plus 25% of profits above that hurdle. Documented in advance for educational review.</p></li>
+                    <!-- <li><h3>Performance fee structure (proposed)</h3><p>6% high-watermark hurdle plus 25% of profits above that hurdle. Documented in advance for educational review.</p></li> -->
                     <li><h3>No lock-up (proposed)</h3><p>Capital will be withdrawable at any time subject to ordinary broker settlement timelines.</p></li>
                 </ol>
             </div>
@@ -213,7 +212,7 @@
         <header class="section__header section__header--center">
             <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Mechanism + The Discipline</p>
             <h2 class="section__h section__h--lg">The Compounding Ladder</h2>
-            <p class="section__sub">Starting at <strong>$100K NLV</strong>. <strong>90% allocated to SPY</strong> (assumed +10%/yr at the 20-year S&amp;P historical average, also serving as portfolio-margin collateral). <strong>10% held in cash and opportunistically deployed</strong> through the /ES futures engine, with per-trade risk scaling <strong>0.5% → 2% of NLV</strong> based on the profit buffer earned. Position size capped at <strong>4 /ES maximum</strong>. The cadence rules that bound drawdown are listed first — they govern the engine whichever way the year plays out.</p>
+            <p class="section__sub">Starting at <strong>$100K NLV</strong>. <strong>90% allocated to SPY</strong> (assumed +10%/yr at the 20-year S&amp;P historical average, also serving as portfolio-margin collateral). <strong>10% held in cash and opportunistically deployed</strong> through the /ES futures engine. <strong>Per-contract risk fixed at 0.5% NLV</strong>; total per-trade exposure scales <strong>0.5% → 2%</strong> as contract count grows <strong>1 → 4</strong> with the earned profit buffer. The cadence rules that bound drawdown are listed first — they govern the engine whichever way the year plays out.</p>
         </header>
 
         <!-- Theoretical disclaimer banner — leading so investors can't miss it -->
@@ -238,7 +237,7 @@
                 </div>
                 <div class="rm-rule">
                     <p class="rm-rule__h"><span class="op">OP-03</span> Trailing daily cap <em class="rm-new">v1.2</em></p>
-                    <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. Per-trade exposure scales <strong>0.5% → 2% of NLV</strong> as the profit buffer compounds; the daily floor ratchets up with every new peak. Tight when the buffer is thin, wider once profit has earned the room. Replaces the v1.0 fixed −12 ES pts cap.</p>
+                    <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. <strong>Per-contract risk is fixed at 0.5% NLV</strong>; total per-trade exposure scales 0.5% → 2% as contracts scale 1 → 4 with the profit buffer. The daily floor ratchets up with every new peak. Replaces the v1.0 fixed −12 ES pts cap.</p>
                 </div>
                 <div class="rm-rule">
                     <p class="rm-rule__h"><span class="op">·</span> Auto-resume</p>
@@ -380,7 +379,7 @@
                 <div class="eq-callout__item"><p class="eq-callout__label">Combined target</p><p class="eq-callout__value">+35% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">engine + SPY, stacked</span></p></div>
                 <div class="eq-callout__item"><p class="eq-callout__label">Hard constraint</p><p class="eq-callout__value">−5% NLV max<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">from any high-water mark</span></p></div>
                 <div class="eq-callout__item"><p class="eq-callout__label">Position scaling</p><p class="eq-callout__value">1 → 4 /ES<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">earned by profit buffer · cap at 4</span></p></div>
-                <div class="eq-callout__item"><p class="eq-callout__label">Per-trade risk</p><p class="eq-callout__value">0.5% → 2% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">scaled by profit buffer · SPY-collateralized</span></p></div>
+                <div class="eq-callout__item"><p class="eq-callout__label">Per-contract risk</p><p class="eq-callout__value">0.5% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">fixed architectural anchor · scales via 1 → 4 contracts</span></p></div>
             </div>
         </div>
 
@@ -396,7 +395,7 @@
         <div class="three-col">
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Disciplined Risk</p>
-                <p>Per-trade risk starts at <strong>0.5% of total NLV</strong> (one trade's exposure at the architectural anchor) and scales up to a <strong>ceiling of 2%</strong> only after the profit buffer has compounded enough to absorb it. The dollar amount grows two ways: as the capital base grows AND as the buffer earns the right to wider stops. The risk envelope is bounded; it doesn't escalate arbitrarily.</p>
+                <p>Risk is anchored <em>per contract</em> at <strong>0.5% of total NLV</strong> — fixed, architectural, never escalated. Total per-trade exposure scales only via <strong>contract count</strong>: 1 /ES = 0.5%, 2 /ES = 1%, 3 /ES = 1.5%, 4 /ES = 2% (the architectural ceiling). Each additional contract is earned by accumulated profit buffer, never assumed. The dollar amount grows two ways — the capital base grows, AND the contract count grows — but the per-contract percentage never changes.</p>
             </article>
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Earned Leverage</p>
@@ -408,7 +407,7 @@
             </article>
         </div>
 
-        <p class="compliance">Aspirational and illustrative. <strong>Composition:</strong> the equity curve above is the result of two stacked layers — <strong>(a) 90% allocated to SPY</strong> compounding at the 20-year S&amp;P historical average (~10%/yr) and (b) <strong>10% held in cash, opportunistically deployed</strong> through the /ES futures engine. The SPY position doubles as portfolio-margin collateral, so the engine sizes against total NLV. <strong>Per-trade risk scales from 0.5% to 2% of NLV</strong> driven by the profit buffer earned — the floor starts tight (one trade's exposure at the architectural anchor) and only widens once accumulated profit has earned the right to absorb it. Headline targets (+26% engine NLV, +9% SPY NLV, +35% combined) are targets, not forecasts. <strong>Engine throughput:</strong> ~$1,480/month/ES, derived from the 227-trade reference dataset. The trailing floor at HWM − 5% NLV ratchets up with every new peak, but markets can gap and slip; nothing on this page is a guarantee. Only 6 post-restart trades exist on the live record so far — a statistically meaningful track record on this exact framework will take many more closed trades to accumulate.</p>
+        <p class="compliance">Aspirational and illustrative. <strong>Composition:</strong> the equity curve above is the result of two stacked layers — <strong>(a) 90% allocated to SPY</strong> compounding at the 20-year S&amp;P historical average (~10%/yr) and (b) <strong>10% held in cash, opportunistically deployed</strong> through the /ES futures engine. The SPY position doubles as portfolio-margin collateral, so the engine sizes against total NLV. <strong>Per-contract risk is fixed at 0.5% NLV</strong> — the architectural anchor never changes. Total per-trade exposure scales 0.5% → 2% only via contract count growing 1 → 4 as the profit buffer earns each next contract. Headline targets (+26% engine NLV, +9% SPY NLV, +35% combined) are targets, not forecasts. <strong>Engine throughput:</strong> ~$1,480/month/ES, derived from the 227-trade reference dataset. The trailing floor at HWM − 5% NLV ratchets up with every new peak, but markets can gap and slip; nothing on this page is a guarantee. Only 6 post-restart trades exist on the live record so far — a statistically meaningful track record on this exact framework will take many more closed trades to accumulate.</p>
 
         <!-- Tangible kill conditions rail: all 8 ED conditions as named chips -->
         <div class="cl-kills">
@@ -422,7 +421,7 @@
         <div class="three-col">
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Disciplined Risk</p>
-                <p>Per-trade risk starts at <strong>0.5% of total NLV</strong> (one trade's exposure at the architectural anchor) and scales up to a <strong>ceiling of 2%</strong> only after the profit buffer has compounded enough to absorb it. The dollar amount grows two ways: as the capital base grows AND as the buffer earns the right to wider stops. The risk envelope is bounded; it doesn't escalate arbitrarily.</p>
+                <p>Risk is anchored <em>per contract</em> at <strong>0.5% of total NLV</strong> — fixed, architectural, never escalated. Total per-trade exposure scales only via <strong>contract count</strong>: 1 /ES = 0.5%, 2 /ES = 1%, 3 /ES = 1.5%, 4 /ES = 2% (the architectural ceiling). Each additional contract is earned by accumulated profit buffer, never assumed. The dollar amount grows two ways — the capital base grows, AND the contract count grows — but the per-contract percentage never changes.</p>
             </article>
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Earned Leverage</p>
@@ -437,13 +436,7 @@
     </div>
 </section>
 
-<!-- ============ 4. CONFIGURATIONS — removed during pre-registration ============ -->
-<!-- The Standard/Enhanced Booster tier variants contradicted the new ladder model
-     ($100K base, 4-cap, three scenarios) and were not yet finalized. Tier variants
-     will be reintroduced at product launch. -->
-
-
-<!-- ============ 5. THE EKANTIK STANDARD ============ -->
+<!-- ============ 4. THE EKANTIK STANDARD ============ -->
 <section class="section section--navy" id="standard">
     <div class="container">
         <header class="section__header section__header--center">
@@ -484,7 +477,7 @@
     </div>
 </section>
 
-<!-- ============ 6. THE PROOF — 8-Test Battery ============ -->
+<!-- ============ 5. THE PROOF — 8-Test Battery ============ -->
 <section class="section section--ivory" id="battery">
     <div class="container">
         <header class="section__header">
@@ -582,59 +575,8 @@
     </div>
 </section>
 
-<!-- ============ 7. REFERENCE DATASET ============ -->
-<section class="section section--white" id="reference">
-    <div class="container">
-        <header class="section__header">
-            <p class="eyebrow"><span class="diamond">◆</span> The Source</p>
-            <h2 class="section__h">The Reference Dataset — 227 Trades, Apr 2023 – Oct 2024.</h2>
-            <p class="section__sub">The historical operator record from which the strategy's edge was derived. The dataset against which the 8-Test Battery returns 8/8 PASS.</p>
-        </header>
 
-        <div class="ref-stats">
-            <div class="ref-stat"><p class="ref-stat__label">Trades</p><p class="ref-stat__value">227</p></div>
-            <div class="ref-stat"><p class="ref-stat__label">Win Rate</p><p class="ref-stat__value">60.3%</p></div>
-            <div class="ref-stat"><p class="ref-stat__label">EV / trade</p><p class="ref-stat__value">+2.38 pts</p></div>
-            <div class="ref-stat"><p class="ref-stat__label">Profit Factor</p><p class="ref-stat__value">1.99</p></div>
-            <div class="ref-stat"><p class="ref-stat__label">Max DD</p><p class="ref-stat__value">−29.0 pts</p></div>
-            <div class="ref-stat"><p class="ref-stat__label">Date Range</p><p class="ref-stat__value">Apr '23 – Oct '24</p></div>
-        </div>
-
-        <div class="ref-detail-grid">
-            <div class="ref-detail">
-                <h3 class="ref-detail__h">Detailed summary</h3>
-                <dl class="ref-detail__list">
-                    <div><dt>Sample size</dt><dd>227 closed trades</dd></div>
-                    <div><dt>Trading days observed</dt><dd>96 days</dd></div>
-                    <div><dt>Win rate</dt><dd>60.3% (135 W / 89 L / 3 BE)</dd></div>
-                    <div><dt>Average win</dt><dd>+7.96 pts (+$397.80 per /ES)</dd></div>
-                    <div><dt>Average loss</dt><dd>−6.08 pts (−$303.80 per /ES)</dd></div>
-                    <div><dt>Win:Loss ratio</dt><dd>1.31</dd></div>
-                    <div><dt>EV per trade</dt><dd>+2.38 pts (+$119.00 per /ES)</dd></div>
-                    <div><dt>Profit factor</dt><dd>1.99</dd></div>
-                    <div><dt>Total P&amp;L</dt><dd>+533.25 pts (+$26,662.50 per /ES)</dd></div>
-                    <div><dt>Max DD (unrestricted)</dt><dd>−37.5 pts</dd></div>
-                    <div><dt>Max DD (with v2 falsifiability)</dt><dd>−29.0 pts</dd></div>
-                </dl>
-            </div>
-
-            <div class="ref-chart">
-                <h3 class="ref-detail__h">Equity curve</h3>
-                <canvas id="equityCurve" width="600" height="280" aria-label="Cumulative equity curve of the 227-trade reference dataset"></canvas>
-                <p class="ref-chart__caption">Cumulative P&amp;L in /ES points across 227 closed trades, Apr 2023 – Oct 2024.</p>
-            </div>
-        </div>
-
-        <div class="ref-actions">
-            <button class="btn btn--primary" id="downloadCleanCsv">Download CSV (clean)</button>
-            <button class="btn btn--secondary" id="downloadMaeMfeCsv">Download CSV (with MAE/MFE)</button>
-            <a href="#battery" class="btn btn--secondary">◆ Run the battery on this dataset →</a>
-        </div>
-        <p class="compliance">The reference dataset is presented as the source of record for the 8-Test Battery's reference verdict. Computed from the reference dataset; sample is pre-asymptotic at this size; realized EV in any future live period may differ materially.</p>
-    </div>
-</section>
-
-<!-- ============ SIGNAL CONTINUITY ============ -->
+<!-- ============ 6. SIGNAL CONTINUITY ============ -->
 <section class="section section--ivory" id="continuity">
     <div class="container">
         <header class="section__header">
@@ -685,7 +627,7 @@
     </div>
 </section>
 
-<!-- ============ 8. FALSIFIABILITY ARCHITECTURE ============ -->
+<!-- ============ 7. FALSIFIABILITY ARCHITECTURE ============ -->
 <section class="section section--navy" id="falsifiability">
     <div class="container">
         <header class="section__header section__header--center">
@@ -811,7 +753,7 @@
     </div>
 </section>
 
-<!-- ============ 9. FOUNDING MEMBERS ============ -->
+<!-- ============ 8. FOUNDING MEMBERS ============ -->
 <section class="section section--ivory section--founding" id="founding">
     <div class="container container--narrow">
         <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> Pre-Registration · Early Cohort</p>
@@ -830,7 +772,6 @@
                 <li>Quarterly educational letters covering market posture, methodology progression, and mission updates</li>
                 <li>Locked fee schedule at launch for the duration of the relationship — no upward adjustments as AUM scales</li>
                 <li>First-priority access to Ekantik 500 when it opens and to any future product launches</li>
-                <li>The knowledge that 100% of any future performance fees are committed to flow directly to the BAPS Endowment</li>
                 <li><strong>Falsifiability transparency</strong> — every Stage 1 or Stage 2 trigger event during the educational window published to your inbox within 24 hours</li>
             </ul>
         </div>
@@ -843,7 +784,8 @@
     </div>
 </section>
 
-<!-- ============ 10. MISSION ALIGNMENT ============ -->
+<!-- ============ MISSION ALIGNMENT (hidden pending founding-cohort fee structure) ============ -->
+<!--
 <section class="section section--white" id="mission">
     <div class="container">
         <div class="two-col">
@@ -882,8 +824,9 @@
         </div>
     </div>
 </section>
+-->
 
-<!-- ============ 11. FAQ ============ -->
+<!-- ============ 9. FAQ ============ -->
 <section class="section section--ivory" id="faq">
     <div class="container container--narrow">
         <header class="section__header section__header--center">
@@ -896,9 +839,9 @@
             <details class="faq__item"><summary>What does "pre-registration" actually do?</summary><div class="faq__body"><p>Pre-registration adds you to the early-access list. You receive executed launch materials, falsifiability dashboard updates during the educational window, and a private invitation when the product is opened for investment. It creates no obligation on either side and is not an application or expression of intent to invest.</p></div></details>
             <details class="faq__item"><summary>Will I need to sell my existing portfolio at launch?</summary><div class="faq__body"><p>No. When the product opens, Ekantik 500 will be funded with new capital deposited into a dedicated sub-account at Interactive Brokers. Existing holdings at other brokerages stay where they are.</p></div></details>
             <details class="faq__item"><summary>How does the methodology treat an investor's SPY position?</summary><div class="faq__body"><p>Inside the proposed sub-account, the SPY allocation serves two purposes: ongoing market exposure (dividends and capital appreciation) and margin collateral for the active sleeve. The methodology does not trade SPY — it sits passively while the futures overlay operates against it.</p></div></details>
-            <details class="faq__item"><summary>What is the proposed fee structure?</summary><div class="faq__body"><p>The structure documented for launch: 6% high-watermark hurdle plus 25% of profits above that hurdle. In any period where the strategy delivers less than 6%, no performance fee would be charged. The hurdle resets annually to the peak.</p></div></details>
+            <!-- <details class="faq__item"><summary>What is the proposed fee structure?</summary><div class="faq__body"><p>The structure documented for launch: 6% high-watermark hurdle plus 25% of profits above that hurdle. In any period where the strategy delivers less than 6%, no performance fee would be charged. The hurdle resets annually to the peak.</p></div></details> -->
             <details class="faq__item"><summary>How would an investor know if the strategy has stopped working?</summary><div class="faq__body"><p>Ekantik 500 publishes two falsifiability gates — both binding, both observable in real time. The Fidelity Layer (four operator-discipline criteria) and the Expression Layer (eight statistical kill conditions) define exactly when the strategy stops. If any gate fires, participants would receive notification within 24 hours, the active engine would immediately reduce to zero new exposure, and the trigger condition would be published.</p></div></details>
-            <details class="faq__item"><summary>Can I see the underlying trade record?</summary><div class="faq__body"><p>Yes. The reference dataset — 227 closed trades from April 2023 through October 2024 — is downloadable as a CSV from the Reference Dataset section. The same battery you can run on this data, you can run on your own.</p></div></details>
+            <details class="faq__item"><summary>Can I see the underlying trade record?</summary><div class="faq__body"><p>Yes. The reference dataset — 227 closed trades from April 2023 through October 2024 — plus every pre-registration trade since the May 2026 restart, is published on the <a href="/dashboard.html">live dashboard</a> and exportable as CSV from there. The same battery you can run on this data, you can run on your own.</p></div></details>
             <details class="faq__item"><summary>Why does the reference dataset end in October 2024? What happened between then and the May 2026 restart?</summary><div class="faq__body"><p>During the Nov 2024 – Apr 2026 window, the operator suspended the Majority Opinion Predisposal Strategy entirely and shifted full focus to developing a separate scalping methodology — the Ekantik Accelerator — publicly demonstrated at <a href="https://accelerator.ekantikcapital.com/" target="_blank" rel="noopener">accelerator.ekantikcapital.com</a>. <strong>No trades exist for that 18-month window.</strong> We do not backfill, infer, or estimate the gap; it is named as a gap. Two things bridge it for pre-registrants: (1) the Accelerator work is publicly verifiable evidence of where the operator's time went; (2) every trade on the restarted strategy is published to the live dashboard within 24 hours of close during pre-registration, witnessed and tagged per the locked Falsifiability Protocol. By product launch, pre-registrants will have seen a continuous live record from restart forward — the original 227 historical trades plus every pre-registration trade, on the same methodology.</p></div></details>
             <details class="faq__item"><summary>What is the difference between the methodology development and the reference dataset?</summary><div class="faq__body"><p>The methodology represents 12+ years of development and refinement. The reference dataset is the operator's actual live trading record on the matured methodology over 18 months, showing real-world execution against the design. The methodology answers "is the architecture sound in principle?"; the reference dataset answers "does the operator execute the architecture in practice?"</p></div></details>
             <details class="faq__item"><summary>Will there be a lock-up at launch?</summary><div class="faq__body"><p>The proposed structure: no lock-up. Capital would be withdrawable at any time subject to ordinary settlement timelines at the custodian.</p></div></details>
@@ -908,7 +851,7 @@
     </div>
 </section>
 
-<!-- ============ 12. PRE-REGISTRATION ============ -->
+<!-- ============ 10. PRE-REGISTRATION ============ -->
 <section class="section section--white section--book" id="prereg">
     <div class="container container--narrow">
         <header class="section__header section__header--center">
@@ -1011,7 +954,6 @@
                     <li><a href="#">Privacy Policy</a></li>
                     <li><a href="#">Terms of Use</a></li>
                     <li><a href="#">Marketing Disclosures</a></li>
-                    <li><a href="#">Mission Vow &amp; Structure</a></li>
                     <li><a href="/falsifiability-protocol.html">Falsifiability Protocol v1.2</a></li>
                 </ul>
             </div>
@@ -1022,6 +964,6 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260527d"></script>
+<script src="js/script.js?v=20260527h"></script>
 </body>
 </html>
