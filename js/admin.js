@@ -249,6 +249,9 @@
     const JOURNAL_RESULT_RE = /^\s*[A-Za-z]\w*\s*:\s*([+-]\d+(?:\.\d+)?)(?:\s+([Hh][23]|BE|be))?\s*$/;
     const JOURNAL_SL_RE     = /\bsl\s*(\d+(?:\.\d+)?)/i;  // unanchored so it matches inline too
     const JOURNAL_TP_RE     = /\btp\s*(\d+(?:\.\d+)?)/i;
+    // Size annotation: "5mes", "2 es", "1mes", "/ES", "/MES". Captures qty + instrument.
+    // Qty defaults to 1 when only the instrument token is present (e.g. "/ES").
+    const JOURNAL_SIZE_RE   = /(?:(\d+)\s*)?\/?(mes|es)\b/i;
 
     // Timestamp variants encountered in Discord paste / journal headers
     const TS_FULL_DATE_RE  = /\b(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+(\d{1,2})[:.](\d{2})\s*(AM|PM|am|pm)?\b/;
@@ -458,11 +461,26 @@
         let pendingEntry = null;    // { side, entry }
         let pendingSl = null;
         let pendingTp = null;
+        let pendingSize = null;     // { qty, instrument: 'ES'|'MES', esEquiv, dollarPerPoint }
         let resultIndex = 0;        // for nudging timestamps when many results share a time
 
         const isOptions = currentStrategy() === 'options';
-        const dollarMult = isOptions ? 1 : 50;
         const sym = defaultSymbol();
+
+        // Resolve a size annotation match into a normalized size record.
+        // /ES: 1 contract = $50/pt = 1.0 ES-equivalent
+        // /MES: 1 contract = $5/pt  = 0.1 ES-equivalent
+        function resolveSize(m) {
+            const qty = m[1] ? parseInt(m[1], 10) : 1;
+            const inst = m[2].toUpperCase();
+            const isMicro = inst === 'MES';
+            return {
+                qty: qty,
+                instrument: inst,
+                esEquiv: isMicro ? qty / 10 : qty,
+                dollarPerPoint: isMicro ? 5 : 50
+            };
+        }
 
         for (let i = 0; i < lines.length; i++) {
             const raw = lines[i];
@@ -482,6 +500,13 @@
                 if (inlineSl) pendingSl = parseFloat(inlineSl[1]);
                 const inlineTp = trimmed.match(JOURNAL_TP_RE);
                 if (inlineTp) pendingTp = parseFloat(inlineTp[1]);
+                // Inline size annotation: "5mes", "2es", "/ES". Strip SL/TP fragments first
+                // so we don't match the digits inside "sl7553" or "tp7531".
+                const sizeScan = trimmed
+                    .replace(/\bsl\s*\d+(?:\.\d+)?/ig, '')
+                    .replace(/\btp\s*\d+(?:\.\d+)?/ig, '');
+                const inlineSize = sizeScan.match(JOURNAL_SIZE_RE);
+                if (inlineSize) pendingSize = resolveSize(inlineSize);
                 continue;
             }
             // Standalone SL/TP lines (label-prefixed): only fire if the line starts with a label
@@ -494,7 +519,7 @@
 
             const rm = trimmed.match(JOURNAL_RESULT_RE);
             if (rm) {
-                const pts = parseFloat(rm[1]);
+                const rawPts = parseFloat(rm[1]);
                 // Tag defaults to H3 (variance, OP-04 resting attribution) when absent
                 let tag = (rm[2] || 'H3').toUpperCase();
                 if (tag === 'H1') tag = 'H3';
@@ -508,13 +533,32 @@
                 }
                 resultIndex++;
 
+                // Normalize to /ES-equivalent units. If no size was seen, assume 1 /ES
+                // (futures default). Options pass through with $1/pt multiplier.
+                let esEquiv, dollarPerPoint, qty, instrument;
+                if (isOptions) {
+                    esEquiv = 1; dollarPerPoint = 1; qty = 1; instrument = 'OPT';
+                } else if (pendingSize) {
+                    esEquiv = pendingSize.esEquiv;
+                    dollarPerPoint = pendingSize.dollarPerPoint;
+                    qty = pendingSize.qty;
+                    instrument = pendingSize.instrument;
+                } else {
+                    esEquiv = 1; dollarPerPoint = 50; qty = 1; instrument = 'ES';
+                }
+                const normPts = rawPts * esEquiv;
+                const dollars = rawPts * qty * dollarPerPoint;
+
                 trades.push({
                     timestamp: tradeDate.toISOString(),
-                    symbol: sym,
+                    symbol: instrument === 'MES' ? '/MES' : sym,
                     side: pendingEntry ? pendingEntry.side : '',
-                    result: pts > 0 ? 'W' : pts < 0 ? 'L' : 'BE',
-                    pts: Math.round(pts * 100) / 100,
-                    dollars: Math.round(pts * dollarMult * 100) / 100,
+                    result: rawPts > 0 ? 'W' : rawPts < 0 ? 'L' : 'BE',
+                    pts: Math.round(normPts * 100) / 100,            // /ES-equivalent
+                    rawPts: Math.round(rawPts * 100) / 100,          // as logged
+                    dollars: Math.round(dollars * 100) / 100,
+                    qty: qty,
+                    instrument: instrument,
                     tag: tag,
                     period: 'pre_reg',
                     strategy: currentStrategy(),
@@ -527,6 +571,7 @@
                 pendingEntry = null;
                 pendingSl = null;
                 pendingTp = null;
+                pendingSize = null;
                 continue;
             }
             // Author lines / other noise — ignore
@@ -592,13 +637,23 @@
         body.innerHTML = STAGED.map(function (t, idx) {
             const date = new Date(t.timestamp).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' });
             const ptsClass = t.pts > 0 ? 'pos' : t.pts < 0 ? 'neg' : 'zero';
+            // Show as-logged points for verification; normalized /ES-equiv shown
+            // alongside when the instrument is MES (or qty > 1).
+            const displayRaw = (typeof t.rawPts === 'number') ? t.rawPts : t.pts;
+            const showNorm = t.instrument === 'MES' || (t.qty && t.qty > 1);
+            const normSuffix = showNorm
+                ? ' <span style="color:var(--slate);font-size:11px">(' + (t.pts>=0?'+':'') + t.pts.toFixed(2) + ' /ES eq)</span>'
+                : '';
+            const sizeBadge = (t.qty && t.instrument && t.instrument !== 'OPT')
+                ? ' <span style="color:var(--slate);font-size:11px">· ' + t.qty + ' /' + t.instrument + '</span>'
+                : '';
             return '<tr>'
                  + '<td>' + (idx+1) + '</td>'
                  + '<td>' + date + '</td>'
-                 + '<td>' + (t.symbol||'/ES') + '</td>'
+                 + '<td>' + (t.symbol||'/ES') + sizeBadge + '</td>'
                  + '<td>' + (t.side||'—') + '</td>'
                  + '<td>' + t.result + '</td>'
-                 + '<td class="num ' + ptsClass + '">' + (t.pts>=0?'+':'') + t.pts.toFixed(2) + '</td>'
+                 + '<td class="num ' + ptsClass + '">' + (displayRaw>=0?'+':'') + displayRaw.toFixed(2) + normSuffix + '</td>'
                  + '<td><span class="tag tag--' + (t.tag||'H3') + '">' + (t.tag||'H3') + '</span></td>'
                  + '</tr>';
         }).join('');
