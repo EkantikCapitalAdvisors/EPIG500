@@ -745,6 +745,143 @@
         });
     });
 
+    /* ---------- GitHub direct publish ----------
+       Commits the merged trades.json straight to main via the GitHub REST API.
+       PAT is fine-grained, repo-scoped (Contents: write), stored in localStorage
+       on this device only — never sent anywhere except api.github.com.
+    */
+    const GH_OWNER = 'EkantikCapitalAdvisors';
+    const GH_REPO  = 'EPIG500';
+    const GH_PATH  = 'data/trades.json';
+    const GH_BRANCH = 'main';
+    const PAT_KEY  = 'epig500_admin_gh_pat_v1';
+
+    function getPat() { try { return localStorage.getItem(PAT_KEY) || ''; } catch (e) { return ''; } }
+    function setPat(v) { try { localStorage.setItem(PAT_KEY, v); } catch (e) {} }
+    function clearPatStorage() { try { localStorage.removeItem(PAT_KEY); } catch (e) {} }
+
+    function refreshPatStatus() {
+        const el = document.getElementById('adminPatStatus');
+        const hasToken = !!getPat();
+        if (el) el.textContent = hasToken ? '✓ Token saved on this device' : 'No token saved';
+        const input = document.getElementById('adminPatInput');
+        if (input && hasToken && !input.value) input.placeholder = '••• token saved — paste to overwrite';
+    }
+    refreshPatStatus();
+
+    document.getElementById('adminPatSave').addEventListener('click', function () {
+        const v = (document.getElementById('adminPatInput').value || '').trim();
+        if (!v) { document.getElementById('adminPatStatus').textContent = 'Paste a token first.'; return; }
+        setPat(v);
+        document.getElementById('adminPatInput').value = '';
+        refreshPatStatus();
+    });
+    document.getElementById('adminPatClear').addEventListener('click', function () {
+        clearPatStorage();
+        document.getElementById('adminPatInput').value = '';
+        refreshPatStatus();
+    });
+
+    function pubStatus(msg, kind) {
+        const el = document.getElementById('adminPublishStatus');
+        el.hidden = false;
+        el.className = 'admin-status admin-status--' + (kind || 'info');
+        el.innerHTML = msg;
+    }
+
+    // Encode a UTF-8 string to base64 (handles non-ASCII correctly).
+    function utf8ToBase64(str) {
+        return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    async function ghRequest(method, url, token, body) {
+        const headers = {
+            'Accept': 'application/vnd.github+json',
+            'Authorization': 'Bearer ' + token,
+            'X-GitHub-Api-Version': '2022-11-28'
+        };
+        if (body) headers['Content-Type'] = 'application/json';
+        const res = await fetch(url, {
+            method: method,
+            headers: headers,
+            body: body ? JSON.stringify(body) : undefined
+        });
+        const text = await res.text();
+        let json = null;
+        try { json = text ? JSON.parse(text) : null; } catch (e) {}
+        if (!res.ok) {
+            const errMsg = (json && json.message) ? json.message : (text || ('HTTP ' + res.status));
+            throw new Error(errMsg);
+        }
+        return json;
+    }
+
+    async function publishToGitHub(outputJson) {
+        const token = getPat();
+        if (!token) {
+            pubStatus('No PAT saved. Open <strong>GitHub publishing settings</strong> below and paste a fine-grained PAT first.', 'error');
+            document.getElementById('adminPatPanel').open = true;
+            return;
+        }
+        const btn = document.getElementById('adminPublish');
+        btn.disabled = true;
+        const origLabel = btn.textContent;
+        btn.textContent = 'Publishing…';
+        try {
+            pubStatus('Reading current trades.json from <code>main</code>…', 'info');
+            const getUrl = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_PATH + '?ref=' + GH_BRANCH;
+            const existing = await ghRequest('GET', getUrl, token);
+            const sha = existing.sha;
+
+            const contentStr = JSON.stringify(outputJson, null, 2) + '\n';
+            const tradesCount = outputJson.trades.length;
+            const prevCount = (existing.content)
+                ? (function () {
+                    try {
+                        const prev = JSON.parse(atob(existing.content.replace(/\n/g, '')));
+                        return (prev.trades || []).length;
+                    } catch (e) { return null; }
+                })()
+                : null;
+            const deltaStr = (prevCount === null) ? '' : (' (' + tradesCount + ' total · ' + (tradesCount - prevCount >= 0 ? '+' : '') + (tradesCount - prevCount) + ' vs previous)');
+
+            pubStatus('Committing to <code>main</code>…', 'info');
+            const putUrl = 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO + '/contents/' + GH_PATH;
+            const commit = await ghRequest('PUT', putUrl, token, {
+                message: 'Update trade record via admin' + deltaStr,
+                content: utf8ToBase64(contentStr),
+                sha: sha,
+                branch: GH_BRANCH
+            });
+
+            const commitSha = (commit.commit && commit.commit.sha) ? commit.commit.sha.slice(0, 7) : '';
+            const commitUrl = (commit.commit && commit.commit.html_url) ? commit.commit.html_url : '';
+            pubStatus(
+                '✓ Committed to <code>main</code> @ <code>' + commitSha + '</code>' + deltaStr
+                + (commitUrl ? ' · <a href="' + commitUrl + '" target="_blank" rel="noopener">view commit ↗</a>' : '')
+                + '<br><span style="font-size:12px;color:var(--slate)">GitHub Pages typically redeploys within ~30 seconds. Refresh the dashboard then.</span>',
+                'success'
+            );
+        } catch (e) {
+            const msg = String(e.message || e);
+            let hint = '';
+            if (/401|403|Bad credentials|not accessible/i.test(msg)) {
+                hint = '<br><span style="font-size:12px">Likely a bad / expired token, or the PAT does not have <code>Contents: write</code> on this repo.</span>';
+            } else if (/sha/i.test(msg) && /does not match/i.test(msg)) {
+                hint = '<br><span style="font-size:12px">The remote file changed since this build. Click <strong>Build new trades.json</strong> again to refresh, then re-publish.</span>';
+            }
+            pubStatus('Publish failed: ' + msg + hint, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = origLabel;
+        }
+    }
+
+    document.getElementById('adminPublish').addEventListener('click', function () {
+        if (!LAST_OUTPUT) { pubStatus('Build the new trades.json first.', 'error'); return; }
+        publishToGitHub(LAST_OUTPUT);
+    });
+
     /* ---------- Current dataset table ---------- */
     function renderCurrent() {
         const q = (document.getElementById('adminSearch').value || '').toLowerCase();
