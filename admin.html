@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=20260528b">
-    <link rel="stylesheet" href="css/dashboard.css?v=20260528b">
+    <link rel="stylesheet" href="css/style.css?v=20260528c">
+    <link rel="stylesheet" href="css/dashboard.css?v=20260528c">
 </head>
 <body class="dash-body">
 
@@ -38,6 +38,25 @@
 
     <!-- Live KPIs (mirror dashboard) -->
     <section class="dash-kpis" id="adminKpis"></section>
+
+    <!-- GitHub publishing settings (always visible — set once, use forever) -->
+    <section class="admin-panel" aria-label="GitHub publishing settings">
+        <details id="adminPatPanel">
+            <summary style="cursor:pointer;font-family:'Playfair Display',serif;font-size:18px;color:var(--navy)">◆ GitHub publishing settings <span id="adminPatStatusInline" style="font-size:13px;color:var(--slate);font-family:'Source Sans 3',sans-serif;font-weight:400"></span></summary>
+            <p class="admin-panel__sub" style="margin-top:8px">A fine-grained Personal Access Token is needed to commit from the browser. Scope it to <strong>this repo only</strong> with <strong>Contents: Read &amp; write</strong>. The token is stored in <code>localStorage</code> on this device — it never leaves your browser.</p>
+            <p class="admin-panel__sub"><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Create a fine-grained PAT →</a> · Repository access: <code>EkantikCapitalAdvisors/EPIG500</code> only · Permissions: <code>Contents: Read and write</code>.</p>
+            <label style="display:block;margin-top:12px">
+                <span style="display:block;font-size:12px;color:var(--slate);margin-bottom:4px">Personal Access Token</span>
+                <input type="password" id="adminPatInput" placeholder="github_pat_…" autocomplete="off" style="width:100%;font-family:monospace;font-size:13px;padding:8px;border:1px solid var(--line);border-radius:4px">
+            </label>
+            <div style="display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap">
+                <button class="btn btn--secondary btn--sm" id="adminPatSave" type="button">Save token</button>
+                <button class="btn btn--ghost btn--sm" id="adminPatClear" type="button">Clear saved token</button>
+                <button class="btn btn--ghost btn--sm" id="adminPatTest" type="button">Test token</button>
+                <span id="adminPatStatus" style="font-size:12px;color:var(--slate)"></span>
+            </div>
+        </details>
+    </section>
 
     <!-- Discord import panel -->
     <section class="admin-panel" aria-label="Import Discord trades">
@@ -166,21 +185,6 @@ F2: -8.25 H2</code></pre>
             </div>
             <div class="admin-status" id="adminPublishStatus" hidden></div>
 
-            <details class="admin-output__cmd" id="adminPatPanel">
-                <summary>◆ GitHub publishing settings</summary>
-                <p class="admin-panel__sub">A fine-grained Personal Access Token is needed to commit from the browser. Scope it to <strong>this repo only</strong> with <strong>Contents: Read & write</strong>. The token is stored in <code>localStorage</code> on this device — it never leaves your browser.</p>
-                <p class="admin-panel__sub"><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Create a fine-grained PAT →</a> · Repository access: <code>EkantikCapitalAdvisors/EPIG500</code> only · Permissions: <code>Contents: Read and write</code>.</p>
-                <label style="display:block;margin-top:12px">
-                    <span style="display:block;font-size:12px;color:var(--slate);margin-bottom:4px">Personal Access Token</span>
-                    <input type="password" id="adminPatInput" placeholder="github_pat_…" autocomplete="off" style="width:100%;font-family:monospace;font-size:13px;padding:8px;border:1px solid var(--line);border-radius:4px">
-                </label>
-                <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-                    <button class="btn btn--secondary btn--sm" id="adminPatSave" type="button">Save token</button>
-                    <button class="btn btn--ghost btn--sm" id="adminPatClear" type="button">Clear saved token</button>
-                    <span id="adminPatStatus" style="font-size:12px;color:var(--slate)"></span>
-                </div>
-            </details>
-
             <details class="admin-output__cmd">
                 <summary>Manual publish (git commands)</summary>
                 <pre><code>cd EPIG500
@@ -219,6 +223,6 @@ git push</code></pre>
     </section>
 </main>
 
-<script src="js/admin.js?v=20260528b"></script>
+<script src="js/admin.js?v=20260528c"></script>
 </body>
 </html>

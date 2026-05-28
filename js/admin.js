@@ -761,13 +761,30 @@
     function clearPatStorage() { try { localStorage.removeItem(PAT_KEY); } catch (e) {} }
 
     function refreshPatStatus() {
-        const el = document.getElementById('adminPatStatus');
         const hasToken = !!getPat();
+        const el = document.getElementById('adminPatStatus');
         if (el) el.textContent = hasToken ? '✓ Token saved on this device' : 'No token saved';
+        const inline = document.getElementById('adminPatStatusInline');
+        if (inline) inline.textContent = hasToken ? '· ✓ token saved' : '· no token — click to set up';
         const input = document.getElementById('adminPatInput');
         if (input && hasToken && !input.value) input.placeholder = '••• token saved — paste to overwrite';
     }
     refreshPatStatus();
+
+    // Test the saved token by hitting /repos/{owner}/{repo} — surfaces 401/403 immediately.
+    const testBtn = document.getElementById('adminPatTest');
+    if (testBtn) testBtn.addEventListener('click', async function () {
+        const token = getPat();
+        const el = document.getElementById('adminPatStatus');
+        if (!token) { el.textContent = 'Save a token first.'; return; }
+        el.textContent = 'Testing…';
+        try {
+            await ghRequest('GET', 'https://api.github.com/repos/' + GH_OWNER + '/' + GH_REPO, token);
+            el.textContent = '✓ Token works — repo access confirmed.';
+        } catch (e) {
+            el.textContent = '✗ ' + String(e.message || e);
+        }
+    });
 
     document.getElementById('adminPatSave').addEventListener('click', function () {
         const v = (document.getElementById('adminPatInput').value || '').trim();
