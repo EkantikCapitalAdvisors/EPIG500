@@ -3267,3 +3267,122 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 @media (max-width: 800px) {
     .rm-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   E·P·I·G Branding — hero acronym strip + four pillar cards
+   ============================================================ */
+
+/* Slim acronym strip beneath the hero H1 */
+.epig-tagline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-3);
+    margin: var(--s-4) 0 var(--s-5);
+    padding: var(--s-3) var(--s-4);
+    background: linear-gradient(90deg, rgba(200, 169, 81, 0.10), rgba(200, 169, 81, 0.02));
+    border-left: 3px solid var(--gold);
+    border-radius: var(--radius);
+    font-size: 14px;
+    color: var(--ivory);
+}
+.epig-tagline__brand {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--gold-bright);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+.epig-tagline__divider {
+    color: var(--gold);
+    opacity: 0.55;
+    font-weight: 300;
+}
+.epig-tagline__pillars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3) var(--s-4);
+    align-items: center;
+}
+.epig-pill {
+    font-size: 14px;
+    color: var(--ivory);
+    opacity: 0.92;
+    white-space: nowrap;
+}
+.epig-pill strong {
+    color: var(--gold-bright);
+    font-weight: 700;
+    margin-right: 1px;
+}
+@media (max-width: 700px) {
+    .epig-tagline { font-size: 13px; padding: var(--s-3); }
+    .epig-tagline__brand { font-size: 16px; }
+    .epig-pill { font-size: 13px; }
+}
+
+/* Four design-pillars section */
+.pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-5);
+    margin-top: var(--s-7);
+}
+@media (max-width: 1000px) { .pillars-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px)  { .pillars-grid { grid-template-columns: 1fr; } }
+
+.pillar-card {
+    background: var(--ivory);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--gold);
+    border-radius: var(--radius);
+    padding: var(--s-5) var(--s-4) var(--s-4);
+    display: flex;
+    flex-direction: column;
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+.pillar-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(27, 42, 74, 0.08);
+}
+.pillar-card__letter {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--gold-deep);
+    margin: 0 0 var(--s-2);
+    letter-spacing: -2px;
+}
+.pillar-card__h {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 22px;
+    color: var(--navy);
+    margin: 0 0 var(--s-1);
+    line-height: 1.2;
+}
+.pillar-card__sub {
+    font-size: 13px;
+    color: var(--slate);
+    font-style: italic;
+    margin: 0 0 var(--s-3);
+}
+.pillar-card__body {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--slate-dark);
+    margin: 0 0 var(--s-3);
+    flex: 1;
+}
+.pillar-card__body strong { color: var(--navy); font-weight: 700; }
+.pillar-card__anchor {
+    margin: 0;
+    font-size: 13px;
+}
+.pillar-card__anchor a {
+    color: var(--gold-deep);
+    font-weight: 600;
+}
+.pillar-card__anchor a:hover { color: var(--navy); }

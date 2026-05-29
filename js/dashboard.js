@@ -8,6 +8,41 @@
     let TRADES = [];
     let META = {};
     let filteredTrades = [];
+    let currentTf = 'all';     // active timeframe key
+
+    /* ---------- Timeframe filter ----------
+       Returns a subset of trades whose timestamps fall in the selected window.
+       'all' = no filter; 'prereg' / 'historical' = period-based. */
+    function tfFilter(trades, tf) {
+        if (!tf || tf === 'all') return trades.slice();
+        if (tf === 'prereg')      return trades.filter(function (t) { return t.period === 'pre_reg'; });
+        if (tf === 'historical')  return trades.filter(function (t) { return t.period === 'historical'; });
+
+        const now = new Date();
+        let cutoff;
+        if (tf === 'ytd') {
+            cutoff = new Date(now.getFullYear(), 0, 1);
+        } else if (tf === 'mtd') {
+            cutoff = new Date(now.getFullYear(), now.getMonth(), 1);
+        } else if (tf === '7d')  { cutoff = new Date(now.getTime() -  7 * 86400000); }
+        else if (tf === '30d') { cutoff = new Date(now.getTime() - 30 * 86400000); }
+        else if (tf === '90d') { cutoff = new Date(now.getTime() - 90 * 86400000); }
+        else { return trades.slice(); }
+        return trades.filter(function (t) { return new Date(t.timestamp) >= cutoff; });
+    }
+
+    function tfLabel(tf) {
+        return ({
+            'all': 'All time',
+            'ytd': 'Year-to-date',
+            'mtd': 'Month-to-date',
+            '7d':  'Last 7 days',
+            '30d': 'Last 30 days',
+            '90d': 'Last 90 days',
+            'prereg': 'Pre-registration trades only',
+            'historical': 'Historical reference dataset only'
+        })[tf] || 'All time';
+    }
 
     fetch('data/trades.json', { cache: 'no-store' })
         .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
@@ -57,17 +92,35 @@
         const lastPeak = Math.max.apply(null, eq);
         const curDD = eq[eq.length - 1] - lastPeak;
 
-        // Streak
-        let maxStreak = 0, cur = 0;
+        // Streaks — max losing streak and current streak (signed: +n win streak, -n loss streak)
+        let maxStreak = 0, runLoss = 0, runWin = 0;
         for (let i = 0; i < chrono.length; i++) {
-            if (chrono[i].pts < 0) { cur++; if (cur > maxStreak) maxStreak = cur; } else { cur = 0; }
+            if (chrono[i].pts < 0) { runLoss++; runWin = 0; if (runLoss > maxStreak) maxStreak = runLoss; }
+            else if (chrono[i].pts > 0) { runWin++; runLoss = 0; }
+            else { runWin = 0; runLoss = 0; }
         }
+        const currentStreak = runWin > 0 ? runWin : -runLoss;
+
+        // Best / worst single trade
+        const best = pts.reduce(function (a, b) { return b > a ? b : a; }, -Infinity);
+        const worst = pts.reduce(function (a, b) { return b < a ? b : a; }, Infinity);
+
+        // W/L ratio (avg win / avg loss); recovery factor (total / |maxDD|)
+        const wlRatio = avgLoss > 0 ? avgWin / avgLoss : Infinity;
+        const recovery = maxDD < 0 ? total / Math.abs(maxDD) : Infinity;
+
+        // Date range
+        const firstTs = chrono.length ? new Date(chrono[0].timestamp) : null;
+        const lastTs  = chrono.length ? new Date(chrono[chrono.length-1].timestamp) : null;
 
         return {
             n: n, wins: wins.length, losses: losses.length, be: be.length,
             winRate: winRate, evMean: evMean, total: total, pf: pf,
             avgWin: avgWin, avgLoss: avgLoss, grossWin: grossWin, grossLoss: grossLoss,
-            equity: eq, chrono: chrono, maxDD: maxDD, curDD: curDD, maxStreak: maxStreak
+            equity: eq, chrono: chrono, maxDD: maxDD, curDD: curDD,
+            maxStreak: maxStreak, currentStreak: currentStreak,
+            best: best, worst: worst, wlRatio: wlRatio, recovery: recovery,
+            firstTs: firstTs, lastTs: lastTs
         };
     }
 
@@ -120,15 +173,39 @@
         ];
     }
 
-    /* ---------- Render ---------- */
+    /* ---------- Render ----------
+       Battery always uses the full record (the canonical 8-test is a sustainability
+       claim on the entire dataset). KPIs + equity curve + trade table respect the
+       active timeframe.
+    */
     function render() {
-        const s = compute(TRADES);
-        if (!s) return;
+        const tfSlice = tfFilter(TRADES, currentTf);
+        const sTf = compute(tfSlice);
+        const sFull = compute(TRADES);
         renderMeta();
-        renderKpis(s);
-        renderBattery(s);
-        drawEquityCurve(s);
-        renderTable();
+        renderTimeframeMeta(sTf, tfSlice.length);
+        if (sTf) {
+            renderKpis(sTf);
+            drawEquityCurve(sTf);
+        } else {
+            document.getElementById('dashKpis').innerHTML = '<div class="kpi" style="grid-column:1/-1;text-align:center;padding:24px"><p class="kpi__sub">No trades in this window. Pick a wider timeframe.</p></div>';
+            const ctx = document.getElementById('dashEquityCurve').getContext('2d');
+            ctx.clearRect(0, 0, document.getElementById('dashEquityCurve').width, document.getElementById('dashEquityCurve').height);
+            document.getElementById('dashChartSub').textContent = '—';
+        }
+        if (sFull) renderBattery(sFull);
+        applyFilters();   // re-applies search/result/side over the current timeframe slice
+    }
+
+    function renderTimeframeMeta(s, sliceLen) {
+        const el = document.getElementById('dashTimeframeMeta');
+        if (!el) return;
+        if (!s || !sliceLen) {
+            el.textContent = tfLabel(currentTf) + ' · no trades in window';
+            return;
+        }
+        const fmt = function (d) { return d ? d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'; };
+        el.innerHTML = '<strong>' + tfLabel(currentTf) + '</strong> · ' + sliceLen + ' of ' + TRADES.length + ' trades · ' + fmt(s.firstTs) + ' → ' + fmt(s.lastTs);
     }
 
     function renderMeta() {
@@ -143,13 +220,28 @@
     function renderKpis(s) {
         const k = document.getElementById('dashKpis');
         const totalDollars = (s.total * 50).toLocaleString('en-US', { maximumFractionDigits: 0 });
+        const streakLabel = s.currentStreak === 0
+            ? 'flat'
+            : (s.currentStreak > 0 ? s.currentStreak + ' W' : Math.abs(s.currentStreak) + ' L');
+        const streakMood = s.currentStreak > 0 ? 'pos' : s.currentStreak < 0 ? 'neg' : null;
+        const recoveryStr = isFinite(s.recovery) ? s.recovery.toFixed(2) + 'x' : '∞';
+        const wlStr = isFinite(s.wlRatio) ? s.wlRatio.toFixed(2) : '∞';
+
         const kpis = [
+            // Row 1 — return / throughput
             { label: 'Total trades',  val: String(s.n),                       sub: s.wins + ' W · ' + s.losses + ' L · ' + s.be + ' BE' },
             { label: 'Win rate',      val: (s.winRate*100).toFixed(1) + '%',  sub: 'excl. BE' },
-            { label: 'EV / trade',    val: (s.evMean>=0?'+':'') + s.evMean.toFixed(2) + ' pts', sub: '($' + Math.round(s.evMean*50).toLocaleString() + ' / contract)', mood: s.evMean>=0?'pos':'neg' },
-            { label: 'Profit Factor', val: isFinite(s.pf) ? s.pf.toFixed(2) : '∞', sub: 'wins/losses', mood: s.pf>=1.5?'pos':'neg' },
-            { label: 'Total P&L',     val: (s.total>=0?'+':'') + s.total.toFixed(0) + ' pts', sub: '$' + totalDollars + ' / contract', mood: s.total>=0?'pos':'neg' },
-            { label: 'Max DD',        val: s.maxDD.toFixed(1) + ' pts',                sub: 'cur: ' + s.curDD.toFixed(1) + ' pts', mood: 'neg' }
+            { label: 'EV / trade',    val: (s.evMean>=0?'+':'') + s.evMean.toFixed(2) + ' pts', sub: '$' + Math.round(s.evMean*50).toLocaleString() + ' / ctr', mood: s.evMean>=0?'pos':'neg' },
+            { label: 'Profit Factor', val: isFinite(s.pf) ? s.pf.toFixed(2) : '∞', sub: 'gross W / gross L', mood: s.pf>=1.5?'pos':'neg' },
+            { label: 'Total P&L',     val: (s.total>=0?'+':'') + s.total.toFixed(0) + ' pts', sub: '$' + totalDollars + ' / ctr', mood: s.total>=0?'pos':'neg' },
+            { label: 'Max DD',        val: s.maxDD.toFixed(1) + ' pts',       sub: 'cur: ' + s.curDD.toFixed(1) + ' pts', mood: 'neg' },
+            // Row 2 — distribution / quality
+            { label: 'Avg win',       val: '+' + s.avgWin.toFixed(2) + ' pts',  sub: 'over ' + s.wins + ' winners', mood: 'pos' },
+            { label: 'Avg loss',      val: '−' + s.avgLoss.toFixed(2) + ' pts', sub: 'over ' + s.losses + ' losers', mood: 'neg' },
+            { label: 'W/L ratio',     val: wlStr,                              sub: 'avg win ÷ avg loss', mood: s.wlRatio>=1?'pos':'neg' },
+            { label: 'Best trade',    val: '+' + s.best.toFixed(2) + ' pts',    sub: 'single best', mood: 'pos' },
+            { label: 'Worst trade',   val:       s.worst.toFixed(2) + ' pts',   sub: 'single worst', mood: 'neg' },
+            { label: 'Current streak', val: streakLabel,                        sub: 'consecutive', mood: streakMood }
         ];
         k.innerHTML = kpis.map(function (x) {
             const moodClass = x.mood ? ' kpi--' + x.mood : '';
@@ -296,7 +388,8 @@
         const res = document.getElementById('dashFilterResult').value;
         const side = document.getElementById('dashFilterSide').value;
         const q = (document.getElementById('dashSearch').value || '').toLowerCase().trim();
-        filteredTrades = TRADES.filter(function (t) {
+        const tfSlice = tfFilter(TRADES, currentTf);
+        filteredTrades = tfSlice.filter(function (t) {
             if (res && t.result !== res) return false;
             if (side && t.side !== side) return false;
             if (q) {
@@ -309,6 +402,17 @@
     }
     ['dashFilterResult','dashFilterSide','dashSearch'].forEach(function (id) {
         document.getElementById(id).addEventListener('input', applyFilters);
+    });
+
+    /* ---------- Timeframe chips ---------- */
+    document.querySelectorAll('#dashTimeframe .tf-chip').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            currentTf = btn.getAttribute('data-tf') || 'all';
+            document.querySelectorAll('#dashTimeframe .tf-chip').forEach(function (b) {
+                b.classList.toggle('is-active', b === btn);
+            });
+            render();
+        });
     });
 
     /* ---------- CSV export ---------- */
@@ -327,7 +431,7 @@
     });
 
     window.addEventListener('resize', function () {
-        const s = compute(TRADES);
+        const s = compute(tfFilter(TRADES, currentTf));
         if (s) drawEquityCurve(s);
     });
 })();
