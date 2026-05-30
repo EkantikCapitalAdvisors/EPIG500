@@ -284,19 +284,45 @@
         const eq = s.equity;
         const min = Math.min.apply(null, eq);
         const max = Math.max.apply(null, eq);
-        const PAD_L = 60, PAD_R = 24, PAD_T = 20, PAD_B = 40;
+        const PAD_L = 64, PAD_R = 80, PAD_T = 20, PAD_B = 40;   // extra right pad for $ axis
         const xStep = (W - PAD_L - PAD_R) / Math.max(1, eq.length - 1);
         const yScale = (H - PAD_T - PAD_B) / (max - min || 1);
 
-        // grid
+        // Compact $ formatter: 1,234 -> 1.2k, 28,250 -> 28.3k, 1,250,000 -> 1.25M
+        function fmtDollars(d) {
+            const sign = d < 0 ? '-' : '+';
+            const a = Math.abs(d);
+            if (a >= 1e6) return sign + '$' + (a / 1e6).toFixed(2) + 'M';
+            if (a >= 1e3) return sign + '$' + (a / 1e3).toFixed(a >= 1e4 ? 1 : 2) + 'k';
+            return sign + '$' + a.toFixed(0);
+        }
+
+        // grid + dual-axis labels: /ES points on the left, $ per contract on the right
         ctx.strokeStyle = 'rgba(27, 42, 74, 0.06)'; ctx.lineWidth = 1;
-        ctx.fillStyle = '#64748B'; ctx.font = '11px "Source Sans 3", sans-serif';
+        ctx.font = '11px "Source Sans 3", sans-serif';
         for (let g = 0; g <= 4; g++) {
             const v = min + (max - min) * g / 4;
             const y = PAD_T + (max - v) * yScale;
             ctx.beginPath(); ctx.moveTo(PAD_L, y); ctx.lineTo(W - PAD_R, y); ctx.stroke();
-            ctx.fillText((v>=0?'+':'') + v.toFixed(0) + ' pts', 8, y + 4);
+            // Left axis: points (navy)
+            ctx.fillStyle = '#1B2A4A';
+            ctx.textAlign = 'right';
+            ctx.fillText((v>=0?'+':'') + v.toFixed(0) + ' pts', PAD_L - 8, y + 4);
+            // Right axis: dollars per /ES contract (gold-deep)
+            ctx.fillStyle = '#A88A38';
+            ctx.textAlign = 'left';
+            ctx.fillText(fmtDollars(v * 50), W - PAD_R + 8, y + 4);
         }
+        ctx.textAlign = 'left';
+        // Axis legends
+        ctx.fillStyle = '#1B2A4A'; ctx.font = '10px "Source Sans 3", sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('/ES pts', PAD_L - 8, PAD_T - 6);
+        ctx.fillStyle = '#A88A38';
+        ctx.textAlign = 'left';
+        ctx.fillText('$ / contract', W - PAD_R + 8, PAD_T - 6);
+        ctx.textAlign = 'left';
+        ctx.font = '11px "Source Sans 3", sans-serif';
         // zero line
         if (min < 0 && max > 0) {
             const yZero = PAD_T + (max) * yScale;
@@ -358,7 +384,14 @@
             ctx.stroke();
         }
 
-        document.getElementById('dashChartSub').textContent = eq.length + ' trades · ending +' + eq[eq.length-1].toFixed(0) + ' pts · peak +' + max.toFixed(0) + ' · trough ' + min.toFixed(0);
+        const endPts = eq[eq.length-1];
+        const fmtUSD = function (d) { return d.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }); };
+        document.getElementById('dashChartSub').innerHTML =
+              eq.length + ' trades · '
+            + 'ending <strong>' + (endPts>=0?'+':'') + endPts.toFixed(0) + ' pts</strong> '
+            + '<span style="color:var(--gold-deep)">(' + fmtUSD(endPts * 50) + ' / ctr)</span> · '
+            + 'peak +' + max.toFixed(0) + ' pts <span style="color:var(--gold-deep)">(' + fmtUSD(max * 50) + ')</span> · '
+            + 'trough ' + min.toFixed(0) + ' pts <span style="color:var(--gold-deep)">(' + fmtUSD(min * 50) + ')</span>';
     }
 
     function renderTable() {
