@@ -118,8 +118,9 @@
        Starting capital: $100K NLV. 1-year horizon. 60 days of no-trading buffer
        up front (~2 months observation/protocol-warmup). Contract scaling capped
        at 4 /ES maximum. Three discrete scenarios (Floor / Realistic / Cooperative).
-       Throughput per /ES from reference data: $26,662.50 / 18 calendar months
-       = ~$1,480/mo/contract. Calendar-month average, not active-day extrapolation. */
+       Per-/ES monthly throughput is a DESIGN TARGET used by the ladder
+       illustration. The actual throughput will be reported from the live
+       pre-registration record as it accumulates. */
 
     const NLV_START         = 100000;
     const SPY_PCT           = 0.90;          // 90% SPY foundation
@@ -129,8 +130,7 @@
     // S&P 500 historical average annual return (last 20 years, incl. dividends, rounded)
     const SPY_ANNUAL_RETURN = 0.10;
     const SPY_MONTHLY_RATE  = Math.pow(1 + SPY_ANNUAL_RETURN, 1/12) - 1; // ≈ 0.797%/mo
-    // Per-/ES per-calendar-month throughput, DERIVED from the 227-trade reference
-    // dataset: total $26,662.50 / 18 calendar months (Apr 2023 – Oct 2024).
+    // Per-/ES per-calendar-month throughput — DESIGN TARGET, not yet substantiated by a published record.
     const PER_ES_MONTHLY    = 1480;
     const DURATION_MAX      = 12;            // months
     const BUFFER_DAYS       = 60;            // engine no-trading buffer at start of year
@@ -554,12 +554,13 @@
     window.addEventListener('resize', function () { drawLadderChart(); });
 
     /* ------------------------------------------------
-       4. REFERENCE DATASET
-       Representative 227-trade record statistically matching published reference stats
-       (60.3% WR, +7.96 avg win, -6.08 avg loss, PF 1.99, EV +2.38 pts).
-       Hiren's actual CSV gets swapped in by replacing REFERENCE_TRADES.
+       4. REFERENCE DATASET — DEPRECATED
+       Earlier versions of this site embedded a synthetic 227-trade dataset here
+       to populate the battery before any real record existed. That has been
+       removed. The page-level battery now reads the same live trades.json the
+       dashboard uses, and refuses to render a verdict below n=30.
        ------------------------------------------------ */
-    function generateReferenceTrades() {
+    function generateReferenceTrades_DEPRECATED() {
         // Deterministic PRNG (Mulberry32) for reproducible representative dataset
         let seed = 0x42424242;
         function rand() {
@@ -618,9 +619,22 @@
         return trades;
     }
 
-    let REFERENCE_TRADES = generateReferenceTrades();
-    let CURRENT_DATASET_LABEL = 'Ekantik reference (227 trades)';
-    let currentTrades = REFERENCE_TRADES.slice();
+    // Live trades.json is the single source of truth — no embedded fallback.
+    let REFERENCE_TRADES = [];
+    let CURRENT_DATASET_LABEL = 'Loading live record…';
+    let currentTrades = [];
+    const BATTERY_MIN_N = 30;
+    fetch('data/trades.json?t=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (json) {
+            if (!json || !json.trades) return;
+            REFERENCE_TRADES = json.trades.slice();
+            currentTrades = REFERENCE_TRADES.slice();
+            const live = REFERENCE_TRADES.filter(function (t) { return t.period === 'pre_reg'; }).length;
+            CURRENT_DATASET_LABEL = 'Live pre-reg record (' + live + ' trades)';
+            if (typeof renderBattery === 'function') renderBattery(currentTrades);
+        })
+        .catch(function () {});
 
     /* ------------------------------------------------
        5. 8-TEST SUSTAINABILITY BATTERY
@@ -781,6 +795,20 @@
         const datasetLabel = document.getElementById('batteryDataset');
         if (!grid) return;
 
+        const n = (trades || []).length;
+        if (n < BATTERY_MIN_N) {
+            verdict.textContent = 'Activates at ' + BATTERY_MIN_N + '+ trades';
+            verdict.classList.remove('has-fail');
+            verdict.classList.add('is-pending');
+            if (timestamp) timestamp.textContent = '—';
+            if (datasetLabel) datasetLabel.textContent = CURRENT_DATASET_LABEL + ' · n = ' + n;
+            grid.innerHTML = '<div style="padding:24px;text-align:center;color:var(--slate);font-size:14px;line-height:1.6">'
+                + '<p style="margin:0 0 8px"><strong>The 8-test battery is a statistical claim about the entire dataset.</strong></p>'
+                + '<p style="margin:0 0 8px">With <strong>n = ' + n + '</strong> trades the sample is too small for meaningful inference. The battery returns when the live record reaches <strong>' + BATTERY_MIN_N + '+ closed trades</strong>.</p>'
+                + '<p style="margin:0"><a href="/dashboard.html">See the live record so far →</a></p>'
+                + '</div>';
+            return;
+        }
         const results = computeBattery(trades);
         if (!results) {
             grid.innerHTML = '<p>Insufficient data to compute battery.</p>';
@@ -789,6 +817,7 @@
         const passed = results.filter(function (r) { return r.pass; }).length;
         verdict.textContent = passed + ' / 8 ' + (passed === 8 ? 'PASS' : passed >= 6 ? 'PARTIAL' : 'FAIL');
         verdict.classList.toggle('has-fail', passed < 8);
+        verdict.classList.remove('is-pending');
         timestamp.textContent = new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
         if (datasetLabel) datasetLabel.textContent = CURRENT_DATASET_LABEL;
 
@@ -1018,9 +1047,10 @@
     }
     function resetToSample() {
         currentTrades = REFERENCE_TRADES.slice();
-        CURRENT_DATASET_LABEL = 'Ekantik reference (227 trades)';
+        const live = currentTrades.filter(function (t) { return t.period === 'pre_reg'; }).length;
+        CURRENT_DATASET_LABEL = 'Live pre-reg record (' + live + ' trades)';
         renderBattery(currentTrades);
-        showStatus('Reset to Ekantik reference dataset.', 'info');
+        showStatus('Reset to live pre-registration record.', 'info');
     }
     document.getElementById('uploadResetBtn')?.addEventListener('click', resetToSample);
     document.getElementById('batteryResetBtn')?.addEventListener('click', resetToSample);

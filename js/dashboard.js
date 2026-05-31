@@ -249,8 +249,10 @@
         const updated = META.last_updated ? new Date(META.last_updated).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) : '—';
         const hist = TRADES.filter(function (t) { return t.period === 'historical'; }).length;
         const live = TRADES.filter(function (t) { return t.period === 'pre_reg'; }).length;
-        const periodLine = '<span class="dash-meta-period dash-meta-period--hist">' + hist + ' historical</span> · <span class="dash-meta-period dash-meta-period--gap">Nov \'24 – Apr \'26 paused (<a href="https://accelerator.ekantikcapital.com/" target="_blank" rel="noopener">Accelerator</a>)</span> · <span class="dash-meta-period dash-meta-period--live">' + live + ' pre-reg live</span>';
-        meta.innerHTML = (META.dataset_label || 'Dataset') + ' · <strong>Last updated:</strong> ' + updated + '<br>' + periodLine;
+        const parts = [];
+        if (hist > 0) parts.push('<span class="dash-meta-period dash-meta-period--hist">' + hist + ' historical</span>');
+        parts.push('<span class="dash-meta-period dash-meta-period--live">' + live + ' pre-reg live</span>');
+        meta.innerHTML = (META.dataset_label || 'Dataset') + ' · <strong>Last updated:</strong> ' + updated + '<br>' + parts.join(' · ');
     }
 
     function renderKpis(s) {
@@ -332,14 +334,23 @@
     }
 
     function renderBattery(s) {
+        const wrap = document.querySelector('.dash-battery');
+        const verdict = document.getElementById('dashBatteryVerdict');
+        const grid = document.getElementById('dashBatteryGrid');
+        const BATTERY_MIN_N = 30;
+        if (!s || s.n < BATTERY_MIN_N) {
+            wrap.classList.add('is-pending');
+            wrap.classList.remove('is-fail');
+            verdict.textContent = 'Activates at ' + BATTERY_MIN_N + '+ trades';
+            grid.innerHTML = '<p style="font-size:13px;color:var(--slate);grid-column:1/-1;margin:0">The 8-test sustainability battery is a statistical claim about the entire dataset. With <strong>n = ' + (s ? s.n : 0) + '</strong> trades the sample is too small for meaningful inference. The battery returns when the live record reaches ' + BATTERY_MIN_N + '+ closed trades.</p>';
+            return;
+        }
+        wrap.classList.remove('is-pending');
         const results = battery(s);
         const passed = results.filter(function (r) { return r.pass; }).length;
-        const verdict = document.getElementById('dashBatteryVerdict');
-        const wrap = document.querySelector('.dash-battery');
         verdict.textContent = passed + ' / 8 ' + (passed === 8 ? 'PASS' : passed >= 6 ? 'PARTIAL' : 'FAIL');
         wrap.classList.toggle('is-fail', passed < 8);
 
-        const grid = document.getElementById('dashBatteryGrid');
         grid.innerHTML = results.map(function (r) {
             return '<div class="tpill' + (r.pass ? '' : ' is-fail') + '">'
                  + '<span class="tpill__name">' + r.name + '</span>'
