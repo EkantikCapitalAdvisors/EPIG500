@@ -112,6 +112,18 @@
         // R-Expectancy: per-trade points expressed in units of average loss (1R)
         const rExp = avgLoss > 0 ? evMean / avgLoss : 0;
 
+        // Annual R: total R-multiples earned annualized over the elapsed window.
+        // Total R = sum(points) / avgLoss. Year fraction uses the span between
+        // first and last trade in the window. Below 30 days the annualization is
+        // noisy; we surface that in the tile sub-label rather than suppressing.
+        const _firstMs = chrono.length ? new Date(chrono[0].timestamp).getTime() : 0;
+        const _lastMs  = chrono.length ? new Date(chrono[chrono.length-1].timestamp).getTime() : 0;
+        const _yrMs = 365.25 * 86400 * 1000;
+        const yearsElapsed = (_lastMs > _firstMs) ? (_lastMs - _firstMs) / _yrMs : 0;
+        const totalR = avgLoss > 0 ? total / avgLoss : 0;
+        const annualR = (yearsElapsed > 0 && avgLoss > 0) ? totalR / yearsElapsed : null;
+        const annualRDaysCovered = yearsElapsed * 365.25;
+
         // Trades-to-recover from the deepest drawdown: from the trough, how many
         // subsequent trades until equity reclaims the peak that preceded it.
         // null if not yet recovered (still in drawdown).
@@ -142,6 +154,8 @@
             maxStreak: maxStreak, currentStreak: currentStreak,
             best: best, worst: worst, wlRatio: wlRatio, recovery: recovery,
             rExp: rExp, recoveryTrades: recoveryTrades, recoveryInProgress: recoveryInProgress,
+            totalR: totalR, annualR: annualR, annualRDaysCovered: annualRDaysCovered,
+            yearsElapsed: yearsElapsed,
             firstTs: firstTs, lastTs: lastTs
         };
     }
@@ -251,6 +265,25 @@
 
         // R-Expectancy formatting
         const rExpStr = (s.rExp >= 0 ? '+' : '') + s.rExp.toFixed(2) + 'R';
+        // Annual R formatting
+        let annualRStr, annualRSub, annualRMood;
+        if (s.annualR === null || !isFinite(s.annualR)) {
+            annualRStr = '—';
+            annualRSub = 'need >1 trade with span';
+            annualRMood = null;
+        } else {
+            annualRStr = (s.annualR >= 0 ? '+' : '') + s.annualR.toFixed(1) + 'R/yr';
+            const daysCovered = Math.max(1, Math.round(s.annualRDaysCovered));
+            const totalRStr = (s.totalR >= 0 ? '+' : '') + s.totalR.toFixed(1) + 'R';
+            if (daysCovered < 30) {
+                annualRSub = 'short window · ' + daysCovered + 'd · total ' + totalRStr;
+            } else if (s.yearsElapsed >= 1) {
+                annualRSub = 'over ' + s.yearsElapsed.toFixed(1) + ' yrs · total ' + totalRStr;
+            } else {
+                annualRSub = 'annualized · ' + daysCovered + 'd · total ' + totalRStr;
+            }
+            annualRMood = s.annualR >= 0 ? 'pos' : 'neg';
+        }
         // Trades-to-recover formatting
         let recovVal, recovSub, recovMood;
         if (s.recoveryTrades !== null) {
@@ -282,9 +315,10 @@
             { label: 'Best trade',    val: '+' + s.best.toFixed(2) + ' pts',    sub: 'single best', mood: 'pos' },
             { label: 'Worst trade',   val:       s.worst.toFixed(2) + ' pts',   sub: 'single worst', mood: 'neg' },
             { label: 'R-Expectancy',  val: rExpStr,                             sub: 'EV ÷ avg loss · 1R units', mood: s.rExp>=0.2?'pos':'neg' },
-            // Row 3 — durability
+            // Row 3 — durability & throughput
             { label: 'Max loss streak', val: s.maxStreak + ' in a row',         sub: 'longest consecutive losses', mood: s.maxStreak<=7?'pos':'neg' },
             { label: 'Trades to recover', val: recovVal,                        sub: recovSub, mood: recovMood },
+            { label: 'Annual R',       val: annualRStr,                          sub: annualRSub, mood: annualRMood },
             { label: 'Current streak', val: streakLabel,                        sub: 'consecutive', mood: streakMood }
         ];
         k.innerHTML = kpis.map(function (x) {
