@@ -109,6 +109,27 @@
         const wlRatio = avgLoss > 0 ? avgWin / avgLoss : Infinity;
         const recovery = maxDD < 0 ? total / Math.abs(maxDD) : Infinity;
 
+        // R-Expectancy: per-trade points expressed in units of average loss (1R)
+        const rExp = avgLoss > 0 ? evMean / avgLoss : 0;
+
+        // Trades-to-recover from the deepest drawdown: from the trough, how many
+        // subsequent trades until equity reclaims the peak that preceded it.
+        // null if not yet recovered (still in drawdown).
+        let _peak = -Infinity, _ddVal = 0, _troughIdx = -1, _peakAtTrough = 0;
+        for (let i = 0; i < eq.length; i++) {
+            if (eq[i] > _peak) _peak = eq[i];
+            const dd = eq[i] - _peak;
+            if (dd < _ddVal) { _ddVal = dd; _troughIdx = i; _peakAtTrough = _peak; }
+        }
+        let recoveryTrades = null;
+        let recoveryInProgress = 0;
+        if (_troughIdx >= 0) {
+            for (let j = _troughIdx + 1; j < eq.length; j++) {
+                if (eq[j] >= _peakAtTrough) { recoveryTrades = j - _troughIdx; break; }
+            }
+            if (recoveryTrades === null) recoveryInProgress = (eq.length - 1) - _troughIdx;
+        }
+
         // Date range
         const firstTs = chrono.length ? new Date(chrono[0].timestamp) : null;
         const lastTs  = chrono.length ? new Date(chrono[chrono.length-1].timestamp) : null;
@@ -120,6 +141,7 @@
             equity: eq, chrono: chrono, maxDD: maxDD, curDD: curDD,
             maxStreak: maxStreak, currentStreak: currentStreak,
             best: best, worst: worst, wlRatio: wlRatio, recovery: recovery,
+            rExp: rExp, recoveryTrades: recoveryTrades, recoveryInProgress: recoveryInProgress,
             firstTs: firstTs, lastTs: lastTs
         };
     }
@@ -227,6 +249,24 @@
         const recoveryStr = isFinite(s.recovery) ? s.recovery.toFixed(2) + 'x' : '∞';
         const wlStr = isFinite(s.wlRatio) ? s.wlRatio.toFixed(2) : '∞';
 
+        // R-Expectancy formatting
+        const rExpStr = (s.rExp >= 0 ? '+' : '') + s.rExp.toFixed(2) + 'R';
+        // Trades-to-recover formatting
+        let recovVal, recovSub, recovMood;
+        if (s.recoveryTrades !== null) {
+            recovVal = s.recoveryTrades + ' trades';
+            recovSub = 'trough → peak reclaim';
+            recovMood = 'pos';
+        } else if (s.recoveryInProgress > 0) {
+            recovVal = 'In progress';
+            recovSub = s.recoveryInProgress + ' trades since trough';
+            recovMood = 'neg';
+        } else {
+            recovVal = '—';
+            recovSub = 'no drawdown yet';
+            recovMood = null;
+        }
+
         const kpis = [
             // Row 1 — return / throughput
             { label: 'Total trades',  val: String(s.n),                       sub: s.wins + ' W · ' + s.losses + ' L · ' + s.be + ' BE' },
@@ -241,6 +281,10 @@
             { label: 'W/L ratio',     val: wlStr,                              sub: 'avg win ÷ avg loss', mood: s.wlRatio>=1?'pos':'neg' },
             { label: 'Best trade',    val: '+' + s.best.toFixed(2) + ' pts',    sub: 'single best', mood: 'pos' },
             { label: 'Worst trade',   val:       s.worst.toFixed(2) + ' pts',   sub: 'single worst', mood: 'neg' },
+            { label: 'R-Expectancy',  val: rExpStr,                             sub: 'EV ÷ avg loss · 1R units', mood: s.rExp>=0.2?'pos':'neg' },
+            // Row 3 — durability
+            { label: 'Max loss streak', val: s.maxStreak + ' in a row',         sub: 'longest consecutive losses', mood: s.maxStreak<=7?'pos':'neg' },
+            { label: 'Trades to recover', val: recovVal,                        sub: recovSub, mood: recovMood },
             { label: 'Current streak', val: streakLabel,                        sub: 'consecutive', mood: streakMood }
         ];
         k.innerHTML = kpis.map(function (x) {
