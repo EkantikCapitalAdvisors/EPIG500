@@ -44,7 +44,7 @@
         })[tf] || 'All time';
     }
 
-    fetch('data/trades.json', { cache: 'no-store' })
+    fetch('data/trades.json?t=' + Date.now(), { cache: 'no-store' })
         .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
         .then(function (json) {
             TRADES = (json.trades || []).slice();
