@@ -130,8 +130,11 @@
     // S&P 500 historical average annual return (last 20 years, incl. dividends, rounded)
     const SPY_ANNUAL_RETURN = 0.10;
     const SPY_MONTHLY_RATE  = Math.pow(1 + SPY_ANNUAL_RETURN, 1/12) - 1; // ≈ 0.797%/mo
-    // Per-/ES per-calendar-month throughput — DESIGN TARGET, not yet substantiated by a published record.
-    const PER_ES_MONTHLY    = 1480;
+    // Per-/ES per-active-month throughput, derived from the Telegram-verified
+    // historical record: 369.5 pts over 14 active months = ~26.4 pts/mo
+    // × $50/pt = ~$1,321/mo/ES. Active-month basis (months with ≥1 trade), not
+    // calendar; the strategy by design does not trade continuously.
+    const PER_ES_MONTHLY    = 1321;
     const DURATION_MAX      = 12;            // months
     const BUFFER_DAYS       = 60;            // engine no-trading buffer at start of year
     const BUFFER_MONTHS     = BUFFER_DAYS / 30; // 2 months
