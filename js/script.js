@@ -52,7 +52,7 @@
     /* Populate continuity section pre-reg counter from data/trades.json */
     const continuityCount = document.getElementById('continuityLiveCount');
     if (continuityCount) {
-        fetch('data/trades.json', { cache: 'no-store' })
+        fetch('data/trades.json?t=' + Date.now(), { cache: 'no-store' })
             .then(function (r) { return r.ok ? r.json() : null; })
             .then(function (j) {
                 if (!j || !j.trades) return;
