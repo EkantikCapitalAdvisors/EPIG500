@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260531f">
+    <link rel="stylesheet" href="css/style.css?v=20260531g">
 
     <script type="application/ld+json">
     {
@@ -115,8 +115,8 @@
             <!-- v2.3 proof-tile row -->
             <div class="proof-tiles">
                 <a href="#battery" class="proof-tile">
-                    <p class="proof-tile__label">Sustainability tests</p>
-                    <p class="proof-tile__value">8 / 8 PASS</p>
+                    <p class="proof-tile__label">8-test battery</p>
+                    <p class="proof-tile__value">Activates at 30 trades</p>
                     <p class="proof-tile__anchor">◆ See the live battery →</p>
                 </a>
                 <a href="/dashboard.html" target="_blank" rel="noopener" class="proof-tile">
@@ -254,7 +254,7 @@
                 <p class="pillar-card__letter">G</p>
                 <h3 class="pillar-card__h">Growth</h3>
                 <p class="pillar-card__sub">Compounding on a passive foundation</p>
-                <p class="pillar-card__body">The SPY layer compounds at the 20-year market average (~10%/yr assumed, applied to the 80% allocation = +8% NLV); the engine layers an additional aspirational +26% NLV target by scaling 1 → 4 /ES contracts as each profit-buffer threshold is earned. Combined design target: +34% NLV over a model year. Targets are engineering objectives, not forecasts.</p>
+                <p class="pillar-card__body">A passive SPY foundation carries baseline market exposure while the /ES engine layers disciplined, <em>earned</em> scaling on top — each additional contract paid for by a realized profit buffer (1 → 4 /ES, capped). How much that compounds is not projected here; it is reported from the live record as it accumulates.</p>
                 <p class="pillar-card__anchor"><a href="#ladder">See the compounding ladder →</a></p>
             </article>
         </div>
@@ -272,7 +272,7 @@
         <header class="section__header section__header--center">
             <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Mechanism + The Discipline</p>
             <h2 class="section__h section__h--lg">The Compounding Ladder</h2>
-            <p class="section__sub">Starting at <strong>$100K NLV</strong>. <strong>80% allocated to SPY</strong> (assumed +10%/yr at the 20-year S&amp;P historical average, also serving as portfolio-margin collateral). <strong>20% held in cash</strong> as an operational settlement buffer that backs the /ES futures engine. <strong>Per-contract risk fixed at 0.5% NLV</strong>; total per-trade exposure scales <strong>0.5% → 2%</strong> as contract count grows <strong>1 → 4</strong> with the earned profit buffer. The cadence rules that bound drawdown are listed first — they govern the engine whichever way the year plays out.</p>
+            <p class="section__sub">Starting at <strong>$100K NLV</strong>. <strong>80% allocated to SPY</strong> for baseline market exposure (the position also serves as portfolio-margin collateral). <strong>20% held in cash</strong> as an operational settlement buffer that backs the /ES futures engine. <strong>Per-contract risk fixed at 0.5% NLV</strong>; total per-trade exposure scales <strong>0.5% → 2%</strong> as contract count grows <strong>1 → 4</strong> with the earned profit buffer. The cadence rules that bound drawdown are listed first — they govern the engine whichever way the year plays out.</p>
         </header>
 
         <!-- Theoretical disclaimer banner — leading so investors can't miss it -->
@@ -340,108 +340,22 @@
             </article>
         </div>
 
-        <!-- Section break + aspirational equity curve -->
+        <!-- Section break + arithmetic of compounding (T1-A replacement; the prior forward-projection equity curve was removed per the no-forward-projection rule) -->
         <header class="section__header" style="margin-top: var(--s-12); margin-bottom: var(--s-4);">
-            <p class="eyebrow"><span class="diamond">◆</span> What 12 months might look like</p>
-            <h3 class="section__h section__h--mid">Aspirational equity curve · engine + SPY overlay</h3>
-            <p class="section__sub">One illustrative path under the cadence above. <strong>Engine contributes +26% on total NLV</strong> via gradual scaling 1 → 4 /ES as the profit buffer compounds. <strong>SPY foundation</strong> (80% × 10%/yr historical) adds +8%. <strong>Combined target: +34% NLV.</strong> Hard constraint: trailing floor at HWM − 5% NLV (never lose more than 5% of total portfolio from any peak).</p>
+            <p class="eyebrow"><span class="diamond">◆</span> The arithmetic of compounding — illustrated on history</p>
+            <h3 class="section__h section__h--mid">Upside capture and downside discipline, on real past returns</h3>
+            <p class="section__sub">Rather than project a forward return, this shows — using actual past S&amp;P 500 total returns — how <em>upside capture</em> and <em>downside discipline</em> combine to drive long-run outcomes versus the index. The arithmetic is the lesson; the future is not the lesson.</p>
         </header>
 
-        <div class="eq-section">
-            <div class="eq-legend">
-                <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: #1B2A4A;"></span> Engine contribution · % of total NLV · stair-step, sized up by buffer</span>
-                <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: #5B7CA8;"></span> SPY foundation · 80% × 10%/yr = +8% NLV</span>
-                <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: repeating-linear-gradient(90deg, var(--signal) 0 6px, transparent 6px 10px);"></span> Trailing floor (HWM − 5% NLV)</span>
-                <span class="eq-legend__item"><span class="eq-legend__swatch" style="background: var(--gold); border-radius: 50%; width: 10px; height: 10px;"></span> Position scale-up</span>
-            </div>
-
-            <svg class="eq-svg" viewBox="0 0 1100 480" role="img" aria-label="Aspirational equity curve over 12 months: engine contributes +26% NLV via 1 to 4 ES scaling, SPY foundation +8% NLV, combined +34% NLV, trailing floor HWM minus 5% NLV">
-                <defs>
-                    <linearGradient id="rmProfitGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#C8A951" stop-opacity="0.5"/>
-                        <stop offset="100%" stop-color="#C8A951" stop-opacity="0.05"/>
-                    </linearGradient>
-                    <linearGradient id="rmSpyGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#5B7CA8" stop-opacity="0.25"/>
-                        <stop offset="100%" stop-color="#5B7CA8" stop-opacity="0.04"/>
-                    </linearGradient>
-                </defs>
-
-                <g font-family="Source Sans 3" font-size="11" fill="#64748B">
-                    <line x1="80" y1="60"  x2="1020" y2="60"  stroke="rgba(27,42,74,0.06)"/><text x="68" y="64" text-anchor="end">+40%</text>
-                    <line x1="80" y1="98"  x2="1020" y2="98"  stroke="rgba(27,42,74,0.06)"/><text x="68" y="102" text-anchor="end">+35%</text>
-                    <line x1="80" y1="135" x2="1020" y2="135" stroke="rgba(27,42,74,0.06)"/><text x="68" y="139" text-anchor="end">+30%</text>
-                    <line x1="80" y1="173" x2="1020" y2="173" stroke="rgba(27,42,74,0.06)"/><text x="68" y="177" text-anchor="end">+25%</text>
-                    <line x1="80" y1="210" x2="1020" y2="210" stroke="rgba(27,42,74,0.06)"/><text x="68" y="214" text-anchor="end">+20%</text>
-                    <line x1="80" y1="248" x2="1020" y2="248" stroke="rgba(27,42,74,0.06)"/><text x="68" y="252" text-anchor="end">+15%</text>
-                    <line x1="80" y1="285" x2="1020" y2="285" stroke="rgba(27,42,74,0.06)"/><text x="68" y="289" text-anchor="end">+10%</text>
-                    <line x1="80" y1="323" x2="1020" y2="323" stroke="rgba(27,42,74,0.06)"/><text x="68" y="327" text-anchor="end">+5%</text>
-                    <line x1="80" y1="360" x2="1020" y2="360" stroke="#1B2A4A" stroke-opacity="0.4" stroke-dasharray="4 4"/><text x="68" y="364" text-anchor="end" font-weight="600">0% start</text>
-                    <line x1="80" y1="398" x2="1020" y2="398" stroke="rgba(220,38,38,0.3)" stroke-dasharray="3 3"/><text x="68" y="402" text-anchor="end" fill="#DC2626">−5% NLV</text>
-                </g>
-
-                <g font-family="Source Sans 3" font-size="11" fill="#64748B">
-                    <line x1="80" y1="420" x2="1020" y2="420" stroke="rgba(27,42,74,0.2)"/>
-                    <text x="80"   y="440" text-anchor="middle">0 mo</text>
-                    <text x="237"  y="440" text-anchor="middle">2</text>
-                    <text x="393"  y="440" text-anchor="middle">4</text>
-                    <text x="550"  y="440" text-anchor="middle">6</text>
-                    <text x="707"  y="440" text-anchor="middle">8</text>
-                    <text x="863"  y="440" text-anchor="middle">10</text>
-                    <text x="1020" y="440" text-anchor="middle">12</text>
-                </g>
-
-                <!-- SPY foundation overlay -->
-                <path d="M 80,360 Q 200,358 237,355 Q 350,348 393,344 Q 470,335 550,325 Q 650,313 707,304 Q 800,287 863,275 Q 950,256 1020,247 L 1020,420 L 80,420 Z" fill="url(#rmSpyGrad)"/>
-                <path d="M 80,360 Q 200,358 237,355 Q 350,348 393,344 Q 470,335 550,325 Q 650,313 707,304 Q 800,287 863,275 Q 950,256 1020,247" fill="none" stroke="#5B7CA8" stroke-width="1.8"/>
-
-                <!-- Engine curve · stair-step 0% → +26% NLV with 4-contract cap (1 → 2 → 3 → 4)
-                     Phases: pos 1 (mo 2–5, reach +3%), pos 2 (mo 5–7, reach +8%), pos 3 (mo 7–9, reach +14%), pos 4 (mo 9–12, reach +26%)
-                     Y scale: yAt(v) = 360 - v×7.5. 0%=360, 3%=338, 8%=300, 14%=255, 20%=210, 26%=165 -->
-                <path d="M 80,360 L 105,363 L 130,357 L 160,360 L 195,353 L 230,355 L 260,348 L 285,350 L 315,341 L 345,344 L 393,330 L 425,333 L 460,323 L 495,326 L 545,308 L 580,311 L 615,294 L 650,297 L 700,270 L 730,273 L 760,251 L 795,254 L 863,225 L 895,229 L 925,209 L 960,213 L 990,188 L 1020,165 L 1020,420 L 80,420 Z" fill="url(#rmProfitGrad)"/>
-                <path d="M 80,360 L 105,363 L 130,357 L 160,360 L 195,353 L 230,355 L 260,348 L 285,350 L 315,341 L 345,344 L 393,330 L 425,333 L 460,323 L 495,326 L 545,308 L 580,311 L 615,294 L 650,297 L 700,270 L 730,273 L 760,251 L 795,254 L 863,225 L 895,229 L 925,209 L 960,213 L 990,188 L 1020,165" fill="none" stroke="#1B2A4A" stroke-width="2.4" stroke-linejoin="round"/>
-
-                <!-- Trailing floor — HWM minus 5% NLV, ratchets up with each new peak -->
-                <path d="M 80,398 L 195,398 L 195,386 L 285,386 L 285,379 L 393,379 L 393,368 L 545,368 L 545,353 L 700,353 L 700,338 L 863,338 L 863,315 L 1020,266" fill="none" stroke="#DC2626" stroke-width="1.8" stroke-dasharray="6 4" opacity="0.85"/>
-
-                <!-- Position scale-up dots at 1 → 2 → 3 → 4 (gold) -->
-                <circle cx="393" cy="330" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>
-                <circle cx="545" cy="308" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>
-                <circle cx="700" cy="270" r="6" fill="#C8A951" stroke="white" stroke-width="2"/>
-
-                <g font-family="Source Sans 3" font-size="10" fill="#A88A38" font-weight="700">
-                    <text x="200" y="345" text-anchor="middle">pos: 1</text>
-                    <text x="395" y="320" text-anchor="middle">↑ 2</text>
-                    <text x="547" y="298" text-anchor="middle">↑ 3</text>
-                    <text x="702" y="260" text-anchor="middle">↑ 4 /ES (cap)</text>
-                </g>
-
-                <g font-family="Source Sans 3" font-size="10" fill="#5B7CA8" font-weight="700"><text x="940" y="265" text-anchor="end">SPY foundation · +8% NLV</text></g>
-                <g font-family="Source Sans 3" font-size="10" fill="#DC2626" font-weight="700"><text x="1020" y="282" text-anchor="end">↗ floor: HWM − 5% NLV</text></g>
-
-                <!-- Year-end engine callout -->
-                <rect x="880" y="60" width="140" height="56" rx="4" fill="#1B2A4A"/>
-                <text x="950" y="78" text-anchor="middle" font-size="10" font-weight="700" fill="#C8A951" font-family="Source Sans 3" letter-spacing="1">YEAR-END · ENGINE</text>
-                <text x="950" y="98" text-anchor="middle" font-size="20" font-weight="700" fill="white" font-family="Source Sans 3">+26% NLV</text>
-                <text x="950" y="112" text-anchor="middle" font-size="9" fill="#94A3B8" font-family="Source Sans 3">theoretical target</text>
-
-                <!-- Combined NLV callout -->
-                <rect x="880" y="124" width="140" height="50" rx="4" fill="#C8A951"/>
-                <text x="950" y="142" text-anchor="middle" font-size="10" font-weight="700" fill="#1B2A4A" font-family="Source Sans 3" letter-spacing="1">COMBINED · NLV</text>
-                <text x="950" y="162" text-anchor="middle" font-size="18" font-weight="700" fill="#1B2A4A" font-family="Source Sans 3">+34%</text>
-
-                <text x="90" y="40" font-family="Source Sans 3" font-size="11" font-weight="600" fill="#1B2A4A" letter-spacing="1">RETURN % OF TOTAL NLV · engine (navy) + SPY (slate)</text>
-            </svg>
-
-            <div class="eq-callout">
-                <div class="eq-callout__item"><p class="eq-callout__label">Engine contribution</p><p class="eq-callout__value">+26% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">target · full-portfolio margin</span></p></div>
-                <div class="eq-callout__item"><p class="eq-callout__label">SPY foundation</p><p class="eq-callout__value">+8% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">80% × 10%/yr historical</span></p></div>
-                <div class="eq-callout__item"><p class="eq-callout__label">Combined target</p><p class="eq-callout__value">+34% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">engine + SPY, stacked</span></p></div>
-                <div class="eq-callout__item"><p class="eq-callout__label">Hard constraint</p><p class="eq-callout__value">−5% NLV max<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">from any high-water mark</span></p></div>
-                <div class="eq-callout__item"><p class="eq-callout__label">Position scaling</p><p class="eq-callout__value">1 → 4 /ES<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">earned by profit buffer · cap at 4</span></p></div>
-                <div class="eq-callout__item"><p class="eq-callout__label">Per-contract risk</p><p class="eq-callout__value">0.5% NLV<br><span style="font-size: 12px; color: var(--slate); font-weight: 400;">fixed architectural anchor · scales via 1 → 4 contracts</span></p></div>
-            </div>
+        <div class="arith-placeholder" style="background:var(--ivory);border:1px dashed var(--line);border-radius:8px;padding:var(--s-8) var(--s-6);text-align:center;margin-bottom:var(--s-6)">
+            <p style="font-family:var(--font-serif);font-size:22px;color:var(--navy);margin:0 0 var(--s-3)">Doubling Arithmetic module — in development</p>
+            <p style="color:var(--slate);max-width:720px;margin:0 auto;line-height:1.6">An interactive illustration is being prepared: choose your upside capture (e.g. 80%, 100%, 120% of the up-month index return) and downside participation (e.g. 50%, 70%, 100%), and the model will compute the long-run outcome against the S&amp;P 500 over the past <strong>20 years of actual market data</strong>. <strong>A historical illustration, hypothetical, not a projection of any Ekantik strategy.</strong></p>
         </div>
+
+        <!-- Removed: forward-projection equity curve. SVG and chips deleted per compliance redline T1-A.
+             What remains below — kill-condition chips and three-col risk/leverage/velocity explainers —
+             are structural commitments, not projections, and stay.
+        -->
 
         <!-- Tangible kill conditions rail: all 8 ED conditions as named chips -->
         <div class="cl-kills">
@@ -464,32 +378,6 @@
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Velocity Compounds</p>
                 <p>Each step shortens the time to the next as throughput grows linearly with contract count. By the 4-/ES ceiling, the engine is doing the heavy lifting and dollar outcomes climb non-linearly.</p>
-            </article>
-        </div>
-
-        <p class="compliance">Aspirational and illustrative. <strong>Composition:</strong> the equity curve above is the result of two stacked layers — <strong>(a) 80% allocated to SPY</strong> compounding at the 20-year S&amp;P historical average (~10%/yr) and (b) <strong>20% held in cash</strong> as an operational settlement buffer that backs the /ES futures engine. The SPY position doubles as portfolio-margin collateral, so the engine sizes against total NLV. <strong>Per-contract risk is fixed at 0.5% NLV</strong> — the architectural anchor never changes. Total per-trade exposure scales 0.5% → 2% only via contract count growing 1 → 4 as the profit buffer earns each next contract. Headline targets (+26% engine NLV, +8% SPY NLV, +34% combined) are targets, not forecasts. <strong>Engine throughput</strong> will be reported from the live pre-registration record as it accumulates. The trailing floor at HWM − 5% NLV ratchets up with every new peak, but markets can gap and slip; nothing on this page is a guarantee. The live record is still accumulating — a statistically meaningful track record will take many more closed trades.</p>
-
-        <!-- Tangible kill conditions rail: all 8 ED conditions as named chips -->
-        <div class="cl-kills">
-            <div class="cl-kills__head">
-                <p class="cl-kills__h">↑ All eight kill conditions are armed at every step</p>
-                <p class="cl-kills__sub">Hover or tap any chip to reveal its trigger. The ladder halts when any one fires — regardless of which step has been reached.</p>
-            </div>
-            <div class="cl-kills__chips" id="cl-kills-chips"><!-- 8 chips rendered by JS --></div>
-        </div>
-
-        <div class="three-col">
-            <article class="explainer">
-                <p class="eyebrow"><span class="diamond">◆</span> Disciplined Risk</p>
-                <p>Risk is anchored <em>per contract</em> at <strong>0.5% of total NLV</strong> — fixed, architectural, never escalated. Total per-trade exposure scales only via <strong>contract count</strong>: 1 /ES = 0.5%, 2 /ES = 1%, 3 /ES = 1.5%, 4 /ES = 2% (the architectural ceiling). Each additional contract is earned by accumulated profit buffer, never assumed. The dollar amount grows two ways — the capital base grows, AND the contract count grows — but the per-contract percentage never changes.</p>
-            </article>
-            <article class="explainer">
-                <p class="eyebrow"><span class="diamond">◆</span> Earned Leverage</p>
-                <p>Position size increases only when verified profits compound the base. The second contract is paid for by the first. Scale is <em>earned</em> — never borrowed, never assumed.</p>
-            </article>
-            <article class="explainer">
-                <p class="eyebrow"><span class="diamond">◆</span> Velocity Compounds</p>
-                <p>Each step shortens the time to the next. By Step 5, the base is doing the heavy lifting and dollar outcomes climb non-linearly.</p>
             </article>
         </div>
 
@@ -533,7 +421,7 @@
             </article>
         </div>
 
-        <p class="standard__closing">If a competitor cannot match these five — and the data shows none can match all five simultaneously — your wealth deserves the firm that does.</p>
+        <p class="standard__closing">These five standards govern every decision, every trade, every disclosure.</p>
     </div>
 </section>
 
@@ -542,7 +430,7 @@
     <div class="container">
         <header class="section__header">
             <p class="eyebrow"><span class="diamond">◆</span> The Proof</p>
-            <h2 class="section__h">The methodology — proven, then verified.</h2>
+            <h2 class="section__h">The methodology — documented over 12 years, now verified in public.</h2>
         </header>
 
         <!-- Methodology Provenance — 12+ years of development, live record accumulating -->
@@ -552,7 +440,7 @@
                 <div class="provenance__phase">
                     <p class="provenance__phase-num">01</p>
                     <p class="provenance__phase-h">12+ years of development</p>
-                    <p class="provenance__phase-body">Over a decade of methodology refinement — iterating on entry criteria, risk anchoring, regime behaviour, and operator discipline — to reach the point where the documented edge can be replicated trade-for-trade against a frozen process.</p>
+                    <p class="provenance__phase-body">Over a decade of methodology refinement — iterating on entry criteria, risk anchoring, regime behaviour, and operator discipline — to reach the point where the documented methodology can be executed trade-for-trade against a frozen process.</p>
                 </div>
                 <div class="provenance__phase">
                     <p class="provenance__phase-num">02</p>
@@ -652,7 +540,7 @@
                     <p class="period__range">12+ years through May 2026</p>
                 </div>
                 <p class="period__h">Methodology development &amp; informal record</p>
-                <p class="period__body">Over a decade of iteration on entry criteria, risk anchoring, regime behaviour, and operator discipline. A subset of trades — <strong>196 calls, Apr 2023 – Oct 2024</strong> — was posted in real time to a private Telegram channel and is viewable on the live dashboard. That record predates the locked Falsifiability Protocol: no witness, no Stage-1 / Stage-2 gates armed, no OP-04 per-trade tagging at the time. During the most recent stretch the operator's public focus was on a separate scalping methodology — the Ekantik Accelerator — publicly demonstrated and verifiable below. The Majority Opinion Predisposal Strategy itself was being refined to the point where the documented edge could be replicated trade-for-trade against a frozen process.</p>
+                <p class="period__body">Over a decade of iteration on entry criteria, risk anchoring, regime behaviour, and operator discipline. A subset of trades — <strong>196 calls, Apr 2023 – Oct 2024</strong> — was posted in real time to a private Telegram channel and is viewable on the live dashboard. That record predates the locked Falsifiability Protocol: no witness, no Stage-1 / Stage-2 gates armed, no OP-04 per-trade tagging at the time. During the most recent stretch the operator's public focus was on a separate scalping methodology — the Ekantik Accelerator — publicly demonstrated and verifiable below. The Majority Opinion Predisposal Strategy itself was being refined to the point where the documented methodology can be executed trade-for-trade against a frozen process.</p>
                 <div class="period__actions">
                     <a href="https://accelerator.ekantikcapital.com/" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">View the Accelerator →</a>
                     <a href="/dashboard.html" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">View the historical record →</a>
@@ -674,7 +562,7 @@
             </article>
         </div>
 
-        <p class="compliance">No historical trade record is published. The 8-test sustainability battery activates at 30+ closed trades and is binding at 100+; until then the live dashboard surfaces KPIs and the equity curve without a battery verdict. Pre-registration participants are the first cohort with a continuous live record on this strategy from public restart through launch. Nothing on this page constitutes a forecast or guarantee.</p>
+        <p class="compliance">The 196-trade Period 1 Telegram record predates the locked Falsifiability Protocol (no witness, no gates armed, no per-trade OP-04 tagging in advance) and is published for transparency, not as a sustainability claim. The 8-test sustainability battery activates at 30+ closed trades on the protocol-bound Period 2 record and is binding at 100+; until then the live dashboard surfaces KPIs and the equity curve without a battery verdict. Pre-registration participants are the first cohort with a continuous, witnessed live record from public restart through launch. Nothing on this page constitutes a forecast or guarantee.</p>
     </div>
 </section>
 
@@ -700,7 +588,7 @@
             <div class="protocol-card__body">
                 <p class="protocol-card__h"><span class="diamond">◆</span> The Falsifiability Protocol</p>
                 <p class="protocol-card__title">Pre-committed operational charter for the Majority Opinion Predisposal Strategy.</p>
-                <p class="protocol-card__lede">The full operational charter — eight Expression-Layer trigger conditions (ED-01 through ED-08), four Fidelity-Layer criteria (OP-01 through OP-04), the three-tier stand-down ladder, the Binding Interpretation Rule, the modification protocol, and the witness verification structure — is published as a single locked document. It was written before any investor capital was accepted. Any change is subject to a 48-hour cool-off, written justification, and witness countersignature, with public disclosure within 24 hours.</p>
+                <p class="protocol-card__lede">The full operational charter — eight Expression-Layer trigger conditions (ED-01 through ED-08), seven Fidelity-Layer criteria (OP-01 through OP-07), the three-tier stand-down ladder, the Binding Interpretation Rule, the modification protocol, and the witness verification structure — is published as a single locked document. It was written before any investor capital was accepted. Any change is subject to a 48-hour cool-off, written justification, and witness countersignature, with public disclosure within 24 hours.</p>
                 <div class="protocol-card__actions">
                     <a href="/falsifiability-protocol.html" target="_blank" rel="noopener" class="btn btn--primary btn--lg" data-cta="protocol-read">Read the full protocol ↗</a>
                     <a href="/falsifiability-protocol.html" target="_blank" rel="noopener" class="btn btn--ghost" data-cta="protocol-newtab">Open in new tab</a>
@@ -712,7 +600,7 @@
         <!-- STAGE 1 -->
         <div class="falsi-stage">
             <p class="falsi-stage__num">Stage 1</p>
-            <h3 class="falsi-stage__h">The Fidelity Layer — four binding criteria</h3>
+            <h3 class="falsi-stage__h">The Fidelity Layer — seven binding criteria (OP-01–07)</h3>
             <p class="falsi-stage__sub">Stage 1 falsifies discipline, not data. A profitable rule breach is still a rule breach — and it disqualifies the trade as evidence of edge.</p>
 
             <div class="op-grid">
@@ -732,10 +620,10 @@
                 </article>
                 <article class="op-card">
                     <p class="op-card__id"><span class="diamond">◆</span> OP-03</p>
-                    <h4 class="op-card__name">Daily −12 Point Cap</h4>
-                    <p class="op-card__def">Cumulative same-day P&amp;L cannot reach −12 /ES points. Functions as the backstop for the single edge case where the first trade of the session is a &gt;−12 pt loss (slipped stop, gap, structural break).</p>
-                    <p class="op-card__threshold">Threshold: Zero session-cap breaches per calendar quarter.</p>
-                    <p class="op-card__remediation"><em>Remediation: Two breaches in any quarter → Tier-2 cessation and full process review.</em></p>
+                    <h4 class="op-card__name">Trailing Daily Cap (v1.2)</h4>
+                    <p class="op-card__def">Cumulative same-day P&amp;L is bounded by a trailing high-water-mark floor. The floor starts at −0.5% of NLV (one trade's risk at the architectural anchor) and ratchets up automatically as accumulated profit creates buffer above the prior peak. Replaces the retired v1.0 fixed −12 ES-point cap, which did not scale with account size or realized profit.</p>
+                    <p class="op-card__threshold">Threshold: Zero breaches per calendar quarter.</p>
+                    <p class="op-card__remediation"><em>Remediation: Two breaches in any quarter → Tier-2 conditions-reduced.</em></p>
                 </article>
                 <article class="op-card">
                     <p class="op-card__id"><span class="diamond">◆</span> OP-04</p>
@@ -745,6 +633,8 @@
                     <p class="op-card__remediation"><em>Remediation: Per missing tag — trade disqualified. Per H1 misapplication — Tier-2 stand-down.</em></p>
                 </article>
             </div>
+
+            <p class="op-cross-ref" style="margin-top:var(--s-3);font-size:14px;color:var(--slate);line-height:1.5"><span class="diamond" style="color:var(--gold)">◆</span> <strong>OP-05, OP-06, OP-07</strong> — weekly sit-down review, bi-weekly conditional size reduction, and the reinstatement gate — are Fidelity-Layer criteria documented in detail under <a href="#ladder">Risk Cadence</a> above. They are part of the same seven-criteria charter; the four cards above show the per-trade controls.</p>
 
             <h4 class="falsi-stage__subh">Stand-down tiers</h4>
             <div class="tier-table-wrap">
@@ -891,7 +781,7 @@
             <details class="faq__item"><summary>Will I need to sell my existing portfolio at launch?</summary><div class="faq__body"><p>No. When the product opens, Ekantik 500 will be funded with new capital deposited into a dedicated sub-account at Interactive Brokers. Existing holdings at other brokerages stay where they are.</p></div></details>
             <details class="faq__item"><summary>How does the methodology treat an investor's SPY position?</summary><div class="faq__body"><p>Inside the proposed sub-account, the SPY allocation serves two purposes: ongoing market exposure (dividends and capital appreciation) and margin collateral for the active sleeve. The methodology does not trade SPY — it sits passively while the futures overlay operates against it.</p></div></details>
             <!-- <details class="faq__item"><summary>What is the proposed fee structure?</summary><div class="faq__body"><p>The structure documented for launch: 6% high-watermark hurdle plus 25% of profits above that hurdle. In any period where the strategy delivers less than 6%, no performance fee would be charged. The hurdle resets annually to the peak.</p></div></details> -->
-            <details class="faq__item"><summary>How would an investor know if the strategy has stopped working?</summary><div class="faq__body"><p>Ekantik 500 publishes two falsifiability gates — both binding, both observable in real time. The Fidelity Layer (four operator-discipline criteria) and the Expression Layer (eight statistical kill conditions) define exactly when the strategy stops. If any gate fires, participants would receive notification within 24 hours, the active engine would immediately reduce to zero new exposure, and the trigger condition would be published.</p></div></details>
+            <details class="faq__item"><summary>How would an investor know if the strategy has stopped working?</summary><div class="faq__body"><p>Ekantik 500 publishes two falsifiability gates — both binding, both observable in real time. The Fidelity Layer (seven operator-discipline criteria, OP-01–07) and the Expression Layer (eight statistical kill conditions, ED-01–08) define exactly when the strategy stops. If any gate fires, participants would receive notification within 24 hours, the active engine would immediately reduce to zero new exposure, and the trigger condition would be published.</p></div></details>
             <details class="faq__item"><summary>Can I see the underlying trade record?</summary><div class="faq__body"><p>Yes. Every trade on the strategy since the May 2026 pre-registration restart is published on the <a href="/dashboard.html">live dashboard</a> within 24 hours of close, and exportable as CSV from there. No historical trade record is currently published — the live record is what exists. The same 8-test battery you can run on this data, you can run on your own.</p></div></details>
             <details class="faq__item"><summary>What is the historical Telegram record, and why isn't it the basis for the sustainability claim?</summary><div class="faq__body"><p>196 trades on the Majority Opinion Predisposal Strategy were posted in real time to a private Telegram channel between April 2023 and October 2024. That record is viewable on the live dashboard for transparency, but it <strong>predates the locked Falsifiability Protocol</strong>: no third-party witness, no Stage-1 / Stage-2 gates armed in advance, no OP-04 per-trade tagging at the time of trade. The protocol-bound, witnessed record begins with the May 2026 pre-registration restart. Pre-registration participants are the first cohort to see every trade captured under the full Falsifiability Protocol v1.2 from trade #1.</p></div></details>
             <details class="faq__item"><summary>When does the 8-test sustainability battery activate?</summary><div class="faq__body"><p>At <strong>30+ closed trades</strong> the battery begins reporting; at <strong>100+ trades</strong> the verdict is binding. Below 30 the sample is too small for the statistical tests to produce meaningful inference, so the dashboard surfaces individual KPIs (win rate, EV, profit factor, drawdown, R-expectancy, etc.) and the equity curve without a battery verdict. The pre-registration window is exactly the period in which the record accumulates to the threshold.</p></div></details>
@@ -1001,10 +891,10 @@
             <div class="footer__col">
                 <h4 class="footer__h"><span class="diamond">◆</span> Legal &amp; Compliance</h4>
                 <ul class="footer__list">
-                    <li><a href="#">Form ADV Part 2</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Use</a></li>
-                    <li><a href="#">Marketing Disclosures</a></li>
+                    <li><span class="footer__pending">Form ADV Part 2 — available upon RIA registration</span></li>
+                    <li><span class="footer__pending">Privacy Policy — published at registration</span></li>
+                    <li><span class="footer__pending">Terms of Use — published at registration</span></li>
+                    <li><span class="footer__pending">Marketing Disclosures — published at registration</span></li>
                     <li><a href="/falsifiability-protocol.html">Falsifiability Protocol v1.2</a></li>
                 </ul>
             </div>
@@ -1015,6 +905,6 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260531f"></script>
+<script src="js/script.js?v=20260531g"></script>
 </body>
 </html>
