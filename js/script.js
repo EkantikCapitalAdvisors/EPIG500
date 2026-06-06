@@ -1258,4 +1258,81 @@
             last = y;
         }, { passive: true });
     }
+
+    /* ------------------------------------------------
+       The Arithmetic — Doubling Arithmetic calculator
+       Real S&P 500 annual total returns (incl. dividends).
+       Compounds each year as: index >= 0 ? index * upCapture : index * downCapture.
+       Three windows: calm bull (2013–2019), crash window (2007–2010), full 20yr (2005–2024).
+       Hypothetical inputs, historical illustration only — not a projection.
+       ------------------------------------------------ */
+    (function setupArithmetic() {
+        const calc = document.getElementById('arithCalc');
+        if (!calc) return;
+
+        // S&P 500 total returns (decimal), calendar year — index values from public sources
+        const SP_TR = {
+            2005: 0.0483, 2006: 0.1585, 2007: 0.0549, 2008: -0.3700, 2009: 0.2646,
+            2010: 0.1506, 2011: 0.0211, 2012: 0.1600, 2013: 0.3239, 2014: 0.1369,
+            2015: 0.0138, 2016: 0.1196, 2017: 0.2183, 2018: -0.0438, 2019: 0.3149,
+            2020: 0.1840, 2021: 0.2871, 2022: -0.1811, 2023: 0.2629, 2024: 0.2502
+        };
+
+        const windows = [
+            { id: 'calm',  label: 'Calm bull run',        range: '2013 – 2019', years: [2013,2014,2015,2016,2017,2018,2019] },
+            { id: 'crash', label: 'Crash window',          range: '2007 – 2010', years: [2007,2008,2009,2010] },
+            { id: 'full',  label: 'Full 20-year span',     range: '2005 – 2024', years: Object.keys(SP_TR).map(Number).sort() }
+        ];
+
+        function compound(years, up, down) {
+            // Returns { indexMult, stratMult }
+            let idx = 1, strat = 1;
+            for (let i = 0; i < years.length; i++) {
+                const r = SP_TR[years[i]];
+                idx *= (1 + r);
+                const captured = r >= 0 ? r * up : r * down;
+                strat *= (1 + captured);
+            }
+            return { idx: idx, strat: strat };
+        }
+
+        function fmtMult(m) {
+            // 1.0 -> "1.00x", 2.34 -> "2.34x"
+            return m.toFixed(2) + 'x';
+        }
+        function fmtPct(p) {
+            const sign = p >= 0 ? '+' : '';
+            return sign + (p * 100).toFixed(1) + '%';
+        }
+        function moodClass(v) { return v > 0 ? ' arith-window__val--pos' : v < 0 ? ' arith-window__val--neg' : ''; }
+
+        function render() {
+            const up = parseInt(document.getElementById('arithUp').value, 10) / 100;
+            const down = parseInt(document.getElementById('arithDown').value, 10) / 100;
+            document.getElementById('arithUpVal').textContent = (up * 100).toFixed(0);
+            document.getElementById('arithDownVal').textContent = (down * 100).toFixed(0);
+
+            const wrap = document.getElementById('arithWindows');
+            wrap.innerHTML = windows.map(function (w) {
+                const r = compound(w.years, up, down);
+                const idxPct = r.idx - 1;
+                const stratPct = r.strat - 1;
+                const alpha = r.strat - r.idx;       // absolute multiple gap
+                const alphaPct = r.strat / r.idx - 1; // relative outperformance
+                return ''
+                    + '<div class="arith-window">'
+                    +   '<p class="arith-window__h">' + w.label + '</p>'
+                    +   '<p class="arith-window__range">' + w.range + '</p>'
+                    +   '<div class="arith-window__row"><span class="arith-window__lbl">S&amp;P 500</span><span class="arith-window__val' + moodClass(idxPct) + '">' + fmtMult(r.idx) + '</span></div>'
+                    +   '<div class="arith-window__row"><span class="arith-window__lbl">Strategy</span><span class="arith-window__val' + moodClass(stratPct) + '">' + fmtMult(r.strat) + '</span></div>'
+                    +   '<div class="arith-window__row"><span class="arith-window__lbl">Δ (strat − index)</span><span class="arith-window__val' + moodClass(alpha) + '">' + (alpha >= 0 ? '+' : '') + alpha.toFixed(2) + 'x</span></div>'
+                    +   '<div class="arith-window__alpha"><span class="arith-window__alpha-lbl">Outperformance</span><span class="arith-window__alpha-val' + moodClass(alphaPct) + '">' + fmtPct(alphaPct) + '</span></div>'
+                    + '</div>';
+            }).join('');
+        }
+
+        document.getElementById('arithUp').addEventListener('input', render);
+        document.getElementById('arithDown').addEventListener('input', render);
+        render();
+    })();
 })();

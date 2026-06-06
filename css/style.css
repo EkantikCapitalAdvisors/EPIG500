@@ -3386,3 +3386,36 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     font-weight: 600;
 }
 .pillar-card__anchor a:hover { color: var(--navy); }
+
+/* ============================================================
+   The Arithmetic — Doubling Arithmetic calculator (real S&P TR data)
+   ============================================================ */
+.arith-calc { background: var(--ivory); border: 1px solid var(--line); border-radius: 12px; padding: var(--s-6); }
+.arith-controls {
+    display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-5);
+    padding-bottom: var(--s-5); border-bottom: 1px solid var(--line);
+}
+@media (max-width: 720px) { .arith-controls { grid-template-columns: 1fr; } }
+.arith-control { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 4px; }
+.arith-control__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--gold-deep); }
+.arith-control__val { font-family: var(--font-serif); font-weight: 700; font-size: 22px; color: var(--navy); justify-self: end; }
+.arith-control input[type=range] { grid-column: 1 / -1; width: 100%; accent-color: var(--gold-deep); cursor: pointer; margin: 6px 0 4px; }
+.arith-control__hint { grid-column: 1 / -1; font-size: 11px; color: var(--slate); }
+
+.arith-windows { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-4); margin-top: var(--s-5); }
+@media (max-width: 900px) { .arith-windows { grid-template-columns: 1fr; } }
+.arith-window { background: var(--white); border: 1px solid var(--line); border-radius: 8px; padding: var(--s-4); display: flex; flex-direction: column; }
+.arith-window__h { font-family: var(--font-serif); font-weight: 600; font-size: 16px; color: var(--navy); margin: 0 0 2px; }
+.arith-window__range { font-size: 11px; color: var(--slate); margin: 0 0 var(--s-3); text-transform: uppercase; letter-spacing: 1px; }
+.arith-window__row { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 0; }
+.arith-window__row + .arith-window__row { border-top: 1px dashed var(--line); }
+.arith-window__lbl { font-size: 12px; color: var(--slate-dark); }
+.arith-window__val { font-family: var(--font-serif); font-weight: 700; font-size: 18px; color: var(--navy); }
+.arith-window__val--pos { color: var(--forest, #2D5016); }
+.arith-window__val--neg { color: var(--signal, #DC2626); }
+.arith-window__alpha { margin-top: var(--s-3); padding-top: var(--s-3); border-top: 2px solid var(--gold); display: flex; justify-content: space-between; align-items: baseline; }
+.arith-window__alpha-lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--gold-deep); }
+.arith-window__alpha-val { font-family: var(--font-serif); font-weight: 700; font-size: 22px; color: var(--navy); }
+
+.arith-source { margin-top: var(--s-5); font-size: 12px; color: var(--slate); line-height: 1.6; }
+.arith-source strong { color: var(--navy); }
