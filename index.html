@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260531h">
+    <link rel="stylesheet" href="css/style.css?v=20260531i">
 
     <script type="application/ld+json">
     {
@@ -300,9 +300,26 @@
             <p class="section__sub">Set an upside capture and a downside capture, and watch the result against the S&amp;P 500 — computed on actual past total returns, across a calm window and a window with a crash. The point isn't the multiple; it's how completely the answer changes with the regime. Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy.</p>
         </header>
 
-        <div class="arith-placeholder" style="background:var(--ivory);border:1px dashed var(--line);border-radius:8px;padding:var(--s-8) var(--s-6);text-align:center">
-            <p style="font-family:var(--font-serif);font-size:22px;color:var(--navy);margin:0 0 var(--s-3)">Doubling Arithmetic module — in development</p>
-            <p style="color:var(--slate);max-width:720px;margin:0 auto;line-height:1.6">An interactive illustration is being prepared: choose your upside capture (e.g. 80%, 100%, 120% of the up-month index return) and downside participation (e.g. 50%, 70%, 100%), and the model will compute the long-run outcome against the S&amp;P 500 over the past <strong>20 years of actual market data</strong>. <strong>A historical illustration, hypothetical, not a projection of any Ekantik strategy.</strong></p>
+        <!-- Doubling Arithmetic calculator — real S&P 500 total-return data, three windows -->
+        <div class="arith-calc" id="arithCalc">
+            <div class="arith-controls">
+                <label class="arith-control">
+                    <span class="arith-control__label">Upside capture</span>
+                    <span class="arith-control__val"><span id="arithUpVal">100</span>%</span>
+                    <input type="range" id="arithUp" min="50" max="150" step="5" value="100" aria-label="Upside capture percent">
+                    <span class="arith-control__hint">% of index return captured in up years</span>
+                </label>
+                <label class="arith-control">
+                    <span class="arith-control__label">Downside participation</span>
+                    <span class="arith-control__val"><span id="arithDownVal">100</span>%</span>
+                    <input type="range" id="arithDown" min="0" max="150" step="5" value="100" aria-label="Downside participation percent">
+                    <span class="arith-control__hint">% of index drawdown taken in down years</span>
+                </label>
+            </div>
+
+            <div class="arith-windows" id="arithWindows"><!-- 3 window cards rendered by JS --></div>
+
+            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns, 2005–2024. Each year: strategy = index × (up&nbsp;years) upside&nbsp;capture, or index × (down&nbsp;years) downside&nbsp;participation. Compounded annually. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy.</strong></p>
         </div>
     </div>
 </section>
@@ -936,6 +953,6 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260531h"></script>
+<script src="js/script.js?v=20260531i"></script>
 </body>
 </html>
