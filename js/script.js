@@ -123,10 +123,10 @@
        pre-registration record as it accumulates. */
 
     const NLV_START         = 100000;
-    const SPY_PCT           = 0.90;          // 90% SPY foundation
-    const BUFFER_PCT        = 0.10;          // 10% cash buffer
-    const SPY_START         = NLV_START * SPY_PCT;   // $90K
-    const CASH_START        = NLV_START * BUFFER_PCT; // $10K
+    const SPY_PCT           = 0.80;          // 80% SPY foundation
+    const BUFFER_PCT        = 0.20;          // 20% cash buffer
+    const SPY_START         = NLV_START * SPY_PCT;   // $80K
+    const CASH_START        = NLV_START * BUFFER_PCT; // $20K
     // S&P 500 historical average annual return (last 20 years, incl. dividends, rounded)
     const SPY_ANNUAL_RETURN = 0.10;
     const SPY_MONTHLY_RATE  = Math.pow(1 + SPY_ANNUAL_RETURN, 1/12) - 1; // ≈ 0.797%/mo
@@ -345,7 +345,7 @@
         const legendY = 14;
         parts.push('<g class="cl-legend" font-family="Source Sans 3" font-size="11">');
         parts.push('<rect x="' + PAD_L + '" y="' + legendY + '" width="12" height="10" fill="#1B2A4A" fill-opacity="0.85"/>');
-        parts.push('<text x="' + (PAD_L + 18) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">SPY foundation · 90% · 10%/yr</text>');
+        parts.push('<text x="' + (PAD_L + 18) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">SPY foundation · 80% · 10%/yr</text>');
         parts.push('<rect x="' + (PAD_L + 220) + '" y="' + legendY + '" width="12" height="10" fill="#94A3B8" fill-opacity="0.7"/>');
         parts.push('<text x="' + (PAD_L + 238) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">Cash buffer · 10%</text>');
         parts.push('<rect x="' + (PAD_L + 360) + '" y="' + legendY + '" width="12" height="10" fill="#C8A951"/>');
@@ -386,7 +386,7 @@
 
             sumEl.innerHTML = [
                 '<article class="cl-card">',
-                  '<p class="cl-card__label">SPY foundation · 90%</p>',
+                  '<p class="cl-card__label">SPY foundation · 80%</p>',
                   '<p class="cl-card__value">+$' + Math.round(spyGain / 1000) + 'K</p>',
                   '<dl class="cl-card__list">',
                     '<div><dt>Start</dt><dd>$' + (SPY_START/1000) + 'K</dd></div>',
