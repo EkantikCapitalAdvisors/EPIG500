@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260531g">
+    <link rel="stylesheet" href="css/style.css?v=20260531h">
 
     <script type="application/ld+json">
     {
@@ -266,6 +266,48 @@
 </section>
 
 
+<!-- ============ 2c. THE LOGIC — alpha through asymmetry (ADD-1; verifier sign-off required per redline) ============ -->
+<section class="section section--ivory" id="logic">
+    <div class="container container--narrow">
+        <header class="section__header">
+            <p class="eyebrow"><span class="diamond">◆</span> The Logic</p>
+            <h2 class="section__h">Alpha through asymmetry — not leverage.</h2>
+        </header>
+
+        <div class="prose">
+            <p>Most ways to "beat the market" quietly mean <em>more market</em> — double the exposure, double the drawdown. That isn't outperformance. It's the same bet, louder, and it breaks in the years that matter most.</p>
+
+            <p>Ekantik 500 is engineered for the opposite: <strong>asymmetric capture.</strong> Fuller, <em>earned</em> participation when the market advances; bounded, pre-committed participation when it declines. The booster engine supplies the upside participation. The two falsifiability gates and the risk cadence supply the downside discipline. Outperformance, by design, lives in the <em>gap</em> between those two — that gap is alpha, and it does not come from leverage.</p>
+
+            <p>The distinction is exact. A market that falls 10%, met with a flat year, is the same outperformance as a market that rises 10%, met with 20% — the same alpha, in opposite directions. One amplifies; the other protects. Leverage can only do the first; it doubles the loss on the way down. <strong>Capture asymmetry is the only honest engine for outperformance that survives a bad year</strong> — which is why the downside gates aren't a constraint on the thesis. They <em>are</em> the thesis.</p>
+
+            <p>How much that asymmetry compounds is not something we project — it depends entirely on the regime. On historical data, the difference between a calm decade and one with a crash is enormous. See the arithmetic, on real index returns, below.</p>
+        </div>
+
+        <p style="text-align:center;margin:var(--s-6) 0 var(--s-3)"><a href="#arithmetic" class="btn btn--primary btn--sm">See the arithmetic →</a></p>
+
+        <p class="compliance" style="text-align:center;margin-top:var(--s-4)"><em>Design intent, not a forecast. EPIG 500 does not target a stated return multiple. The illustration below uses actual past S&amp;P 500 total returns and user-set, hypothetical capture inputs; it does not represent any Ekantik strategy's performance. Past performance does not guarantee future results.</em></p>
+    </div>
+</section>
+
+
+<!-- ============ 2d. THE ARITHMETIC — historical illustration (ADD-2; moved out of Ladder section) ============ -->
+<section class="section section--white" id="arithmetic">
+    <div class="container">
+        <header class="section__header">
+            <p class="eyebrow"><span class="diamond">◆</span> The Arithmetic</p>
+            <h2 class="section__h">The same asymmetry, run on history.</h2>
+            <p class="section__sub">Set an upside capture and a downside capture, and watch the result against the S&amp;P 500 — computed on actual past total returns, across a calm window and a window with a crash. The point isn't the multiple; it's how completely the answer changes with the regime. Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy.</p>
+        </header>
+
+        <div class="arith-placeholder" style="background:var(--ivory);border:1px dashed var(--line);border-radius:8px;padding:var(--s-8) var(--s-6);text-align:center">
+            <p style="font-family:var(--font-serif);font-size:22px;color:var(--navy);margin:0 0 var(--s-3)">Doubling Arithmetic module — in development</p>
+            <p style="color:var(--slate);max-width:720px;margin:0 auto;line-height:1.6">An interactive illustration is being prepared: choose your upside capture (e.g. 80%, 100%, 120% of the up-month index return) and downside participation (e.g. 50%, 70%, 100%), and the model will compute the long-run outcome against the S&amp;P 500 over the past <strong>20 years of actual market data</strong>. <strong>A historical illustration, hypothetical, not a projection of any Ekantik strategy.</strong></p>
+        </div>
+    </div>
+</section>
+
+
 <!-- ============ 3. COMPOUNDING LADDER + RISK MANAGEMENT CADENCE ============ -->
 <section class="section section--white" id="ladder">
     <div class="container">
@@ -340,17 +382,6 @@
             </article>
         </div>
 
-        <!-- Section break + arithmetic of compounding (T1-A replacement; the prior forward-projection equity curve was removed per the no-forward-projection rule) -->
-        <header class="section__header" style="margin-top: var(--s-12); margin-bottom: var(--s-4);">
-            <p class="eyebrow"><span class="diamond">◆</span> The arithmetic of compounding — illustrated on history</p>
-            <h3 class="section__h section__h--mid">Upside capture and downside discipline, on real past returns</h3>
-            <p class="section__sub">Rather than project a forward return, this shows — using actual past S&amp;P 500 total returns — how <em>upside capture</em> and <em>downside discipline</em> combine to drive long-run outcomes versus the index. The arithmetic is the lesson; the future is not the lesson.</p>
-        </header>
-
-        <div class="arith-placeholder" style="background:var(--ivory);border:1px dashed var(--line);border-radius:8px;padding:var(--s-8) var(--s-6);text-align:center;margin-bottom:var(--s-6)">
-            <p style="font-family:var(--font-serif);font-size:22px;color:var(--navy);margin:0 0 var(--s-3)">Doubling Arithmetic module — in development</p>
-            <p style="color:var(--slate);max-width:720px;margin:0 auto;line-height:1.6">An interactive illustration is being prepared: choose your upside capture (e.g. 80%, 100%, 120% of the up-month index return) and downside participation (e.g. 50%, 70%, 100%), and the model will compute the long-run outcome against the S&amp;P 500 over the past <strong>20 years of actual market data</strong>. <strong>A historical illustration, hypothetical, not a projection of any Ekantik strategy.</strong></p>
-        </div>
 
         <!-- Removed: forward-projection equity curve. SVG and chips deleted per compliance redline T1-A.
              What remains below — kill-condition chips and three-col risk/leverage/velocity explainers —
@@ -905,6 +936,6 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260531g"></script>
+<script src="js/script.js?v=20260531h"></script>
 </body>
 </html>
