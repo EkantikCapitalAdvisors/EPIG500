@@ -1329,7 +1329,152 @@
                     +   '<div class="arith-window__alpha"><span class="arith-window__alpha-lbl">Outperformance</span><span class="arith-window__alpha-val' + moodClass(alphaPct) + '">' + fmtPct(alphaPct) + '</span></div>'
                     + '</div>';
             }).join('');
+
+            drawEquityChart(up, down);
         }
+
+        /* ------------------------------------------------
+           Historical equity chart — stacked 80% SPY + 20% engine vs 100% S&P 500.
+           For each year y in the active window:
+             r_spy  = SP_TR[y]
+             r_eng  = r_spy * (r_spy >= 0 ? up : down)
+             total  = 0.80*(1+r_spy)*spyVal + 0.20*(1+r_eng)*engVal
+           Two stacked area traces (SPY base, engine overlay) + S&P benchmark line.
+           ------------------------------------------------ */
+        const ALLOC_SPY = 0.80;
+        const ALLOC_ENG = 0.20;
+        let activeWindow = 'full';
+
+        function buildSeries(years, up, down) {
+            // Each output point: { yr, spy, eng, total, idx } where spy+eng=total, all start at ALLOC.
+            const out = [{ yr: years[0] - 1, spy: ALLOC_SPY, eng: ALLOC_ENG, total: 1, idx: 1 }];
+            let spy = ALLOC_SPY, eng = ALLOC_ENG, idx = 1;
+            for (let i = 0; i < years.length; i++) {
+                const r = SP_TR[years[i]];
+                spy = spy * (1 + r);
+                const rEng = r * (r >= 0 ? up : down);
+                eng = eng * (1 + rEng);
+                idx = idx * (1 + r);
+                out.push({ yr: years[i], spy: spy, eng: eng, total: spy + eng, idx: idx });
+            }
+            return out;
+        }
+
+        function drawEquityChart(up, down) {
+            const canvas = document.getElementById('arithEquityCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const W = canvas.clientWidth || 1100;
+            const H = canvas.clientHeight || 360;
+            canvas.width = W * dpr; canvas.height = H * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.clearRect(0, 0, W, H);
+
+            const win = windows.find(function (w) { return w.id === activeWindow; }) || windows[2];
+            const series = buildSeries(win.years, up, down);
+
+            const PAD_L = 56, PAD_R = 24, PAD_T = 24, PAD_B = 36;
+            const xN = series.length - 1;
+            const maxVal = Math.max.apply(null, series.map(function (p) { return Math.max(p.total, p.idx); }));
+            const minVal = Math.min.apply(null, series.map(function (p) { return Math.min(p.total, p.idx, p.spy); }));
+            const yMax = maxVal * 1.05;
+            const yMin = Math.min(minVal * 0.95, 0.5);
+
+            function x(i) { return PAD_L + (i / xN) * (W - PAD_L - PAD_R); }
+            function y(v) { return PAD_T + (yMax - v) / (yMax - yMin) * (H - PAD_T - PAD_B); }
+
+            // Grid lines + Y-axis labels (every 0.5x roughly)
+            ctx.strokeStyle = 'rgba(27, 42, 74, 0.06)'; ctx.lineWidth = 1;
+            ctx.fillStyle = '#64748B'; ctx.font = '11px "Source Sans 3", sans-serif';
+            const yStep = (yMax - yMin) > 6 ? 1 : 0.5;
+            for (let v = Math.ceil(yMin / yStep) * yStep; v <= yMax; v += yStep) {
+                const yy = y(v);
+                ctx.beginPath(); ctx.moveTo(PAD_L, yy); ctx.lineTo(W - PAD_R, yy); ctx.stroke();
+                ctx.textAlign = 'right'; ctx.fillText(v.toFixed(yStep >= 1 ? 1 : 2) + 'x', PAD_L - 6, yy + 4);
+            }
+            // Start line (1.0x) emphasized
+            const y1 = y(1);
+            ctx.strokeStyle = 'rgba(27, 42, 74, 0.3)'; ctx.setLineDash([3,3]);
+            ctx.beginPath(); ctx.moveTo(PAD_L, y1); ctx.lineTo(W - PAD_R, y1); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // X-axis labels (years), spaced
+            ctx.fillStyle = '#64748B'; ctx.textAlign = 'center';
+            const labelEvery = Math.max(1, Math.ceil(series.length / 8));
+            for (let i = 0; i < series.length; i++) {
+                if (i % labelEvery !== 0 && i !== series.length - 1) continue;
+                ctx.fillText(String(series[i].yr + (i === 0 ? '' : '')), x(i), H - PAD_B + 18);
+            }
+
+            // Stacked area: SPY foundation (slate)
+            ctx.fillStyle = 'rgba(91, 124, 168, 0.22)';
+            ctx.beginPath();
+            ctx.moveTo(x(0), y(0));
+            for (let i = 0; i < series.length; i++) ctx.lineTo(x(i), y(series[i].spy));
+            ctx.lineTo(x(xN), y(0));
+            ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = '#5B7CA8'; ctx.lineWidth = 1.6;
+            ctx.beginPath();
+            for (let i = 0; i < series.length; i++) {
+                const px = x(i), py = y(series[i].spy);
+                if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+
+            // Stacked area: engine contribution on top of SPY (gold band, between spy and total)
+            ctx.fillStyle = 'rgba(200, 169, 81, 0.38)';
+            ctx.beginPath();
+            ctx.moveTo(x(0), y(series[0].spy));
+            for (let i = 0; i < series.length; i++) ctx.lineTo(x(i), y(series[i].total));
+            for (let i = series.length - 1; i >= 0; i--) ctx.lineTo(x(i), y(series[i].spy));
+            ctx.closePath();
+            ctx.fill();
+
+            // Total NLV line (gold-deep, sits at top of gold band)
+            ctx.strokeStyle = '#A88A38'; ctx.lineWidth = 2.4;
+            ctx.beginPath();
+            for (let i = 0; i < series.length; i++) {
+                const px = x(i), py = y(series[i].total);
+                if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+
+            // S&P 500 benchmark line (navy)
+            ctx.strokeStyle = '#1B2A4A'; ctx.lineWidth = 1.6; ctx.setLineDash([6, 4]);
+            ctx.beginPath();
+            for (let i = 0; i < series.length; i++) {
+                const px = x(i), py = y(series[i].idx);
+                if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // End-point callouts: strategy multiplier + S&P multiplier
+            const last = series[series.length - 1];
+            ctx.fillStyle = '#A88A38'; ctx.textAlign = 'left'; ctx.font = '12px "Source Sans 3", sans-serif';
+            ctx.fillText(last.total.toFixed(2) + 'x · Strategy', x(xN) - 90, y(last.total) - 8);
+            ctx.fillStyle = '#1B2A4A';
+            ctx.fillText(last.idx.toFixed(2) + 'x · S&P 500', x(xN) - 90, y(last.idx) + 16);
+        }
+
+        // Window tabs
+        document.querySelectorAll('.arith-tab').forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                activeWindow = tab.getAttribute('data-window');
+                document.querySelectorAll('.arith-tab').forEach(function (t) { t.classList.toggle('is-active', t === tab); });
+                const up = parseInt(document.getElementById('arithUp').value, 10) / 100;
+                const down = parseInt(document.getElementById('arithDown').value, 10) / 100;
+                drawEquityChart(up, down);
+            });
+        });
+
+        window.addEventListener('resize', function () {
+            const up = parseInt(document.getElementById('arithUp').value, 10) / 100;
+            const down = parseInt(document.getElementById('arithDown').value, 10) / 100;
+            drawEquityChart(up, down);
+        });
 
         document.getElementById('arithUp').addEventListener('input', render);
         document.getElementById('arithDown').addEventListener('input', render);
