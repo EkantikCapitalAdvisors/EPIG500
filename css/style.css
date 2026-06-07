@@ -3439,3 +3439,14 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .arith-chart__legend-item { display: inline-flex; align-items: center; gap: 6px; }
 .arith-chart__swatch { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
 .arith-chart__swatch--line { width: 18px; height: 3px; border-radius: 0; }
+
+/* /ES throughput contract-count chip selector */
+.arith-chart__contracts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: var(--s-2); }
+.arith-chart__contracts-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--gold-deep); margin-right: 6px; }
+.arith-contract {
+    background: transparent; border: 1px solid var(--line); border-radius: 999px;
+    padding: 4px 12px; font-family: inherit; font-size: 12px; font-weight: 600;
+    color: var(--slate-dark); cursor: pointer; transition: all .15s ease; white-space: nowrap;
+}
+.arith-contract:hover { border-color: var(--gold); color: var(--navy); }
+.arith-contract.is-active { background: var(--gold-deep); border-color: var(--gold-deep); color: #fff; }
