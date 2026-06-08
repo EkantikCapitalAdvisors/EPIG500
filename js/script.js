@@ -636,6 +636,10 @@
             const live = REFERENCE_TRADES.filter(function (t) { return t.period === 'pre_reg'; }).length;
             CURRENT_DATASET_LABEL = 'Live pre-reg record (' + live + ' trades)';
             if (typeof renderBattery === 'function') renderBattery(currentTrades);
+            // Refresh the §Arithmetic Booster Engine baseline now that real data is in.
+            if (typeof window.__epigArithRefreshBaseline === 'function') {
+                try { window.__epigArithRefreshBaseline(); } catch (e) {}
+            }
         })
         .catch(function () {});
 
@@ -1372,20 +1376,85 @@
         let activeRiskPct = 0;     // 0 = Booster Engine off; 0.25, 0.5, 1.0 = per-trade risk %
 
         // Annual throughput as a fraction of $100K starting NLV at the 0.5% per-trade
-        // architectural risk anchor (the level the Telegram record was generated at).
-        // Source: 196-trade record, 369.5 pts over 14 active months
-        //   = 26.4 pts/active month × 12 = 316.8 pts/yr × $50/pt = $15,840/yr
-        //   ≈ 15.84% of $100K NLV per year at 0.5% / trade risk.
-        const THROUGHPUT_RATE_AT_HISTORICAL_RISK = 0.1584;
+        // architectural risk anchor. Initial value is a fallback derived from the
+        // 196-trade Telegram record (369.5 pts / 14 active months × 12 × $50 / $100K
+        // = ~15.84%). Once REFERENCE_TRADES populates from data/trades.json, the
+        // baseline is recomputed LIVE from the combined record (historical +
+        // pre-registration), so every admin publish flows through automatically.
+        let THROUGHPUT_RATE_AT_HISTORICAL_RISK = 0.1584;
+        let throughputBaselineMeta = {
+            source: 'fallback (hardcoded 196-trade Telegram derivation)',
+            tradeCount: 196,
+            totalPts: 369.5,
+            activeMonths: 14,
+            ratePct: 15.84
+        };
         const HISTORICAL_RISK_PCT = 0.5;
+
         // Throughput scales linearly with per-trade risk:
-        //   risk 0.25% → 0.5× historical → ~7.92% NLV/yr
-        //   risk 0.5%  → 1.0× historical → ~15.84% NLV/yr  (baseline)
-        //   risk 1.0%  → 2.0× historical → ~31.68% NLV/yr
+        //   risk 0.25% → 0.5× baseline
+        //   risk 0.5%  → 1.0× baseline  (== architectural anchor)
+        //   risk 1.0%  → 2.0× baseline
         function throughputRateFor(riskPct) {
             if (!riskPct) return 0;
             return (riskPct / HISTORICAL_RISK_PCT) * THROUGHPUT_RATE_AT_HISTORICAL_RISK;
         }
+
+        // Compute the live baseline from a trade array. Returns null if the data
+        // is empty / un-parseable; in that case the fallback constant stays in use.
+        function computeBaselineFromTrades(trades) {
+            if (!trades || !trades.length) return null;
+            const months = {};
+            let totalPts = 0;
+            for (let i = 0; i < trades.length; i++) {
+                const t = trades[i];
+                const pts = typeof t.pts === 'number' ? t.pts : parseFloat(t.pts);
+                if (isFinite(pts)) totalPts += pts;
+                const ts = t.timestamp;
+                if (ts && typeof ts === 'string') months[ts.slice(0, 7)] = true;
+            }
+            const activeMonths = Object.keys(months).length;
+            if (!activeMonths) return null;
+            // pts/active month × 12 months/yr × $50/pt / $100K NLV
+            const ratePct100 = (totalPts / activeMonths) * 12 * 50 / 100000;
+            return {
+                rate: ratePct100,
+                tradeCount: trades.length,
+                totalPts: totalPts,
+                activeMonths: activeMonths,
+                ratePct: ratePct100 * 100
+            };
+        }
+
+        // Refresh the baseline + re-render. Called by the outer fetch handler once
+        // REFERENCE_TRADES populates. Safe to call repeatedly.
+        function refreshBaselineFromLiveRecord() {
+            const meta = computeBaselineFromTrades(REFERENCE_TRADES);
+            if (meta && isFinite(meta.rate) && meta.rate > 0) {
+                THROUGHPUT_RATE_AT_HISTORICAL_RISK = meta.rate;
+                throughputBaselineMeta = {
+                    source: 'live combined record (historical + pre-registration)',
+                    tradeCount: meta.tradeCount,
+                    totalPts: meta.totalPts,
+                    activeMonths: meta.activeMonths,
+                    ratePct: meta.ratePct
+                };
+            }
+            updateBaselineIndicator();
+            if (typeof render === 'function') render();
+        }
+
+        function updateBaselineIndicator() {
+            const el = document.getElementById('arithBaselineIndicator');
+            if (!el) return;
+            const m = throughputBaselineMeta;
+            const ratePct = m.ratePct.toFixed(2);
+            const totalPts = m.totalPts.toFixed(1);
+            el.innerHTML = '<span class="diamond">◆</span> Baseline (live): <strong>' + ratePct + '% NLV / yr</strong> at the 0.5% anchor · derived from ' + m.tradeCount + ' trades, ' + totalPts + ' pts over ' + m.activeMonths + ' active months';
+        }
+
+        // Expose for the outer fetch handler.
+        window.__epigArithRefreshBaseline = refreshBaselineFromLiveRecord;
 
         function buildSeries(years, up, down, riskPct) {
             // Each output point: { yr, spy, eng, thr, total, idx }
