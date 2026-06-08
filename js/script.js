@@ -1303,6 +1303,13 @@
             const sign = p >= 0 ? '+' : '';
             return sign + (p * 100).toFixed(1) + '%';
         }
+        // Compact USD formatter: 1234 -> "$1.2K", 28250 -> "$28.3K", 1034000 -> "$1.03M"
+        function fmtUSD0(d) {
+            const a = Math.abs(d);
+            if (a >= 1e6) return '$' + (a / 1e6).toFixed(2) + 'M';
+            if (a >= 1e3) return '$' + (a / 1e3).toFixed(a >= 1e4 ? 1 : 2) + 'K';
+            return '$' + a.toFixed(0);
+        }
         function moodClass(v) { return v > 0 ? ' arith-window__val--pos' : v < 0 ? ' arith-window__val--neg' : ''; }
 
         function render() {
@@ -1321,14 +1328,26 @@
                 const stratPct = r.strat - 1;
                 const alpha = r.strat - r.idx;       // absolute multiple gap
                 const alphaPct = r.strat / r.idx - 1; // relative outperformance
+                // Dollar reference: a $100K model portfolio. End values and the
+                // absolute outperformance in dollars make the magnitude apparent.
+                const NLV0 = 100000;
+                const idxDollar = r.idx * NLV0;
+                const stratDollar = r.strat * NLV0;
+                const alphaDollar = alpha * NLV0;   // = stratDollar - idxDollar
                 return ''
                     + '<div class="arith-window">'
                     +   '<p class="arith-window__h">' + w.label + '</p>'
                     +   '<p class="arith-window__range">' + w.range + '</p>'
-                    +   '<div class="arith-window__row"><span class="arith-window__lbl">S&amp;P 500</span><span class="arith-window__val' + moodClass(idxPct) + '">' + fmtMult(r.idx) + '</span></div>'
-                    +   '<div class="arith-window__row"><span class="arith-window__lbl">' + stratLabel + '</span><span class="arith-window__val' + moodClass(stratPct) + '">' + fmtMult(r.strat) + '</span></div>'
+                    +   '<div class="arith-window__row"><span class="arith-window__lbl">S&amp;P 500</span><span class="arith-window__val' + moodClass(idxPct) + '">' + fmtMult(r.idx) + ' <span class="arith-window__dollars">' + fmtUSD0(idxDollar) + '</span></span></div>'
+                    +   '<div class="arith-window__row"><span class="arith-window__lbl">' + stratLabel + '</span><span class="arith-window__val' + moodClass(stratPct) + '">' + fmtMult(r.strat) + ' <span class="arith-window__dollars">' + fmtUSD0(stratDollar) + '</span></span></div>'
                     +   '<div class="arith-window__row"><span class="arith-window__lbl">Δ (strat − index)</span><span class="arith-window__val' + moodClass(alpha) + '">' + (alpha >= 0 ? '+' : '') + alpha.toFixed(2) + 'x</span></div>'
-                    +   '<div class="arith-window__alpha"><span class="arith-window__alpha-lbl">Outperformance</span><span class="arith-window__alpha-val' + moodClass(alphaPct) + '">' + fmtPct(alphaPct) + '</span></div>'
+                    +   '<div class="arith-window__alpha">'
+                    +     '<span class="arith-window__alpha-lbl">Outperformance</span>'
+                    +     '<span class="arith-window__alpha-stack">'
+                    +       '<span class="arith-window__alpha-val' + moodClass(alphaPct) + '">' + fmtPct(alphaPct) + '</span>'
+                    +       '<span class="arith-window__alpha-dollars">' + (alphaDollar >= 0 ? '+' : '−') + fmtUSD0(Math.abs(alphaDollar)) + ' on $100K</span>'
+                    +     '</span>'
+                    +   '</div>'
                     + '</div>';
             }).join('');
 
