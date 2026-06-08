@@ -1288,7 +1288,7 @@
             // Returns { idx, strat } for the END of the window. Wraps buildSeries so
             // the cards reflect the exact same model as the chart: 80% SPY foundation
             // (compounded by index TR) + 20% capture-asymmetric engine (slider-driven)
-            // + optional /ES throughput layer (N contracts × ~15.84% NLV/yr, linear).
+            // + optional Booster Engine layer (N contracts × ~15.84% NLV/yr, linear).
             // At sliders 100/100 and contracts=0, strat === idx (calibration check).
             const s = buildSeries(years, up, down, contracts || 0);
             const last = s[s.length - 1];
@@ -1313,7 +1313,7 @@
 
             const wrap = document.getElementById('arithWindows');
             const stratLabel = activeRiskPct > 0
-                ? 'Strategy (incl. ' + activeRiskPct + '% /ES throughput)'
+                ? 'Strategy (incl. Booster @ ' + activeRiskPct + '% / trade)'
                 : 'Strategy (capture only)';
             wrap.innerHTML = windows.map(function (w) {
                 const r = compound(w.years, up, down, activeRiskPct);
@@ -1346,7 +1346,7 @@
         const ALLOC_SPY = 0.80;
         const ALLOC_ENG = 0.20;
         let activeWindow = 'full';
-        let activeRiskPct = 0;     // 0 = throughput layer off; 0.25, 0.5, 1.0 = per-trade risk %
+        let activeRiskPct = 0;     // 0 = Booster Engine off; 0.25, 0.5, 1.0 = per-trade risk %
 
         // Annual throughput as a fraction of $100K starting NLV at the 0.5% per-trade
         // architectural risk anchor (the level the Telegram record was generated at).
@@ -1368,7 +1368,7 @@
             // Each output point: { yr, spy, eng, thr, total, idx }
             //   spy  = 80% SPY foundation, grown by actual past returns
             //   eng  = capture-asymmetric overlay (stylized, slider-driven)
-            //   thr  = /ES throughput layer (real Telegram-derived, scaled by per-trade risk %)
+            //   thr  = Booster Engine layer (real Telegram-derived, scaled by per-trade risk %)
             //   total = spy + eng + thr (stacked layers; thr=0 when risk=0)
             //   idx  = S&P 500 benchmark
             const risk = riskPct || 0;
@@ -1462,7 +1462,7 @@
             ctx.closePath();
             ctx.fill();
 
-            // Stacked area: /ES throughput layer on top (gold-deep band, spy+eng → total) — only if contracts > 0
+            // Stacked area: Booster Engine layer on top (gold-deep band, spy+eng → total) — only if contracts > 0
             if (activeRiskPct > 0) {
                 ctx.fillStyle = 'rgba(168, 138, 56, 0.45)';
                 ctx.beginPath();
@@ -1511,7 +1511,7 @@
             });
         });
 
-        // Contract count chips (/ES throughput layer)
+        // Risk-per-trade chips (Booster Engine layer)
         function syncThroughLegend() {
             const legend = document.getElementById('arithLegendThrough');
             const lblCt = document.getElementById('arithLegendContracts');

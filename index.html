@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260531m">
+    <link rel="stylesheet" href="css/style.css?v=20260531n">
 
     <script type="application/ld+json">
     {
@@ -319,34 +319,34 @@
 
             <div class="arith-windows" id="arithWindows"><!-- 3 window cards rendered by JS --></div>
 
-            <!-- Stacked equity curve: 80% SPY foundation + capture asymmetry + optional /ES throughput, plotted against the S&P 500 -->
+            <!-- Stacked equity curve: 80% SPY foundation + capture asymmetry + optional Booster Engine, plotted against the S&P 500 -->
             <div class="arith-chart">
                 <header class="arith-chart__head">
                     <h3 class="arith-chart__h">How the architecture stacks over time</h3>
-                    <p class="arith-chart__sub">Two engine layers on top of the 80% SPY foundation: <strong>(1) capture asymmetry</strong> — the stylized thesis from the calculator above, driven by the upside/downside sliders; <strong>(2) /ES throughput</strong> — a separate, optional layer modelled from the actual 196-trade Telegram record (~$1,321/mo per /ES contract). Pick the contract count to see the throughput contribution scale 0 → 4 /ES.</p>
+                    <p class="arith-chart__sub">Two layers on top of the 80% SPY foundation: <strong>(1) capture asymmetry</strong> — the stylized thesis from the calculator above, driven by the upside/downside sliders; <strong>(2) the Booster Engine</strong> — a separate, optional layer modelled from the actual 196-trade Telegram record (~$1,321/mo at the 0.5% / trade architectural risk anchor). Pick the per-trade risk to see the engine's contribution scale up or down.</p>
                     <div class="arith-chart__tabs" role="radiogroup" aria-label="Window selector">
                         <button class="arith-tab is-active" data-window="full" type="button">Full 20-year</button>
                         <button class="arith-tab" data-window="calm" type="button">Calm (2013–2019)</button>
                         <button class="arith-tab" data-window="crash" type="button">Crash (2007–2010)</button>
                     </div>
-                    <div class="arith-chart__contracts" role="radiogroup" aria-label="ES throughput risk level">
-                        <span class="arith-chart__contracts-label">/ES throughput risk</span>
+                    <div class="arith-chart__contracts" role="radiogroup" aria-label="Booster Engine risk level">
+                        <span class="arith-chart__contracts-label">Booster Engine · risk / trade</span>
                         <button class="arith-contract is-active" data-risk="0" type="button">Off</button>
-                        <button class="arith-contract" data-risk="0.25" type="button">0.25% / trade</button>
-                        <button class="arith-contract" data-risk="0.5" type="button">0.5% / trade · historical</button>
-                        <button class="arith-contract" data-risk="1" type="button">1% / trade</button>
+                        <button class="arith-contract" data-risk="0.25" type="button">0.25%</button>
+                        <button class="arith-contract" data-risk="0.5" type="button">0.5% · historical</button>
+                        <button class="arith-contract" data-risk="1" type="button">1%</button>
                     </div>
                 </header>
-                <canvas id="arithEquityCanvas" width="1100" height="360" aria-label="Historical equity curve: S&P 500 vs 80% SPY foundation, plus capture-asymmetric engine band, plus optional /ES throughput layer at the chosen per-trade risk level."></canvas>
+                <canvas id="arithEquityCanvas" width="1100" height="360" aria-label="Historical equity curve: S&P 500 vs 80% SPY foundation, plus capture-asymmetry band, plus optional Booster Engine layer at the chosen per-trade risk level."></canvas>
                 <div class="arith-chart__legend">
                     <span class="arith-chart__legend-item"><span class="arith-chart__swatch" style="background:#5B7CA8"></span> 80% SPY foundation (passive)</span>
                     <span class="arith-chart__legend-item"><span class="arith-chart__swatch" style="background:#C8A951"></span> + Capture asymmetry (stylized)</span>
-                    <span class="arith-chart__legend-item" id="arithLegendThrough" hidden><span class="arith-chart__swatch" style="background:#A88A38"></span> + /ES throughput (real, <span id="arithLegendContracts">0.5</span>% / trade)</span>
+                    <span class="arith-chart__legend-item" id="arithLegendThrough" hidden><span class="arith-chart__swatch" style="background:#A88A38"></span> + Booster Engine (real, <span id="arithLegendContracts">0.5</span>% / trade)</span>
                     <span class="arith-chart__legend-item"><span class="arith-chart__swatch arith-chart__swatch--line" style="background:#1B2A4A"></span> S&amp;P 500 (100% benchmark)</span>
                 </div>
             </div>
 
-            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns, 2005–2024. <strong>Capture-asymmetry layer:</strong> 80% × index + 20% × (capture × index), where capture = upside slider in up years and downside slider in down years. <strong>/ES throughput layer (optional):</strong> derived from the 196-trade Telegram record (369.5 pts ÷ 14 active months × $50/pt ≈ $1,321/mo at the <strong>0.5% / trade architectural risk anchor</strong>, ≈ 15.84% NLV / yr on a $100K base). Throughput scales linearly with per-trade risk — <strong>0.25%</strong> halves the historical throughput, <strong>1%</strong> doubles it. Throughput is shown as <em>independent</em> of the year's S&amp;P return — the operator's intraday /ES trading isn't tied to the index's annual direction. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy.</strong> The Telegram record predates the locked Falsifiability Protocol; the protocol-bound live record begins May 2026 and is still accumulating.</p>
+            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns, 2005–2024. <strong>Capture-asymmetry layer:</strong> 80% × index + 20% × (capture × index), where capture = upside slider in up years and downside slider in down years. <strong>Booster Engine layer (optional):</strong> derived from the 196-trade Telegram /ES record (369.5 pts ÷ 14 active months × $50/pt ≈ $1,321/mo at the <strong>0.5% / trade architectural risk anchor</strong>, ≈ 15.84% NLV / yr on a $100K base). Engine contribution scales linearly with per-trade risk — <strong>0.25%</strong> halves the historical contribution, <strong>1%</strong> doubles it. The engine is shown as <em>independent</em> of the year's S&amp;P return — the operator's intraday /ES trading isn't tied to the index's annual direction. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy.</strong> The Telegram record predates the locked Falsifiability Protocol; the protocol-bound live record begins May 2026 and is still accumulating.</p>
         </div>
     </div>
 </section>
@@ -980,6 +980,6 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260531m"></script>
+<script src="js/script.js?v=20260531n"></script>
 </body>
 </html>
