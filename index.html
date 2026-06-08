@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260531p">
+    <link rel="stylesheet" href="css/style.css?v=20260531q">
 
     <script type="application/ld+json">
     {
@@ -333,9 +333,10 @@
                         <span class="arith-chart__contracts-label">Booster Engine · risk / trade</span>
                         <button class="arith-contract is-active" data-risk="0" type="button">Off</button>
                         <button class="arith-contract" data-risk="0.25" type="button">0.25%</button>
-                        <button class="arith-contract" data-risk="0.5" type="button">0.5% · historical</button>
+                        <button class="arith-contract" data-risk="0.5" type="button">0.5% · anchor</button>
                         <button class="arith-contract" data-risk="1" type="button">1%</button>
                     </div>
+                    <p class="arith-chart__baseline" id="arithBaselineIndicator"><span class="diamond">◆</span> Baseline (live): <strong>15.84% NLV / yr</strong> at the 0.5% anchor · derived from 196 trades, 369.5 pts over 14 active months</p>
                 </header>
                 <canvas id="arithEquityCanvas" width="1100" height="360" aria-label="Historical equity curve: S&P 500 vs 80% SPY foundation, plus capture-asymmetry band, plus optional Booster Engine layer at the chosen per-trade risk level."></canvas>
                 <div class="arith-chart__legend">
@@ -346,7 +347,7 @@
                 </div>
             </div>
 
-            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns, 2005–2024. <strong>Capture-asymmetry layer:</strong> 80% × index + 20% × (capture × index), where capture = upside slider in up years and downside slider in down years. <strong>Booster Engine layer (optional):</strong> derived from the 196-trade Telegram /ES record (369.5 pts ÷ 14 active months × $50/pt ≈ $1,321/mo at the <strong>0.5% / trade architectural risk anchor</strong>, ≈ 15.84% NLV / yr on a $100K base). Engine contribution scales linearly with per-trade risk — <strong>0.25%</strong> halves the historical contribution, <strong>1%</strong> doubles it. The engine is shown as <em>independent</em> of the year's S&amp;P return — the operator's intraday /ES trading isn't tied to the index's annual direction. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy.</strong> The Telegram record predates the locked Falsifiability Protocol; the protocol-bound live record begins May 2026 and is still accumulating.</p>
+            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns, 2005–2024. <strong>Capture-asymmetry layer:</strong> 80% × index + 20% × (capture × index), where capture = upside slider in up years and downside slider in down years. <strong>Booster Engine layer (optional):</strong> baseline derived <em>live</em> from <code>/data/trades.json</code> — total points ÷ active months × 12 × $50 / $100K starting NLV. Every admin publish updates the baseline automatically. The 0.5% anchor chip is the architectural per-trade risk; <strong>0.25%</strong> halves the baseline, <strong>1%</strong> doubles it. Engine throughput is shown as <em>independent</em> of the year's S&amp;P return — the operator's intraday /ES trading isn't tied to the index's annual direction. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy.</strong> The current dataset combines the Period 1 Telegram record (Apr 2023 – Oct 2024, pre-protocol) with the Period 2 pre-registration live record (May 2026 → present, under the locked Falsifiability Protocol).</p>
         </div>
     </div>
 </section>
@@ -980,6 +981,6 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260531p"></script>
+<script src="js/script.js?v=20260531q"></script>
 </body>
 </html>
