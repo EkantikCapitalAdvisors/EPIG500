@@ -1327,9 +1327,13 @@
                 const idxPct = r.idx - 1;
                 const stratPct = r.strat - 1;
                 const alpha = r.strat - r.idx;       // absolute multiple gap
-                const alphaPct = r.strat / r.idx - 1; // relative outperformance
-                // Dollar reference: a $100K model portfolio. End values and the
-                // absolute outperformance in dollars make the magnitude apparent.
+                const alphaPct = r.strat / r.idx - 1; // relative outperformance over the window
+                // Alpha CAGR: annualized excess return. Geometric mean of the per-year
+                // outperformance ratio, expressed as %/yr. Lets the visitor compare
+                // windows of different lengths (4yr crash vs 20yr full) on equal footing.
+                const years = w.years.length;
+                const alphaCagr = years > 0 ? Math.pow(r.strat / r.idx, 1 / years) - 1 : 0;
+                // Dollar reference: a $100K model portfolio.
                 const NLV0 = 100000;
                 const idxDollar = r.idx * NLV0;
                 const stratDollar = r.strat * NLV0;
@@ -1337,15 +1341,15 @@
                 return ''
                     + '<div class="arith-window">'
                     +   '<p class="arith-window__h">' + w.label + '</p>'
-                    +   '<p class="arith-window__range">' + w.range + '</p>'
+                    +   '<p class="arith-window__range">' + w.range + ' · ' + years + ' yrs</p>'
                     +   '<div class="arith-window__row"><span class="arith-window__lbl">S&amp;P 500</span><span class="arith-window__val' + moodClass(idxPct) + '">' + fmtMult(r.idx) + ' <span class="arith-window__dollars">' + fmtUSD0(idxDollar) + '</span></span></div>'
                     +   '<div class="arith-window__row"><span class="arith-window__lbl">' + stratLabel + '</span><span class="arith-window__val' + moodClass(stratPct) + '">' + fmtMult(r.strat) + ' <span class="arith-window__dollars">' + fmtUSD0(stratDollar) + '</span></span></div>'
                     +   '<div class="arith-window__row"><span class="arith-window__lbl">Δ (strat − index)</span><span class="arith-window__val' + moodClass(alpha) + '">' + (alpha >= 0 ? '+' : '') + alpha.toFixed(2) + 'x</span></div>'
                     +   '<div class="arith-window__alpha">'
                     +     '<span class="arith-window__alpha-lbl">Outperformance</span>'
                     +     '<span class="arith-window__alpha-stack">'
-                    +       '<span class="arith-window__alpha-val' + moodClass(alphaPct) + '">' + fmtPct(alphaPct) + '</span>'
-                    +       '<span class="arith-window__alpha-dollars">' + (alphaDollar >= 0 ? '+' : '−') + fmtUSD0(Math.abs(alphaDollar)) + ' on $100K</span>'
+                    +       '<span class="arith-window__alpha-val' + moodClass(alphaPct) + '">' + fmtPct(alphaPct) + ' <span class="arith-window__alpha-suffix">total</span></span>'
+                    +       '<span class="arith-window__alpha-dollars">' + fmtPct(alphaCagr) + '/yr CAGR · ' + (alphaDollar >= 0 ? '+' : '−') + fmtUSD0(Math.abs(alphaDollar)) + ' on $100K</span>'
                     +     '</span>'
                     +   '</div>'
                     + '</div>';
