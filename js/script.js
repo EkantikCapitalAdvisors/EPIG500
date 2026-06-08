@@ -1350,7 +1350,7 @@
                     +   '<div class="arith-window__row"><span class="arith-window__lbl">' + stratLabel + '</span><span class="arith-window__val' + moodClass(stratPct) + '">' + fmtMult(r.strat) + ' <span class="arith-window__dollars">' + fmtUSD0(stratDollar) + '</span></span></div>'
                     +   '<div class="arith-window__row"><span class="arith-window__lbl">Δ (strat − index)</span><span class="arith-window__val' + moodClass(alpha) + '">' + (alpha >= 0 ? '+' : '') + alpha.toFixed(2) + 'x</span></div>'
                     +   '<div class="arith-window__alpha">'
-                    +     '<span class="arith-window__alpha-lbl">Outperformance</span>'
+                    +     '<span class="arith-window__alpha-lbl">Outperformance<br><span class="arith-window__alpha-vs">vs 100% S&amp;P 500</span></span>'
                     +     '<span class="arith-window__alpha-stack">'
                     +       '<span class="arith-window__alpha-val' + moodClass(alphaPct) + '">' + fmtPct(alphaPct) + ' <span class="arith-window__alpha-suffix">total</span></span>'
                     +       '<span class="arith-window__alpha-dollars">' + fmtPct(alphaCagr) + '/yr CAGR · ' + (alphaDollar >= 0 ? '+' : '−') + fmtUSD0(Math.abs(alphaDollar)) + ' on $100K</span>'
@@ -1458,20 +1458,28 @@
 
         function buildSeries(years, up, down, riskPct) {
             // Each output point: { yr, spy, eng, thr, total, idx }
-            //   spy  = 80% SPY foundation, grown by actual past returns
-            //   eng  = capture-asymmetric overlay (stylized, slider-driven)
+            // v1.3 model: capture asymmetry now drives the FOUNDATION (the
+            // synthetic-passive S&P 500 overlay), not a 20% slice. The 20%
+            // bucket is operational cash (flat). The Booster Engine adds
+            // throughput on top.
+            //   spy  = 80% S&P foundation, grown by CAPTURE-MODIFIED past returns
+            //   eng  = 20% cash bucket (flat — operational buffer)
             //   thr  = Booster Engine layer (real Telegram-derived, scaled by per-trade risk %)
             //   total = spy + eng + thr (stacked layers; thr=0 when risk=0)
-            //   idx  = S&P 500 benchmark
+            //   idx  = S&P 500 benchmark (100% exposure)
             const risk = riskPct || 0;
             const out = [{ yr: years[0] - 1, spy: ALLOC_SPY, eng: ALLOC_ENG, thr: 0, total: 1, idx: 1 }];
             let spy = ALLOC_SPY, eng = ALLOC_ENG, thr = 0, idx = 1;
             const thrRate = throughputRateFor(risk);
             for (let i = 0; i < years.length; i++) {
                 const r = SP_TR[years[i]];
-                spy = spy * (1 + r);
-                const rEng = r * (r >= 0 ? up : down);
-                eng = eng * (1 + rEng);
+                // Capture-asymmetric return on the foundation (overlay output):
+                //   up year: r × upsideCapture (e.g. 100% = full participation)
+                //   down year: r × downsideParticipation (e.g. 50% = take half the drawdown)
+                const rFoundation = r * (r >= 0 ? up : down);
+                spy = spy * (1 + rFoundation);
+                // Cash bucket stays flat (no exposure, no yield in this illustration)
+                // eng unchanged from previous year
                 // Throughput layer is linear: each year the engine adds thrRate × $100K
                 // in PnL (constant in dollar terms — the per-trade risk % is fixed for
                 // the illustration, so the dollar throughput stays steady year to year).

@@ -3471,3 +3471,34 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 }
 .arith-chart__baseline .diamond { color: var(--gold); margin-right: 4px; }
 .arith-chart__baseline strong { color: var(--navy); }
+
+/* Benchmark disclosure under the Outperformance row label */
+.arith-window__alpha-vs { font-family: var(--font-sans); font-weight: 500; font-size: 9px; color: var(--slate); letter-spacing: 0.6px; text-transform: uppercase; display: inline-block; margin-top: 2px; }
+
+/* §The Honest Problem — pullquote and prose sub-heads (v1.3) */
+.pullquote {
+    margin: var(--s-7) 0;
+    padding: var(--s-5) var(--s-6);
+    border-left: 4px solid var(--gold);
+    background: rgba(200, 169, 81, 0.06);
+    border-radius: 0 6px 6px 0;
+}
+.pullquote blockquote {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-style: italic;
+    font-size: 28px;
+    line-height: 1.2;
+    color: var(--navy);
+    margin: 0;
+    quotes: "“" "”";
+}
+.pullquote blockquote::before { content: open-quote; color: var(--gold-deep); margin-right: 4px; }
+.pullquote blockquote::after  { content: close-quote; color: var(--gold-deep); margin-left: 4px; }
+.prose .prose__subh {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--navy);
+    margin: var(--s-5) 0 var(--s-2);
+}
