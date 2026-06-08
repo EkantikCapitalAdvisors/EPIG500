@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Majority Opinion Predisposal Strategy — Falsifiability Protocol v1.2 · Ekantik Capital Advisors</title>
+<title>Majority Opinion Predisposal Strategy + Synthetic-Passive Overlay — Falsifiability Protocol v1.3 · Ekantik Capital Advisors</title>
 <style>
   :root {
     --navy: #1B2A4A;
@@ -254,16 +254,16 @@
   <div class="firm-tag">Ekantik Capital Advisors LLC</div>
 
   <h1 class="protocol-title">Falsifiability Protocol</h1>
-  <p class="protocol-subtitle">A pre-committed operational charter · v1.2 · Majority Opinion Predisposal Strategy</p>
+  <p class="protocol-subtitle">A pre-committed operational charter · v1.3 · Majority Opinion Predisposal Strategy + Synthetic-Passive Overlay</p>
 
   <p class="lead">
-    Governing the Majority Opinion Predisposal Strategy on ES &amp; MES futures within the Ekantik 500 active engine. Issued by the operator. Witness-locked. Publicly disclosed. Modification subject to a 48-hour cool-off and written justification.
+    Governing both engines of Ekantik 500: the <strong>Majority Opinion Predisposal Strategy</strong> on ES &amp; MES futures (the active engine), and the <strong>synthetic-passive overlay</strong> on the SPY foundation (new in v1.3). Issued by the operator. Witness-locked. Publicly disclosed. Modification subject to a 48-hour cool-off and written justification.
   </p>
 
   <table class="meta">
     <tr><td>Document</td><td>Falsifiability Protocol · Locked Operational Charter</td></tr>
-    <tr><td>Version</td><td>1.2 — Fidelity Layer expanded from four to seven criteria. OP-03 reframed as a <strong>trailing daily cap</strong> (starts at −0.5% NLV, ratchets up with profit buffer); the v1.0 fixed −12 ES point cap is retired. Added <strong>OP-05</strong> (weekly sit-down after 2–3 consecutive losing days), <strong>OP-06</strong> (bi-weekly size reduction to 1/5 after 2nd consecutive losing week), <strong>OP-07</strong> (reinstatement only after 5 good trades at reduced size, witness-countersigned). ED-05 warning/hard-kill split unchanged from v1.1. v1.0 Expression Layer (ED-01..ED-08) unchanged.</td></tr>
-    <tr><td>Reference</td><td>FP-MOPS-V1.2-2026-05</td></tr>
+    <tr><td>Version</td><td>1.3 — Adds <strong>Article VIII (Synthetic-Passive Overlay)</strong>: an overlay <strong>Fidelity Layer</strong> (rules for stepping equity exposure down in genuine corrections and back up as buyers return, executed without discretion) and an overlay <strong>Expression Layer</strong> (cycle-level overlay-alpha gate: beat-or-protect versus simply holding the index). Two engines, four gates. The overlay's quantitative thresholds are documented as <em>design intent</em> and will be locked under Article IV before any capital is deployed. All v1.2 articles (Fidelity Layer OP-01..07, Expression Layer ED-01..08, tier ladder, modification protocol, witness structure) unchanged.</td></tr>
+    <tr><td>Reference</td><td>FP-MOPS-V1.3-2026-06</td></tr>
     <tr><td>Strategy</td><td>Majority Opinion Predisposal Strategy · ES / MES Futures</td></tr>
     <tr><td>Vehicle</td><td>Ekantik 500 · Active /ES Engine Layer</td></tr>
     <tr><td>Issuing entity</td><td>Ekantik Capital Advisors LLC · Maple Grove, MN</td></tr>
@@ -516,13 +516,47 @@
   <!-- ============== ARTICLE VII — WITNESS ============== -->
   <h2 class="article-h"><span class="article-label">Article VII</span>Witness &amp; Verification</h2>
 
-  <p>The named witness for this protocol is <strong>Manish Dharod</strong>, who holds authority over: modification approvals (Article IV), breach tier classifications (Article VI), and Stage-1 resumption events (T2 / T3). The witness signs that protocol was followed; the witness does not endorse the substance of any decision or modification.</p>
+  <p>The named witness for this protocol is <strong>Manish Dharod</strong>, who holds authority over: modification approvals (Article IV), breach tier classifications (Article VI), Stage-1 resumption events (T2 / T3), and overlay-rule lockings (Article VIII). The witness signs that protocol was followed; the witness does not endorse the substance of any decision or modification.</p>
 
   <ul class="actions">
-    <li><strong>Countersignature</strong> required for: modifications, T2/T3 resumptions, monthly attribution audits. Artifact retrievable from the public page.</li>
+    <li><strong>Countersignature</strong> required for: modifications, T2/T3 resumptions, monthly attribution audits, overlay-rule lockings. Artifact retrievable from the public page.</li>
     <li><strong>Classification disputes:</strong> 7-day cool-off from initial classification; witness reviews with written rationale; if unresolved, a neutral third-party adjudicator — mutually agreed and named at the time of dispute — decides; decision binding and published in the breach record.</li>
-    <li><strong>Monthly audit:</strong> findings across all four Fidelity-Layer criteria, plus rolling Expression-Layer figures, published monthly to <code class="inline">witness-audits.json</code>. Without the monthly artifact, the "witness reviews monthly" claim is itself in breach.</li>
+    <li><strong>Monthly audit:</strong> findings across all seven Fidelity-Layer criteria, rolling Expression-Layer figures, and (once locked) overlay-decision log + overlay-alpha rolling figure, published monthly to <code class="inline">witness-audits.json</code>. Without the monthly artifact, the "witness reviews monthly" claim is itself in breach.</li>
   </ul>
+
+  <!-- ============== ARTICLE VIII — SYNTHETIC-PASSIVE OVERLAY (v1.3) ============== -->
+  <h2 class="article-h"><span class="article-label">Article VIII</span>The Synthetic-Passive Overlay — Two Layers, Drafted as Design Intent</h2>
+
+  <p><strong>Status note (v1.3):</strong> The structure of the overlay's two gates — Fidelity and Expression — is committed in this article. The <em>quantitative thresholds</em> (specific trigger conditions, exposure step sizes, beat-or-protect %) are documented here as <strong>design intent</strong>. They will be locked under Article IV's modification protocol (48-hour cool-off, written justification, witness countersignature by Manish Dharod) <strong>before any investor capital is deployed</strong>. Until lock, the overlay is illustrated on the public page as a hypothetical-inputs calculator; it does not run on live capital. This article describes what the overlay <em>will be</em> under the locked v1.3.</p>
+
+  <h3 class="crit-h"><span class="crit-label">VIII.A</span>The Overlay Fidelity Layer — Rule-Based Exposure</h3>
+  <p>The synthetic-passive overlay reduces the SPY foundation's exposure only when published, rules-based triggers fire — never on discretion, sentiment, or short-term price action. The full default state is 100% of the foundation allocation invested. The overlay carries three published exposure states:</p>
+  <ul class="actions">
+    <li><strong>State A — Full participation (default):</strong> 100% of the foundation allocation is invested in SPY. No overlay action. Held through new highs, through noise, through routine pullbacks.</li>
+    <li><strong>State B — Step-down (genuine correction):</strong> Reduce SPY exposure to a published lower band (target range to be locked: 50–70% of foundation allocation). Triggered only when both a <em>price-confirmation</em> condition (e.g. SPY below its 200-day moving average) <em>and</em> a <em>breadth/credit-confirmation</em> condition (e.g. NYSE advance-decline line failing alongside high-yield spreads widening) fire concurrently. Both conditions reduce false-positive whipsaws in noise-driven dips.</li>
+    <li><strong>State C — Further reduction (broadening sell):</strong> Reduce to a published deeper band (target range to be locked: 20–40% of foundation allocation). Triggered when the conditions above persist <em>and</em> selling broadens across sectors / market-cap tiers. Designed for cycle-level drawdowns, not corrections.</li>
+  </ul>
+  <p>Restoration is symmetric and rules-based — exposure steps back up to State B and then State A only when the triggers reverse with the same dual-confirmation discipline. No discretionary "I think the bottom is in" overrides. The exact threshold values for each trigger, the exposure percentages for each state, the lookback windows, and the dual-confirmation logic are the <em>quantitative thresholds</em> referenced in the status note above. They will be locked before capital deploys.</p>
+
+  <h3 class="crit-h"><span class="crit-label">VIII.B</span>The Overlay Expression Layer — Beat-or-Protect Gate</h3>
+  <p>The overlay's expression gate measures whether the rules above are actually producing the asymmetry they claim. The test is cycle-level (not month-level or year-level) because asymmetric capture only proves itself across at least one full market cycle including a meaningful drawdown.</p>
+  <ul class="actions">
+    <li><strong>Measurement window:</strong> rolling 5 calendar years (initial) → rolling full market cycle (binding from year 5 forward, with cycle defined as peak-to-peak through at least one ≥10% drawdown).</li>
+    <li><strong>Pass condition (either / or):</strong> the overlaid foundation either (a) <strong>beats</strong> a pure-passive 100% S&amp;P 500 hold on total return over the window, <em>or</em> (b) <strong>protects</strong> — takes ≤ a published threshold of the index's maximum drawdown over the window (target range to be locked: 60–80% of index max DD). One of the two must hold.</li>
+    <li><strong>Fail condition:</strong> both (a) and (b) fail. The overlay is declared falsified. The foundation reverts to <strong>pure passive 100% SPY hold</strong>, publicly, on the dashboard, within 24 hours of the determination. Participants are notified. The overlay rule set is retired; any future re-introduction requires a new locked protocol version under Article IV.</li>
+    <li><strong>Interpretation Rule:</strong> the overlay-alpha gate cannot be declared falsified from data generated during a known overlay Fidelity-Layer breach (analogous to Article VI's binding interpretation rule for the futures engine). Discretionary deviations from the published exposure rules disqualify the trade record as evidence of expression-layer failure.</li>
+  </ul>
+
+  <h3 class="crit-h"><span class="crit-label">VIII.C</span>Coordination with the Futures Engine</h3>
+  <p>The synthetic-passive overlay and the futures engine share one account. When the overlay reduces SPY exposure (State B or C), the SPY collateral backing the futures engine's portfolio margin reduces with it. The two are coordinated by rule, not improvised:</p>
+  <ul class="actions">
+    <li>The futures engine's per-contract risk anchor (0.5% NLV, fixed under Article V OP-anchor) is computed against <em>current</em> NLV — which reflects the overlay's current exposure state. As SPY is reduced, dollar-risk per contract shrinks proportionally.</li>
+    <li>Contract count ceilings under the cadence rules (OP-05/06/07) are unaffected by the overlay state. Earned contracts remain earned.</li>
+    <li>The 20% cash buffer is preserved across all overlay states; it is operational settlement only, never tapped to fund either layer.</li>
+  </ul>
+
+  <h3 class="crit-h"><span class="crit-label">VIII.D</span>Disclosure Cadence</h3>
+  <p>Every overlay decision — each State A → B step-down, each B → C deepening, each restoration — is published to the live dashboard within 24 hours, alongside the trigger conditions that fired. The rolling overlay-alpha figure (5-year then cycle-level) is computed live and visible. The overlay's Fidelity-Layer compliance is part of the monthly witness audit (Article VII).</p>
 
   <!-- ============== SIGNATURE ============== -->
   <div class="sig-block">
@@ -547,7 +581,7 @@
   </div>
 
   <footer>
-    Falsifiability Protocol · v1.2 · Doc Ref FP-MOPS-V1.2-2026-05<span class="dot">·</span>Ekantik Capital Advisors LLC · Maple Grove, MN<span class="dot">·</span>Public — epig500.ekantikcapital.com<span class="dot">·</span>© 2026 Ekantik Capital Advisors LLC. All rights reserved.
+    Falsifiability Protocol · v1.3 · Doc Ref FP-MOPS-V1.3-2026-06<span class="dot">·</span>Ekantik Capital Advisors LLC · Maple Grove, MN<span class="dot">·</span>Public — epig500.ekantikcapital.com<span class="dot">·</span>© 2026 Ekantik Capital Advisors LLC. All rights reserved.
   </footer>
 
 </div>
