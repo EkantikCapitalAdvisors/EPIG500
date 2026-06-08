@@ -3471,3 +3471,6 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 }
 .arith-chart__baseline .diamond { color: var(--gold); margin-right: 4px; }
 .arith-chart__baseline strong { color: var(--navy); }
+
+/* Benchmark disclosure under the Outperformance row label */
+.arith-window__alpha-vs { font-family: var(--font-sans); font-weight: 500; font-size: 9px; color: var(--slate); letter-spacing: 0.6px; text-transform: uppercase; display: inline-block; margin-top: 2px; }

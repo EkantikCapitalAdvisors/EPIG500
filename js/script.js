@@ -1350,7 +1350,7 @@
                     +   '<div class="arith-window__row"><span class="arith-window__lbl">' + stratLabel + '</span><span class="arith-window__val' + moodClass(stratPct) + '">' + fmtMult(r.strat) + ' <span class="arith-window__dollars">' + fmtUSD0(stratDollar) + '</span></span></div>'
                     +   '<div class="arith-window__row"><span class="arith-window__lbl">Δ (strat − index)</span><span class="arith-window__val' + moodClass(alpha) + '">' + (alpha >= 0 ? '+' : '') + alpha.toFixed(2) + 'x</span></div>'
                     +   '<div class="arith-window__alpha">'
-                    +     '<span class="arith-window__alpha-lbl">Outperformance</span>'
+                    +     '<span class="arith-window__alpha-lbl">Outperformance<br><span class="arith-window__alpha-vs">vs 100% S&amp;P 500</span></span>'
                     +     '<span class="arith-window__alpha-stack">'
                     +       '<span class="arith-window__alpha-val' + moodClass(alphaPct) + '">' + fmtPct(alphaPct) + ' <span class="arith-window__alpha-suffix">total</span></span>'
                     +       '<span class="arith-window__alpha-dollars">' + fmtPct(alphaCagr) + '/yr CAGR · ' + (alphaDollar >= 0 ? '+' : '−') + fmtUSD0(Math.abs(alphaDollar)) + ' on $100K</span>'
