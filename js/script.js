@@ -1284,16 +1284,15 @@
             { id: 'full',  label: 'Full 20-year span',     range: '2005 – 2024', years: Object.keys(SP_TR).map(Number).sort() }
         ];
 
-        function compound(years, up, down) {
-            // Returns { indexMult, stratMult }
-            let idx = 1, strat = 1;
-            for (let i = 0; i < years.length; i++) {
-                const r = SP_TR[years[i]];
-                idx *= (1 + r);
-                const captured = r >= 0 ? r * up : r * down;
-                strat *= (1 + captured);
-            }
-            return { idx: idx, strat: strat };
+        function compound(years, up, down, contracts) {
+            // Returns { idx, strat } for the END of the window. Wraps buildSeries so
+            // the cards reflect the exact same model as the chart: 80% SPY foundation
+            // (compounded by index TR) + 20% capture-asymmetric engine (slider-driven)
+            // + optional /ES throughput layer (N contracts × ~15.84% NLV/yr, linear).
+            // At sliders 100/100 and contracts=0, strat === idx (calibration check).
+            const s = buildSeries(years, up, down, contracts || 0);
+            const last = s[s.length - 1];
+            return { idx: last.idx, strat: last.total };
         }
 
         function fmtMult(m) {
@@ -1313,8 +1312,11 @@
             document.getElementById('arithDownVal').textContent = (down * 100).toFixed(0);
 
             const wrap = document.getElementById('arithWindows');
+            const stratLabel = activeContracts > 0
+                ? 'Strategy (incl. ' + activeContracts + ' /ES throughput)'
+                : 'Strategy (capture only)';
             wrap.innerHTML = windows.map(function (w) {
-                const r = compound(w.years, up, down);
+                const r = compound(w.years, up, down, activeContracts);
                 const idxPct = r.idx - 1;
                 const stratPct = r.strat - 1;
                 const alpha = r.strat - r.idx;       // absolute multiple gap
@@ -1324,7 +1326,7 @@
                     +   '<p class="arith-window__h">' + w.label + '</p>'
                     +   '<p class="arith-window__range">' + w.range + '</p>'
                     +   '<div class="arith-window__row"><span class="arith-window__lbl">S&amp;P 500</span><span class="arith-window__val' + moodClass(idxPct) + '">' + fmtMult(r.idx) + '</span></div>'
-                    +   '<div class="arith-window__row"><span class="arith-window__lbl">Strategy</span><span class="arith-window__val' + moodClass(stratPct) + '">' + fmtMult(r.strat) + '</span></div>'
+                    +   '<div class="arith-window__row"><span class="arith-window__lbl">' + stratLabel + '</span><span class="arith-window__val' + moodClass(stratPct) + '">' + fmtMult(r.strat) + '</span></div>'
                     +   '<div class="arith-window__row"><span class="arith-window__lbl">Δ (strat − index)</span><span class="arith-window__val' + moodClass(alpha) + '">' + (alpha >= 0 ? '+' : '') + alpha.toFixed(2) + 'x</span></div>'
                     +   '<div class="arith-window__alpha"><span class="arith-window__alpha-lbl">Outperformance</span><span class="arith-window__alpha-val' + moodClass(alphaPct) + '">' + fmtPct(alphaPct) + '</span></div>'
                     + '</div>';
@@ -1515,9 +1517,7 @@
                 activeContracts = parseInt(chip.getAttribute('data-contracts'), 10) || 0;
                 document.querySelectorAll('.arith-contract').forEach(function (c) { c.classList.toggle('is-active', c === chip); });
                 syncThroughLegend();
-                const up = parseInt(document.getElementById('arithUp').value, 10) / 100;
-                const down = parseInt(document.getElementById('arithDown').value, 10) / 100;
-                drawEquityChart(up, down);
+                render();   // re-render both cards AND chart so they stay in sync
             });
         });
         syncThroughLegend();
