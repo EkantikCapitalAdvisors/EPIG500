@@ -1312,11 +1312,11 @@
             document.getElementById('arithDownVal').textContent = (down * 100).toFixed(0);
 
             const wrap = document.getElementById('arithWindows');
-            const stratLabel = activeContracts > 0
-                ? 'Strategy (incl. ' + activeContracts + ' /ES throughput)'
+            const stratLabel = activeRiskPct > 0
+                ? 'Strategy (incl. ' + activeRiskPct + '% /ES throughput)'
                 : 'Strategy (capture only)';
             wrap.innerHTML = windows.map(function (w) {
-                const r = compound(w.years, up, down, activeContracts);
+                const r = compound(w.years, up, down, activeRiskPct);
                 const idxPct = r.idx - 1;
                 const stratPct = r.strat - 1;
                 const alpha = r.strat - r.idx;       // absolute multiple gap
@@ -1346,38 +1346,44 @@
         const ALLOC_SPY = 0.80;
         const ALLOC_ENG = 0.20;
         let activeWindow = 'full';
-        let activeContracts = 0;   // 0 = throughput layer off; 1-4 = N contracts
+        let activeRiskPct = 0;     // 0 = throughput layer off; 0.25, 0.5, 1.0 = per-trade risk %
 
-        // Per-contract annual throughput as a fraction of $100K starting NLV.
-        // Source: 196-trade Telegram record, 369.5 pts over 14 active months.
-        // 26.4 pts/active month * 12 = 316.8 pts/yr at 1 contract * $50/pt = $15,840/yr
-        //   ~= 15.84% of $100K NLV per contract per year.
-        const THROUGHPUT_RATE_PER_CONTRACT = 0.1584;
+        // Annual throughput as a fraction of $100K starting NLV at the 0.5% per-trade
+        // architectural risk anchor (the level the Telegram record was generated at).
+        // Source: 196-trade record, 369.5 pts over 14 active months
+        //   = 26.4 pts/active month × 12 = 316.8 pts/yr × $50/pt = $15,840/yr
+        //   ≈ 15.84% of $100K NLV per year at 0.5% / trade risk.
+        const THROUGHPUT_RATE_AT_HISTORICAL_RISK = 0.1584;
+        const HISTORICAL_RISK_PCT = 0.5;
+        // Throughput scales linearly with per-trade risk:
+        //   risk 0.25% → 0.5× historical → ~7.92% NLV/yr
+        //   risk 0.5%  → 1.0× historical → ~15.84% NLV/yr  (baseline)
+        //   risk 1.0%  → 2.0× historical → ~31.68% NLV/yr
+        function throughputRateFor(riskPct) {
+            if (!riskPct) return 0;
+            return (riskPct / HISTORICAL_RISK_PCT) * THROUGHPUT_RATE_AT_HISTORICAL_RISK;
+        }
 
-        function buildSeries(years, up, down, contracts) {
+        function buildSeries(years, up, down, riskPct) {
             // Each output point: { yr, spy, eng, thr, total, idx }
             //   spy  = 80% SPY foundation, grown by actual past returns
             //   eng  = capture-asymmetric overlay (stylized, slider-driven)
-            //   thr  = /ES throughput layer (real, contract-count driven, S&P-independent)
-            //   total = spy + eng + thr (stacked layers; thr=0 when contracts=0)
+            //   thr  = /ES throughput layer (real Telegram-derived, scaled by per-trade risk %)
+            //   total = spy + eng + thr (stacked layers; thr=0 when risk=0)
             //   idx  = S&P 500 benchmark
-            const c = contracts || 0;
+            const risk = riskPct || 0;
             const out = [{ yr: years[0] - 1, spy: ALLOC_SPY, eng: ALLOC_ENG, thr: 0, total: 1, idx: 1 }];
             let spy = ALLOC_SPY, eng = ALLOC_ENG, thr = 0, idx = 1;
-            const thrRate = c * THROUGHPUT_RATE_PER_CONTRACT;
+            const thrRate = throughputRateFor(risk);
             for (let i = 0; i < years.length; i++) {
                 const r = SP_TR[years[i]];
                 spy = spy * (1 + r);
                 const rEng = r * (r >= 0 ? up : down);
                 eng = eng * (1 + rEng);
-                // Throughput layer is linear, not compounding. The engine produces
-                // ~$15,840/yr per contract in PnL (real Telegram record, fixed N).
-                // We model that as a constant addition (N × 15.84% of $100K starting
-                // NLV) accumulated each year. The PnL itself doesn't earn yield on
-                // itself; contract count is held fixed for the illustration so the
-                // dollar PnL stays constant year-to-year (in real architecture,
-                // contract count grows per ladder cadence and PnL scales with it).
-                if (c > 0) thr = thrRate * (i + 1);
+                // Throughput layer is linear: each year the engine adds thrRate × $100K
+                // in PnL (constant in dollar terms — the per-trade risk % is fixed for
+                // the illustration, so the dollar throughput stays steady year to year).
+                if (risk > 0) thr = thrRate * (i + 1);
                 idx = idx * (1 + r);
                 out.push({ yr: years[i], spy: spy, eng: eng, thr: thr, total: spy + eng + thr, idx: idx });
             }
@@ -1396,7 +1402,7 @@
             ctx.clearRect(0, 0, W, H);
 
             const win = windows.find(function (w) { return w.id === activeWindow; }) || windows[2];
-            const series = buildSeries(win.years, up, down, activeContracts);
+            const series = buildSeries(win.years, up, down, activeRiskPct);
 
             const PAD_L = 56, PAD_R = 24, PAD_T = 24, PAD_B = 36;
             const xN = series.length - 1;
@@ -1457,7 +1463,7 @@
             ctx.fill();
 
             // Stacked area: /ES throughput layer on top (gold-deep band, spy+eng → total) — only if contracts > 0
-            if (activeContracts > 0) {
+            if (activeRiskPct > 0) {
                 ctx.fillStyle = 'rgba(168, 138, 56, 0.45)';
                 ctx.beginPath();
                 ctx.moveTo(x(0), y(series[0].spy + series[0].eng));
@@ -1509,12 +1515,12 @@
         function syncThroughLegend() {
             const legend = document.getElementById('arithLegendThrough');
             const lblCt = document.getElementById('arithLegendContracts');
-            if (legend) legend.hidden = (activeContracts === 0);
-            if (lblCt) lblCt.textContent = String(activeContracts || 1);
+            if (legend) legend.hidden = (activeRiskPct === 0);
+            if (lblCt) lblCt.textContent = String(activeRiskPct || 0.5);
         }
         document.querySelectorAll('.arith-contract').forEach(function (chip) {
             chip.addEventListener('click', function () {
-                activeContracts = parseInt(chip.getAttribute('data-contracts'), 10) || 0;
+                activeRiskPct = parseFloat(chip.getAttribute('data-risk')) || 0;
                 document.querySelectorAll('.arith-contract').forEach(function (c) { c.classList.toggle('is-active', c === chip); });
                 syncThroughLegend();
                 render();   // re-render both cards AND chart so they stay in sync
