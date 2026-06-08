@@ -3502,3 +3502,19 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     color: var(--navy);
     margin: var(--s-5) 0 var(--s-2);
 }
+
+/* Calm-window regime explainer below the three Arithmetic cards (v1.3) */
+.arith-regime-note {
+    margin: var(--s-5) 0 0;
+    padding: 12px 16px;
+    background: rgba(91, 124, 168, 0.06);
+    border-left: 3px solid #5B7CA8;
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+    color: var(--slate-dark);
+    line-height: 1.6;
+}
+.arith-regime-note .diamond { color: var(--gold); margin-right: 4px; }
+.arith-regime-note strong { color: var(--navy); }
+.arith-regime-note a { color: var(--gold-deep); font-weight: 600; }
+.arith-regime-note a:hover { color: var(--navy); }
