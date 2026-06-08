@@ -1344,18 +1344,40 @@
         const ALLOC_SPY = 0.80;
         const ALLOC_ENG = 0.20;
         let activeWindow = 'full';
+        let activeContracts = 0;   // 0 = throughput layer off; 1-4 = N contracts
 
-        function buildSeries(years, up, down) {
-            // Each output point: { yr, spy, eng, total, idx } where spy+eng=total, all start at ALLOC.
-            const out = [{ yr: years[0] - 1, spy: ALLOC_SPY, eng: ALLOC_ENG, total: 1, idx: 1 }];
-            let spy = ALLOC_SPY, eng = ALLOC_ENG, idx = 1;
+        // Per-contract annual throughput as a fraction of $100K starting NLV.
+        // Source: 196-trade Telegram record, 369.5 pts over 14 active months.
+        // 26.4 pts/active month * 12 = 316.8 pts/yr at 1 contract * $50/pt = $15,840/yr
+        //   ~= 15.84% of $100K NLV per contract per year.
+        const THROUGHPUT_RATE_PER_CONTRACT = 0.1584;
+
+        function buildSeries(years, up, down, contracts) {
+            // Each output point: { yr, spy, eng, thr, total, idx }
+            //   spy  = 80% SPY foundation, grown by actual past returns
+            //   eng  = capture-asymmetric overlay (stylized, slider-driven)
+            //   thr  = /ES throughput layer (real, contract-count driven, S&P-independent)
+            //   total = spy + eng + thr (stacked layers; thr=0 when contracts=0)
+            //   idx  = S&P 500 benchmark
+            const c = contracts || 0;
+            const out = [{ yr: years[0] - 1, spy: ALLOC_SPY, eng: ALLOC_ENG, thr: 0, total: 1, idx: 1 }];
+            let spy = ALLOC_SPY, eng = ALLOC_ENG, thr = 0, idx = 1;
+            const thrRate = c * THROUGHPUT_RATE_PER_CONTRACT;
             for (let i = 0; i < years.length; i++) {
                 const r = SP_TR[years[i]];
                 spy = spy * (1 + r);
                 const rEng = r * (r >= 0 ? up : down);
                 eng = eng * (1 + rEng);
+                // Throughput layer is linear, not compounding. The engine produces
+                // ~$15,840/yr per contract in PnL (real Telegram record, fixed N).
+                // We model that as a constant addition (N × 15.84% of $100K starting
+                // NLV) accumulated each year. The PnL itself doesn't earn yield on
+                // itself; contract count is held fixed for the illustration so the
+                // dollar PnL stays constant year-to-year (in real architecture,
+                // contract count grows per ladder cadence and PnL scales with it).
+                if (c > 0) thr = thrRate * (i + 1);
                 idx = idx * (1 + r);
-                out.push({ yr: years[i], spy: spy, eng: eng, total: spy + eng, idx: idx });
+                out.push({ yr: years[i], spy: spy, eng: eng, thr: thr, total: spy + eng + thr, idx: idx });
             }
             return out;
         }
@@ -1372,7 +1394,7 @@
             ctx.clearRect(0, 0, W, H);
 
             const win = windows.find(function (w) { return w.id === activeWindow; }) || windows[2];
-            const series = buildSeries(win.years, up, down);
+            const series = buildSeries(win.years, up, down, activeContracts);
 
             const PAD_L = 56, PAD_R = 24, PAD_T = 24, PAD_B = 36;
             const xN = series.length - 1;
@@ -1423,16 +1445,27 @@
             }
             ctx.stroke();
 
-            // Stacked area: engine contribution on top of SPY (gold band, between spy and total)
+            // Stacked area: capture-asymmetric engine on top of SPY (gold band, spy → spy+eng)
             ctx.fillStyle = 'rgba(200, 169, 81, 0.38)';
             ctx.beginPath();
             ctx.moveTo(x(0), y(series[0].spy));
-            for (let i = 0; i < series.length; i++) ctx.lineTo(x(i), y(series[i].total));
+            for (let i = 0; i < series.length; i++) ctx.lineTo(x(i), y(series[i].spy + series[i].eng));
             for (let i = series.length - 1; i >= 0; i--) ctx.lineTo(x(i), y(series[i].spy));
             ctx.closePath();
             ctx.fill();
 
-            // Total NLV line (gold-deep, sits at top of gold band)
+            // Stacked area: /ES throughput layer on top (gold-deep band, spy+eng → total) — only if contracts > 0
+            if (activeContracts > 0) {
+                ctx.fillStyle = 'rgba(168, 138, 56, 0.45)';
+                ctx.beginPath();
+                ctx.moveTo(x(0), y(series[0].spy + series[0].eng));
+                for (let i = 0; i < series.length; i++) ctx.lineTo(x(i), y(series[i].total));
+                for (let i = series.length - 1; i >= 0; i--) ctx.lineTo(x(i), y(series[i].spy + series[i].eng));
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            // Total NLV line (gold-deep, sits at top of all stacked bands)
             ctx.strokeStyle = '#A88A38'; ctx.lineWidth = 2.4;
             ctx.beginPath();
             for (let i = 0; i < series.length; i++) {
@@ -1469,6 +1502,25 @@
                 drawEquityChart(up, down);
             });
         });
+
+        // Contract count chips (/ES throughput layer)
+        function syncThroughLegend() {
+            const legend = document.getElementById('arithLegendThrough');
+            const lblCt = document.getElementById('arithLegendContracts');
+            if (legend) legend.hidden = (activeContracts === 0);
+            if (lblCt) lblCt.textContent = String(activeContracts || 1);
+        }
+        document.querySelectorAll('.arith-contract').forEach(function (chip) {
+            chip.addEventListener('click', function () {
+                activeContracts = parseInt(chip.getAttribute('data-contracts'), 10) || 0;
+                document.querySelectorAll('.arith-contract').forEach(function (c) { c.classList.toggle('is-active', c === chip); });
+                syncThroughLegend();
+                const up = parseInt(document.getElementById('arithUp').value, 10) / 100;
+                const down = parseInt(document.getElementById('arithDown').value, 10) / 100;
+                drawEquityChart(up, down);
+            });
+        });
+        syncThroughLegend();
 
         window.addEventListener('resize', function () {
             const up = parseInt(document.getElementById('arithUp').value, 10) / 100;
