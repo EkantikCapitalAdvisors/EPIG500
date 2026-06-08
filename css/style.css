@@ -3450,3 +3450,8 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 }
 .arith-contract:hover { border-color: var(--gold); color: var(--navy); }
 .arith-contract.is-active { background: var(--gold-deep); border-color: var(--gold-deep); color: #fff; }
+
+/* Dollar context on Arithmetic cards (model $100K portfolio) */
+.arith-window__dollars { font-family: var(--font-sans); font-weight: 600; font-size: 11px; color: var(--slate); margin-left: 4px; letter-spacing: 0.2px; }
+.arith-window__alpha-stack { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+.arith-window__alpha-dollars { font-family: var(--font-sans); font-weight: 600; font-size: 11px; color: var(--slate); letter-spacing: 0.2px; line-height: 1; }
