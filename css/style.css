@@ -3455,3 +3455,6 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .arith-window__dollars { font-family: var(--font-sans); font-weight: 600; font-size: 11px; color: var(--slate); margin-left: 4px; letter-spacing: 0.2px; }
 .arith-window__alpha-stack { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
 .arith-window__alpha-dollars { font-family: var(--font-sans); font-weight: 600; font-size: 11px; color: var(--slate); letter-spacing: 0.2px; line-height: 1; }
+
+/* Outperformance row 'total' suffix next to the headline % */
+.arith-window__alpha-suffix { font-family: var(--font-sans); font-weight: 500; font-size: 11px; color: var(--slate); letter-spacing: 0.4px; text-transform: uppercase; margin-left: 4px; }
