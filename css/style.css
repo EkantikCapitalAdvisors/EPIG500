@@ -3542,3 +3542,17 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 }
 .arith-plain-english .diamond { color: var(--gold); margin-right: 4px; }
 .arith-plain-english strong { color: var(--navy); }
+
+/* EPIG three-problems framing — short investor-language microcopy under the tagline strip */
+.epig-frame {
+    margin: var(--s-3) 0 var(--s-4);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.45;
+    color: var(--gold-bright);
+    max-width: 56ch;
+}
+@media (max-width: 700px) {
+    .epig-frame { font-size: 16px; }
+}
