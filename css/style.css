@@ -3518,3 +3518,13 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .arith-regime-note strong { color: var(--navy); }
 .arith-regime-note a { color: var(--gold-deep); font-weight: 600; }
 .arith-regime-note a:hover { color: var(--navy); }
+
+/* Booster Engine baseline indicator — multi-line projection (v1.3+) */
+.arith-baseline__headline { margin: 0 0 6px; font-size: 14px; color: var(--slate-dark); line-height: 1.45; }
+.arith-baseline__headline .diamond { color: var(--gold); margin-right: 4px; }
+.arith-baseline__headline strong { color: var(--navy); font-size: 16px; }
+.arith-baseline__dollars { color: var(--slate); font-weight: 600; margin-left: 6px; font-size: 13px; }
+.arith-baseline__r { margin: 4px 0; font-size: 12px; color: var(--slate); line-height: 1.5; }
+.arith-baseline__r strong { color: var(--navy); font-weight: 600; }
+.arith-baseline__src { margin: 6px 0 0; font-size: 11px; color: var(--slate); line-height: 1.5; }
+.arith-baseline__src em { font-style: italic; }
