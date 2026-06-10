@@ -1324,7 +1324,7 @@
 
             const wrap = document.getElementById('arithWindows');
             const stratLabel = activeRiskPct > 0
-                ? 'Strategy (incl. Booster @ ' + activeRiskPct + '% / trade)'
+                ? 'Strategy (incl. Booster from live record)'
                 : 'Strategy (capture only)';
             wrap.innerHTML = windows.map(function (w) {
                 const r = compound(w.years, up, down, activeRiskPct);
@@ -1373,7 +1373,10 @@
         const ALLOC_SPY = 0.80;
         const ALLOC_ENG = 0.20;
         let activeWindow = 'full';
-        let activeRiskPct = 0;     // 0 = Booster Engine off; 0.25, 0.5, 1.0 = per-trade risk %
+        // Booster Engine state: 0 = off; 0.5 = on (live-record extrapolation at the
+        // 0.5% architectural risk anchor, the level the actual record was generated at).
+        // Default is "on" so the projected boost is visible without an extra click.
+        let activeRiskPct = 0.5;
 
         // Annual throughput as a fraction of $100K starting NLV at the 0.5% per-trade
         // architectural risk anchor. Initial value is a fallback derived from the
@@ -1400,29 +1403,49 @@
             return (riskPct / HISTORICAL_RISK_PCT) * THROUGHPUT_RATE_AT_HISTORICAL_RISK;
         }
 
-        // Compute the live baseline from a trade array. Returns null if the data
+        // Compute the live baseline from a trade array, plus R-multiple stats
+        // (avg loss = 1R, EV, R-expectancy, Annual R). Returns null if the data
         // is empty / un-parseable; in that case the fallback constant stays in use.
         function computeBaselineFromTrades(trades) {
             if (!trades || !trades.length) return null;
             const months = {};
             let totalPts = 0;
+            let winSum = 0, lossSum = 0, winN = 0, lossN = 0;
             for (let i = 0; i < trades.length; i++) {
                 const t = trades[i];
                 const pts = typeof t.pts === 'number' ? t.pts : parseFloat(t.pts);
-                if (isFinite(pts)) totalPts += pts;
+                if (!isFinite(pts)) continue;
+                totalPts += pts;
+                if (pts > 0) { winSum += pts; winN++; }
+                else if (pts < 0) { lossSum += pts; lossN++; }
                 const ts = t.timestamp;
                 if (ts && typeof ts === 'string') months[ts.slice(0, 7)] = true;
             }
             const activeMonths = Object.keys(months).length;
             if (!activeMonths) return null;
-            // pts/active month × 12 months/yr × $50/pt / $100K NLV
+            // Throughput rate: pts/active month × 12 months/yr × $50/pt / $100K NLV
             const ratePct100 = (totalPts / activeMonths) * 12 * 50 / 100000;
+            // R-multiple framing: 1R = average loss in points
+            const avgLoss = lossN > 0 ? Math.abs(lossSum / lossN) : 0;
+            const avgWin  = winN > 0 ? winSum / winN : 0;
+            const evPerTrade = trades.length > 0 ? totalPts / trades.length : 0;
+            const rExpectancy = avgLoss > 0 ? evPerTrade / avgLoss : 0;          // R per trade
+            const tradesPerYear = activeMonths > 0 ? (trades.length / activeMonths) * 12 : 0;
+            const annualR = rExpectancy * tradesPerYear;                          // R per year
             return {
                 rate: ratePct100,
                 tradeCount: trades.length,
                 totalPts: totalPts,
                 activeMonths: activeMonths,
-                ratePct: ratePct100 * 100
+                ratePct: ratePct100 * 100,
+                avgLoss: avgLoss,
+                avgWin: avgWin,
+                evPerTrade: evPerTrade,
+                rExpectancy: rExpectancy,
+                tradesPerYear: tradesPerYear,
+                annualR: annualR,
+                winN: winN,
+                lossN: lossN
             };
         }
 
@@ -1432,13 +1455,9 @@
             const meta = computeBaselineFromTrades(REFERENCE_TRADES);
             if (meta && isFinite(meta.rate) && meta.rate > 0) {
                 THROUGHPUT_RATE_AT_HISTORICAL_RISK = meta.rate;
-                throughputBaselineMeta = {
-                    source: 'live combined record (historical + pre-registration)',
-                    tradeCount: meta.tradeCount,
-                    totalPts: meta.totalPts,
-                    activeMonths: meta.activeMonths,
-                    ratePct: meta.ratePct
-                };
+                throughputBaselineMeta = Object.assign({
+                    source: 'live combined record (historical + pre-registration)'
+                }, meta);
             }
             updateBaselineIndicator();
             if (typeof render === 'function') render();
@@ -1448,9 +1467,31 @@
             const el = document.getElementById('arithBaselineIndicator');
             if (!el) return;
             const m = throughputBaselineMeta;
-            const ratePct = m.ratePct.toFixed(2);
-            const totalPts = m.totalPts.toFixed(1);
-            el.innerHTML = '<span class="diamond">◆</span> Baseline (live): <strong>' + ratePct + '% NLV / yr</strong> at the 0.5% anchor · derived from ' + m.tradeCount + ' trades, ' + totalPts + ' pts over ' + m.activeMonths + ' active months';
+            const ratePct = (m.ratePct || 0).toFixed(2);
+            const totalPts = (m.totalPts || 0).toFixed(1);
+            const dollarsPerYear = ((m.ratePct || 0) * 1000).toFixed(0);  // % NLV/yr × $100K / 100 → $ per yr
+            const dollarsPerMonth = Math.round(dollarsPerYear / 12);
+            const evStr = m.evPerTrade !== undefined ? (m.evPerTrade >= 0 ? '+' : '') + m.evPerTrade.toFixed(2) + ' pts' : '—';
+            const avgLossStr = m.avgLoss !== undefined ? m.avgLoss.toFixed(2) + ' pts' : '—';
+            const rExpStr = m.rExpectancy !== undefined ? (m.rExpectancy >= 0 ? '+' : '') + m.rExpectancy.toFixed(2) + 'R' : '—';
+            const tpyStr = m.tradesPerYear !== undefined ? m.tradesPerYear.toFixed(0) : '—';
+            const annualRStr = m.annualR !== undefined ? (m.annualR >= 0 ? '+' : '') + m.annualR.toFixed(1) + 'R/yr' : '—';
+            const trades = m.tradeCount || 0;
+            const months = m.activeMonths || 0;
+
+            el.innerHTML =
+                  '<p class="arith-baseline__headline">'
+                +   '<span class="diamond">◆</span> What the Booster Engine has delivered on the live record · <strong>+' + ratePct + '% NLV / yr</strong> on a $100K portfolio'
+                +   ' <span class="arith-baseline__dollars">≈ $' + parseInt(dollarsPerYear,10).toLocaleString() + '/yr · $' + dollarsPerMonth.toLocaleString() + '/month</span>'
+                + '</p>'
+                + '<p class="arith-baseline__r">'
+                +   'Annual R framing: avg loss <strong>' + avgLossStr + '</strong> = <strong>1R</strong>'
+                +   ' · EV/trade <strong>' + evStr + '</strong> · R-expectancy <strong>' + rExpStr + '/trade</strong>'
+                +   ' · ~' + tpyStr + ' trades/yr · <strong>Annual R = ' + annualRStr + '</strong>'
+                + '</p>'
+                + '<p class="arith-baseline__src">'
+                +   '<em>Source: live combined record (' + trades + ' trades · ' + totalPts + ' pts · ' + months + ' active months). Updates automatically with every admin publish. Throughput modeled at the 0.5% per-trade architectural risk anchor — the level the record was generated at. Historical illustration of past throughput extrapolated forward at constant contract count; not a projection of any Ekantik strategy.</em>'
+                + '</p>';
         }
 
         // Expose for the outer fetch handler.
@@ -1611,12 +1652,13 @@
             });
         });
 
-        // Risk-per-trade chips (Booster Engine layer)
+        // Booster Engine on/off toggle.
         function syncThroughLegend() {
             const legend = document.getElementById('arithLegendThrough');
-            const lblCt = document.getElementById('arithLegendContracts');
-            if (legend) legend.hidden = (activeRiskPct === 0);
-            if (lblCt) lblCt.textContent = String(activeRiskPct || 0.5);
+            const baseline = document.getElementById('arithBaselineIndicator');
+            const isOn = activeRiskPct > 0;
+            if (legend) legend.hidden = !isOn;
+            if (baseline) baseline.style.opacity = isOn ? '1' : '0.5';
         }
         document.querySelectorAll('.arith-contract').forEach(function (chip) {
             chip.addEventListener('click', function () {
