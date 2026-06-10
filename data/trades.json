@@ -3,7 +3,7 @@
     "version": 6,
     "dataset_label": "Ekantik 500 trade record",
     "dataset_range": "Apr 2023 – Jun 2026",
-    "last_updated": "2026-06-10T20:58:52.423Z",
+    "last_updated": "2026-06-10T21:00:24.077Z",
     "description": "Operator live trading record on the Majority Opinion Predisposal Strategy. Historical block (Apr 2023 - Oct 2024) reconciled trade-by-trade from the operator's Telegram alerts channel export. Pre-registration block (May 2026 -> launch) is the post-restart live record. See /falsifiability-protocol.html."
   },
   "trades": [
@@ -3216,6 +3216,24 @@
       "sl": 7287,
       "tp": 7489,
       "id": 212
+    },
+    {
+      "timestamp": "2026-06-10T20:59:55.742Z",
+      "symbol": "/MES",
+      "side": "LONG",
+      "result": "W",
+      "pts": 19,
+      "rawPts": 38,
+      "dollars": 950,
+      "qty": 5,
+      "instrument": "MES",
+      "tag": "H3",
+      "period": "pre_reg",
+      "strategy": "futures",
+      "entry": 7451,
+      "sl": 7438,
+      "tp": 7489,
+      "id": 213
     }
   ]
 }
