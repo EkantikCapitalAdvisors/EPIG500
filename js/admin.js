@@ -242,16 +242,22 @@
        LABEL is anything matching M\w+ (e.g. MO1, M01, MO2, MES, etc.)
        Multiple trades may be separated by blank lines and/or new date headers.
     */
-    // Per-line patterns. Prefix is any letter+word (M1, MO1, F1, MES, SPX, etc.)
+    // Per-line patterns. Prefix is any letter+word (M1, MO1, F1, MES, SPX, etc.),
+    // optionally followed by trailing non-word punctuation like `^`, `*`, `!`, `?`,
+    // `#`, etc. — these are preserved in the source channel but treated as
+    // cosmetic (e.g. `M1^: +38` parses as a result line; the `^` is dropped).
+    const LABEL_RE_FRAG = '[A-Za-z]\\w*[^\\s:]*';
     // Entry: starts with label, then s/b side letter, then price. Allows trailing inline SL/TP (parsed separately).
-    const JOURNAL_ENTRY_RE  = /^\s*[A-Za-z]\w*\s*:\s*([sbSB])\s+(\d+(?:\.\d+)?)/;
+    const JOURNAL_ENTRY_RE  = new RegExp('^\\s*' + LABEL_RE_FRAG + '\\s*:\\s*([sbSB])\\s+(\\d+(?:\\.\\d+)?)');
     // Result: signed points required. Tag (H2/H3/BE) optional — defaults to H3 if absent.
-    const JOURNAL_RESULT_RE = /^\s*[A-Za-z]\w*\s*:\s*([+-]\d+(?:\.\d+)?)(?:\s+([Hh][23]|BE|be))?\s*$/;
+    const JOURNAL_RESULT_RE = new RegExp('^\\s*' + LABEL_RE_FRAG + '\\s*:\\s*([+-]\\d+(?:\\.\\d+)?)(?:\\s+([Hh][23]|BE|be))?\\s*$');
     const JOURNAL_SL_RE     = /\bsl\s*(\d+(?:\.\d+)?)/i;  // unanchored so it matches inline too
     const JOURNAL_TP_RE     = /\btp\s*(\d+(?:\.\d+)?)/i;
     // Size annotation: "5mes", "2 es", "1mes", "/ES", "/MES". Captures qty + instrument.
     // Qty defaults to 1 when only the instrument token is present (e.g. "/ES").
     const JOURNAL_SIZE_RE   = /(?:(\d+)\s*)?\/?(mes|es)\b/i;
+    // Used as a quick "is this a label-prefixed line?" sniff for standalone SL/TP detection.
+    const LABEL_PREFIX_RE   = new RegExp('^\\s*' + LABEL_RE_FRAG + '\\s*:');
 
     // Timestamp variants encountered in Discord paste / journal headers
     const TS_FULL_DATE_RE  = /\b(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+(\d{1,2})[:.](\d{2})\s*(AM|PM|am|pm)?\b/;
@@ -510,7 +516,7 @@
                 continue;
             }
             // Standalone SL/TP lines (label-prefixed): only fire if the line starts with a label
-            if (/^\s*[A-Za-z]\w*\s*:/.test(trimmed)) {
+            if (LABEL_PREFIX_RE.test(trimmed)) {
                 const sl = trimmed.match(JOURNAL_SL_RE);
                 if (sl && !em) { pendingSl = parseFloat(sl[1]); continue; }
                 const tp = trimmed.match(JOURNAL_TP_RE);
