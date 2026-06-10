@@ -3528,3 +3528,17 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .arith-baseline__r strong { color: var(--navy); font-weight: 600; }
 .arith-baseline__src { margin: 6px 0 0; font-size: 11px; color: var(--slate); line-height: 1.5; }
 .arith-baseline__src em { font-style: italic; }
+
+/* Dynamic plain-English summary under the Arithmetic cards */
+.arith-plain-english {
+    margin: var(--s-4) 0 0;
+    padding: 14px 18px;
+    background: rgba(200, 169, 81, 0.08);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0;
+    font-size: 14px;
+    color: var(--slate-dark);
+    line-height: 1.6;
+}
+.arith-plain-english .diamond { color: var(--gold); margin-right: 4px; }
+.arith-plain-english strong { color: var(--navy); }

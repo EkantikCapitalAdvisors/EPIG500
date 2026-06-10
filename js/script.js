@@ -1360,6 +1360,61 @@
             }).join('');
 
             drawEquityChart(up, down);
+            renderPlainEnglish(up, down);
+        }
+
+        /* ------------------------------------------------
+           Dynamic plain-English summary for the currently-active window.
+           Updates on every slider, window-tab, and Booster-toggle change.
+           Reads sliders + active window + Booster state; outputs one sentence
+           in the same units as the cards so the visitor can audit at a glance.
+           ------------------------------------------------ */
+        function renderPlainEnglish(up, down) {
+            const el = document.getElementById('arithPlainEnglish');
+            if (!el) return;
+            const win = windows.find(function (w) { return w.id === activeWindow; }) || windows[2];
+            const series = buildSeries(win.years, up, down, activeRiskPct);
+            const last = series[series.length - 1];
+            const years = win.years.length;
+            const NLV0 = 100000;
+            const stratDollar = last.total * NLV0;
+            const idxDollar = last.idx * NLV0;
+            const ratio = last.total / last.idx;
+            const upPct = Math.round(up * 100);
+            const downPct = Math.round(down * 100);
+
+            // Pick a comparison phrase that matches the magnitude.
+            let comparePhrase;
+            if (ratio >= 1.95 && ratio < 2.10) comparePhrase = 'about double';
+            else if (ratio >= 2.10)            comparePhrase = 'roughly ' + ratio.toFixed(1) + '× more than';
+            else if (ratio >= 1.50)            comparePhrase = 'about ' + Math.round((ratio - 1) * 100) + '% more than';
+            else if (ratio >= 1.05)            comparePhrase = Math.round((ratio - 1) * 100) + '% more than';
+            else if (ratio >= 0.95)            comparePhrase = 'roughly matching';
+            else                                comparePhrase = Math.round((1 - ratio) * 100) + '% less than';
+
+            // Booster clause
+            let boosterClause = '';
+            if (activeRiskPct > 0) {
+                const m = throughputBaselineMeta;
+                const dollarsPerMonth = ((m.ratePct || 0) * 1000 / 12).toFixed(0);
+                boosterClause = ', AND the Booster Engine delivers its live-record throughput (~<strong>$' + parseInt(dollarsPerMonth,10).toLocaleString() + '/month at the 0.5% risk anchor</strong>) consistently';
+            }
+
+            // Window label in plain text
+            const winLabel = win.label.toLowerCase() === 'full 20-year span'
+                ? 'over the full 20-year span (2005–2024)'
+                : win.label.toLowerCase() === 'calm bull run'
+                    ? 'across the calm 2013–2019 bull run'
+                    : 'through the 2007–2010 crash window';
+
+            el.innerHTML =
+                  '<span class="diamond">◆</span> <strong>In plain English ' + winLabel + ':</strong> '
+                + 'if the overlay captures <strong>' + upPct + '%</strong> of every up year '
+                + 'and only <strong>' + downPct + '%</strong> of every down year for <strong>' + years + ' straight years</strong>'
+                + boosterClause + ', '
+                + 'a $100K portfolio ends at <strong>' + fmtUSD0(stratDollar) + '</strong> — '
+                + comparePhrase + ' the <strong>' + fmtUSD0(idxDollar) + '</strong> '
+                + 'an investor would have gotten from just buying SPY and holding.';
         }
 
         /* ------------------------------------------------
@@ -1649,6 +1704,7 @@
                 const up = parseInt(document.getElementById('arithUp').value, 10) / 100;
                 const down = parseInt(document.getElementById('arithDown').value, 10) / 100;
                 drawEquityChart(up, down);
+                renderPlainEnglish(up, down);
             });
         });
 
