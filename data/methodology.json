@@ -1,0 +1,37 @@
+{
+  "_note": "Sample list — pending production update. Hiren to confirm the canonical 8 robustness tests.",
+  "tests": [
+    {
+      "name": "Out-of-sample validation",
+      "description": "System parameters fixed before 2022; 2022 bear market evaluated with no adjustments."
+    },
+    {
+      "name": "Walk-forward analysis",
+      "description": "Rolling re-estimation across the 15-year window; edge holds across all walk-forward partitions."
+    },
+    {
+      "name": "Parameter sensitivity",
+      "description": "Edge stable across reasonable parameter perturbations; no single parameter is load-bearing."
+    },
+    {
+      "name": "Regime split",
+      "description": "Performance evaluated separately across bull, bear, and sideways regimes; edge present in each."
+    },
+    {
+      "name": "Top-3 outlier removal",
+      "description": "Edge net of the three largest winning trades remains positive (+$567)."
+    },
+    {
+      "name": "Statistical significance test",
+      "description": "p-value of 0.023 against a null of zero expectancy; edge is not attributable to chance."
+    },
+    {
+      "name": "Stress-event evaluation",
+      "description": "Behavior measured through Q4 2018, March 2020 COVID gap, 2022 bear market, and recent corrections."
+    },
+    {
+      "name": "Drawdown discipline check",
+      "description": "Maximum drawdown contained to 10% across the full backtest, including stress regimes."
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-clean-white text-deep-navy font-sans antialiased;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-serif;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    @apply bg-warm-gold/30 text-deep-navy;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-content px-6 md:px-10;
+  }
+
+  .section-pad {
+    @apply py-[64px] md:py-[96px];
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-md bg-warm-gold px-6 py-3 text-deep-navy font-semibold tracking-wide transition hover:brightness-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-warm-gold focus-visible:ring-offset-2 focus-visible:ring-offset-deep-navy;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-md border border-deep-navy/20 px-5 py-2.5 text-deep-navy font-medium transition hover:border-deep-navy/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-deep-navy;
+  }
+
+  .btn-ghost-light {
+    @apply inline-flex items-center justify-center rounded-md border border-clean-white/30 px-5 py-2.5 text-clean-white font-medium transition hover:border-clean-white/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-clean-white;
+  }
+
+  .killer-line {
+    @apply font-serif text-2xl md:text-3xl leading-tight;
+  }
+
+  .visually-hidden {
+    @apply sr-only;
+  }
+}

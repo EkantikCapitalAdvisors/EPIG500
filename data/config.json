@@ -1,0 +1,12 @@
+{
+  "_note": "Sample tokens — pending production update by Hiren. Replace string values to update copy across the site. Brackets render as-is so unset tokens are visually obvious in QA.",
+  "BUFFER_THRESHOLD": "[BUFFER_THRESHOLD]",
+  "CORRECTION_TRIGGER": "[CORRECTION_TRIGGER]",
+  "MAX_LEVERAGE": "[MAX_LEVERAGE]",
+  "BETA_UP": "[BETA_UP]",
+  "BETA_DOWN": "[BETA_DOWN]",
+  "BETA_STRESS": "[BETA_STRESS]",
+  "MIN_INVESTABLE_ASSETS": "[MIN_INVESTABLE_ASSETS]",
+  "ADV_LINK": null,
+  "ADV_STATUS": "Registration in progress."
+}

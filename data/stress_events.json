@@ -1,0 +1,25 @@
+{
+  "_note": "Sample data — pending production update.",
+  "events": [
+    {
+      "window": "Q4 2018",
+      "sp500": -13.5,
+      "strategy": 1.4
+    },
+    {
+      "window": "COVID Mar 2020",
+      "sp500": -33.8,
+      "strategy": 4.2
+    },
+    {
+      "window": "2022 Bear",
+      "sp500": -25.4,
+      "strategy": 3.6
+    },
+    {
+      "window": "Aug 2024 Correction",
+      "sp500": -8.5,
+      "strategy": 0.9
+    }
+  ]
+}

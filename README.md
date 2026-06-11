@@ -1,107 +1,97 @@
-# Ekantik Capital Advisors — EPIG 500 Website
+# Ekantik 500 Landing Page
 
-## Project Overview
-A professional investment strategy website for **Ekantik Capital Advisors LLC**, showcasing the **EPIG 500** (Enduring Principal Protection Income & Growth) managed portfolio service.
+Public marketing site for the **Ekantik 500** strategy at `epig500.ekantikcapital.com`.
+Built per the v1.3 specification: defined-risk long equity with structural hedge property.
 
-**Design:** Dark navy (#0a1628 / #071220) background with gold (#d4af37) accents, white typography — matching the Ekantik Capital Advisors brand identity.
+## Stack
 
----
+- Next.js 14 (App Router) with `output: 'export'` for static GitHub Pages deploy
+- TypeScript, Tailwind CSS, Recharts
+- Supabase (form storage), Resend (transactional email), Cal.com (scheduler) — all env-gated
+- Plausible (analytics) — env-gated
 
-## ✅ Completed Features
+## Local development
 
-### index.html (Main Landing Page)
-- **Revised Performance Mandate** — Updated to the new asymmetric target:
-  - 📈 **Beat market by 20% in UP years** (120% of S&P 500 participation)
-  - 🛡️ **~20% of market drawdown in DOWN years** (only 20% of market losses during corrections)
-  - Hypothetical result: **18.1% CAGR vs 13.5% S&P 500** (2015–2026 backtested)
-- **Hero Section** — Visual performance mandate display with UP/DOWN year panels + 16.1% CAGR result box
-- **What Section** — Market phase statistics (70% sideways / 22% up / 8% down), EPIG formula display, $100K wealth calculator sidebar
-- **How It Works** — Year-by-year comparison table (2015–2024) with Market Match / Cash Protection regimes, compounding principle steps
-- **Proof Section** — Two-period historical illustrations (Lost Decade 2000-2010 & Bull Market 2015-2024), combined wealth impact box
-- **Strategy Section** — Dynamic portfolio allocation display (SPY / Long-term stocks / Short-term bets / Cash)
-- **5-Step Research Framework** — Evidence cards for systematic methodology
-- **CTA Section** — TradingView portfolio + Skool community links
-- **FAQ Section** — 6 categories with expandable answers, updated to reflect market-matching mandate
-- **Disclaimer Section** — Proper risk disclosures with hypothetical backtested language
-- **Footer** — Brand, links, social media
+```bash
+npm install
+npm run dev          # http://localhost:3000
+npm run build        # static export to ./out
+npm run compliance:scan
+```
 
-### epig-500.html (Detailed Strategy Page)
-- Full detailed breakdown of EPIG 500 strategy
-- Comprehensive performance comparisons
-- Suitability assessment and requirements
+Copy `.env.example` to `.env.local` and fill in the four scaffolded integrations
+(Supabase, Resend, Cal.com URL, Plausible). The site renders fully without any of
+these set — forms succeed against a stub, the scheduler CTA falls back to `mailto:`,
+and analytics events log to the dev console.
 
-### css/style.css
-- Complete responsive CSS matching brand color scheme
-- Dark navy + gold + white design language
-- Mobile-first responsive breakpoints (1024px, 768px, 480px)
-- CSS custom properties for consistent theming
+## Deployment
 
-### js/script.js
-- Mobile menu toggle
-- FAQ accordion functionality
-- Video modal open/close
-- Email subscription form handling
-- Scroll-based navbar effects
-- Intersection Observer animations
-- Active nav link highlighting
+`main` branch pushes deploy to GitHub Pages via `.github/workflows/deploy.yml`.
+The `public/CNAME` file pins the custom domain. The workflow runs the compliance
+scan before building; build fails if forbidden phrasings are detected.
 
----
+Required GitHub secrets:
 
-## 📊 Key Performance Data Used
+| Secret | Purpose |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Email capture writes |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Email capture writes |
+| `NEXT_PUBLIC_SCHEDULER_URL` | Cal.com link for primary CTA |
+| `NEXT_PUBLIC_FALLBACK_EMAIL` | mailto fallback if scheduler unset |
+| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | Analytics domain |
 
-| Metric | Value | Period |
-|--------|-------|--------|
-| Hypothetical CAGR | 18.1% | 2015–2026 |
-| S&P 500 CAGR | 13.5% | 2015–2026 |
-| Alpha Generated | +4.6% | 120% upside, 20% drawdown |
-| $100K → EPIG | $621,507 | 11 years |
-| $100K → S&P | $351,162 | 11 years |
-| Wealth Advantage | +$270,345 | 11 years |
-| Lost Decade EPIG CAGR | 10.42% | 2000–2010 |
-| Lost Decade S&P CAGR | -0.94% | 2000–2010 |
-| Lost Decade Advantage | +$178,635 | 10 years |
-| Bull Market EPIG CAGR | 18.40% | 2015–2024 |
-| Bull Market Advantage | +$229,263 | 10 years |
+## Repo layout
 
----
+```
+app/                  # App Router pages: /, /methodology, /trades, /reports, /dashboard
+components/           # Section components (Hero, Edge, Promise, HedgeProperty, Engine, Verification, CTA)
+components/charts/    # Recharts components (Drawdown, StressEvent, CorrelationScatter)
+components/ui/        # StatTable, Accordion, SampleDataBadge
+components/forms/     # EmailCapture, SchedulerCTA
+data/                 # Sample JSON datasets + bracketed config tokens
+lib/                  # supabase, analytics, cta, copy
+public/               # CNAME, logo, og-image
+scripts/              # generate-sample-data, compliance-scan
+.github/workflows/    # deploy.yml
+```
 
-## 🛣️ Functional Entry URIs
+## Inputs still needed from Hiren (per spec §10)
 
-| Path | Description |
-|------|-------------|
-| `index.html` | Main landing page |
-| `index.html#what` | What We Offer section |
-| `index.html#how` | How It Works section |
-| `index.html#proof` | Research & Proof section |
-| `index.html#subscribe` | Get Started / CTA section |
-| `epig-500.html` | Detailed EPIG 500 strategy page |
+All sample placeholders are clearly marked in the UI ("Sample data — pending production update").
+Swap-in points:
 
----
+| # | Item | File / token | Spec section |
+|---|---|---|---|
+| 1 | 8 named robustness tests | `data/methodology.json` → `tests` | §3.2 |
+| 2 | Profit buffer threshold | `data/config.json` → `BUFFER_THRESHOLD` | §3.5 |
+| 3 | Correction event trigger | `data/config.json` → `CORRECTION_TRIGGER` | §3.5 |
+| 4 | Maximum leverage ratio | `data/config.json` → `MAX_LEVERAGE` | §3.5 |
+| 5 | Equity curve / drawdown JSON (15-yr) | `data/equity_curve.json` → `series` | §5.1 |
+| 6 | Stress event windows + strategy returns | `data/stress_events.json` → `events` | §5.2 |
+| 7 | Beta in up / down / stress regimes | `data/config.json` → `BETA_UP`/`BETA_DOWN`/`BETA_STRESS` | §3.4 |
+| 8 | Monthly returns scatter dataset | `data/monthly_returns.json` → `series` | §5.3 |
+| 9 | Hero headline selection | `components/Hero.tsx` (default Option A) | §3.1 |
+| 10 | Minimum investable assets qualifier | `data/config.json` → `MIN_INVESTABLE_ASSETS` | §3.7 |
+| 11 | Logo files (SVG, PNG) | `public/logo.svg` (placeholder) | Header / footer |
+| 12 | ADV registration status / link | `data/config.json` → `ADV_LINK` / `ADV_STATUS` | §6.5 |
+| 13 | Scheduler URL (Cal.com) | env: `NEXT_PUBLIC_SCHEDULER_URL` | §3.7 |
 
-## ⚠️ Features Not Yet Implemented
-- Contact form backend (currently email-only)
-- Animated chart visualizations (Chart.js integration)
-- Real-time S&P 500 performance ticker
-- Video embed for overview section
-- Blog/news section
-- Downloadable strategy PDF
+To regenerate sample chart data: `node scripts/generate-sample-data.mjs`.
 
-## 🔄 Recommended Next Steps
-1. **Add Chart.js** — Interactive year-by-year performance chart comparing EPIG 500 vs S&P 500
-2. **Video Section** — Replace placeholder YouTube embed with actual strategy overview video
-3. **Contact Form** — Wire up email subscription to actual CRM/email service
-4. **Live Performance Data** — Add real-time TradingView widget for current portfolio status
-5. **SEO Optimization** — Add structured data, Open Graph tags, sitemap
+## Compliance discipline
 
----
+The build runs `scripts/compliance-scan.mjs`, which fails on:
 
-## 📋 Brand Colors
-| Color | Hex | Usage |
-|-------|-----|-------|
-| Navy Deep | `#071220` | Page background |
-| Navy Dark | `#0a1628` | Section backgrounds |
-| Gold | `#d4af37` | Primary accent, headings |
-| Gold Bright | `#f0c040` | Hover states |
-| Green | `#00c896` | Positive/up indicators |
-| Red | `#ff4757` | Negative/down indicators |
-| White | `#ffffff` | Primary text |
+- Forbidden tokens: `guaranteed`, `principal protection`, `you will earn`, `risk-free`, `always negatively correlated`
+- Numeric performance references (e.g. `16%`, `CAGR`) that lack a `backtested` / `live` / `forward-looking` qualifier within ±240 characters
+
+To intentionally allow a match (e.g. inside a disclaimer that contains "not guaranteed"), tag the surrounding context with `ALLOW-COPY`.
+
+## Phase 2 (post-launch)
+
+- Live dashboard with real-time positions
+- Auth-gated Founders Circle area
+- Monthly live report publication automation
+- Full trade log
+- Live-vs-backtest tracking
+- A/B testing of hero headline variants
