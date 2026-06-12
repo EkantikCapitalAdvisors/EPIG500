@@ -6,13 +6,15 @@
    ================================================ */
 
 :root {
-    /* Brand palette — per Section 4.1 (verify against alpha.ekantikcapital.com) */
-    --navy:        #1B2A4A;
-    --navy-deep:   #131E36;
+    /* Brand palette — aligned to firm standard (ECFS · cashflow.ekantikcapital.com).
+       Gold + dark-navy ramp matched exactly; mid brand-navy nudged to the ECFS
+       ramp. Semantic teal/red layer below is unchanged (load-bearing on EPIG). */
+    --navy:        #12264a;   /* ECFS navy-600 — brand navy on light */
+    --navy-deep:   #0a1628;   /* ECFS navy-800 */
     --navy-soft:   #243A66;
-    --gold:        #C8A951;
-    --gold-bright: #E5C673;
-    --gold-deep:   #A88A38;
+    --gold:        #d4af37;   /* ECFS gold (DEFAULT) */
+    --gold-bright: #e8cc6e;   /* ECFS gold-light */
+    --gold-deep:   #b8962e;   /* ECFS gold-dark */
     --ivory:       #FAF8F5;
     --white:       #FFFFFF;
     --slate:       #64748B;
@@ -24,7 +26,7 @@
     --line-light:  rgba(255, 255, 255, 0.15);
 
     /* Semantic layer — spec §1.1 */
-    --navy-950:      #10182B;            /* deep page background (dark sections) */
+    --navy-950:      #060c18;            /* deep page background — ECFS navy-900 */
     --navy-800:      var(--navy);        /* brand navy — cards, headers on light */
     --gold-500:      var(--gold);
     --color-upside:  var(--gold);        /* earned scale, upside, primary CTA */
@@ -221,30 +223,43 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     color: var(--navy);
     font-family: var(--font-sans);
 }
+.logo__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+/* Logo lockup — aligned to ECFS firm standard: gold-gradient "ECA" mark,
+   serif wordmark, slate "Advisors LLC" sublabel. Wordmark stays navy on the
+   light nav (gold would fail AA on white); footer variant flips for dark. */
 .logo__mark {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
     display: grid;
     place-items: center;
-    background: var(--navy);
-    color: var(--gold);
-    font-family: var(--font-serif);
-    font-weight: 700;
-    font-size: 18px;
+    background: linear-gradient(135deg, #d4af37 0%, #e8cc6e 50%, #d4af37 100%);
+    color: var(--navy);
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.5px;
 }
 .logo__wordmark {
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 2.5px;
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.05;
+    letter-spacing: 0.2px;
     color: var(--navy);
+    white-space: nowrap;
 }
 .logo__sublabel {
-    font-weight: 500;
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: var(--gold-deep);
-    padding-left: var(--s-3);
-    border-left: 1px solid var(--line);
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--slate);
+    display: block;
 }
 .nav__links {
     display: flex;
@@ -939,7 +954,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     margin-bottom: var(--s-12);
 }
 .logo--footer .logo__wordmark { color: var(--white); }
-.logo--footer .logo__sublabel { color: var(--gold); border-left-color: var(--line-light); }
+.logo--footer .logo__sublabel { color: rgba(233, 231, 226, 0.7); }
 .footer__tagline {
     margin: var(--s-4) 0 var(--s-6);
     color: var(--text-on-dark);
