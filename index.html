@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260612m">
+    <link rel="stylesheet" href="css/style.css?v=20260612n">
 
     <script type="application/ld+json">
     {
@@ -482,11 +482,16 @@
                 <header class="arith-chart__head">
                     <h3 class="arith-chart__h">How the architecture stacks over time</h3>
                     <p class="arith-chart__sub">Two layers on top of the 20% cash buffer: <strong>(1) the synthetic-passive foundation</strong> — 80% S&amp;P 500 with the overlay applying capture asymmetry (modeled output of the published overlay rules, driven by the sliders above); <strong>(2) the Booster Engine</strong> — extrapolated directly from the actual live trading record at the 0.5% per-trade architectural risk anchor. Toggle the Booster off to see the foundation alone, on to see the engine layer as an illustration extrapolated from the live record — an illustration, not an expectation.</p>
-                    <div class="arith-chart__tabs" role="radiogroup" aria-label="Window selector">
+                    <div class="arith-chart__tabs" role="radiogroup" aria-label="Window presets">
                         <button class="arith-tab is-active" data-window="full" type="button">Full 20-year</button>
-                        <button class="arith-tab" data-window="full50" type="button">Full 50-year</button>
                         <button class="arith-tab" data-window="calm" type="button">Calm (2013–2019)</button>
                         <button class="arith-tab" data-window="crash" type="button">Crash (2007–2010)</button>
+                    </div>
+                    <div class="arith-chart__range">
+                        <span class="arith-chart__range-label">Or pick any period — last 50 years:</span>
+                        <label class="arith-chart__range-field">From <select id="arithFrom" aria-label="Start year"></select></label>
+                        <span class="arith-chart__range-arrow" aria-hidden="true">→</span>
+                        <label class="arith-chart__range-field">To <select id="arithTo" aria-label="End year"></select></label>
                     </div>
                     <div class="arith-chart__contracts" role="radiogroup" aria-label="Booster Engine toggle" id="arithBoosterToggle">
                         <span class="arith-chart__contracts-label">Booster Engine</span>
@@ -1116,6 +1121,6 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260612i"></script>
+<script src="js/script.js?v=20260612j"></script>
 </body>
 </html>
