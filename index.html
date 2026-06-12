@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260612o">
+    <link rel="stylesheet" href="css/style.css?v=20260612p">
 
     <script type="application/ld+json">
     {
@@ -466,6 +466,22 @@
                 <p class="calc__verdict">Cutting this loss in half cuts the repair bill by <strong>61%</strong> — convex losses mean protection pays twice.</p>
             </div>
             <p class="calc__caption"><em>Recovery arithmetic is identity math — true for every investor in every era. Illustrative arithmetic, not a projection or a strategy result. Past performance does not guarantee future results.</em></p>
+        </div>
+
+        <!-- Calculator 2 — The Volatility Tax (arithmetic vs geometric mean) · Calculator Spec v1.0 §2 -->
+        <div class="calc" id="calcVolTaxWrap">
+            <header class="calc__head">
+                <p class="eyebrow"><span class="diamond">◆</span> The Volatility Tax</p>
+                <h3 class="calc__h">Same 20 years. +11.9%/yr average — but only +10.4%/yr compounded.</h3>
+                <p class="calc__sub">The gap is the volatility tax: what compounds is the geometric mean, and drawdown years are what drag it below the average. Reducing participation in the down years closes the gap.</p>
+            </header>
+            <div id="calcVolTax">
+                <!-- static default state (p = 100%, S&P 2005–2024) — replaced on hydration -->
+                <p class="calc__pair"><span class="calc__num">+11.9%</span> <span class="calc__pair-label">arithmetic mean</span></p>
+                <p class="calc__pair"><span class="calc__num">+10.4%</span> <span class="calc__pair-label">geometric mean (what compounds)</span></p>
+                <p class="calc__verdict">At 100% downside participation the volatility tax is 1.5 pp — a hypothetical $100K compounds to $717K over this series.</p>
+            </div>
+            <p class="calc__caption"><em>Historical illustration on actual S&amp;P 500 annual total returns (2005–2024 preset) with user-set, hypothetical downside-participation inputs. This models arithmetic, not any Ekantik strategy; the synthetic-passive overlay has no live track record. Not a projection. Past performance does not guarantee future results.</em></p>
         </div>
 
         <!-- Doubling Arithmetic calculator — real S&P 500 total-return data, three windows -->
@@ -1142,5 +1158,6 @@
 <script src="js/script.js?v=20260612k"></script>
 <script src="js/calc-core.js?v=20260612a" defer></script>
 <script src="js/calc-repair.js?v=20260612a" defer></script>
+<script src="js/calc-voltax.js?v=20260612a" defer></script>
 </body>
 </html>
