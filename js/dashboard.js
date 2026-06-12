@@ -274,8 +274,14 @@
                 if (p < worst) worst = p;
             }
             const ruled = ts.length - be;
-            const d = new Date(ym + '-01T00:00:00Z');
-            const label = d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+            // Build the label from the YYYY-MM string directly so timezone shift
+            // can't push the month back. (new Date('2026-05-01T00:00:00Z').toLocale...
+            // would have rendered as "Apr 26" for any negative UTC offset, since
+            // midnight UTC May 1 = April 30 evening locally.)
+            const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            const yy = ym.slice(2, 4);
+            const mm = parseInt(ym.slice(5, 7), 10);
+            const label = MONTH_ABBR[mm - 1] + ' ' + yy;
             return {
                 ym: ym, label: label, n: ts.length,
                 wins: wins, losses: losses, be: be,
