@@ -4065,3 +4065,63 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .logo__sublabel { display: none; }
     .nav__links { gap: var(--s-4); }
 }
+
+/* ================================================
+   LIVE RECORD vs. KILL BOUNDARIES (§Arithmetic)
+   Countersigned mockup 2026-06-12 — realized Period 2
+   trades + armed ED-05 floors. Gold = earned series;
+   red = kill semantics only.
+   ================================================ */
+.live-bounded {
+    margin-top: var(--s-12);
+    background: var(--white);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: var(--s-8);
+}
+.live-bounded__h {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--navy);
+    margin-bottom: var(--s-3);
+}
+.live-bounded__sub {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--slate-dark);
+    max-width: 920px;
+    margin-bottom: var(--s-6);
+}
+#liveBoundedCanvas {
+    width: 100%;
+    height: 340px;
+    display: block;
+}
+.live-bounded__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-6);
+    margin-top: var(--s-4);
+    font-size: 13px;
+    color: var(--slate-dark);
+}
+.live-bounded__legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.live-bounded__swatch { width: 18px; height: 0; border-top: 3px solid; display: inline-block; }
+.live-bounded__swatch--earned { border-color: var(--gold-deep); }
+.live-bounded__swatch--hard   { border-top-style: dashed; border-color: var(--color-kill); }
+.live-bounded__swatch--warn   { border-top-style: dotted; border-color: rgba(220, 38, 38, 0.55); }
+.live-bounded__stat {
+    margin-top: var(--s-4);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--navy);
+    background: var(--ivory);
+    border-radius: var(--radius);
+    padding: var(--s-3) var(--s-4);
+}
+.live-bounded .compliance { margin-top: var(--s-6); }
+@media (max-width: 768px) {
+    .live-bounded { padding: var(--s-6); }
+    #liveBoundedCanvas { height: 260px; }
+}

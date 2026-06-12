@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260612f">
+    <link rel="stylesheet" href="css/style.css?v=20260612g">
 
     <script type="application/ld+json">
     {
@@ -500,6 +500,26 @@
                     <span class="arith-chart__legend-item" id="arithLegendThrough" hidden><span class="arith-chart__swatch" style="background:#A88A38"></span> + Booster Engine (live record extrapolated)</span>
                     <span class="arith-chart__legend-item"><span class="arith-chart__swatch arith-chart__swatch--line" style="background:#1B2A4A"></span> S&amp;P 500 (100% benchmark)</span>
                 </div>
+            </div>
+
+            <!-- Live record vs. kill boundaries — approved mockup (Manish Dharod countersignature,
+                 2026-06-12). Draws only closed, protocol-bound Period 2 trades plus the armed ED-05
+                 drawdown thresholds from FP-MOPS-V1.4. No projection, no extrapolation; claim gates
+                 (CLAIMS_THROUGHPUT_ENABLED / BOOSTER_TOGGLE_ENABLED) remain OFF. Hidden until the
+                 live data loads; stays hidden on fetch failure. -->
+            <div class="live-bounded" id="liveBounded" hidden>
+                <header class="live-bounded__head">
+                    <h3 class="live-bounded__h">The live record, drawn against its kill boundaries.</h3>
+                    <p class="live-bounded__sub">Every point below is a closed, protocol-bound Period 2 trade, published within 24 hours of close. The red lines are not annotations — they are armed kill conditions from the locked protocol: the <strong>ED-05a drawdown warning (peak − 45 /ES pts)</strong> and the <strong>ED-05b hard kill (peak − 100 /ES pts · $5,000 per contract)</strong>, both measured peak-to-trough, so both floors ratchet up with every new equity high. The upside is witnessed, never promised; the downside is engineered.</p>
+                </header>
+                <canvas id="liveBoundedCanvas" width="1100" height="340" aria-label="Cumulative /ES points of the protocol-bound live record, plotted against the ED-05a warning floor and the ED-05b hard-kill floor, which ratchet up with each new equity high."></canvas>
+                <div class="live-bounded__legend">
+                    <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--earned"></span> Protocol-bound live record (Period 2) · cumulative /ES points</span>
+                    <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--hard"></span> ED-05b hard kill floor · peak − 100 pts</span>
+                    <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--warn"></span> ED-05a warning · peak − 45 pts</span>
+                </div>
+                <p class="live-bounded__stat" id="liveBoundedStat"></p>
+                <p class="compliance">Past performance does not guarantee future results. The record is still early — too few trades for the statistics to settle; the 8-test battery activates at 30 closed trades. Kill thresholds describe operating commitments by the firm, not guarantees against loss; a gate-fire does not guarantee preservation of capital. Chart shows realized, published trades only — no extrapolation.</p>
             </div>
 
             <p class="arith-source">◆ Source: S&amp;P 500 annual total returns, 2005–2024. <strong>Benchmark for Outperformance:</strong> 100% S&amp;P 500 — the conservative comparison (the natural alternative an investor would consider is "just put it all in SPY"). <strong>Foundation layer (overlay model v1.3):</strong> 80% × (capture × index), where capture is the modeled output of the synthetic-passive overlay's published rules — upside slider in up years, downside slider in down years. The overlay drives the foundation itself, not a 20% token slice; this is the meaningful change from the prior model. <strong>Cash buffer:</strong> the remaining 20% is operational cash (flat, no exposure) — this is the literal architecture; it carries a real ~17% drag vs 100%-S&amp;P over a 20-year window, which the overlay's downside protection must overcome to clear the bar. <strong>Booster Engine layer:</strong> extrapolated <em>live</em> from <code>/data/trades.json</code> at the 0.5% per-trade architectural risk anchor (the level the actual record was generated at). Throughput rate = total points ÷ active months × 12 × $50 / $100K starting NLV. Annual R framing: 1R = avg loss in points; R-expectancy = EV/trade ÷ 1R; Annual R = R-expectancy × trades/year. Every admin publish updates the projection automatically. Engine throughput is shown as <em>independent</em> of the year's S&amp;P return — the operator's intraday /ES trading isn't tied to the index's annual direction. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy. The synthetic-passive overlay has no live track record; the rule set is published as design intent under armed-but-unfired falsifiability gates.</strong> Dataset: protocol-bound Period 2 trades only. The Period 1 Telegram record is displayed on the dashboard for transparency and is excluded from every figure on this page.</p>
@@ -1056,6 +1076,6 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260612a"></script>
+<script src="js/script.js?v=20260612b"></script>
 </body>
 </html>

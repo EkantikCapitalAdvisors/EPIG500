@@ -149,10 +149,123 @@
             el.dataset.state = 'fallback';
         });
     }
+    /* ------------------------------------------------
+       LIVE RECORD vs. KILL BOUNDARIES (§Arithmetic)
+       Approved mockup — countersigned 2026-06-12.
+       Plots realized Period 2 cumulative points against the
+       armed ED-05a (−45) / ED-05b (−100) peak-to-trough
+       floors. Realized data + contractual thresholds only.
+       ------------------------------------------------ */
+    let liveBoundedTrades = null;
+    function drawLiveBounded() {
+        const wrap = document.getElementById('liveBounded');
+        const canvas = document.getElementById('liveBoundedCanvas');
+        const statEl = document.getElementById('liveBoundedStat');
+        const trades = liveBoundedTrades;
+        if (!wrap || !canvas || !trades || !trades.length) return;
+        wrap.hidden = false;
+
+        // Cumulative equity (pts) and the two ratcheting drawdown floors.
+        const eq = [0];
+        let cum = 0;
+        for (let i = 0; i < trades.length; i++) { cum += trades[i].pts; eq.push(Math.round(cum * 100) / 100); }
+        const hard = [], warn = [];
+        let peak = 0;
+        for (let i = 0; i < eq.length; i++) {
+            peak = Math.max(peak, eq[i]);
+            hard.push(peak - 100);
+            warn.push(peak - 45);
+        }
+
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        const W = canvas.clientWidth || 1100;
+        const H = canvas.clientHeight || 340;
+        canvas.width = W * dpr; canvas.height = H * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, W, H);
+
+        const PAD_L = 56, PAD_R = 130, PAD_T = 22, PAD_B = 34;
+        const xN = eq.length - 1;
+        const yMax = Math.max.apply(null, eq) + 12;
+        const yMin = Math.min(Math.min.apply(null, hard), Math.min.apply(null, eq)) - 12;
+        function x(i) { return PAD_L + (i / xN) * (W - PAD_L - PAD_R); }
+        function y(v) { return PAD_T + (yMax - v) / (yMax - yMin) * (H - PAD_T - PAD_B); }
+
+        // Grid + Y labels (pts)
+        ctx.font = '11px "Source Sans 3", sans-serif';
+        const span = yMax - yMin;
+        const step = span > 160 ? 50 : 25;
+        for (let v = Math.ceil(yMin / step) * step; v <= yMax; v += step) {
+            ctx.strokeStyle = 'rgba(27, 42, 74, 0.06)'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(PAD_L, y(v)); ctx.lineTo(W - PAD_R, y(v)); ctx.stroke();
+            ctx.fillStyle = '#64748B'; ctx.textAlign = 'right';
+            ctx.fillText((v > 0 ? '+' : '') + v + ' pts', PAD_L - 6, y(v) + 4);
+        }
+        // Zero line
+        ctx.strokeStyle = 'rgba(27, 42, 74, 0.3)'; ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.moveTo(PAD_L, y(0)); ctx.lineTo(W - PAD_R, y(0)); ctx.stroke();
+        ctx.setLineDash([]);
+        // X labels (trade #)
+        ctx.fillStyle = '#64748B'; ctx.textAlign = 'center';
+        const every = Math.max(1, Math.ceil(xN / 12));
+        for (let i = 0; i <= xN; i += every) ctx.fillText(i === 0 ? 'start' : '#' + i, x(i), H - PAD_B + 18);
+
+        function tracePath(arr) {
+            ctx.beginPath();
+            for (let i = 0; i < arr.length; i++) {
+                const px = x(i), py = y(arr[i]);
+                if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+        }
+
+        // Survival margin: shade between equity and hard-kill floor (neutral slate)
+        ctx.fillStyle = 'rgba(100, 116, 139, 0.07)';
+        ctx.beginPath();
+        for (let i = 0; i < eq.length; i++) ctx.lineTo(x(i), y(eq[i]));
+        for (let i = eq.length - 1; i >= 0; i--) ctx.lineTo(x(i), y(hard[i]));
+        ctx.closePath(); ctx.fill();
+
+        // ED-05a warning floor — red dotted (kill semantics, lighter weight)
+        ctx.strokeStyle = 'rgba(220, 38, 38, 0.55)'; ctx.lineWidth = 1.4; ctx.setLineDash([2, 4]);
+        tracePath(warn); ctx.stroke();
+        // ED-05b hard kill floor — red dashed
+        ctx.strokeStyle = '#DC2626'; ctx.lineWidth = 2; ctx.setLineDash([7, 5]);
+        tracePath(hard); ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Equity curve — gold (earned series) with per-trade dots
+        ctx.strokeStyle = '#A88A38'; ctx.lineWidth = 2.4;
+        tracePath(eq); ctx.stroke();
+        ctx.fillStyle = '#C8A951';
+        for (let i = 1; i < eq.length; i++) {
+            ctx.beginPath(); ctx.arc(x(i), y(eq[i]), 3, 0, Math.PI * 2); ctx.fill();
+            ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1; ctx.stroke();
+        }
+
+        // End labels
+        const last = eq.length - 1;
+        ctx.textAlign = 'left'; ctx.font = '12px "Source Sans 3", sans-serif';
+        ctx.fillStyle = '#A88A38';
+        ctx.fillText((eq[last] >= 0 ? '+' : '') + eq[last].toFixed(1) + ' pts · live record', x(last) + 10, y(eq[last]) + 4);
+        ctx.fillStyle = '#DC2626';
+        ctx.fillText('hard kill · ' + hard[last].toFixed(0) + ' pts', x(last) + 10, y(hard[last]) + 4);
+        ctx.fillText('warning · ' + warn[last].toFixed(0) + ' pts', x(last) + 10, y(warn[last]) + 4);
+
+        if (statEl) {
+            const headroom = eq[last] - hard[last];
+            const peakStr = (peak >= 0 ? '+' : '') + peak.toFixed(1);
+            statEl.innerHTML = '◆ Current: <strong>' + (eq[last] >= 0 ? '+' : '') + eq[last].toFixed(1) + ' pts</strong> over <strong>' + trades.length + ' closed trades</strong> · equity peak ' + peakStr + ' pts · distance to the ED-05b hard kill: <strong>' + headroom.toFixed(1) + ' pts of headroom</strong>. Both floors ratchet up with every new equity high — earned profit raises the line a falsification would have to cross.';
+        }
+    }
+    window.addEventListener('resize', function () { drawLiveBounded(); });
+
     tradesWithTimeout.then(function (trades) {
         const live = trades.filter(isProtocolBound);
         const n = live.length;
         renderCountdown(n);
+        liveBoundedTrades = live;
+        drawLiveBounded();
         const continuityCount = document.getElementById('continuityLiveCount');
         if (continuityCount) {
             continuityCount.innerHTML = '<strong>' + n + ' pre-registration ' + (n === 1 ? 'trade' : 'trades') + '</strong> published so far — every trade within 24 hours of close.';
