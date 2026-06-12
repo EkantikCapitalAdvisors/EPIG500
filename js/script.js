@@ -337,7 +337,7 @@
 
             const nameInput = preregForm.querySelector('input[name="name"]');
             const emailInput = preregForm.querySelector('input[name="email"]');
-            const honeypot = preregForm.querySelector('input[name="website"]');
+            const honeypot = preregForm.querySelector('input[name="_honey"]');
 
             const name = (nameInput.value || '').trim();
             const email = (emailInput.value || '').trim();
@@ -357,7 +357,7 @@
             }
 
             const fd = new FormData(preregForm);
-            fd.delete('website');
+            fd.delete('_honey');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting…';
 

@@ -931,12 +931,14 @@
             </div>
         </div>
 
-        <!-- Pre-registration form — POSTs to a real handler; no mailto in the submit path.
-             [CONFIG: form endpoint — Netlify Forms / Formspree / custom; owner to provision.
-              Set data-endpoint below to the provisioned endpoint URL.] -->
+        <!-- Pre-registration form — POSTs to FormSubmit (AJAX endpoint, JSON response);
+             submissions delivered to hd@ekantikcapital.com. No mailto in the submit path.
+             NOTE: first submission triggers a one-time activation email to that inbox. -->
         <form class="prereg-form" id="preregForm" method="post" novalidate
-              data-endpoint="[CONFIG: form endpoint — owner to provision]"
+              data-endpoint="https://formsubmit.co/ajax/hd@ekantikcapital.com"
               action="">
+            <input type="hidden" name="_subject" value="Ekantik 500 — pre-registration">
+            <input type="hidden" name="_template" value="table">
             <label class="prereg-form__field">
                 <span class="prereg-form__label">Full name</span>
                 <input type="text" name="name" required autocomplete="name" placeholder="Your name">
@@ -947,10 +949,11 @@
                 <input type="email" name="email" required autocomplete="email" placeholder="you@domain.com">
                 <span class="prereg-form__error" hidden>Please enter a valid email address.</span>
             </label>
-            <!-- Honeypot — humans never see or fill this field -->
+            <!-- Honeypot — humans never see or fill this field; FormSubmit drops
+                 submissions where _honey is filled (server-side validation) -->
             <label class="prereg-form__hp" aria-hidden="true">
                 <span>Company website</span>
-                <input type="text" name="website" tabindex="-1" autocomplete="off">
+                <input type="text" name="_honey" tabindex="-1" autocomplete="off">
             </label>
             <label class="prereg-form__field">
                 <span class="prereg-form__label">Approximate deployable capital (optional)</span>
@@ -1076,6 +1079,6 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260612b"></script>
+<script src="js/script.js?v=20260612c"></script>
 </body>
 </html>
