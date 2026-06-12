@@ -235,9 +235,9 @@
         ctx.setLineDash([]);
 
         // Equity curve — gold (earned series) with per-trade dots
-        ctx.strokeStyle = '#A88A38'; ctx.lineWidth = 2.4;
+        ctx.strokeStyle = '#b8962e'; ctx.lineWidth = 2.4;
         tracePath(eq); ctx.stroke();
-        ctx.fillStyle = '#C8A951';
+        ctx.fillStyle = '#d4af37';
         for (let i = 1; i < eq.length; i++) {
             ctx.beginPath(); ctx.arc(x(i), y(eq[i]), 3, 0, Math.PI * 2); ctx.fill();
             ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1; ctx.stroke();
@@ -246,7 +246,7 @@
         // End labels
         const last = eq.length - 1;
         ctx.textAlign = 'left'; ctx.font = '12px "Source Sans 3", sans-serif';
-        ctx.fillStyle = '#A88A38';
+        ctx.fillStyle = '#b8962e';
         ctx.fillText((eq[last] >= 0 ? '+' : '') + eq[last].toFixed(1) + ' pts · live record', x(last) + 10, y(eq[last]) + 4);
         ctx.fillStyle = '#DC2626';
         ctx.fillText('hard kill · ' + hard[last].toFixed(0) + ' pts', x(last) + 10, y(hard[last]) + 4);
@@ -583,13 +583,13 @@
         const cashArea   = buildArea(function (p) { return p.spy + p.cash; }, function (p) { return p.spy; });
         const engineArea = buildArea(function (p) { return p.value; }, function (p) { return p.spy + p.cash; });
 
-        parts.push('<path d="' + spyArea + '" fill="#1B2A4A" fill-opacity="0.85"/>');           // SPY: deep navy
+        parts.push('<path d="' + spyArea + '" fill="#12264a" fill-opacity="0.85"/>');           // SPY: deep navy
         parts.push('<path d="' + cashArea + '" fill="#94A3B8" fill-opacity="0.7"/>');           // Cash: slate
-        parts.push('<path d="' + engineArea + '" fill="#C8A951" fill-opacity="0.9"/>');         // Engine: gold
+        parts.push('<path d="' + engineArea + '" fill="#d4af37" fill-opacity="0.9"/>');         // Engine: gold
 
         // Top-line stroke (total NLV)
         const topLine = pts.map(function (p, i) { return (i === 0 ? 'M ' : 'L ') + xAt(p.t) + ',' + yAt(p.value); }).join(' ');
-        parts.push('<path d="' + topLine + '" fill="none" stroke="#131E36" stroke-width="2"/>');
+        parts.push('<path d="' + topLine + '" fill="none" stroke="#0a1628" stroke-width="2"/>');
 
         // SPY/cash dividing line (subtle, white)
         const spyTopLine = pts.map(function (p, i) { return (i === 0 ? 'M ' : 'L ') + xAt(p.t) + ',' + yAt(p.spy); }).join(' ');
@@ -609,21 +609,21 @@
         steps.forEach(function (s) {
             const x = xAt(s.timeReached);
             const yTop = yAt(s.nlv);
-            parts.push('<line x1="' + x + '" y1="' + yTop + '" x2="' + x + '" y2="' + (yTop - 28) + '" stroke="#C8A951" stroke-width="1.5"/>');
-            parts.push('<circle cx="' + x + '" cy="' + yTop + '" r="5" fill="#C8A951" stroke="white" stroke-width="1.5"/>');
-            parts.push('<rect x="' + (x + 6) + '" y="' + (yTop - 42) + '" width="62" height="18" rx="2" fill="#1B2A4A"/>');
-            parts.push('<text x="' + (x + 37) + '" y="' + (yTop - 30) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#C8A951" font-family="Source Sans 3">' + s.contracts + ' /ES</text>');
+            parts.push('<line x1="' + x + '" y1="' + yTop + '" x2="' + x + '" y2="' + (yTop - 28) + '" stroke="#d4af37" stroke-width="1.5"/>');
+            parts.push('<circle cx="' + x + '" cy="' + yTop + '" r="5" fill="#d4af37" stroke="white" stroke-width="1.5"/>');
+            parts.push('<rect x="' + (x + 6) + '" y="' + (yTop - 42) + '" width="62" height="18" rx="2" fill="#12264a"/>');
+            parts.push('<text x="' + (x + 37) + '" y="' + (yTop - 30) + '" text-anchor="middle" font-size="11" font-weight="700" fill="#d4af37" font-family="Source Sans 3">' + s.contracts + ' /ES</text>');
         });
 
         // Layer legend — above the plot area, stays out of the chart interior
         const legendY = 14;
         parts.push('<g class="cl-legend" font-family="Source Sans 3" font-size="11">');
-        parts.push('<rect x="' + PAD_L + '" y="' + legendY + '" width="12" height="10" fill="#1B2A4A" fill-opacity="0.85"/>');
-        parts.push('<text x="' + (PAD_L + 18) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">SPY foundation · 80% · 10%/yr</text>');
+        parts.push('<rect x="' + PAD_L + '" y="' + legendY + '" width="12" height="10" fill="#12264a" fill-opacity="0.85"/>');
+        parts.push('<text x="' + (PAD_L + 18) + '" y="' + (legendY + 9) + '" fill="#12264a" font-weight="600">SPY foundation · 80% · 10%/yr</text>');
         parts.push('<rect x="' + (PAD_L + 220) + '" y="' + legendY + '" width="12" height="10" fill="#94A3B8" fill-opacity="0.7"/>');
-        parts.push('<text x="' + (PAD_L + 238) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">Cash buffer · 10%</text>');
-        parts.push('<rect x="' + (PAD_L + 360) + '" y="' + legendY + '" width="12" height="10" fill="#C8A951"/>');
-        parts.push('<text x="' + (PAD_L + 378) + '" y="' + (legendY + 9) + '" fill="#1B2A4A" font-weight="600">Engine profit</text>');
+        parts.push('<text x="' + (PAD_L + 238) + '" y="' + (legendY + 9) + '" fill="#12264a" font-weight="600">Cash buffer · 10%</text>');
+        parts.push('<rect x="' + (PAD_L + 360) + '" y="' + legendY + '" width="12" height="10" fill="#d4af37"/>');
+        parts.push('<text x="' + (PAD_L + 378) + '" y="' + (legendY + 9) + '" fill="#12264a" font-weight="600">Engine profit</text>');
         parts.push('</g>');
 
         // Year-end stacked breakdown callout on the right
@@ -634,11 +634,11 @@
         const calloutH = 90;
         const calloutY = yAt(finalVal) - 8;
         const calloutAdj = Math.max(PAD_T + 4, calloutY - calloutH);
-        parts.push('<rect x="' + (xEnd - 132) + '" y="' + calloutAdj + '" width="132" height="' + calloutH + '" rx="4" fill="#1B2A4A"/>');
-        parts.push('<text x="' + (xEnd - 66) + '" y="' + (calloutAdj + 14) + '" text-anchor="middle" font-size="10" font-weight="700" fill="#C8A951" font-family="Source Sans 3" letter-spacing="1">YEAR-END NLV</text>');
+        parts.push('<rect x="' + (xEnd - 132) + '" y="' + calloutAdj + '" width="132" height="' + calloutH + '" rx="4" fill="#12264a"/>');
+        parts.push('<text x="' + (xEnd - 66) + '" y="' + (calloutAdj + 14) + '" text-anchor="middle" font-size="10" font-weight="700" fill="#d4af37" font-family="Source Sans 3" letter-spacing="1">YEAR-END NLV</text>');
         parts.push('<text x="' + (xEnd - 66) + '" y="' + (calloutAdj + 36) + '" text-anchor="middle" font-size="20" font-weight="700" fill="white" font-family="Source Sans 3">$' + Math.round(finalVal / 1000) + 'K</text>');
         parts.push('<text x="' + (xEnd - 124) + '" y="' + (calloutAdj + 56) + '" font-size="10" fill="#94A3B8" font-family="Source Sans 3">SPY    +$' + Math.round((finalSpy - SPY_START)/1000) + 'K</text>');
-        parts.push('<text x="' + (xEnd - 124) + '" y="' + (calloutAdj + 70) + '" font-size="10" fill="#C8A951" font-family="Source Sans 3">Engine +$' + Math.round(finalEngine/1000) + 'K</text>');
+        parts.push('<text x="' + (xEnd - 124) + '" y="' + (calloutAdj + 70) + '" font-size="10" fill="#d4af37" font-family="Source Sans 3">Engine +$' + Math.round(finalEngine/1000) + 'K</text>');
         parts.push('<text x="' + (xEnd - 124) + '" y="' + (calloutAdj + 84) + '" font-size="10" fill="white" font-weight="700" font-family="Source Sans 3">Total  +$' + Math.round(finalProfit/1000) + 'K</text>');
 
         svg.innerHTML = parts.join('');
@@ -1428,7 +1428,7 @@
         ctx.lineTo(pad + (equity.length - 1) * xStep, H - pad);
         ctx.closePath(); ctx.fill();
         // Line
-        ctx.strokeStyle = '#1B2A4A'; ctx.lineWidth = 2;
+        ctx.strokeStyle = '#12264a'; ctx.lineWidth = 2;
         ctx.beginPath();
         for (let i = 0; i < equity.length; i++) {
             const x = pad + i * xStep;
@@ -1501,7 +1501,7 @@
         if (fallback) fallback.remove();
         const widget = document.createElement('div');
         widget.className = 'calendly-inline-widget';
-        widget.setAttribute('data-url', url + '?hide_event_type_details=0&primary_color=C8A951&text_color=1B2A4A');
+        widget.setAttribute('data-url', url + '?hide_event_type_details=0&primary_color=d4af37&text_color=12264a');
         widget.style.minWidth = '320px';
         widget.style.height   = '720px';
         container.appendChild(widget);
@@ -1952,7 +1952,7 @@
             }
 
             // Total NLV line (gold-deep, sits at top of all stacked bands)
-            ctx.strokeStyle = '#A88A38'; ctx.lineWidth = 2.4;
+            ctx.strokeStyle = '#b8962e'; ctx.lineWidth = 2.4;
             ctx.beginPath();
             for (let i = 0; i < series.length; i++) {
                 const px = x(i), py = y(series[i].total);
@@ -1961,7 +1961,7 @@
             ctx.stroke();
 
             // S&P 500 benchmark line (navy)
-            ctx.strokeStyle = '#1B2A4A'; ctx.lineWidth = 1.6; ctx.setLineDash([6, 4]);
+            ctx.strokeStyle = '#12264a'; ctx.lineWidth = 1.6; ctx.setLineDash([6, 4]);
             ctx.beginPath();
             for (let i = 0; i < series.length; i++) {
                 const px = x(i), py = y(series[i].idx);
@@ -1972,9 +1972,9 @@
 
             // End-point callouts: strategy multiplier + S&P multiplier
             const last = series[series.length - 1];
-            ctx.fillStyle = '#A88A38'; ctx.textAlign = 'left'; ctx.font = '12px "Source Sans 3", sans-serif';
+            ctx.fillStyle = '#b8962e'; ctx.textAlign = 'left'; ctx.font = '12px "Source Sans 3", sans-serif';
             ctx.fillText(last.total.toFixed(2) + 'x · Strategy', x(xN) - 90, y(last.total) - 8);
-            ctx.fillStyle = '#1B2A4A';
+            ctx.fillStyle = '#12264a';
             ctx.fillText(last.idx.toFixed(2) + 'x · S&P 500', x(xN) - 90, y(last.idx) + 16);
 
             updateChartReading(up, down);
