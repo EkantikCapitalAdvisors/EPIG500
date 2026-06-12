@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Majority Opinion Predisposal Strategy + Synthetic-Passive Overlay — Falsifiability Protocol v1.3 · Ekantik Capital Advisors</title>
+<title>Majority Opinion Predisposal Strategy + Synthetic-Passive Overlay — Falsifiability Protocol v1.4 · Ekantik Capital Advisors</title>
 <style>
   :root {
     --navy: #1B2A4A;
@@ -254,7 +254,7 @@
   <div class="firm-tag">Ekantik Capital Advisors LLC</div>
 
   <h1 class="protocol-title">Falsifiability Protocol</h1>
-  <p class="protocol-subtitle">A pre-committed operational charter · v1.3 · Majority Opinion Predisposal Strategy + Synthetic-Passive Overlay</p>
+  <p class="protocol-subtitle">A pre-committed operational charter · v1.4 · Majority Opinion Predisposal Strategy + Synthetic-Passive Overlay</p>
 
   <p class="lead">
     Governing both engines of Ekantik 500: the <strong>Majority Opinion Predisposal Strategy</strong> on ES &amp; MES futures (the active engine), and the <strong>synthetic-passive overlay</strong> on the SPY foundation (new in v1.3). Issued by the operator. Witness-locked. Publicly disclosed. Modification subject to a 48-hour cool-off and written justification.
@@ -262,8 +262,8 @@
 
   <table class="meta">
     <tr><td>Document</td><td>Falsifiability Protocol · Locked Operational Charter</td></tr>
-    <tr><td>Version</td><td>1.3 — Adds <strong>Article VIII (Synthetic-Passive Overlay)</strong>: an overlay <strong>Fidelity Layer</strong> (rules for stepping equity exposure down in genuine corrections and back up as buyers return, executed without discretion) and an overlay <strong>Expression Layer</strong> (cycle-level overlay-alpha gate: beat-or-protect versus simply holding the index). Two engines, four gates. The overlay's quantitative thresholds are documented as <em>design intent</em> and will be locked under Article IV before any capital is deployed. All v1.2 articles (Fidelity Layer OP-01..07, Expression Layer ED-01..08, tier ladder, modification protocol, witness structure) unchanged.</td></tr>
-    <tr><td>Reference</td><td>FP-MOPS-V1.3-2026-06</td></tr>
+    <tr><td>Version</td><td>1.4 — Two threshold revisions to Stage-2 / Stage-1 articles. (a) <strong>ED-05b hard kill</strong> revised from −75 ES pts → <strong>−100 ES pts ($5,000 per contract)</strong>: round dollar-anchored ceiling for operational clarity; sits deeper than the v1.1 1st-percentile bootstrap-derived figure (−75.6 pts). (b) <strong>OP-06 bi-weekly size reduction</strong> revised from <em>1/5 of normal</em> → <em>1/2 of normal</em>: preserves the size-reduction principle with a less severe cut and a more practical resumption ramp. ED-05a (warning, −45 pts), the bootstrap rationale, and Article VIII (Synthetic-Passive Overlay, added v1.3) all unchanged. All other articles preserved verbatim. Change log appended to each affected article.</td></tr>
+    <tr><td>Reference</td><td>FP-MOPS-V1.4-2026-06</td></tr>
     <tr><td>Strategy</td><td>Majority Opinion Predisposal Strategy · ES / MES Futures</td></tr>
     <tr><td>Vehicle</td><td>Ekantik 500 · Active /ES Engine Layer</td></tr>
     <tr><td>Issuing entity</td><td>Ekantik Capital Advisors LLC · Maple Grove, MN</td></tr>
@@ -304,7 +304,7 @@
     <li><strong>ED-03 · Rolling-50 profit factor &lt; 1.30.</strong> Asymmetry of winners-to-losers collapses below the slippage-buffer floor.</li>
     <li><strong>ED-04 · Rolling-50 win:loss ratio &lt; 1.10.</strong> Asymmetry decays even where win-rate holds.</li>
     <li><strong>ED-05a · Realized peak-to-trough drawdown &gt; −45 ES points (portfolio) — warning tier.</strong> Triggers Stage-1 Tier-2 conditions-reduced response (minimum sizing, witness oversight) for next 20 qualified trades. Threshold derived from the 25th percentile of the reference-dataset bootstrap (50,000 random orderings); roughly the midpoint between median and 75th-pct max DD under the documented edge.</li>
-    <li><strong>ED-05b · Realized peak-to-trough drawdown &gt; −75 ES points (portfolio) — hard kill.</strong> Architecture-linked ceiling. Derived from the 1st percentile of the bootstrap distribution: under the documented edge, fewer than 1% of random orderings of the reference dataset produce a max DD this deep. Crossing this threshold is therefore stronger evidence of edge failure than of variance, and triggers the full Stage-2 stand-down action protocol.</li>
+    <li><strong>ED-05b · Realized peak-to-trough drawdown &gt; −100 ES points (portfolio, $5,000 per contract) — hard kill.</strong> Architecture-linked ceiling, anchored to a round dollar figure for operational clarity. Sits beyond the 1st percentile of the bootstrap distribution: under the documented edge, well under 1% of random orderings of the reference dataset produce a max DD this deep. Crossing this threshold is therefore stronger evidence of edge failure than of variance, and triggers the full Stage-2 stand-down action protocol. (Updated from the v1.1–v1.3 threshold of −75 pts; see Article IV change log.)</li>
     <li><strong>ED-06 · Top-3 winner removal turns the cumulative record negative.</strong> Edge survives only on outliers.</li>
     <li><strong>ED-07 · Consecutive loss streak ≥ 7 in any rolling window.</strong> A 2-sigma deviation from the documented streak distribution.</li>
     <li><strong>ED-08 · One-sided t-test p-value &gt; 0.10 past trade 100.</strong> Statistical signal can no longer be distinguished from noise.</li>
@@ -331,7 +331,10 @@
       The observed −29 pt DD therefore sits at the ~93rd percentile of bootstrap orderings — the historical record happened to be on the lucky side of the distribution. A −30 pt kill would fire in approximately 95% of random orderings under the same healthy edge: a kill on noise, not signal. The split-tier replacement, anchored to bootstrap percentiles, preserves the gate's intent while passing the variance-of-the-same-edge test:
     </p>
     <p style="margin-top: 6px;">
-      <strong>ED-05a (warning, −45 pts)</strong> sits between the median (−40) and the 25th percentile (−47). Firing here means the operator is in the worse 75% of paths under a known-healthy edge — worth a Tier-2 conditions-reduced response, not a hard cessation. <strong>ED-05b (hard kill, −75 pts)</strong> sits at the 1st percentile of the bootstrap. 99% of paths under the documented edge stay above this line; crossing it is stronger evidence of edge failure than of variance.
+      <strong>ED-05a (warning, −45 pts)</strong> sits between the median (−40) and the 25th percentile (−47). Firing here means the operator is in the worse 75% of paths under a known-healthy edge — worth a Tier-2 conditions-reduced response, not a hard cessation. <strong>ED-05b (hard kill, −100 pts ≈ $5,000 per /ES contract)</strong> sits beyond the 1st percentile of the bootstrap (which was −75.6 pts). Crossing it is therefore even stronger evidence of edge failure than the prior v1.1–v1.3 −75 threshold — well under 1% of paths under the documented edge reach this line. The round-number, dollar-anchored ceiling preserves the architecture-linked intent while making the cap operationally intuitive for size-up decisions.
+    </p>
+    <p style="margin-top: 6px;">
+      <strong>Change log (v1.4):</strong> hard kill threshold revised from −75 pts → <strong>−100 pts ($5,000 per /ES)</strong>. The v1.1–v1.3 figure was bootstrap-derived (1st percentile of 50,000 reference-dataset orderings); the v1.4 figure sits deeper, accepting a fractionally lower false-positive rate in exchange for a round dollar-anchored cap. ED-05a (warning, −45 pts) unchanged. Bootstrap percentiles for reference: 1st −75.6 · 5th −61.7 · 25th −47.1 · median −39.6.
     </p>
     <p style="margin-top: 6px;">
       Bootstrap script and result CSV will be published alongside this protocol as <code class="inline">bootstrap-ed05.csv</code> for independent verification. Investors at any account size can re-run the analysis using the public reference dataset.
@@ -449,17 +452,18 @@
     <strong>Verification:</strong> witness audits the daily trade log weekly; flagged sit-down events disclosed to investors within 7 days.
   </div>
 
-  <!-- OP-06 (new in v1.2) -->
-  <h3 class="crit-h"><span class="crit-label">OP-06</span>Bi-Weekly Size Reduction <em class="gold" style="font-style: normal; font-size: 13px;">(v1.2)</em></h3>
+  <!-- OP-06 (introduced v1.2; threshold updated v1.4) -->
+  <h3 class="crit-h"><span class="crit-label">OP-06</span>Bi-Weekly Size Reduction <em class="gold" style="font-style: normal; font-size: 13px;">(v1.2 · revised v1.4)</em></h3>
 
   <p>
-    A <strong>second consecutive losing week</strong> (where "losing week" is any week ending net-negative on closed trades) triggers an immediate sizing reduction to <strong>1/5 of normal</strong> — for example 1 /MES in place of 1 /ES. The reduction holds until OP-07 reinstatement conditions are met. Daily filings transition to witness oversight for the duration of the reduction window.
+    A <strong>second consecutive losing week</strong> (where "losing week" is any week ending net-negative on closed trades) triggers an immediate sizing reduction to <strong>half of normal</strong> — for example 5 /MES in place of 1 /ES, an equivalent 50% cut in dollar exposure per trade while preserving the same instrument's tick mechanics. The reduction holds until OP-07 reinstatement conditions are met. Daily filings transition to witness oversight for the duration of the reduction window.
   </p>
 
   <div class="crit-meta">
-    <strong>Breach:</strong> any entry sized above the 1/5 reduction during an active OP-06 window.<br>
+    <strong>Breach:</strong> any entry sized above the 1/2 reduction during an active OP-06 window.<br>
     <strong>Threshold:</strong> <span class="red">zero breaches, period.</span><br>
-    <strong>Verification:</strong> witness countersigns each entry during the reduction window. Per-trade size logged against the OP-06 cap.
+    <strong>Verification:</strong> witness countersigns each entry during the reduction window. Per-trade size logged against the OP-06 cap.<br>
+    <strong>Change log (v1.4):</strong> reduction factor revised from <em>1/5 of normal</em> → <em>1/2 of normal</em>. The v1.2 figure produced an aggressive recovery posture (a quarter-position bias toward stand-down); the v1.4 figure preserves the size-reduction principle with a less severe cut, accepting modestly higher capital-at-risk during the OP-06 window in exchange for a more practical resumption ramp once OP-07 reinstatement criteria are met.
   </div>
 
   <!-- OP-07 (new in v1.2) -->
@@ -581,7 +585,7 @@
   </div>
 
   <footer>
-    Falsifiability Protocol · v1.3 · Doc Ref FP-MOPS-V1.3-2026-06<span class="dot">·</span>Ekantik Capital Advisors LLC · Maple Grove, MN<span class="dot">·</span>Public — epig500.ekantikcapital.com<span class="dot">·</span>© 2026 Ekantik Capital Advisors LLC. All rights reserved.
+    Falsifiability Protocol · v1.4 · Doc Ref FP-MOPS-V1.4-2026-06<span class="dot">·</span>Ekantik Capital Advisors LLC · Maple Grove, MN<span class="dot">·</span>Public — epig500.ekantikcapital.com<span class="dot">·</span>© 2026 Ekantik Capital Advisors LLC. All rights reserved.
   </footer>
 
 </div>
