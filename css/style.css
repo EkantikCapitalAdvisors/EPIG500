@@ -23,6 +23,17 @@
     --line:        rgba(27, 42, 74, 0.12);
     --line-light:  rgba(255, 255, 255, 0.15);
 
+    /* Semantic layer — spec §1.1 */
+    --navy-950:      #10182B;            /* deep page background (dark sections) */
+    --navy-800:      var(--navy);        /* brand navy — cards, headers on light */
+    --gold-500:      var(--gold);
+    --color-upside:  var(--gold);        /* earned scale, upside, primary CTA */
+    --color-data:    var(--teal);        /* charts, neutral data, battery bars */
+    --color-kill:    var(--signal);      /* EXCLUSIVELY kill conditions / gate states / stand-downs */
+    --text-on-dark:  #E9E7E2;            /* body text on navy — never gold for body */
+    --text-on-light: var(--navy);
+    --card-border:   #E5E1D8;
+
     /* Spacing scale (Tailwind-aligned) */
     --s-2:  8px;
     --s-3:  12px;
@@ -53,7 +64,7 @@
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
     font-family: var(--font-sans);
-    font-size: 18px;
+    font-size: 17px;
     line-height: 1.7;
     color: var(--navy);
     background: var(--white);
@@ -63,7 +74,7 @@ body {
 }
 img, svg { max-width: 100%; height: auto; display: block; }
 a { color: var(--navy); text-decoration: none; transition: color var(--transition); }
-a:hover { color: var(--gold-deep); }
+a:hover { color: var(--navy-soft); }
 em { font-style: italic; }
 button { font: inherit; border: 0; background: transparent; cursor: pointer; color: inherit; }
 
@@ -238,14 +249,15 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .nav__links {
     display: flex;
     align-items: center;
-    gap: var(--s-8);
+    gap: var(--s-6);
     margin-left: auto;
 }
 .nav__links a {
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 500;
     color: var(--slate-dark);
     letter-spacing: 0.4px;
+    white-space: nowrap;
 }
 .nav__links a:hover { color: var(--navy); }
 
@@ -282,8 +294,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
    HERO
    ================================================ */
 .hero {
-    min-height: 80vh;
-    background: var(--navy);
+    background: var(--navy-950);
     color: var(--ivory);
     padding: var(--s-24) 0 var(--s-16);
     position: relative;
@@ -317,9 +328,9 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     max-width: 720px;
 }
 .hero__sub {
-    font-size: 22px;
-    line-height: 1.55;
-    color: rgba(250, 248, 245, 0.88);
+    font-size: 21px;
+    line-height: 1.6;
+    color: var(--text-on-dark);
     margin-bottom: var(--s-8);
     max-width: 640px;
 }
@@ -597,28 +608,29 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     gap: var(--s-6);
 }
 .principle {
-    padding: var(--s-6);
+    padding: var(--s-8) var(--s-6);
     text-align: center;
-    border-top: 1px solid rgba(200, 169, 81, 0.3);
+    background: var(--white);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
 }
-.principle__icon {
-    display: grid;
-    place-items: center;
+.principle__mark {
     margin-bottom: var(--s-4);
-    height: 44px;
+    font-size: 18px;
 }
+.principle__mark .diamond { margin-right: 0; font-size: 1em; }
 .principle h3 {
     font-family: var(--font-serif);
     font-weight: 600;
     font-size: 18px;
-    color: var(--white);
+    color: var(--navy);
     margin-bottom: var(--s-3);
     line-height: 1.3;
 }
 .principle p {
     font-size: 14px;
     line-height: 1.6;
-    color: rgba(250, 248, 245, 0.78);
+    color: var(--slate-dark);
 }
 .standard__closing {
     text-align: center;
@@ -626,7 +638,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     max-width: 760px;
     font-size: 17px;
     line-height: 1.6;
-    color: rgba(250, 248, 245, 0.9);
+    color: var(--slate-dark);
     font-style: italic;
 }
 
@@ -724,7 +736,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 /* ================================================
    FOUNDING MEMBER (SECTION 8)
    ================================================ */
-.section--founding { background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%); }
+.section--founding { background: var(--ivory); }
 .section--founding .section__h--light { text-align: center; }
 .founding__body {
     max-width: 720px;
@@ -733,11 +745,12 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .founding__body p {
     font-size: 19px;
     line-height: 1.7;
-    color: rgba(250, 248, 245, 0.9);
+    color: var(--navy);
     margin-bottom: var(--s-6);
 }
 .founding__card {
-    background: var(--ivory);
+    background: var(--white);
+    border: 1px solid var(--card-border);
     border-radius: var(--radius-lg);
     padding: var(--s-8);
     margin-top: var(--s-8);
@@ -853,7 +866,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     overflow: hidden;
     transition: border-color var(--transition);
 }
-.faq__item[open] { border-color: var(--gold); }
+.faq__item[open] { border-color: var(--navy); }
 .faq__item summary {
     list-style: none;
     padding: var(--s-6);
@@ -914,7 +927,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
    FOOTER
    ================================================ */
 .footer {
-    background: var(--navy-deep);
+    background: var(--navy-950);
     color: rgba(250, 248, 245, 0.7);
     padding: var(--s-16) 0 var(--s-8);
     font-size: 14px;
@@ -929,7 +942,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .logo--footer .logo__sublabel { color: var(--gold); border-left-color: var(--line-light); }
 .footer__tagline {
     margin: var(--s-4) 0 var(--s-6);
-    color: var(--gold);
+    color: var(--text-on-dark);
     font-size: 13px;
     letter-spacing: 0.8px;
 }
@@ -946,7 +959,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 }
 .footer__list { list-style: none; display: grid; gap: var(--s-2); }
 .footer__list a { color: rgba(250, 248, 245, 0.7); }
-.footer__list a:hover { color: var(--gold); }
+.footer__list a:hover { color: var(--white); }
 .footer__legal {
     padding-top: var(--s-6);
     border-top: 1px solid var(--line-light);
@@ -990,9 +1003,6 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 
 @media (max-width: 768px) {
     .section { padding: var(--s-16) 0; }
-    .nav__links { display: none; }
-    .nav__menu-toggle { display: flex; }
-    .nav .btn--sm { display: none; }
 
     .hero { min-height: auto; padding: var(--s-16) 0; }
     .hero__inner {
@@ -1250,7 +1260,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 }
 .gold-rule__bar {
     height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    background: linear-gradient(90deg, transparent, var(--card-border), transparent);
 }
 .gold-rule__text {
     font-family: var(--font-serif);
@@ -1587,14 +1597,14 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     margin-left: auto;
     margin-right: auto;
 }
-.falsi-intro p { color: rgba(250, 248, 245, 0.95); font-size: 17px; line-height: 1.7; }
+.falsi-intro p { color: var(--navy); font-size: 17px; line-height: 1.7; }
 
 .falsi-stage { margin-bottom: var(--s-12); }
 .falsi-stage__num {
     font-family: var(--font-serif);
     font-weight: 700;
     font-size: 14px;
-    color: var(--gold);
+    color: var(--gold-deep);
     letter-spacing: 2px;
     text-transform: uppercase;
     margin-bottom: var(--s-2);
@@ -1603,11 +1613,11 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     font-family: var(--font-serif);
     font-weight: 700;
     font-size: 28px;
-    color: var(--white);
+    color: var(--navy);
     margin-bottom: var(--s-3);
 }
 .falsi-stage__sub {
-    color: rgba(250, 248, 245, 0.78);
+    color: var(--slate-dark);
     font-size: 16px;
     margin-bottom: var(--s-8);
     line-height: 1.6;
@@ -1652,7 +1662,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     margin-bottom: var(--s-3);
 }
 .op-card__def {
-    color: rgba(250, 248, 245, 0.85);
+    color: var(--slate-dark);
     font-size: 14px;
     line-height: 1.65;
     margin-bottom: var(--s-3);
@@ -1664,7 +1674,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     margin-bottom: var(--s-2);
 }
 .op-card__remediation {
-    color: rgba(250, 248, 245, 0.6);
+    color: var(--slate);
     font-size: 13px;
     line-height: 1.5;
 }
@@ -1673,8 +1683,8 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .tier-table, .ed-table {
     width: 100%;
     border-collapse: collapse;
-    background: rgba(255, 255, 255, 0.04);
-    color: rgba(250, 248, 245, 0.9);
+    background: var(--white);
+    color: var(--navy);
     font-size: 14px;
     border-radius: var(--radius);
     overflow: hidden;
@@ -1683,12 +1693,12 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .ed-table th, .ed-table td {
     padding: var(--s-3) var(--s-4);
     text-align: left;
-    border-bottom: 1px solid rgba(200, 169, 81, 0.2);
+    border-bottom: 1px solid var(--card-border);
     vertical-align: top;
 }
 .tier-table th, .ed-table th {
-    background: rgba(200, 169, 81, 0.15);
-    color: var(--gold);
+    background: var(--ivory);
+    color: var(--navy);
     text-transform: uppercase;
     font-size: 11px;
     letter-spacing: 1px;
@@ -1697,12 +1707,12 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .ed-table td:first-child {
     font-family: var(--font-serif);
     font-weight: 700;
-    color: var(--gold);
+    color: var(--color-kill);
 }
 
 .binding-rule {
-    background: rgba(200, 169, 81, 0.1);
-    border: 2px solid var(--gold);
+    background: var(--ivory);
+    border: 1.5px solid var(--navy);
     border-radius: var(--radius-lg);
     padding: var(--s-6) var(--s-8);
     margin: var(--s-12) 0;
@@ -1711,11 +1721,11 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     font-family: var(--font-serif);
     font-weight: 700;
     font-size: 18px;
-    color: var(--gold);
+    color: var(--navy);
     margin-bottom: var(--s-3);
 }
 .binding-rule p {
-    color: rgba(250, 248, 245, 0.92);
+    color: var(--navy);
     font-size: 15px;
     line-height: 1.7;
 }
@@ -1736,12 +1746,12 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 }
 .kill-action__list {
     padding-left: var(--s-6);
-    color: rgba(250, 248, 245, 0.92);
+    color: var(--navy);
     display: grid;
     gap: var(--s-3);
 }
 .kill-action__list li { font-size: 14px; line-height: 1.65; }
-.kill-action__list strong { color: var(--white); }
+.kill-action__list strong { color: var(--navy); }
 
 .compliance--light {
     color: rgba(250, 248, 245, 0.6);
@@ -2145,7 +2155,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .trow__bar-fill {
     position: absolute;
     top: 0; bottom: 0; left: 0;
-    background: linear-gradient(90deg, rgba(45, 80, 22, 0.4), rgba(45, 80, 22, 0.7));
+    background: linear-gradient(90deg, rgba(13, 148, 136, 0.45), rgba(13, 148, 136, 0.85));
     border-radius: 100px;
 }
 .trow.is-fail .trow__bar-fill {
@@ -2570,8 +2580,8 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
    PRE-REGISTRATION BANNER + FORM
    ================================================ */
 .prereg-banner {
-    background: var(--navy-deep);
-    border-bottom: 1px solid var(--gold);
+    background: var(--navy-950);
+    border-bottom: 1px solid var(--line-light);
     color: var(--ivory);
 }
 .prereg-banner__inner {
@@ -2659,7 +2669,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     text-align: center;
     margin-top: var(--s-2);
 }
-.prereg-form__note a { color: var(--gold-deep); border-bottom: 1px solid transparent; }
+.prereg-form__note a { color: var(--navy); border-bottom: 1px solid var(--line); }
 .prereg-form__note a:hover { border-bottom-color: var(--gold); }
 
 /* Educational call collapsible */
@@ -2772,7 +2782,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     border-bottom: 1px dashed var(--line);
 }
 .protocol-card__actions .btn--ghost { color: var(--navy); padding-left: 0; }
-.protocol-card__actions .btn--ghost:hover { color: var(--gold-deep); }
+.protocol-card__actions .btn--ghost:hover { color: var(--navy-soft); }
 .protocol-card__attest {
     font-size: 12px;
     color: var(--slate);
@@ -3578,4 +3588,540 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 }
 .falsi-intro__engineering a:hover {
     text-decoration-color: var(--gold-bright);
+}
+
+/* ================================================
+   v3.0 — CONVERSION-ARCHITECTURE PASS (spec 2026-06-12)
+   Nav CTAs · single-column hero · proof strip · founder
+   section · trade countdown · gate chips · falsifiability
+   accordions · founder call card · form states · CTA band
+   ================================================ */
+
+/* ---- Nav CTA pair ---- */
+.nav__cta { display: flex; gap: var(--s-3); align-items: center; }
+.nav__mobile-cta {
+    display: grid;
+    gap: var(--s-3);
+    margin-top: var(--s-4);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+}
+@media (max-width: 1024px) {
+    .nav__cta { display: none; }
+}
+
+/* ---- Hero: one idea per screen ---- */
+.hero__inner--single {
+    grid-template-columns: 1fr;
+    max-width: 880px;
+    margin: 0 auto;
+    text-align: left;
+}
+.hero__inner--single .hero__headline { max-width: 860px; }
+.hero__footnote-ref {
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 0.6em;
+    vertical-align: super;
+}
+.hero__discord-link { margin-top: var(--s-4); font-size: 15px; }
+.hero__discord-link a {
+    color: var(--text-on-dark);
+    border-bottom: 1px solid var(--line-light);
+}
+.hero__discord-link a:hover { color: var(--white); }
+.hero__footnote {
+    margin-top: var(--s-6);
+    font-size: 13px;
+    color: var(--text-on-dark);
+    max-width: 720px;
+}
+.hero__footnote summary {
+    cursor: pointer;
+    color: rgba(233, 231, 226, 0.7);
+    list-style: none;
+}
+.hero__footnote summary::-webkit-details-marker { display: none; }
+.hero__footnote[open] summary { color: var(--text-on-dark); }
+.hero__footnote p {
+    margin-top: var(--s-2);
+    line-height: 1.6;
+    color: rgba(233, 231, 226, 0.85);
+}
+
+/* ---- Proof strip (below hero fold) ---- */
+.proof-strip {
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+    padding: var(--s-4) 0;
+}
+.proof-strip__inner {
+    display: grid;
+    gap: var(--s-3);
+}
+.proof-strip__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-8);
+    justify-content: space-between;
+}
+.proof-strip__links a {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+}
+.proof-strip__links a:hover { color: var(--navy-soft); text-decoration: underline; }
+.proof-strip__countdown .trade-countdown__text { font-size: 13px; color: var(--slate-dark); margin: 0; }
+
+/* ---- Trade countdown component ---- */
+.trade-countdown { margin: 0 0 var(--s-8); }
+.trade-countdown--inline { margin: 0 0 var(--s-8); }
+.trade-countdown__bar {
+    height: 8px;
+    background: rgba(27, 42, 74, 0.08);
+    border-radius: 100px;
+    overflow: hidden;
+    margin-bottom: var(--s-2);
+    max-width: 520px;
+}
+.trade-countdown__fill {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(13, 148, 136, 0.55), var(--color-data));
+    border-radius: 100px;
+    transition: width 400ms ease-out;
+}
+.trade-countdown__text {
+    font-size: 15px;
+    color: var(--slate-dark);
+    line-height: 1.5;
+}
+.trade-countdown__text a { font-weight: 600; color: var(--navy); }
+.proof-strip .trade-countdown__bar { height: 6px; margin-bottom: 4px; }
+
+/* ---- Founder section ---- */
+.founder {
+    display: grid;
+    grid-template-columns: 4fr 7fr;
+    gap: var(--s-16);
+    align-items: start;
+}
+.founder__portrait-placeholder {
+    background: var(--navy);
+    border-radius: var(--radius-lg);
+    aspect-ratio: 4 / 5;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    gap: var(--s-2);
+    color: var(--text-on-dark);
+}
+.founder__portrait-mark { color: var(--gold); font-size: 22px; }
+.founder__portrait-name {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--white);
+}
+.founder__portrait-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(233, 231, 226, 0.75);
+}
+.founder__sig {
+    margin-top: var(--s-6);
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 17px;
+    color: var(--navy);
+}
+.founder__cta { margin-top: var(--s-8); }
+.founder__cta-sub {
+    margin-top: var(--s-3);
+    font-size: 13px;
+    color: var(--slate);
+}
+@media (max-width: 900px) {
+    .founder { grid-template-columns: 1fr; gap: var(--s-8); }
+    .founder__portrait { max-width: 320px; }
+}
+
+/* ---- Account-structure accordion (S3) ---- */
+.structure-accordion {
+    margin-top: var(--s-6);
+    background: var(--white);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+}
+.structure-accordion > summary {
+    cursor: pointer;
+    padding: var(--s-4) var(--s-6);
+    font-weight: 600;
+    color: var(--navy);
+    list-style: none;
+    position: relative;
+    padding-right: 48px;
+}
+.structure-accordion > summary::-webkit-details-marker { display: none; }
+.structure-accordion > summary::after {
+    content: '+';
+    position: absolute;
+    right: var(--s-6);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: var(--slate);
+    transition: transform var(--transition);
+}
+.structure-accordion[open] > summary::after { transform: translateY(-50%) rotate(45deg); }
+.structure-accordion .numbered-card { padding: 0 var(--s-6) var(--s-4); }
+
+/* ---- Period badges (S6) — slate = neutral, gold = protocol-bound ---- */
+.period-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: var(--s-2);
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.period-badge--slate { background: rgba(100, 116, 139, 0.14); color: var(--slate-dark); border: 1px solid rgba(100, 116, 139, 0.35); }
+.period-badge--gold  { background: rgba(200, 169, 81, 0.16); color: var(--gold-deep); border: 1px solid rgba(200, 169, 81, 0.5); }
+
+/* ---- Gate-status chips (S9) — armed = slate; fired = red (kill semantics) ---- */
+.gate-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    justify-content: center;
+    margin-bottom: var(--s-12);
+}
+.gate-chip {
+    font-size: 12px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--slate-dark);
+    background: rgba(100, 116, 139, 0.1);
+    border: 1px solid rgba(100, 116, 139, 0.35);
+    border-radius: 100px;
+    padding: 5px 14px;
+    white-space: nowrap;
+}
+.gate-chip strong { color: var(--navy); }
+.gate-chip.is-fired {
+    color: var(--color-kill);
+    background: rgba(220, 38, 38, 0.08);
+    border-color: var(--color-kill);
+}
+.gate-chip.is-fired strong { color: var(--color-kill); }
+
+/* ---- Falsifiability accordions ---- */
+.falsi-acc-group { display: grid; gap: var(--s-3); }
+.falsi-acc {
+    background: var(--white);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    margin-top: var(--s-3);
+}
+.falsi-acc-group .falsi-acc { margin-top: 0; }
+.falsi-acc > summary {
+    cursor: pointer;
+    padding: var(--s-4) var(--s-6);
+    font-weight: 600;
+    color: var(--navy);
+    font-size: 15px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    position: relative;
+    padding-right: 48px;
+}
+.falsi-acc > summary::-webkit-details-marker { display: none; }
+.falsi-acc > summary::after {
+    content: '+';
+    position: absolute;
+    right: var(--s-6);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: var(--slate);
+    transition: transform var(--transition);
+}
+.falsi-acc[open] > summary::after { transform: translateY(-50%) rotate(45deg); }
+.falsi-acc__dot {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    border-radius: 50%;
+    background: var(--color-kill);
+    display: inline-block;
+}
+.falsi-acc__id {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--slate-dark);
+    background: var(--ivory);
+    border: 1px solid var(--card-border);
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+}
+.falsi-acc__body { padding: 0 var(--s-6) var(--s-4); }
+.falsi-acc__body .op-card__threshold { margin-top: var(--s-2); }
+.kill-action {
+    background: rgba(220, 38, 38, 0.04);
+}
+.kill-action__h { color: var(--color-kill); }
+
+/* ---- Founder call card (S10, #talk) ---- */
+.founder-call {
+    background: var(--white);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: var(--s-8);
+    margin-bottom: var(--s-12);
+}
+.founder-call__h {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--navy);
+    margin-bottom: var(--s-4);
+}
+.founder-call__body {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--slate-dark);
+    margin-bottom: var(--s-6);
+}
+.founder-call__cta { margin-bottom: var(--s-4); }
+.booking__embed { min-height: 1px; }
+
+/* ---- Pre-registration form states ---- */
+.prereg-form__hp {
+    position: absolute !important;
+    left: -9999px !important;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+.prereg-form { position: relative; }
+.prereg-form__error {
+    font-size: 13px;
+    color: var(--color-kill);
+}
+.prereg-form input.is-invalid,
+.prereg-form select.is-invalid { border-color: var(--color-kill); }
+.prereg-form__status {
+    background: var(--ivory);
+    border: 1px solid var(--card-border);
+    border-left: 3px solid var(--color-kill);
+    border-radius: var(--radius);
+    padding: var(--s-3) var(--s-4);
+    font-size: 14px;
+    color: var(--navy);
+}
+.prereg-form__privacy {
+    font-size: 13px;
+    color: var(--slate);
+    text-align: center;
+}
+.prereg-success {
+    background: var(--white);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: var(--s-8);
+    text-align: center;
+    display: grid;
+    gap: var(--s-4);
+    justify-items: center;
+}
+.prereg-success__h {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--navy);
+}
+.prereg-success__body {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--slate-dark);
+    max-width: 560px;
+}
+.join-discord-line {
+    margin-top: var(--s-8);
+    text-align: center;
+    font-size: 15px;
+    color: var(--slate-dark);
+}
+.join-discord-line a { font-weight: 600; color: var(--navy); border-bottom: 1px solid var(--line); }
+
+/* ---- Final CTA band (S12, dark) ---- */
+.cta-band {
+    background: var(--navy-950);
+    color: var(--text-on-dark);
+    text-align: center;
+    padding: var(--s-24) 0;
+}
+.cta-band__h {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 38px;
+    line-height: 1.2;
+    color: var(--gold);
+    margin-bottom: var(--s-4);
+}
+.cta-band__sub {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--text-on-dark);
+    max-width: 680px;
+    margin: 0 auto var(--s-8);
+}
+.cta-band__actions {
+    display: flex;
+    gap: var(--s-4);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--s-6);
+}
+.cta-band__micro { font-size: 13px; color: rgba(233, 231, 226, 0.65); }
+
+/* ---- Booster toggle (disabled state) ---- */
+.arith-contract[disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+.arith-chart__contracts-caption {
+    font-size: 12px;
+    color: var(--slate);
+    font-style: italic;
+}
+
+/* ---- Founding section (now light) ---- */
+.founding__discord-link { margin-top: var(--s-4); font-size: 14px; }
+.founding__discord-link a { color: var(--slate-dark); border-bottom: 1px solid var(--line); }
+.section--founding .section__h--center,
+.section--founding .section__h { color: var(--navy); }
+
+/* ---- Cards on light: 1px #E5E1D8 borders ---- */
+.faq__item, .pillar-card, .component-card, .rm-card { border-color: var(--card-border); }
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+    body { font-size: 16px; }
+    .hero__headline { font-size: 32px; }
+    .cta-band__h { font-size: 28px; }
+    .proof-strip__links { flex-direction: column; gap: var(--s-2); }
+    .cta-band__actions { flex-direction: column; align-items: stretch; }
+    .principles { grid-template-columns: 1fr; }
+}
+@media (min-width: 769px) and (max-width: 1100px) {
+    .principles { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ---- Hero / CTA band: secondary CTA as outline button on dark ---- */
+.hero__cta { display: flex; flex-wrap: wrap; gap: var(--s-4); align-items: center; }
+.hero__cta .hero__cta-sub, .hero__cta .hero__discord-link { flex-basis: 100%; }
+.hero__cta .btn--ghost,
+.cta-band__actions .btn--ghost {
+    border: 1.5px solid rgba(233, 231, 226, 0.55);
+    color: var(--text-on-dark);
+    padding: 18px 36px;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    border-radius: var(--radius);
+}
+.hero__cta .btn--ghost:hover,
+.cta-band__actions .btn--ghost:hover {
+    color: var(--white);
+    border-color: var(--white);
+    background: rgba(255, 255, 255, 0.06);
+}
+@media (max-width: 768px) {
+    .hero__cta { flex-direction: column; align-items: stretch; }
+}
+
+/* ---- Nav: collapse to drawer below 1100px (links + CTA pair need the room) ---- */
+.nav__cta .btn { white-space: nowrap; }
+@media (max-width: 1100px) {
+    .nav__links { display: none; }
+    .nav__cta { display: none; }
+    .nav__menu-toggle { display: flex; }
+}
+
+/* ---- Nav CTA sizing so the full bar fits one line at 1140–1440px ---- */
+.nav__cta .btn--sm { padding: 9px 14px; font-size: 12.5px; letter-spacing: 0.6px; }
+@media (max-width: 1340px) {
+    .logo__sublabel { display: none; }
+    .nav__links { gap: var(--s-4); }
+}
+
+/* ================================================
+   LIVE RECORD vs. KILL BOUNDARIES (§Arithmetic)
+   Countersigned mockup 2026-06-12 — realized Period 2
+   trades + armed ED-05 floors. Gold = earned series;
+   red = kill semantics only.
+   ================================================ */
+.live-bounded {
+    margin-top: var(--s-12);
+    background: var(--white);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: var(--s-8);
+}
+.live-bounded__h {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--navy);
+    margin-bottom: var(--s-3);
+}
+.live-bounded__sub {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--slate-dark);
+    max-width: 920px;
+    margin-bottom: var(--s-6);
+}
+#liveBoundedCanvas {
+    width: 100%;
+    height: 340px;
+    display: block;
+}
+.live-bounded__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-6);
+    margin-top: var(--s-4);
+    font-size: 13px;
+    color: var(--slate-dark);
+}
+.live-bounded__legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.live-bounded__swatch { width: 18px; height: 0; border-top: 3px solid; display: inline-block; }
+.live-bounded__swatch--earned { border-color: var(--gold-deep); }
+.live-bounded__swatch--hard   { border-top-style: dashed; border-color: var(--color-kill); }
+.live-bounded__swatch--warn   { border-top-style: dotted; border-color: rgba(220, 38, 38, 0.55); }
+.live-bounded__stat {
+    margin-top: var(--s-4);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--navy);
+    background: var(--ivory);
+    border-radius: var(--radius);
+    padding: var(--s-3) var(--s-4);
+}
+.live-bounded .compliance { margin-top: var(--s-6); }
+@media (max-width: 768px) {
+    .live-bounded { padding: var(--s-6); }
+    #liveBoundedCanvas { height: 260px; }
 }
