@@ -4415,3 +4415,33 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .calc { padding: var(--s-6); }
     .calc__num { font-size: 22px; }
 }
+
+/* ---- Calculator 2 — Volatility Tax ---- */
+.calc__tabs { display: flex; gap: var(--s-2); margin-bottom: var(--s-4); }
+.calc__paste { margin-bottom: var(--s-4); }
+.calc__paste textarea {
+    width: 100%;
+    font: 13px/1.5 'JetBrains Mono', monospace;
+    color: var(--navy);
+    background: var(--ivory);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: var(--s-3);
+    resize: vertical;
+}
+.calc__paste-row { display: flex; align-items: center; gap: var(--s-3); margin-top: var(--s-2); flex-wrap: wrap; }
+.calc__error { font-size: 13px; color: #E05A6B; font-weight: 600; }
+.vt-bar { display: grid; grid-template-columns: 220px 1fr 90px; align-items: center; gap: var(--s-3); margin-bottom: var(--s-2); }
+.vt-bar__label { font-size: 13px; color: var(--slate-dark); }
+.vt-bar__track { height: 22px; background: rgba(18, 38, 74, 0.05); border-radius: var(--radius); overflow: hidden; }
+.vt-bar__fill { height: 100%; border-radius: var(--radius); transition: width 200ms ease-out; }
+.vt-bar__fill--arith { background: rgba(212, 175, 55, 0.35); }
+.vt-bar__fill--geom  { background: var(--gold); }
+.vt-bar__val { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; color: var(--navy); text-align: right; }
+.vt-tax { margin-top: var(--s-2); font-size: 14px; color: #E05A6B; }
+.vt-tax strong { font-family: 'JetBrains Mono', monospace; }
+.vt-tax__base { font-size: 12px; color: var(--slate); font-style: italic; }
+@media (max-width: 720px) {
+    .vt-bar { grid-template-columns: 1fr; gap: 4px; }
+    .vt-bar__val { text-align: left; }
+}
