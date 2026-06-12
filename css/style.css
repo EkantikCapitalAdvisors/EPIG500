@@ -4500,3 +4500,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .cb-rung--kill .cb-rung__fig, .cb-rung--kill .cb-rung__id { color: #E05A6B; }
 .cb-protocol-link { font-size: 13px; font-weight: 600; color: var(--navy); margin-left: var(--s-4); }
 @media (max-width: 720px) { .cb-controls { grid-template-columns: 1fr; } }
+
+/* ---- Calculator 3 — Honest Trade-off ---- */
+.to-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-6); }
+@media (max-width: 720px) { .to-controls { grid-template-columns: 1fr; } }
