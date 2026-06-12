@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260612p">
+    <link rel="stylesheet" href="css/style.css?v=20260612q">
 
     <script type="application/ld+json">
     {
@@ -677,6 +677,26 @@
         </div>
 
 
+        <!-- Calculator 4 — The Worst Case, Priced (bounded-loss architecture) · Calculator Spec v1.0 §4.
+             LOSS-SIDE ONLY: no gain, throughput, or expectancy figure may render here. -->
+        <div class="calc" id="calcBoundsWrap">
+            <header class="calc__head">
+                <p class="eyebrow"><span class="diamond">◆</span> The Worst Case, Priced</p>
+                <h3 class="calc__h">A risk with a number can be financed. An unbounded risk can only be feared.</h3>
+                <p class="calc__sub">The engine's published loss bounds — per trade, per day, per week, and the hard kill — at a hypothetical account size. Loss-side only, by construction.</p>
+            </header>
+            <div id="calcBounds">
+                <!-- static default state (NLV $100K, 1 contract) — replaced on hydration -->
+                <div class="cb-ladder">
+                    <div class="cb-rung"><span class="cb-rung__id">OP-02</span><div class="cb-rung__body"><p class="cb-rung__title">Per trade</p><p class="cb-rung__fig">−$500 (0.5% of NLV)</p><p class="cb-rung__text">Per-contract risk fixed at 0.5% of NLV. After any closed losing trade, the day is over (one-loss daily rule).</p></div></div>
+                    <div class="cb-rung"><span class="cb-rung__id">OP-03</span><div class="cb-rung__body"><p class="cb-rung__title">Daily floor</p><p class="cb-rung__fig">−$500 (starting)</p><p class="cb-rung__text">Trailing high-water-mark floor — ratchets up with every new equity peak, never down.</p></div></div>
+                    <div class="cb-rung"><span class="cb-rung__id">OP-05</span><div class="cb-rung__body"><p class="cb-rung__title">Weekly stand-down</p><p class="cb-rung__fig cb-rung__fig--rule">2–3 consecutive losing days halts the week (OP-05)</p><p class="cb-rung__text">A rule, not a dollar figure: consecutive losing days halt the week pending witness review.</p></div></div>
+                    <div class="cb-rung cb-rung--kill"><span class="cb-rung__id">ED-05b</span><div class="cb-rung__body"><p class="cb-rung__title">Hard kill</p><p class="cb-rung__fig">−$5,000</p><p class="cb-rung__text">The most the engine can lose before it is declared dead, in public: $5,000 (100 /ES pts × $50/pt × 1). $5,000 budgeted in advance.</p></div></div>
+                </div>
+            </div>
+            <p class="calc__caption"><em>These figures compute the published Falsifiability Protocol v1.5 loss bounds at a hypothetical account size. Caps and the hard kill are sizing and exit rules enforced by rule — fast markets can gap beyond them. Not a guarantee, not an offer, and not a statement of expected results. Past performance does not guarantee future results.</em></p>
+        </div>
+
         <!-- Removed: forward-projection equity curve. SVG and chips deleted per compliance redline T1-A.
              What remains below — kill-condition chips and three-col risk/leverage/velocity explainers —
              are structural commitments, not projections, and stay.
@@ -1159,5 +1179,6 @@
 <script src="js/calc-core.js?v=20260612a" defer></script>
 <script src="js/calc-repair.js?v=20260612a" defer></script>
 <script src="js/calc-voltax.js?v=20260612a" defer></script>
+<script src="js/calc-bounds.js?v=20260612a" defer></script>
 </body>
 </html>
