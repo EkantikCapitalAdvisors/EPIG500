@@ -4240,3 +4240,11 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .ladder-stairs__arrow { padding-bottom: 0; transform: rotate(90deg); max-width: none; height: 40px; }
     .ladder-stairs__arrow-label { display: none; }
 }
+
+/* ---- Arithmetic legend: honor [hidden] (display rule was overriding it) ---- */
+.arith-chart__legend-item[hidden] { display: none !important; }
+.arith-chart__swatch--dashed {
+    background: transparent !important;
+    border-top: 2px dashed #1B2A4A;
+    height: 0 !important;
+}
