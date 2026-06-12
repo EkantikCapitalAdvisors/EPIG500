@@ -6,7 +6,39 @@
 (function () {
     'use strict';
 
+    /* ------------------------------------------------
+       CLAIM GATES (CEG) — ship OFF. Flip only after written
+       countersignature per spec §5 (Manish Dharod).
+       ------------------------------------------------ */
+    const EPIG_FLAGS = window.EPIG_FLAGS = {
+        CLAIMS_THROUGHPUT_ENABLED: false,
+        BOOSTER_TOGGLE_ENABLED: false
+    };
+
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ------------------------------------------------
+       SHARED TRADES FETCH — one request, many consumers.
+       Period discipline: only protocol-bound Period 2 trades
+       (period === 'pre_reg'; fallback: close date >= 2026-05-01)
+       feed any count, KPI, or extrapolation on this page.
+       ------------------------------------------------ */
+    const PERIOD2_START = '2026-05-01';
+    function isProtocolBound(t) {
+        if (t && typeof t.period === 'string') return t.period === 'pre_reg';
+        return !!(t && typeof t.timestamp === 'string' && t.timestamp.slice(0, 10) >= PERIOD2_START);
+    }
+    const tradesPromise = fetch('data/trades.json?t=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)); })
+        .then(function (j) {
+            if (!j || !Array.isArray(j.trades)) throw new Error('bad payload');
+            return j.trades;
+        });
+    // 4s timeout guard — fallback copy must replace any pending state.
+    const tradesWithTimeout = Promise.race([
+        tradesPromise,
+        new Promise(function (_, reject) { setTimeout(function () { reject(new Error('timeout')); }, 4000); })
+    ]);
 
     /* ------------------------------------------------
        1. NAV + SMOOTH SCROLL
@@ -23,6 +55,14 @@
                 navMobile.classList.remove('is-open');
                 menuToggle.setAttribute('aria-expanded', 'false');
             });
+        });
+    }
+
+    const footnoteRef = document.querySelector('.hero__footnote-ref');
+    if (footnoteRef) {
+        footnoteRef.addEventListener('click', function () {
+            const fn = document.getElementById('hero-footnote');
+            if (fn) fn.open = true;
         });
     }
 
@@ -49,59 +89,180 @@
     }
     track('page_view', { url: location.href, referrer: document.referrer || null });
 
-    /* Populate continuity section pre-reg counter from data/trades.json */
-    const continuityCount = document.getElementById('continuityLiveCount');
-    if (continuityCount) {
-        fetch('data/trades.json?t=' + Date.now(), { cache: 'no-store' })
-            .then(function (r) { return r.ok ? r.json() : null; })
-            .then(function (j) {
-                if (!j || !j.trades) return;
-                const live = j.trades.filter(function (t) { return t.period === 'pre_reg'; }).length;
-                continuityCount.textContent = live === 0 ? 'Awaiting first restart trade' : (live + (live === 1 ? ' trade' : ' trades'));
-            })
-            .catch(function () {});
-    }
+    /* Scroll-depth events: 25 / 50 / 75 / 100 */
+    (function () {
+        const fired = {};
+        function onScroll() {
+            const doc = document.documentElement;
+            const max = doc.scrollHeight - window.innerHeight;
+            if (max <= 0) return;
+            const pct = ((window.scrollY || doc.scrollTop) / max) * 100;
+            [25, 50, 75, 100].forEach(function (mark) {
+                if (!fired[mark] && pct >= mark) {
+                    fired[mark] = true;
+                    track('scroll_depth', { depth: mark });
+                }
+            });
+            if (fired[100]) window.removeEventListener('scroll', onScroll);
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+    })();
 
+    /* ------------------------------------------------
+       TRADE COUNTDOWN — embedded in proof strip (S1),
+       The Proof (S6), and Pre-Registration (S10).
+       States per spec §S6; static fallback on fetch
+       failure / 4s timeout. '—' / 'Loading…' / spinners
+       must never persist on screen.
+       ------------------------------------------------ */
+    const BATTERY_BINDING_N = 100;
+    function countdownCopy(n) {
+        if (n < 30) {
+            return { state: 'building', n: n,
+                text: 'Trade ' + n + ' of 30 toward battery activation — every trade published within 24 hours of close. ',
+                link: 'Watch each one land →', href: '/dashboard.html', bar: Math.max(0, Math.min(100, (n / 30) * 100)) };
+        }
+        if (n < BATTERY_BINDING_N) {
+            return { state: 'provisional', n: n,
+                text: 'Battery live on ' + n + ' trades — verdict provisional until 100. ',
+                link: 'Open the live battery →', href: '#battery', bar: null };
+        }
+        return { state: 'binding', n: n,
+            text: 'Battery binding — ' + n + ' trades on the protocol-bound record. ',
+            link: 'Open the live battery →', href: '#battery', bar: null };
+    }
+    function renderCountdown(n) {
+        document.querySelectorAll('.js-trade-countdown').forEach(function (el) {
+            const c = countdownCopy(n);
+            let html = '';
+            if (c.bar !== null) {
+                html += '<div class="trade-countdown__bar" role="img" aria-label="' + c.n + ' of 30 trades toward battery activation"><div class="trade-countdown__fill" style="width:' + c.bar + '%"></div></div>';
+            }
+            html += '<p class="trade-countdown__text">' + c.text + '<a href="' + c.href + '" data-cta="countdown-' + (el.dataset.variant || 'full') + '">' + c.link + '</a></p>';
+            el.innerHTML = html;
+            el.dataset.state = c.state;
+        });
+    }
+    function renderCountdownFallback() {
+        document.querySelectorAll('.js-trade-countdown').forEach(function (el) {
+            el.innerHTML = '<p class="trade-countdown__text">The live record updates within 24 hours of every closed trade — <a href="/dashboard.html" data-cta="countdown-fallback">open the dashboard →</a></p>';
+            el.dataset.state = 'fallback';
+        });
+    }
+    tradesWithTimeout.then(function (trades) {
+        const live = trades.filter(isProtocolBound);
+        const n = live.length;
+        renderCountdown(n);
+        const continuityCount = document.getElementById('continuityLiveCount');
+        if (continuityCount) {
+            continuityCount.innerHTML = '<strong>' + n + ' pre-registration ' + (n === 1 ? 'trade' : 'trades') + '</strong> published so far — every trade within 24 hours of close.';
+        }
+        document.querySelectorAll('.js-prereg-count').forEach(function (el) {
+            el.textContent = n + ' pre-registration ' + (n === 1 ? 'trade' : 'trades') + ' to date';
+        });
+        const boosterCaption = document.getElementById('arithBoosterCaption');
+        if (boosterCaption && !EPIG_FLAGS.BOOSTER_TOGGLE_ENABLED) {
+            boosterCaption.textContent = 'Engine layer unlocks with the protocol-bound record (trade ' + n + ' of 30).';
+        }
+        const baseline = document.getElementById('arithBaselineIndicator');
+        if (baseline && !EPIG_FLAGS.CLAIMS_THROUGHPUT_ENABLED) {
+            baseline.innerHTML = '<p class="arith-baseline__headline"><span class="diamond">◆</span> Engine throughput will be reported here from the protocol-bound live record once the battery activates at 30 closed trades (currently ' + n + '). Until then, we publish the trades — not an extrapolation.</p>';
+        }
+    }).catch(function () {
+        renderCountdownFallback();
+    });
+
+    /* Analytics — spec §6 event names */
     document.querySelectorAll('a[href="#prereg"]').forEach(function (cta) {
         cta.addEventListener('click', function () {
-            track('prereg_cta_click', { source: cta.dataset.cta || 'unknown', section: cta.closest('section')?.id || 'unknown' });
+            track('cta_prereg_click', { location: cta.dataset.cta || 'unknown', section: cta.closest('section')?.id || 'unknown' });
+        });
+    });
+    document.querySelectorAll('a[href="#talk"], a[data-cta^="founder-call"]').forEach(function (cta) {
+        cta.addEventListener('click', function () {
+            track('cta_founder_call_click', { location: cta.dataset.cta || 'unknown', section: cta.closest('section')?.id || 'unknown' });
         });
     });
     document.querySelectorAll('a[data-cta^="discord-"]').forEach(function (cta) {
         cta.addEventListener('click', function () {
-            track('discord_cta_click', { source: cta.dataset.cta, section: cta.closest('section')?.id || 'nav' });
+            track('discord_click', { location: cta.dataset.cta, section: cta.closest('section')?.id || 'nav' });
         });
     });
+    document.querySelectorAll('a[href*="falsifiability-protocol"]').forEach(function (a) {
+        a.addEventListener('click', function () { track('protocol_open', { location: a.dataset.cta || 'inline' }); });
+    });
+    document.querySelectorAll('a[href*="dashboard"]').forEach(function (a) {
+        a.addEventListener('click', function () { track('dashboard_open', { location: a.dataset.cta || 'inline' }); });
+    });
 
-    /* Pre-registration form — builds a mailto: with structured body */
+    /* Pre-registration form — POSTs to the configured endpoint.
+       No mailto: anywhere in the submit path. Honeypot + inline errors.
+       Server-side validation lives with the form provider. */
     const preregForm = document.getElementById('preregForm');
     if (preregForm) {
+        const statusEl = document.getElementById('preregStatus');
+        const submitBtn = document.getElementById('preregSubmit');
+
+        function setFieldError(input, show) {
+            const field = input.closest('.prereg-form__field');
+            const err = field ? field.querySelector('.prereg-form__error') : null;
+            if (err) err.hidden = !show;
+            input.classList.toggle('is-invalid', show);
+        }
+        function showStatusMsg(msg) {
+            if (!statusEl) return;
+            statusEl.hidden = false;
+            statusEl.textContent = msg;
+        }
+        function clearStatusMsg() {
+            if (statusEl) { statusEl.hidden = true; statusEl.textContent = ''; }
+        }
+
         preregForm.addEventListener('submit', function (e) {
             e.preventDefault();
+            clearStatusMsg();
+
+            const nameInput = preregForm.querySelector('input[name="name"]');
+            const emailInput = preregForm.querySelector('input[name="email"]');
+            const honeypot = preregForm.querySelector('input[name="website"]');
+
+            const name = (nameInput.value || '').trim();
+            const email = (emailInput.value || '').trim();
+            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+            setFieldError(nameInput, !name);
+            setFieldError(emailInput, !emailOk);
+            if (!name || !emailOk) return;
+
+            // Honeypot: silently drop bot submissions.
+            if (honeypot && honeypot.value.trim() !== '') return;
+
+            const endpoint = preregForm.dataset.endpoint || '';
+            if (!endpoint || endpoint.indexOf('[CONFIG') === 0) {
+                showStatusMsg('Submissions are briefly offline. Please email hiren@ekantikcapital.com with the subject "Ekantik 500 pre-registration".');
+                return;
+            }
+
             const fd = new FormData(preregForm);
-            const name = (fd.get('name') || '').trim();
-            const email = (fd.get('email') || '').trim();
-            const capital = (fd.get('capital') || '').trim();
-            const curiosity = (fd.get('curiosity') || '').trim();
-            const subject = 'Ekantik 500 — pre-registration: ' + name;
-            const body = [
-                'Pre-registration submission',
-                '',
-                'Name:      ' + name,
-                'Email:     ' + email,
-                'Capital:   ' + (capital || '(not specified)'),
-                '',
-                'Curiosity:',
-                curiosity || '(none)',
-                '',
-                '---',
-                'Submitted from epig500.ekantikcapital.com pre-registration form.'
-            ].join('\n');
-            const mailto = 'mailto:hiren@ekantikcapital.com'
-                + '?subject=' + encodeURIComponent(subject)
-                + '&body=' + encodeURIComponent(body);
-            track('prereg_submit', { capital: capital || 'unspecified' });
-            window.location.href = mailto;
+            fd.delete('website');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting…';
+
+            fetch(endpoint, { method: 'POST', body: fd, headers: { Accept: 'application/json' } })
+                .then(function (r) {
+                    if (!r.ok) throw new Error('HTTP ' + r.status);
+                    track('prereg_submit_success', { capital: (fd.get('capital') || 'unspecified') });
+                    const tpl = document.getElementById('preregSuccessTemplate');
+                    if (tpl) {
+                        const success = tpl.content.cloneNode(true);
+                        preregForm.replaceWith(success);
+                    }
+                })
+                .catch(function () {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit pre-registration';
+                    showStatusMsg('Something went wrong submitting the form. Please try again, or email hiren@ekantikcapital.com.');
+                });
         });
     }
 
@@ -623,25 +784,34 @@
     }
 
     // Live trades.json is the single source of truth — no embedded fallback.
+    // Period discipline: only protocol-bound Period 2 trades feed the page-level
+    // battery. The Period 1 Telegram record stays on the dashboard, never here.
     let REFERENCE_TRADES = [];
-    let CURRENT_DATASET_LABEL = 'Loading live record…';
+    let CURRENT_DATASET_LABEL = 'Live pre-registration record';
     let currentTrades = [];
     const BATTERY_MIN_N = 30;
-    fetch('data/trades.json?t=' + Date.now(), { cache: 'no-store' })
-        .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (json) {
-            if (!json || !json.trades) return;
-            REFERENCE_TRADES = json.trades.slice();
+    tradesWithTimeout
+        .then(function (trades) {
+            REFERENCE_TRADES = trades.filter(isProtocolBound);
             currentTrades = REFERENCE_TRADES.slice();
-            const live = REFERENCE_TRADES.filter(function (t) { return t.period === 'pre_reg'; }).length;
-            CURRENT_DATASET_LABEL = 'Live pre-reg record (' + live + ' trades)';
+            CURRENT_DATASET_LABEL = 'Live pre-reg record (' + REFERENCE_TRADES.length + ' trades)';
             if (typeof renderBattery === 'function') renderBattery(currentTrades);
             // Refresh the §Arithmetic Booster Engine baseline now that real data is in.
             if (typeof window.__epigArithRefreshBaseline === 'function') {
                 try { window.__epigArithRefreshBaseline(); } catch (e) {}
             }
         })
-        .catch(function () {});
+        .catch(function () {
+            // Static fallback — pending copy must not persist on screen.
+            const verdict = document.getElementById('batteryVerdict');
+            const timestamp = document.getElementById('batteryTimestamp');
+            const datasetLabel = document.getElementById('batteryDataset');
+            const grid = document.getElementById('batteryGrid');
+            if (timestamp) timestamp.textContent = 'unavailable right now';
+            if (datasetLabel) datasetLabel.textContent = 'live pre-registration record';
+            if (verdict) verdict.textContent = 'Activates at ' + BATTERY_MIN_N + '+ trades';
+            if (grid) grid.innerHTML = '<div style="padding:24px;text-align:center;color:var(--slate);font-size:14px;line-height:1.6"><p style="margin:0">The live record updates within 24 hours of every closed trade — <a href="/dashboard.html">open the dashboard →</a></p></div>';
+        });
 
     /* ------------------------------------------------
        5. 8-TEST SUSTAINABILITY BATTERY
@@ -1054,8 +1224,7 @@
     }
     function resetToSample() {
         currentTrades = REFERENCE_TRADES.slice();
-        const live = currentTrades.filter(function (t) { return t.period === 'pre_reg'; }).length;
-        CURRENT_DATASET_LABEL = 'Live pre-reg record (' + live + ' trades)';
+        CURRENT_DATASET_LABEL = 'Live pre-reg record (' + currentTrades.length + ' trades)';
         renderBattery(currentTrades);
         showStatus('Reset to live pre-registration record.', 'info');
     }
@@ -1195,7 +1364,7 @@
     if (calendlyContainer && 'IntersectionObserver' in window) {
         const cIO = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) { if (entry.isIntersecting) { loadCalendly(calendlyContainer); cIO.disconnect(); } });
-        }, { threshold: 0.2 });
+        }, { threshold: 0, rootMargin: '200px 0px' });
         cIO.observe(calendlyContainer);
     } else if (calendlyContainer) {
         loadCalendly(calendlyContainer);
@@ -1292,7 +1461,7 @@
             // Returns { idx, strat } for the END of the window. Wraps buildSeries so
             // the cards reflect the exact same model as the chart: 80% SPY foundation
             // (compounded by index TR) + 20% capture-asymmetric engine (slider-driven)
-            // + optional Booster Engine layer (N contracts × ~15.84% NLV/yr, linear).
+            // + optional Booster Engine layer (claim-gated; Period 2 throughput, linear).
             // At sliders 100/100 and contracts=0, strat === idx (calibration check).
             const s = buildSeries(years, up, down, contracts || 0);
             const last = s[s.length - 1];
@@ -1392,12 +1561,11 @@
             else if (ratio >= 0.95)            comparePhrase = 'roughly matching';
             else                                comparePhrase = Math.round((1 - ratio) * 100) + '% less than';
 
-            // Booster clause
+            // Booster clause — only when the countersigned flag is on; no monthly dollarization.
             let boosterClause = '';
-            if (activeRiskPct > 0) {
+            if (activeRiskPct > 0 && EPIG_FLAGS.BOOSTER_TOGGLE_ENABLED) {
                 const m = throughputBaselineMeta;
-                const dollarsPerMonth = ((m.ratePct || 0) * 1000 / 12).toFixed(0);
-                boosterClause = ', AND the Booster Engine delivers its live-record throughput (~<strong>$' + parseInt(dollarsPerMonth,10).toLocaleString() + '/month at the 0.5% risk anchor</strong>) consistently';
+                boosterClause = ', AND the Booster Engine repeats its protocol-bound live-record throughput (sample: <strong>' + (m.tradeCount || 0) + ' trades</strong>, at the 0.5% risk anchor) consistently';
             }
 
             // Window label in plain text
@@ -1429,23 +1597,21 @@
         const ALLOC_ENG = 0.20;
         let activeWindow = 'full';
         // Booster Engine state: 0 = off; 0.5 = on (live-record extrapolation at the
-        // 0.5% architectural risk anchor, the level the actual record was generated at).
-        // Default is "on" so the projected boost is visible without an extra click.
-        let activeRiskPct = 0.5;
+        // 0.5% architectural risk anchor). Ships OFF: the engine layer only unlocks
+        // when BOOSTER_TOGGLE_ENABLED is countersigned on (spec §5), and is then
+        // computed from protocol-bound Period 2 trades only.
+        let activeRiskPct = 0;
 
         // Annual throughput as a fraction of $100K starting NLV at the 0.5% per-trade
-        // architectural risk anchor. Initial value is a fallback derived from the
-        // 196-trade Telegram record (369.5 pts / 14 active months × 12 × $50 / $100K
-        // = ~15.84%). Once REFERENCE_TRADES populates from data/trades.json, the
-        // baseline is recomputed LIVE from the combined record (historical +
-        // pre-registration), so every admin publish flows through automatically.
-        let THROUGHPUT_RATE_AT_HISTORICAL_RISK = 0.1584;
+        // architectural risk anchor. No hardcoded fallback: the rate stays 0 until it
+        // is computed from the protocol-bound Period 2 record (REFERENCE_TRADES).
+        let THROUGHPUT_RATE_AT_HISTORICAL_RISK = 0;
         let throughputBaselineMeta = {
-            source: 'fallback (hardcoded 196-trade Telegram derivation)',
-            tradeCount: 196,
-            totalPts: 369.5,
-            activeMonths: 14,
-            ratePct: 15.84
+            source: 'protocol-bound Period 2 record (pending)',
+            tradeCount: 0,
+            totalPts: 0,
+            activeMonths: 0,
+            ratePct: 0
         };
         const HISTORICAL_RISK_PCT = 0.5;
 
@@ -1507,11 +1673,12 @@
         // Refresh the baseline + re-render. Called by the outer fetch handler once
         // REFERENCE_TRADES populates. Safe to call repeatedly.
         function refreshBaselineFromLiveRecord() {
+            // REFERENCE_TRADES is Period-2-only by construction (see fetch handler).
             const meta = computeBaselineFromTrades(REFERENCE_TRADES);
             if (meta && isFinite(meta.rate) && meta.rate > 0) {
                 THROUGHPUT_RATE_AT_HISTORICAL_RISK = meta.rate;
                 throughputBaselineMeta = Object.assign({
-                    source: 'live combined record (historical + pre-registration)'
+                    source: 'protocol-bound Period 2 live record'
                 }, meta);
             }
             updateBaselineIndicator();
@@ -1521,31 +1688,29 @@
         function updateBaselineIndicator() {
             const el = document.getElementById('arithBaselineIndicator');
             if (!el) return;
+
+            // CLAIM GATE (spec §5): no throughput %, $/yr, or $/mo figure may render
+            // while CLAIMS_THROUGHPUT_ENABLED is off. Monthly dollarization stays
+            // removed permanently even after the gate opens.
+            if (!EPIG_FLAGS.CLAIMS_THROUGHPUT_ENABLED) {
+                const n = REFERENCE_TRADES.length;
+                el.innerHTML =
+                      '<p class="arith-baseline__headline"><span class="diamond">◆</span> Engine throughput will be reported here from the protocol-bound live record once the battery activates at 30 closed trades (currently ' + n + '). Until then, we publish the trades — not an extrapolation.</p>';
+                return;
+            }
+
             const m = throughputBaselineMeta;
             const ratePct = (m.ratePct || 0).toFixed(2);
             const totalPts = (m.totalPts || 0).toFixed(1);
-            const dollarsPerYear = ((m.ratePct || 0) * 1000).toFixed(0);  // % NLV/yr × $100K / 100 → $ per yr
-            const dollarsPerMonth = Math.round(dollarsPerYear / 12);
-            const evStr = m.evPerTrade !== undefined ? (m.evPerTrade >= 0 ? '+' : '') + m.evPerTrade.toFixed(2) + ' pts' : '—';
-            const avgLossStr = m.avgLoss !== undefined ? m.avgLoss.toFixed(2) + ' pts' : '—';
-            const rExpStr = m.rExpectancy !== undefined ? (m.rExpectancy >= 0 ? '+' : '') + m.rExpectancy.toFixed(2) + 'R' : '—';
-            const tpyStr = m.tradesPerYear !== undefined ? m.tradesPerYear.toFixed(0) : '—';
-            const annualRStr = m.annualR !== undefined ? (m.annualR >= 0 ? '+' : '') + m.annualR.toFixed(1) + 'R/yr' : '—';
             const trades = m.tradeCount || 0;
             const months = m.activeMonths || 0;
 
             el.innerHTML =
                   '<p class="arith-baseline__headline">'
-                +   '<span class="diamond">◆</span> What the Booster Engine has delivered on the live record · <strong>+' + ratePct + '% NLV / yr</strong> on a $100K portfolio'
-                +   ' <span class="arith-baseline__dollars">≈ $' + parseInt(dollarsPerYear,10).toLocaleString() + '/yr · $' + dollarsPerMonth.toLocaleString() + '/month</span>'
-                + '</p>'
-                + '<p class="arith-baseline__r">'
-                +   'Annual R framing: avg loss <strong>' + avgLossStr + '</strong> = <strong>1R</strong>'
-                +   ' · EV/trade <strong>' + evStr + '</strong> · R-expectancy <strong>' + rExpStr + '/trade</strong>'
-                +   ' · ~' + tpyStr + ' trades/yr · <strong>Annual R = ' + annualRStr + '</strong>'
+                +   '<span class="diamond">◆</span> Booster Engine throughput on the protocol-bound live record · <strong>+' + ratePct + '% NLV / yr</strong> on a $100K portfolio · sample: <strong>' + trades + ' trades</strong>'
                 + '</p>'
                 + '<p class="arith-baseline__src">'
-                +   '<em>Source: live combined record (' + trades + ' trades · ' + totalPts + ' pts · ' + months + ' active months). Updates automatically with every admin publish. Throughput modeled at the 0.5% per-trade architectural risk anchor — the level the record was generated at. Historical illustration of past throughput extrapolated forward at constant contract count; not a projection of any Ekantik strategy.</em>'
+                +   '<em>Source: protocol-bound Period 2 live record (' + trades + ' trades · ' + totalPts + ' pts · ' + months + ' active months). Updates automatically with every admin publish. Throughput modeled at the 0.5% per-trade architectural risk anchor — the level the record was generated at. Historical illustration of past throughput extrapolated forward at constant contract count; not a projection of any Ekantik strategy.</em>'
                 + '</p>';
         }
 
@@ -1714,11 +1879,19 @@
             const baseline = document.getElementById('arithBaselineIndicator');
             const isOn = activeRiskPct > 0;
             if (legend) legend.hidden = !isOn;
-            if (baseline) baseline.style.opacity = isOn ? '1' : '0.5';
+            // The claim-gate notice stays fully visible while throughput claims are off.
+            if (baseline) baseline.style.opacity = (isOn || !EPIG_FLAGS.CLAIMS_THROUGHPUT_ENABLED) ? '1' : '0.5';
         }
         document.querySelectorAll('.arith-contract').forEach(function (chip) {
+            const risk = parseFloat(chip.getAttribute('data-risk')) || 0;
+            if (risk > 0 && EPIG_FLAGS.BOOSTER_TOGGLE_ENABLED) {
+                chip.disabled = false;
+                chip.removeAttribute('aria-disabled');
+            }
             chip.addEventListener('click', function () {
-                activeRiskPct = parseFloat(chip.getAttribute('data-risk')) || 0;
+                if (chip.disabled) return;
+                if (risk > 0 && !EPIG_FLAGS.BOOSTER_TOGGLE_ENABLED) return;
+                activeRiskPct = risk;
                 document.querySelectorAll('.arith-contract').forEach(function (c) { c.classList.toggle('is-active', c === chip); });
                 syncThroughLegend();
                 render();   // re-render both cards AND chart so they stay in sync
