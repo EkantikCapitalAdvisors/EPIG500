@@ -4300,3 +4300,39 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     background: rgba(27, 42, 74, 0.35);
 }
 #arithEquityCanvas { touch-action: pan-y; }
+
+/* ---- Arithmetic chart: free date-range picker ---- */
+.arith-chart__range {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-3);
+    margin-top: var(--s-3);
+}
+.arith-chart__range-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--slate-dark);
+}
+.arith-chart__range-field {
+    font-size: 13px;
+    color: var(--navy);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.arith-chart__range-field select {
+    font: inherit;
+    font-size: 13px;
+    color: var(--navy);
+    background: var(--white);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 5px 8px;
+    cursor: pointer;
+}
+.arith-chart__range-field select:focus {
+    outline: none;
+    border-color: var(--gold-deep);
+}
+.arith-chart__range-arrow { color: var(--slate); }

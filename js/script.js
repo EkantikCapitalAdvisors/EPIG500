@@ -1573,14 +1573,19 @@
 
         // Inclusive year-range helper.
         function yrSpan(a, b) { const o = []; for (let y = a; y <= b; y++) o.push(y); return o; }
+        const DATA_MIN_YEAR = 1975, DATA_MAX_YEAR = 2024;
 
-        // `card: false` → chart-tab only, kept out of the 3-card comparison snapshot.
         const windows = [
-            { id: 'calm',   label: 'Calm bull run',     range: '2013 – 2019', years: yrSpan(2013, 2019) },
-            { id: 'crash',  label: 'Crash window',      range: '2007 – 2010', years: yrSpan(2007, 2010) },
-            { id: 'full',   label: 'Full 20-year span', range: '2005 – 2024', years: yrSpan(2005, 2024) },
-            { id: 'full50', label: 'Full 50-year span', range: '1975 – 2024', years: yrSpan(1975, 2024), card: false }
+            { id: 'calm',  label: 'Calm bull run',     range: '2013 – 2019', years: yrSpan(2013, 2019) },
+            { id: 'crash', label: 'Crash window',      range: '2007 – 2010', years: yrSpan(2007, 2010) },
+            { id: 'full',  label: 'Full 20-year span', range: '2005 – 2024', years: yrSpan(2005, 2024) }
         ];
+
+        // Single source of truth for the active range. Presets set it; the From/To
+        // pickers set it to an arbitrary span anywhere in 1975–2024.
+        let activeYears = yrSpan(2005, 2024);
+        function rangeStartYear() { return activeYears[0]; }
+        function rangeEndYear() { return activeYears[activeYears.length - 1]; }
 
         function compound(years, up, down, contracts) {
             // Returns { idx, strat } for the END of the window. Wraps buildSeries so
@@ -1666,10 +1671,9 @@
         function renderPlainEnglish(up, down) {
             const el = document.getElementById('arithPlainEnglish');
             if (!el) return;
-            const win = windows.find(function (w) { return w.id === activeWindow; }) || windows[2];
-            const series = buildSeries(win.years, up, down, activeRiskPct);
+            const series = buildSeries(activeYears, up, down, activeRiskPct);
             const last = series[series.length - 1];
-            const years = win.years.length;
+            const years = activeYears.length;
             const NLV0 = 100000;
             const stratDollar = last.total * NLV0;
             const idxDollar = last.idx * NLV0;
@@ -1695,12 +1699,12 @@
 
             // Window label in plain text
             const winLabelMap = {
-                full:   'over the full 20-year span (2005–2024)',
-                full50: 'over the full 50-year span (1975–2024)',
-                calm:   'across the calm 2013–2019 bull run',
-                crash:  'through the 2007–2010 crash window'
+                full:  'over the full 20-year span (2005–2024)',
+                calm:  'across the calm 2013–2019 bull run',
+                crash: 'through the 2007–2010 crash window'
             };
-            const winLabel = winLabelMap[win.id] || ('over ' + win.range);
+            const winLabel = winLabelMap[activeWindow]
+                || ('over the ' + years + '-year window you selected (' + rangeStartYear() + '–' + rangeEndYear() + ')');
 
             el.innerHTML =
                   '<span class="diamond">◆</span> <strong>In plain English ' + winLabel + ':</strong> '
@@ -1891,8 +1895,7 @@
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             ctx.clearRect(0, 0, W, H);
 
-            const win = windows.find(function (w) { return w.id === activeWindow; }) || windows[2];
-            const series = buildSeries(win.years, up, down, activeRiskPct);
+            const series = buildSeries(activeYears, up, down, activeRiskPct);
 
             const PAD_L = 56, PAD_R = 24, PAD_T = 24, PAD_B = 36;
             const xN = series.length - 1;
@@ -1902,7 +1905,7 @@
             // Long horizons (50-year) compound across multiple decades; a linear axis
             // crushes the early years into a flat line. Use a log y-axis so equal
             // vertical distance = equal % move and every decade stays legible.
-            const useLog = win.years.length > 25;
+            const useLog = activeYears.length > 25;
             const yMax = maxVal * 1.05;
             const yMin = useLog ? Math.max(0.4, minVal * 0.9) : Math.min(minVal * 0.95, 0.5);
             const lyMin = Math.log10(yMin), lyMax = Math.log10(yMax);
@@ -2032,10 +2035,9 @@
         function updateChartReading(up, down) {
             const el = document.getElementById('arithChartReading');
             if (!el) return;
-            const win = windows.find(function (w) { return w.id === activeWindow; }) || windows[2];
             let m = 1, idx = 1;
-            for (let i = 0; i < win.years.length; i++) {
-                const r = SP_TR[win.years[i]];
+            for (let i = 0; i < activeYears.length; i++) {
+                const r = SP_TR[activeYears[i]];
                 const c = r >= 0 ? up : down;
                 m *= (1 + r * c) / (1 + r);
                 idx *= (1 + r);
@@ -2099,17 +2101,57 @@
             canvas.addEventListener('pointerleave', hide);
         })();
 
-        // Window tabs
+        const fromSel = document.getElementById('arithFrom');
+        const toSel = document.getElementById('arithTo');
+
+        function redrawRange() {
+            const up = parseInt(document.getElementById('arithUp').value, 10) / 100;
+            const down = parseInt(document.getElementById('arithDown').value, 10) / 100;
+            drawEquityChart(up, down);
+            renderPlainEnglish(up, down);
+        }
+        function syncPickers() {
+            if (fromSel) fromSel.value = String(rangeStartYear());
+            if (toSel) toSel.value = String(rangeEndYear());
+        }
+        // Populate the From/To year dropdowns (1975–2024).
+        if (fromSel && toSel) {
+            let opts = '';
+            for (let yy = DATA_MIN_YEAR; yy <= DATA_MAX_YEAR; yy++) opts += '<option value="' + yy + '">' + yy + '</option>';
+            fromSel.innerHTML = opts; toSel.innerHTML = opts;
+            syncPickers();
+        }
+
+        // Preset tabs — also sync the pickers to the preset's bounds.
         document.querySelectorAll('.arith-tab').forEach(function (tab) {
             tab.addEventListener('click', function () {
-                activeWindow = tab.getAttribute('data-window');
+                const id = tab.getAttribute('data-window');
+                const w = windows.find(function (x) { return x.id === id; });
+                if (!w) return;
+                activeWindow = id;
+                activeYears = w.years.slice();
                 document.querySelectorAll('.arith-tab').forEach(function (t) { t.classList.toggle('is-active', t === tab); });
-                const up = parseInt(document.getElementById('arithUp').value, 10) / 100;
-                const down = parseInt(document.getElementById('arithDown').value, 10) / 100;
-                drawEquityChart(up, down);
-                renderPlainEnglish(up, down);
+                syncPickers();
+                redrawRange();
             });
         });
+
+        // Free date-range picker — any span in the last 50 years.
+        function onPickerChange(changed) {
+            let from = parseInt(fromSel.value, 10);
+            let to = parseInt(toSel.value, 10);
+            // Keep from ≤ to: nudge the *other* control so the user's last pick stands.
+            if (from > to) {
+                if (changed === 'from') { to = from; toSel.value = String(to); }
+                else { from = to; fromSel.value = String(from); }
+            }
+            activeWindow = 'custom';
+            activeYears = yrSpan(from, to);
+            document.querySelectorAll('.arith-tab').forEach(function (t) { t.classList.remove('is-active'); });
+            redrawRange();
+        }
+        if (fromSel) fromSel.addEventListener('change', function () { onPickerChange('from'); });
+        if (toSel) toSel.addEventListener('change', function () { onPickerChange('to'); });
 
         // Booster Engine on/off toggle.
         function syncThroughLegend() {
