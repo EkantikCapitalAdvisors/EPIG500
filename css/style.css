@@ -4445,3 +4445,58 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .vt-bar { grid-template-columns: 1fr; gap: 4px; }
     .vt-bar__val { text-align: left; }
 }
+
+/* ---- Calculator 4 — Worst Case, Priced (loss bounds ladder) ---- */
+.cb-controls { display: grid; grid-template-columns: 1fr auto; gap: var(--s-6); align-items: end; }
+.cb-controls input[type="number"] {
+    width: 110px;
+    font: 13px 'JetBrains Mono', monospace;
+    color: var(--navy);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 4px 8px;
+}
+.cb-stepper { display: flex; align-items: center; gap: var(--s-3); padding-bottom: var(--s-2); flex-wrap: wrap; }
+.cb-stepper__label { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--gold-deep); }
+.cb-stepper__btn {
+    width: 44px; height: 44px;
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    background: var(--ivory);
+    color: var(--navy);
+    font-size: 20px;
+    cursor: pointer;
+}
+.cb-stepper__btn:hover { border-color: var(--navy); }
+.cb-stepper__n { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 22px; color: var(--navy); min-width: 24px; text-align: center; }
+.cb-warn { font-size: 12px; color: var(--gold-deep); font-style: italic; }
+.cb-ladder { display: grid; gap: var(--s-3); margin-top: var(--s-4); }
+.cb-rung {
+    display: flex;
+    gap: var(--s-4);
+    align-items: flex-start;
+    background: var(--ivory);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: var(--s-4);
+}
+.cb-rung__id {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--slate-dark);
+    background: var(--white);
+    border: 1px solid var(--card-border);
+    border-radius: 3px;
+    padding: 3px 8px;
+    white-space: nowrap;
+    margin-top: 2px;
+}
+.cb-rung__title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--slate-dark); }
+.cb-rung__fig { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 20px; color: var(--navy); margin: 2px 0; }
+.cb-rung__fig--rule { font-family: var(--font-sans); font-size: 14px; font-weight: 600; }
+.cb-rung__text { font-size: 13px; line-height: 1.55; color: var(--slate); }
+.cb-rung--kill { border-left: 3px solid #E05A6B; }
+.cb-rung--kill .cb-rung__fig, .cb-rung--kill .cb-rung__id { color: #E05A6B; }
+.cb-protocol-link { font-size: 13px; font-weight: 600; color: var(--navy); margin-left: var(--s-4); }
+@media (max-width: 720px) { .cb-controls { grid-template-columns: 1fr; } }
