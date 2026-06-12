@@ -223,14 +223,171 @@
         if (sTf) {
             renderKpis(sTf);
             drawEquityCurve(sTf);
+            renderMonthly(tfSlice);
         } else {
             document.getElementById('dashKpis').innerHTML = '<div class="kpi" style="grid-column:1/-1;text-align:center;padding:24px"><p class="kpi__sub">No trades in this window. Pick a wider timeframe.</p></div>';
             const ctx = document.getElementById('dashEquityCurve').getContext('2d');
             ctx.clearRect(0, 0, document.getElementById('dashEquityCurve').width, document.getElementById('dashEquityCurve').height);
             document.getElementById('dashChartSub').textContent = '—';
+            clearMonthly();
         }
         if (sFull) renderBattery(sFull);
         applyFilters();   // re-applies search/result/side over the current timeframe slice
+    }
+
+    /* ------------------------------------------------
+       Monthly P&L breakdown — bar chart + table.
+       Groups the timeframe-filtered trades by YYYY-MM and renders:
+         - canvas bar chart (gold = positive months, red = negative)
+         - audit table with trades / W-L / WR / net pts / net $ / best / worst
+       Respects the active timeframe selector (uses tfSlice).
+       ------------------------------------------------ */
+    function clearMonthly() {
+        const sub = document.getElementById('dashMonthlySub');
+        if (sub) sub.textContent = '—';
+        const body = document.getElementById('dashMonthlyBody');
+        if (body) body.innerHTML = '';
+        const canvas = document.getElementById('dashMonthlyChart');
+        if (canvas) canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function groupByMonth(trades) {
+        // Returns sorted array of { ym, label, trades[], n, wins, losses, be, wr, net, dollars, best, worst }
+        const buckets = {};
+        for (let i = 0; i < trades.length; i++) {
+            const t = trades[i];
+            if (!t.timestamp) continue;
+            const ym = String(t.timestamp).slice(0, 7); // YYYY-MM
+            (buckets[ym] = buckets[ym] || []).push(t);
+        }
+        const keys = Object.keys(buckets).sort();
+        return keys.map(function (ym) {
+            const ts = buckets[ym];
+            let wins = 0, losses = 0, be = 0, net = 0, best = -Infinity, worst = Infinity;
+            for (let i = 0; i < ts.length; i++) {
+                const p = ts[i].pts;
+                net += p;
+                if (p > 0) wins++;
+                else if (p < 0) losses++;
+                else be++;
+                if (p > best) best = p;
+                if (p < worst) worst = p;
+            }
+            const ruled = ts.length - be;
+            const d = new Date(ym + '-01T00:00:00Z');
+            const label = d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+            return {
+                ym: ym, label: label, n: ts.length,
+                wins: wins, losses: losses, be: be,
+                wr: ruled > 0 ? wins / ruled : 0,
+                net: net, dollars: net * 50,
+                best: isFinite(best) ? best : 0,
+                worst: isFinite(worst) ? worst : 0
+            };
+        });
+    }
+
+    function renderMonthly(trades) {
+        const months = groupByMonth(trades);
+        const sub = document.getElementById('dashMonthlySub');
+        const body = document.getElementById('dashMonthlyBody');
+
+        if (!months.length) { clearMonthly(); return; }
+
+        const positives = months.filter(function (m) { return m.net > 0; }).length;
+        const negatives = months.filter(function (m) { return m.net < 0; }).length;
+        const total = months.reduce(function (a, m) { return a + m.net; }, 0);
+        const avg = total / months.length;
+        sub.innerHTML = months.length + ' months · '
+            + '<span style="color:var(--forest,#2D5016)">' + positives + ' up</span> · '
+            + '<span style="color:var(--signal,#DC2626)">' + negatives + ' down</span> · '
+            + 'avg <strong>' + (avg >= 0 ? '+' : '') + avg.toFixed(1) + ' pts/mo</strong> '
+            + '<span style="color:var(--slate)">(≈ $' + Math.round(avg * 50).toLocaleString() + '/mo per /ES)</span>';
+
+        // Table rows
+        body.innerHTML = months.map(function (m) {
+            const netClass = m.net > 0 ? 'pos' : m.net < 0 ? 'neg' : 'zero';
+            const wrPct = (m.wr * 100).toFixed(0) + '%';
+            return ''
+                + '<tr>'
+                +   '<td>' + m.label + '</td>'
+                +   '<td class="num">' + m.n + '</td>'
+                +   '<td class="num">' + m.wins + ' / ' + m.losses + (m.be ? ' / ' + m.be + ' BE' : '') + '</td>'
+                +   '<td class="num">' + wrPct + '</td>'
+                +   '<td class="num ' + netClass + '">' + (m.net >= 0 ? '+' : '') + m.net.toFixed(2) + '</td>'
+                +   '<td class="num ' + netClass + '">$' + Math.round(m.dollars).toLocaleString() + '</td>'
+                +   '<td class="num pos">+' + m.best.toFixed(1) + '</td>'
+                +   '<td class="num neg">' + m.worst.toFixed(1) + '</td>'
+                + '</tr>';
+        }).join('');
+
+        drawMonthlyChart(months);
+    }
+
+    function drawMonthlyChart(months) {
+        const canvas = document.getElementById('dashMonthlyChart');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+        const W = canvas.clientWidth || 1100;
+        const H = canvas.clientHeight || 220;
+        canvas.width = W * dpr; canvas.height = H * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, W, H);
+
+        const PAD_L = 56, PAD_R = 24, PAD_T = 16, PAD_B = 36;
+        const n = months.length;
+        const maxAbs = Math.max.apply(null, months.map(function (m) { return Math.abs(m.net); })) || 1;
+        const yMax = maxAbs * 1.15;
+        const yMin = -yMax;
+
+        function x(i) { return PAD_L + (i + 0.5) * ((W - PAD_L - PAD_R) / Math.max(1, n)); }
+        function y(v) { return PAD_T + (yMax - v) / (yMax - yMin) * (H - PAD_T - PAD_B); }
+
+        // Grid + Y labels
+        ctx.font = '10px "Source Sans 3", sans-serif';
+        ctx.strokeStyle = 'rgba(27,42,74,0.06)'; ctx.lineWidth = 1;
+        ctx.fillStyle = '#64748B'; ctx.textAlign = 'right';
+        const yStep = niceStep(maxAbs);
+        for (let v = -Math.ceil(maxAbs / yStep) * yStep; v <= maxAbs * 1.05; v += yStep) {
+            const yy = y(v);
+            if (yy < PAD_T || yy > H - PAD_B) continue;
+            ctx.beginPath(); ctx.moveTo(PAD_L, yy); ctx.lineTo(W - PAD_R, yy); ctx.stroke();
+            ctx.fillText((v >= 0 ? '+' : '') + v.toFixed(0), PAD_L - 6, yy + 3);
+        }
+        // Zero line emphasized
+        const y0 = y(0);
+        ctx.strokeStyle = 'rgba(27,42,74,0.3)'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(PAD_L, y0); ctx.lineTo(W - PAD_R, y0); ctx.stroke();
+
+        // Bars
+        const barW = Math.min(28, Math.max(6, (W - PAD_L - PAD_R) / n * 0.7));
+        for (let i = 0; i < n; i++) {
+            const m = months[i];
+            const cx = x(i);
+            const yTop = y(Math.max(m.net, 0));
+            const yBot = y(Math.min(m.net, 0));
+            ctx.fillStyle = m.net >= 0 ? '#C8A951' : '#DC2626';
+            ctx.fillRect(cx - barW / 2, yTop, barW, Math.max(1, yBot - yTop));
+        }
+
+        // X labels — first, last, and every few in between
+        ctx.fillStyle = '#64748B'; ctx.textAlign = 'center';
+        const every = Math.max(1, Math.ceil(n / 8));
+        for (let i = 0; i < n; i++) {
+            if (i % every !== 0 && i !== n - 1) continue;
+            ctx.fillText(months[i].label, x(i), H - PAD_B + 16);
+        }
+    }
+
+    function niceStep(maxAbs) {
+        if (maxAbs > 200) return 100;
+        if (maxAbs > 80) return 50;
+        if (maxAbs > 40) return 20;
+        if (maxAbs > 20) return 10;
+        if (maxAbs > 8) return 5;
+        if (maxAbs > 4) return 2;
+        return 1;
     }
 
     function renderTimeframeMeta(s, sliceLen) {
