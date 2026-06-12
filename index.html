@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260612d">
+    <link rel="stylesheet" href="css/style.css?v=20260612e">
 
     <script type="application/ld+json">
     {
@@ -134,7 +134,7 @@
                 </a>
                 <a href="#falsifiability" class="proof-tile">
                     <p class="proof-tile__label">Drawdown ceiling</p>
-                    <p class="proof-tile__value">Hard kill: −75 pts</p>
+                    <p class="proof-tile__value">Hard kill: −100 pts ($5K/ES)</p>
                     <p class="proof-tile__anchor">◆ See Stage 2 →</p>
                 </a>
             </div>
@@ -277,7 +277,7 @@
                 <p class="pillar-card__letter">P</p>
                 <h3 class="pillar-card__h">Principal Preservation</h3>
                 <p class="pillar-card__sub">Engineered to preserve capital first</p>
-                <p class="pillar-card__body">80% of capital sits in the <strong>synthetic-passive</strong> S&amp;P 500 foundation — passive by default, reduced by published overlay rules in genuine corrections. 20% is held in cash as an operational settlement buffer. On the futures engine, per-/ES-contract risk is fixed at <strong>0.5% NLV</strong> — the architectural anchor never changes. A trailing daily cap, a HWM−5% NLV floor, and a hard kill at −75 cumulative /ES points (1st-percentile of 50,000 bootstrap orderings) bound the worst case.</p>
+                <p class="pillar-card__body">80% of capital sits in the <strong>synthetic-passive</strong> S&amp;P 500 foundation — passive by default, reduced by published overlay rules in genuine corrections. 20% is held in cash as an operational settlement buffer. On the futures engine, per-/ES-contract risk is fixed at <strong>0.5% NLV</strong> — the architectural anchor never changes. A trailing daily cap, a HWM−5% NLV floor, and a hard kill at −100 cumulative /ES points ($5,000 per contract) bound the worst case.</p>
                 <p class="pillar-card__anchor"><a href="#ladder">See the risk cadence →</a></p>
             </article>
 
@@ -458,8 +458,8 @@
                 <span class="rm-card__cadence">Bi-weekly · Recovery</span>
                 <h3 class="rm-card__h">Two losing weeks → reduce</h3>
                 <div class="rm-rule">
-                    <p class="rm-rule__h"><span class="op">OP-06</span> Size reduction <em class="rm-new">v1.2</em></p>
-                    <p class="rm-rule__body"><strong>2nd consecutive losing week</strong> → engine sizing cuts to <strong>1/5 of normal</strong> (e.g. 1 /MES instead of 1 /ES). Daily filing under witness oversight for the duration.</p>
+                    <p class="rm-rule__h"><span class="op">OP-06</span> Size reduction <em class="rm-new">v1.4</em></p>
+                    <p class="rm-rule__body"><strong>2nd consecutive losing week</strong> → engine sizing cuts to <strong>half of normal</strong> (e.g. 5 /MES in place of 1 /ES — equivalent dollar exposure cut by 50%). Daily filing under witness oversight for the duration.</p>
                 </div>
                 <div class="rm-rule">
                     <p class="rm-rule__h"><span class="op">OP-07</span> Reinstatement <em class="rm-new">v1.2</em></p>
@@ -675,7 +675,7 @@
                     <p class="period__range">May 2026 → product launch</p>
                 </div>
                 <p class="period__h">Pre-registration live publication</p>
-                <p class="period__body">Every trade on the strategy published to the live dashboard within 24 hours of close. Tagged H2 or H3 per OP-04. Witnessed per the locked Falsifiability Protocol v1.3. Pre-registration participants get a continuous live record from restart through product launch — built openly, in public, trade by trade.</p>
+                <p class="period__body">Every trade on the strategy published to the live dashboard within 24 hours of close. Tagged H2 or H3 per OP-04. Witnessed per the locked Falsifiability Protocol v1.4. Pre-registration participants get a continuous live record from restart through product launch — built openly, in public, trade by trade.</p>
                 <div class="period__actions">
                     <a href="/dashboard.html" target="_blank" rel="noopener" class="btn btn--primary btn--sm">Open live dashboard ↗</a>
                 </div>
@@ -704,8 +704,8 @@
         <!-- Locked operational charter — published as pre-commitment artifact -->
         <div class="protocol-card">
             <div class="protocol-card__meta">
-                <p class="protocol-card__doc">Doc Ref: <code>FP-MOPS-V1.3-2026-06</code></p>
-                <p class="protocol-card__version">v1.3 · Synthetic-passive overlay rule set + overlay-alpha expression gate · Locked operational charter</p>
+                <p class="protocol-card__doc">Doc Ref: <code>FP-MOPS-V1.4-2026-06</code></p>
+                <p class="protocol-card__version">v1.4 · ED-05b hard kill revised to −100 pts ($5K/ES) · OP-06 size reduction revised to 1/2 · Locked operational charter</p>
             </div>
             <div class="protocol-card__body">
                 <p class="protocol-card__h"><span class="diamond">◆</span> The Falsifiability Protocol</p>
@@ -792,7 +792,7 @@
                         <tr><td>ED-03</td><td>Rolling-50 profit factor</td><td>&lt; 1.30</td><td>Test 3</td></tr>
                         <tr><td>ED-04</td><td>Rolling-50 W:L ratio</td><td>&lt; 1.10</td><td>Test 5</td></tr>
                         <tr><td>ED-05a</td><td>Realized peak-to-trough DD · <strong>warning</strong></td><td>&gt; −45 /ES pts (25th-pct bootstrap)</td><td>Architecture-linked</td></tr>
-                        <tr><td>ED-05b</td><td>Realized peak-to-trough DD · <strong>hard kill</strong></td><td>&gt; −75 /ES pts (1st-pct bootstrap)</td><td>Architecture-linked</td></tr>
+                        <tr><td>ED-05b</td><td>Realized peak-to-trough DD · <strong>hard kill</strong></td><td>&gt; −100 /ES pts ($5,000 per contract)</td><td>Architecture-linked</td></tr>
                         <tr><td>ED-06</td><td>Top-3 winner removal</td><td>P&amp;L &lt; 0 without top-3</td><td>Test 4</td></tr>
                         <tr><td>ED-07</td><td>Consecutive loss streak</td><td>Single streak ≥ 7</td><td>Test 7</td></tr>
                         <tr><td>ED-08</td><td>P-value floor</td><td>p &gt; 0.10 past trade 100</td><td>Test 1</td></tr>
@@ -909,7 +909,7 @@
             <!-- <details class="faq__item"><summary>What is the proposed fee structure?</summary><div class="faq__body"><p>The structure documented for launch: 6% high-watermark hurdle plus 25% of profits above that hurdle. In any period where the strategy delivers less than 6%, no performance fee would be charged. The hurdle resets annually to the peak.</p></div></details> -->
             <details class="faq__item"><summary>How would an investor know if the strategy has stopped working?</summary><div class="faq__body"><p>Ekantik 500 publishes <strong>four</strong> falsifiability gates — two engines, four gates, all binding, all observable in real time. The futures engine carries its Fidelity Layer (OP-01–07, operator-discipline criteria) and its Expression Layer (ED-01–08, statistical kill conditions). The synthetic-passive overlay carries its own pair: an overlay Fidelity Layer (the exact exposure-step rules, executed without discretion) and an overlay Expression Layer (beat-or-protect versus simply holding, measured over a full market cycle). If any gate fires, participants receive notification within 24 hours, the implicated layer immediately reduces to zero new exposure, and the trigger condition is published.</p></div></details>
             <details class="faq__item"><summary>Can I see the underlying trade record?</summary><div class="faq__body"><p>Yes. Every trade on the strategy since the May 2026 pre-registration restart is published on the <a href="/dashboard.html">live dashboard</a> within 24 hours of close, and exportable as CSV from there. No historical trade record is currently published — the live record is what exists. The same 8-test battery you can run on this data, you can run on your own.</p></div></details>
-            <details class="faq__item"><summary>What is the historical Telegram record, and why isn't it the basis for the sustainability claim?</summary><div class="faq__body"><p>196 trades on the Majority Opinion Predisposal Strategy were posted in real time to a private Telegram channel between April 2023 and October 2024. That record is viewable on the live dashboard for transparency, but it <strong>predates the locked Falsifiability Protocol</strong>: no third-party witness, no Stage-1 / Stage-2 gates armed in advance, no OP-04 per-trade tagging at the time of trade. The protocol-bound, witnessed record begins with the May 2026 pre-registration restart. Pre-registration participants are the first cohort to see every trade captured under the full Falsifiability Protocol v1.3 from trade #1.</p></div></details>
+            <details class="faq__item"><summary>What is the historical Telegram record, and why isn't it the basis for the sustainability claim?</summary><div class="faq__body"><p>196 trades on the Majority Opinion Predisposal Strategy were posted in real time to a private Telegram channel between April 2023 and October 2024. That record is viewable on the live dashboard for transparency, but it <strong>predates the locked Falsifiability Protocol</strong>: no third-party witness, no Stage-1 / Stage-2 gates armed in advance, no OP-04 per-trade tagging at the time of trade. The protocol-bound, witnessed record begins with the May 2026 pre-registration restart. Pre-registration participants are the first cohort to see every trade captured under the full Falsifiability Protocol v1.4 from trade #1.</p></div></details>
             <details class="faq__item"><summary>When does the 8-test sustainability battery activate?</summary><div class="faq__body"><p>At <strong>30+ closed trades</strong> the battery begins reporting; at <strong>100+ trades</strong> the verdict is binding. Below 30 the sample is too small for the statistical tests to produce meaningful inference, so the dashboard surfaces individual KPIs (win rate, EV, profit factor, drawdown, R-expectancy, etc.) and the equity curve without a battery verdict. The pre-registration window is exactly the period in which the record accumulates to the threshold.</p></div></details>
             <details class="faq__item"><summary>Will there be a lock-up at launch?</summary><div class="faq__body"><p>The proposed structure: no lock-up. Capital would be withdrawable at any time subject to ordinary settlement timelines at the custodian.</p></div></details>
             <details class="faq__item"><summary>What is Ekantik Capital Advisors LLC?</summary><div class="faq__body"><p>Ekantik Capital Advisors LLC is the firm developing the methodology. At product launch, it will operate as a Registered Investment Advisor. During the pre-registration phase, this site is operated as an educational research property — no advisory services are being offered.</p></div></details>
@@ -1022,7 +1022,7 @@
                     <li><span class="footer__pending">Privacy Policy — published at registration</span></li>
                     <li><span class="footer__pending">Terms of Use — published at registration</span></li>
                     <li><span class="footer__pending">Marketing Disclosures — published at registration</span></li>
-                    <li><a href="/falsifiability-protocol.html">Falsifiability Protocol v1.3</a></li>
+                    <li><a href="/falsifiability-protocol.html">Falsifiability Protocol v1.4</a></li>
                 </ul>
             </div>
         </div>
