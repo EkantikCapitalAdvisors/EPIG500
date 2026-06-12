@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260612g">
+    <link rel="stylesheet" href="css/style.css?v=20260612h">
 
     <script type="application/ld+json">
     {
@@ -541,6 +541,50 @@
         <div class="theoretical-banner">
             <p class="theoretical-banner__h"><span class="diamond">◆</span> Theoretical · <span class="js-prereg-count">pre-registration record accumulating</span></p>
             <p class="theoretical-banner__body">The cadence rules, position-scaling logic, and target returns shown below are <strong>design intent</strong> — engineered, not yet demonstrated. <strong>The live pre-registration record is the only published trading record for this strategy and is still accumulating.</strong> A statistically meaningful track record will take many more closed trades; the 8-test sustainability battery activates at 30+ trades. Pre-registration participants see every trade as it happens; nothing on this page constitutes a forecast or guarantee.</p>
+        </div>
+
+        <!-- Earned-scale staircase — structural rules from the locked protocol only.
+             Contract counts, the fixed 0.5% per-contract anchor, unlock and de-scale
+             conditions are documented architecture; no dollars, no timeline, no
+             projection (forward equity curve removed per compliance redline T1-A). -->
+        <div class="ladder-stairs" role="img" aria-label="The earned-scale staircase: 1 /ES at 0.5% NLV per trade, scaling to 2, 3, then 4 /ES at 2% per trade, with each additional contract unlocked only by a realized profit buffer. The ladder also de-scales: OP-06 cuts size to half after a second consecutive losing week.">
+            <div class="ladder-stairs__track">
+                <div class="ladder-stair">
+                    <div class="ladder-stair__stack"><span class="ladder-stair__block ladder-stair__block--base"></span></div>
+                    <p class="ladder-stair__contracts">1 /ES</p>
+                    <p class="ladder-stair__risk">0.5% NLV per trade</p>
+                    <p class="ladder-stair__gate">The architectural base — where every account starts</p>
+                </div>
+                <div class="ladder-stairs__arrow" aria-hidden="true"><span class="diamond">◆</span><span class="ladder-stairs__arrow-label">earned profit buffer unlocks the next contract</span>→</div>
+                <div class="ladder-stair">
+                    <div class="ladder-stair__stack"><span class="ladder-stair__block ladder-stair__block--base"></span><span class="ladder-stair__block ladder-stair__block--earned"></span></div>
+                    <p class="ladder-stair__contracts">2 /ES</p>
+                    <p class="ladder-stair__risk">1.0% NLV per trade</p>
+                    <p class="ladder-stair__gate">Second contract paid for by the first's realized profit</p>
+                </div>
+                <div class="ladder-stairs__arrow" aria-hidden="true"><span class="diamond">◆</span><span class="ladder-stairs__arrow-label">earned profit buffer unlocks the next contract</span>→</div>
+                <div class="ladder-stair">
+                    <div class="ladder-stair__stack"><span class="ladder-stair__block ladder-stair__block--base"></span><span class="ladder-stair__block ladder-stair__block--earned"></span><span class="ladder-stair__block ladder-stair__block--earned"></span></div>
+                    <p class="ladder-stair__contracts">3 /ES</p>
+                    <p class="ladder-stair__risk">1.5% NLV per trade</p>
+                    <p class="ladder-stair__gate">Each step earned by accumulated buffer — never assumed</p>
+                </div>
+                <div class="ladder-stairs__arrow" aria-hidden="true"><span class="diamond">◆</span><span class="ladder-stairs__arrow-label">earned profit buffer unlocks the next contract</span>→</div>
+                <div class="ladder-stair ladder-stair--ceiling">
+                    <div class="ladder-stair__stack"><span class="ladder-stair__block ladder-stair__block--base"></span><span class="ladder-stair__block ladder-stair__block--earned"></span><span class="ladder-stair__block ladder-stair__block--earned"></span><span class="ladder-stair__block ladder-stair__block--earned"></span></div>
+                    <p class="ladder-stair__contracts">4 /ES</p>
+                    <p class="ladder-stair__risk">2.0% NLV per trade</p>
+                    <p class="ladder-stair__gate"><strong>The architectural ceiling</strong> — scaling stops here by rule, regardless of profit</p>
+                </div>
+            </div>
+            <div class="ladder-stairs__legend">
+                <span class="ladder-stairs__legend-item"><span class="ladder-stair__block ladder-stair__block--base ladder-stair__block--mini"></span> base contract</span>
+                <span class="ladder-stairs__legend-item"><span class="ladder-stair__block ladder-stair__block--earned ladder-stair__block--mini"></span> earned contract — paid for by realized profit</span>
+            </div>
+            <div class="ladder-stairs__notes">
+                <p class="ladder-stairs__note"><span class="diamond">◆</span> <strong>The per-contract anchor never moves.</strong> Risk per contract is fixed at 0.5% of NLV at every step; only the contract count scales — and only when the realized profit buffer has paid for it.</p>
+                <p class="ladder-stairs__note ladder-stairs__note--kill"><strong>And the ladder moves both ways.</strong> A second consecutive losing week (OP-06) cuts size to half until five clean trades reinstate it (OP-07). All eight ED kill conditions stay armed at every step — see the rail below.</p>
+            </div>
         </div>
 
         <!-- Three-panel risk-management cadence -->
