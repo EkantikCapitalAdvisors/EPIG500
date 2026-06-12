@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260612q">
+    <link rel="stylesheet" href="css/style.css?v=20260612r">
 
     <script type="application/ld+json">
     {
@@ -510,6 +510,22 @@
             <p class="arith-regime-note">
                 <span class="diamond">◆</span> <strong>Reading the three windows:</strong> the synthetic-passive overlay's value is realized only when there is meaningful drawdown to step aside from. In a relentless bull window with a shallow dip (Calm 2013–2019), the literal 20% cash drag dominates the overlay's protection benefit and the strategy lags 100% S&amp;P. In crash windows (2007–2010), the overlay's protection dominates. Over full market cycles, the overlay's job is to either <em>beat</em> the index <em>or</em> <em>protect</em> against its drawdown — never required to do both in every sub-window. This is the regime dependence the overlay's <a href="/falsifiability-protocol.html" target="_blank" rel="noopener">Expression Layer gate (Article VIII.B)</a> measures across full cycles.
             </p>
+
+            <!-- Calculator 3 — The Honest Trade-off (break-even lag explorer) · Calculator Spec v1.0 §3.
+                 Quantifies the regime-dependence note above: publish where the mechanism loses. -->
+            <div class="calc" id="calcTradeoffWrap">
+                <header class="calc__head">
+                    <p class="eyebrow"><span class="diamond">◆</span> The Honest Trade-off</p>
+                    <h3 class="calc__h">The step-aside pays two lags to buy the avoided middle.</h3>
+                    <p class="calc__sub">Exit lags the top; re-entry lags the turn. In shallow corrections the lags cost more than the protection is worth — in deep ones, protection dominates. Set the lags and find the break-even depth.</p>
+                </header>
+                <div id="calcTradeoff">
+                    <!-- static default state (D 20% · g 25% · m 25%) — replaced on hydration -->
+                    <p class="calc__pair"><span class="calc__pair-label">Hold-through:</span> <span class="calc__num">0.0%</span> <span class="calc__pair-label">round trip · Step-aside:</span> <span class="calc__num">0.0%</span> <span class="calc__pair-label">(a 20% correction never reaches a 25% give-back — the step-aside never triggers)</span></p>
+                    <p class="calc__verdict">In shallow corrections this mechanism loses by design — its value concentrates in deep drawdowns. That regime-dependence is exactly what the overlay’s <a href="/falsifiability-protocol.html">Expression Layer gate measures across full cycles</a>.</p>
+                </div>
+                <p class="calc__caption"><em>Schematic single-cycle model with user-set, hypothetical lag inputs — unitless, not a track record, not a backtest, not a projection of any Ekantik strategy. The synthetic-passive overlay has no live track record; its rules are published as design intent under armed-but-unfired falsifiability gates. Past performance does not guarantee future results.</em></p>
+            </div>
 
             <!-- Stacked equity curve: 80% SPY foundation + capture asymmetry + optional Booster Engine, plotted against the S&P 500 -->
             <div class="arith-chart">
@@ -1180,5 +1196,6 @@
 <script src="js/calc-repair.js?v=20260612a" defer></script>
 <script src="js/calc-voltax.js?v=20260612a" defer></script>
 <script src="js/calc-bounds.js?v=20260612a" defer></script>
+<script src="js/calc-tradeoff.js?v=20260612a" defer></script>
 </body>
 </html>
