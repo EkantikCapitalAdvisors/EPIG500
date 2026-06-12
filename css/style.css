@@ -4248,3 +4248,37 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     border-top: 2px dashed #1B2A4A;
     height: 0 !important;
 }
+
+/* ---- Arithmetic chart: hover tooltip + dynamic reading line ---- */
+.arith-chart { position: relative; }
+.arith-chart__reading {
+    margin-top: var(--s-4);
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--slate-dark);
+    background: var(--ivory);
+    border-radius: var(--radius);
+    padding: var(--s-3) var(--s-4);
+}
+.arith-tooltip {
+    position: absolute;
+    z-index: 6;
+    pointer-events: none;
+    background: var(--navy);
+    color: var(--text-on-dark);
+    font-size: 12px;
+    line-height: 1.55;
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    box-shadow: 0 6px 18px rgba(16, 24, 43, 0.25);
+    white-space: nowrap;
+}
+.arith-tooltip strong { color: var(--white); }
+.arith-tooltip__line {
+    position: absolute;
+    z-index: 5;
+    pointer-events: none;
+    width: 1px;
+    background: rgba(27, 42, 74, 0.35);
+}
+#arithEquityCanvas { touch-action: pan-y; }
