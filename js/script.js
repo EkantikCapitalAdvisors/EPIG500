@@ -391,7 +391,7 @@
     /* Compounding Ladder model — v4
        Starting capital: $100K NLV. 1-year horizon. 60 days of no-trading buffer
        up front (~2 months observation/protocol-warmup). Contract scaling capped
-       at 4 /ES maximum. Three discrete scenarios (Floor / Realistic / Cooperative).
+       at 2 /ES maximum. Three discrete scenarios (Floor / Realistic / Cooperative).
        Per-/ES monthly throughput is a DESIGN TARGET used by the ladder
        illustration. The actual throughput will be reported from the live
        pre-registration record as it accumulates. */
@@ -413,7 +413,7 @@
     const BUFFER_DAYS       = 60;            // engine no-trading buffer at start of year
     const BUFFER_MONTHS     = BUFFER_DAYS / 30; // 2 months
     const COOP_BUFFER_PROFIT = 5000;          // profit needed at each level before scaling +1 contract
-    const MAX_CONTRACTS     = 4;
+    const MAX_CONTRACTS     = 2;   // margin ceiling under the 80/20 structure
     // Cooperative scale times — each step requires ≈$5K profit at the current contract count.
     // Time to earn $5K at N contracts = $5,000 / (N × $1,480/mo). Accelerates as contracts grow.
     const COOP_T1 = BUFFER_MONTHS;                                              // 2.00 mo — engine starts at 1 /ES
@@ -456,7 +456,7 @@
             ]
         },
         cooperative: {
-            label: 'Cooperative — gradual scaling 1 → 2 → 3 → 4. Each step is earned by ≈$5K profit at the current contract count. Acceleration is built in: each next $5K arrives faster than the last because throughput scales with contracts.',
+            label: 'Cooperative — scaling 1 → 2 (the margin ceiling). The second contract is earned by ≈$5K profit at the current contract count.',
             transitions: [
                 { startMonth: COOP_T1, contracts: 1 },
                 { startMonth: COOP_T2, contracts: 2 },
