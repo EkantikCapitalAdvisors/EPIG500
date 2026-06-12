@@ -10,7 +10,7 @@
        Gold + dark-navy ramp matched exactly; mid brand-navy nudged to the ECFS
        ramp. Semantic teal/red layer below is unchanged (load-bearing on EPIG). */
     --navy:        #12264a;   /* ECFS navy-600 — brand navy on light */
-    --navy-deep:   #0a1628;   /* ECFS navy-800 */
+    --navy-deep:   #0a1a34;   /* deep navy-blue accent strip */
     --navy-soft:   #243A66;
     --gold:        #d4af37;   /* ECFS gold (DEFAULT) */
     --gold-bright: #e8cc6e;   /* ECFS gold-light */
@@ -26,7 +26,7 @@
     --line-light:  rgba(255, 255, 255, 0.15);
 
     /* Semantic layer — spec §1.1 */
-    --navy-950:      #060c18;            /* deep page background — ECFS navy-900 */
+    --navy-950:      #0c1d3a;            /* deep navy-blue page background (dark sections) */
     --navy-800:      var(--navy);        /* brand navy — cards, headers on light */
     --gold-500:      var(--gold);
     --color-upside:  var(--gold);        /* earned scale, upside, primary CTA */
@@ -185,7 +185,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     background: var(--gold-bright);
     color: var(--navy);
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(200, 169, 81, 0.25);
+    box-shadow: 0 6px 18px rgba(212, 175, 55, 0.25);
 }
 .btn--secondary {
     background: transparent;
@@ -320,8 +320,9 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 80% 20%, rgba(200, 169, 81, 0.08), transparent 50%),
-        radial-gradient(circle at 10% 80%, rgba(36, 58, 102, 0.5), transparent 50%);
+        radial-gradient(circle at 78% 12%, rgba(212, 175, 55, 0.10), transparent 46%),
+        radial-gradient(circle at 12% 78%, rgba(36, 58, 102, 0.55), transparent 52%),
+        linear-gradient(165deg, #102545 0%, var(--navy-950) 58%, #0a1830 100%);
     pointer-events: none;
 }
 .hero__inner {
@@ -389,7 +390,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     transform: translateX(-50%);
     width: 24px;
     height: 36px;
-    border: 1.5px solid rgba(200, 169, 81, 0.6);
+    border: 1.5px solid rgba(212, 175, 55, 0.6);
     border-radius: 12px;
     display: grid;
     place-items: center;
@@ -1239,7 +1240,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 }
 .cadence__table td { color: var(--slate-dark); }
 .cadence__total td {
-    background: rgba(200, 169, 81, 0.08);
+    background: rgba(212, 175, 55, 0.08);
     font-weight: 700;
     color: var(--navy);
 }
@@ -1476,7 +1477,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 }
 .upload-drop:hover, .upload-drop.is-dragover {
     border-color: var(--gold);
-    background: rgba(200, 169, 81, 0.04);
+    background: rgba(212, 175, 55, 0.04);
 }
 .upload-drop__icon {
     font-size: 28px;
@@ -1603,7 +1604,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 
 /* Falsifiability section */
 .falsi-intro {
-    background: rgba(200, 169, 81, 0.08);
+    background: rgba(212, 175, 55, 0.08);
     border-left: 3px solid var(--gold);
     padding: var(--s-6) var(--s-8);
     border-radius: var(--radius);
@@ -1652,7 +1653,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 }
 .op-card {
     background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(200, 169, 81, 0.3);
+    border: 1px solid rgba(212, 175, 55, 0.3);
     border-radius: var(--radius);
     padding: var(--s-6);
 }
@@ -1770,7 +1771,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 
 .compliance--light {
     color: rgba(250, 248, 245, 0.6);
-    border-top: 1px solid rgba(200, 169, 81, 0.2);
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
     padding-top: var(--s-6);
 }
 
@@ -1884,7 +1885,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     place-items: center;
     text-align: center;
     padding: var(--s-6);
-    box-shadow: 0 8px 32px rgba(27, 42, 74, 0.25), inset 0 0 0 1px rgba(200, 169, 81, 0.3);
+    box-shadow: 0 8px 32px rgba(27, 42, 74, 0.25), inset 0 0 0 1px rgba(212, 175, 55, 0.3);
     z-index: 2;
 }
 .battery__hub-eyebrow {
@@ -2315,7 +2316,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     display: inline-block;
 }
 .cl-chart__legend-swatch--area {
-    background: linear-gradient(180deg, rgba(200, 169, 81, 0.4), rgba(200, 169, 81, 0.1));
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.4), rgba(212, 175, 55, 0.1));
     border: 1px solid var(--gold);
 }
 .cl-chart__legend-swatch--dot {
@@ -2517,7 +2518,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     padding: 14px 0;
     text-decoration: underline;
     text-underline-offset: 4px;
-    text-decoration-color: rgba(200, 169, 81, 0.4);
+    text-decoration-color: rgba(212, 175, 55, 0.4);
 }
 .btn--ghost:hover {
     color: var(--gold-bright);
@@ -2628,7 +2629,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     letter-spacing: 0.5px;
     text-transform: uppercase;
     padding-left: var(--s-3);
-    border-left: 1px solid rgba(200, 169, 81, 0.3);
+    border-left: 1px solid rgba(212, 175, 55, 0.3);
     white-space: nowrap;
 }
 .prereg-banner__cta:hover { color: var(--gold-bright); }
@@ -2757,7 +2758,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     font-weight: 600;
 }
 .protocol-card__doc code {
-    background: rgba(200, 169, 81, 0.15);
+    background: rgba(212, 175, 55, 0.15);
     padding: 2px 8px;
     border-radius: 2px;
     font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
@@ -2913,7 +2914,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     border: 1px solid var(--gold);
     border-radius: var(--radius-lg);
     margin-bottom: var(--s-8);
-    box-shadow: 0 6px 20px rgba(200, 169, 81, 0.08);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.08);
 }
 .cl-hero__col {
     display: flex;
@@ -3003,7 +3004,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     border-radius: var(--radius);
     padding: var(--s-6);
 }
-.cl-card--gold { border-top-color: var(--gold); background: linear-gradient(180deg, rgba(200,169,81,0.06), var(--white)); }
+.cl-card--gold { border-top-color: var(--gold); background: linear-gradient(180deg, rgba(212,175,55,0.06), var(--white)); }
 .cl-card__label {
     font-size: 11px;
     text-transform: uppercase;
@@ -3217,7 +3218,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     color: var(--gold-deep);
     letter-spacing: 1px;
     padding: 2px 8px;
-    background: rgba(200, 169, 81, 0.1);
+    background: rgba(212, 175, 55, 0.1);
     border-radius: 2px;
 }
 .rm-rule__h .rm-new {
@@ -3305,7 +3306,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     gap: var(--s-3);
     margin: var(--s-4) 0 var(--s-5);
     padding: var(--s-3) var(--s-4);
-    background: linear-gradient(90deg, rgba(200, 169, 81, 0.10), rgba(200, 169, 81, 0.02));
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.10), rgba(212, 175, 55, 0.02));
     border-left: 3px solid var(--gold);
     border-radius: var(--radius);
     font-size: 14px;
@@ -3505,7 +3506,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     margin: var(--s-7) 0;
     padding: var(--s-5) var(--s-6);
     border-left: 4px solid var(--gold);
-    background: rgba(200, 169, 81, 0.06);
+    background: rgba(212, 175, 55, 0.06);
     border-radius: 0 6px 6px 0;
 }
 .pullquote blockquote {
@@ -3558,7 +3559,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .arith-plain-english {
     margin: var(--s-4) 0 0;
     padding: 14px 18px;
-    background: rgba(200, 169, 81, 0.08);
+    background: rgba(212, 175, 55, 0.08);
     border-left: 3px solid var(--gold);
     border-radius: 0 4px 4px 0;
     font-size: 14px;
@@ -3586,7 +3587,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .falsi-intro__engineering {
     margin-top: var(--s-3);
     padding-top: var(--s-3);
-    border-top: 1px dashed rgba(200, 169, 81, 0.35);
+    border-top: 1px dashed rgba(212, 175, 55, 0.35);
     font-size: 15px;
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.85);
@@ -3598,7 +3599,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .falsi-intro__engineering a {
     color: var(--gold-bright);
     text-decoration: underline;
-    text-decoration-color: rgba(200, 169, 81, 0.45);
+    text-decoration-color: rgba(212, 175, 55, 0.45);
     text-underline-offset: 3px;
 }
 .falsi-intro__engineering a:hover {
@@ -3805,7 +3806,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     white-space: nowrap;
 }
 .period-badge--slate { background: rgba(100, 116, 139, 0.14); color: var(--slate-dark); border: 1px solid rgba(100, 116, 139, 0.35); }
-.period-badge--gold  { background: rgba(200, 169, 81, 0.16); color: var(--gold-deep); border: 1px solid rgba(200, 169, 81, 0.5); }
+.period-badge--gold  { background: rgba(212, 175, 55, 0.16); color: var(--gold-deep); border: 1px solid rgba(212, 175, 55, 0.5); }
 
 /* ---- Gate-status chips (S9) — armed = slate; fired = red (kill semantics) ---- */
 .gate-chips {
@@ -3980,7 +3981,9 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 
 /* ---- Final CTA band (S12, dark) ---- */
 .cta-band {
-    background: var(--navy-950);
+    background:
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.07), transparent 55%),
+        linear-gradient(180deg, #102545 0%, var(--navy-950) 60%, #0a1830 100%);
     color: var(--text-on-dark);
     text-align: center;
     padding: var(--s-24) 0;
