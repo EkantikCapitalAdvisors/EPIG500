@@ -3556,3 +3556,26 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 @media (max-width: 700px) {
     .epig-frame { font-size: 16px; }
 }
+
+/* Engineering-culture cross-link in the Falsifiability intro */
+.falsi-intro__engineering {
+    margin-top: var(--s-3);
+    padding-top: var(--s-3);
+    border-top: 1px dashed rgba(200, 169, 81, 0.35);
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
+}
+.falsi-intro__engineering em {
+    color: var(--gold-bright);
+    font-style: italic;
+}
+.falsi-intro__engineering a {
+    color: var(--gold-bright);
+    text-decoration: underline;
+    text-decoration-color: rgba(200, 169, 81, 0.45);
+    text-underline-offset: 3px;
+}
+.falsi-intro__engineering a:hover {
+    text-decoration-color: var(--gold-bright);
+}
