@@ -352,7 +352,7 @@
 
             const endpoint = preregForm.dataset.endpoint || '';
             if (!endpoint || endpoint.indexOf('[CONFIG') === 0) {
-                showStatusMsg('Submissions are briefly offline. Please email hiren@ekantikcapital.com with the subject "Ekantik 500 pre-registration".');
+                showStatusMsg('Submissions are briefly offline. Please email info@ekantikcapital.com with the subject "Ekantik 500 pre-registration".');
                 return;
             }
 
@@ -374,7 +374,7 @@
                 .catch(function () {
                     submitBtn.disabled = false;
                     submitBtn.textContent = 'Submit pre-registration';
-                    showStatusMsg('Something went wrong submitting the form. Please try again, or email hiren@ekantikcapital.com.');
+                    showStatusMsg('Something went wrong submitting the form. Please try again, or email info@ekantikcapital.com.');
                 });
         });
     }
@@ -1296,7 +1296,7 @@
             showStatus('✓ Loaded ' + trades.length + ' trades from ' + (filename || 'paste') + '. Battery recomputed.', 'success');
             track('battery_upload', { trades: trades.length, source: filename || 'paste' });
         } catch (e) {
-            showStatus('Could not parse data: ' + e.message + '. Format detected may be unsupported. Email hiren@ekantikcapital.com for format help.', 'error');
+            showStatus('Could not parse data: ' + e.message + '. Format detected may be unsupported. Email info@ekantikcapital.com for format help.', 'error');
         }
     }
 
