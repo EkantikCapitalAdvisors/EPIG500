@@ -1,0 +1,13 @@
+{
+  "protocolVersion": "1.5",
+  "docRef": "FP-MOPS-V1.5-2026-06",
+  "perContractRiskPctNLV": 0.5,
+  "maxContracts": 2,
+  "maxPerTradeExposurePctNLV": 1.0,
+  "dollarsPerPoint": 50,
+  "hardKillPoints": 100,
+  "hardKillDollarsPerContract": 5000,
+  "dailyFloorStartPctNLV": 0.5,
+  "standardSizingNLVPerContract": 100000,
+  "weeklyStandDownRule": "2–3 consecutive losing days halts the week (OP-05)"
+}

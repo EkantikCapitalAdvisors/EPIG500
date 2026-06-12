@@ -14,10 +14,10 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260612n">
+    <link rel="stylesheet" href="css/style.css?v=20260612o">
 
     <script type="application/ld+json">
     {
@@ -449,6 +449,24 @@
             <p class="section__sub">The upside/downside capture is no longer a hypothetical input — it is the <strong>modeled output of the synthetic-passive overlay's published rules</strong>, and it now drives the <em>foundation itself</em>, not a token slice. The difference is decisive: with a 20%-slice model, a 50%-downside year still takes ~90% of the market's drawdown. With the overlay driving the foundation, 50% downside participation means the core takes roughly <strong>40%</strong> of that drawdown. That is where outperformance on the 80% is actually produced. Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy.</p>
             <p class="compliance" style="margin-top:var(--s-4)"><em>Design intent, not a forecast. Ekantik 500 does not target a stated return multiple. The illustration below uses actual past S&amp;P 500 total returns and user-set, hypothetical capture inputs; it does not represent any Ekantik strategy's performance. Past performance does not guarantee future results.</em></p>
         </header>
+
+        <!-- Calculator 1 — The Repair Bill (Recovery Convexity) · Calculator Spec v1.0 §1 -->
+        <div class="calc" id="calcRepairWrap">
+            <header class="calc__head">
+                <p class="eyebrow"><span class="diamond">◆</span> The Repair Bill</p>
+                <h3 class="calc__h">A −50% year needs +100% back. The math is not symmetric.</h3>
+                <p class="calc__sub">Losses are convex: the gain required to repair a loss grows faster than the loss itself — so cutting a loss in half cuts the repair bill by <em>more</em> than half.</p>
+            </header>
+            <div id="calcRepair">
+                <!-- static default state (d = 37%) — replaced on hydration -->
+                <div class="calc__readout">
+                    <p class="calc__pair"><span class="calc__num">−37%</span> <span class="calc__arrow">→</span> <span class="calc__num">+59%</span> <span class="calc__pair-label">required to repair</span></p>
+                    <p class="calc__pair calc__pair--teal"><span class="calc__num">−18.5%</span> <span class="calc__arrow">→</span> <span class="calc__num">+23%</span> <span class="calc__pair-label">the same loss, cut in half</span></p>
+                </div>
+                <p class="calc__verdict">Cutting this loss in half cuts the repair bill by <strong>61%</strong> — convex losses mean protection pays twice.</p>
+            </div>
+            <p class="calc__caption"><em>Recovery arithmetic is identity math — true for every investor in every era. Illustrative arithmetic, not a projection or a strategy result. Past performance does not guarantee future results.</em></p>
+        </div>
 
         <!-- Doubling Arithmetic calculator — real S&P 500 total-return data, three windows -->
         <div class="arith-calc" id="arithCalc">
@@ -1121,6 +1139,8 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260612j"></script>
+<script src="js/script.js?v=20260612k"></script>
+<script src="js/calc-core.js?v=20260612a" defer></script>
+<script src="js/calc-repair.js?v=20260612a" defer></script>
 </body>
 </html>

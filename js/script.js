@@ -1571,6 +1571,10 @@
             2020: 0.1840, 2021: 0.2871, 2022: -0.1811, 2023: 0.2629, 2024: 0.2502
         };
 
+        // Canonical dataset — exposed read-only for the calculator suite
+        // (Calculator Spec v1.0 §0.3.5: never a second copy of the series).
+        window.EPIG_SP_TR = SP_TR;
+
         // Inclusive year-range helper.
         function yrSpan(a, b) { const o = []; for (let y = a; y <= b; y++) o.push(y); return o; }
         const DATA_MIN_YEAR = 1975, DATA_MAX_YEAR = 2024;
