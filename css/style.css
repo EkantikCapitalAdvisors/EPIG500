@@ -4125,3 +4125,118 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .live-bounded { padding: var(--s-6); }
     #liveBoundedCanvas { height: 260px; }
 }
+
+/* ================================================
+   EARNED-SCALE STAIRCASE (§Compounding Ladder)
+   Structural rules only: contract count + fixed 0.5%
+   anchor + unlock/de-scale gates. Gold = earned scale
+   (permitted slot); red = de-scale/kill note only.
+   ================================================ */
+.ladder-stairs {
+    margin: var(--s-8) 0 var(--s-4);
+}
+.ladder-stairs__track {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--s-3);
+    justify-content: center;
+}
+.ladder-stair {
+    flex: 1;
+    max-width: 220px;
+    background: var(--white);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: var(--s-4);
+    text-align: center;
+}
+.ladder-stair--ceiling { border-color: var(--navy); }
+.ladder-stair__stack {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 3px;
+    margin-bottom: var(--s-3);
+    min-height: 96px;
+    justify-content: flex-start;
+}
+.ladder-stair__block {
+    width: 56px;
+    height: 20px;
+    border-radius: 3px;
+    display: inline-block;
+}
+.ladder-stair__block--base   { background: var(--navy); }
+.ladder-stair__block--earned { background: linear-gradient(180deg, var(--gold-bright), var(--gold)); }
+.ladder-stair__block--mini   { width: 22px; height: 10px; vertical-align: middle; }
+.ladder-stair__contracts {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--navy);
+}
+.ladder-stair__risk {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--slate-dark);
+    margin-bottom: var(--s-2);
+}
+.ladder-stair__gate {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--slate);
+}
+.ladder-stairs__arrow {
+    align-self: center;
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    color: var(--slate);
+    font-size: 16px;
+    max-width: 110px;
+    text-align: center;
+    padding-bottom: var(--s-12);
+}
+.ladder-stairs__arrow .diamond { margin-right: 0; }
+.ladder-stairs__arrow-label {
+    font-size: 10.5px;
+    line-height: 1.35;
+    color: var(--slate);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.ladder-stairs__legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-6);
+    margin-top: var(--s-4);
+    font-size: 13px;
+    color: var(--slate-dark);
+}
+.ladder-stairs__legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.ladder-stairs__notes {
+    max-width: 880px;
+    margin: var(--s-6) auto 0;
+    display: grid;
+    gap: var(--s-3);
+}
+.ladder-stairs__note {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--navy);
+    background: var(--ivory);
+    border-radius: var(--radius);
+    padding: var(--s-3) var(--s-4);
+}
+.ladder-stairs__note--kill {
+    border-left: 3px solid var(--color-kill);
+}
+@media (max-width: 900px) {
+    .ladder-stairs__track { flex-direction: column; align-items: stretch; }
+    .ladder-stair { max-width: none; }
+    .ladder-stair__stack { flex-direction: row; min-height: 0; justify-content: center; }
+    .ladder-stair__block { width: 28px; height: 16px; }
+    .ladder-stairs__arrow { padding-bottom: 0; transform: rotate(90deg); max-width: none; height: 40px; }
+    .ladder-stairs__arrow-label { display: none; }
+}
