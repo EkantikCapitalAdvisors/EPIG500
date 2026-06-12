@@ -1911,15 +1911,15 @@
                 ctx.fillText(String(series[i].yr + (i === 0 ? '' : '')), x(i), H - PAD_B + 18);
             }
 
-            // Stacked area: SPY foundation (slate)
-            ctx.fillStyle = 'rgba(91, 124, 168, 0.22)';
+            // Stacked area: SPY foundation (teal — data color)
+            ctx.fillStyle = 'rgba(13, 148, 136, 0.16)';
             ctx.beginPath();
             ctx.moveTo(x(0), y(0));
             for (let i = 0; i < series.length; i++) ctx.lineTo(x(i), y(series[i].spy));
             ctx.lineTo(x(xN), y(0));
             ctx.closePath();
             ctx.fill();
-            ctx.strokeStyle = '#5B7CA8'; ctx.lineWidth = 1.6;
+            ctx.strokeStyle = '#0D9488'; ctx.lineWidth = 1.6;
             ctx.beginPath();
             for (let i = 0; i < series.length; i++) {
                 const px = x(i), py = y(series[i].spy);
@@ -1927,8 +1927,9 @@
             }
             ctx.stroke();
 
-            // Stacked area: capture-asymmetric engine on top of SPY (gold band, spy → spy+eng)
-            ctx.fillStyle = 'rgba(200, 169, 81, 0.38)';
+            // Stacked area: 20% cash buffer on top of SPY (slate band, spy → spy+eng).
+            // Gold is reserved for the Booster Engine band only.
+            ctx.fillStyle = 'rgba(148, 163, 184, 0.35)';
             ctx.beginPath();
             ctx.moveTo(x(0), y(series[0].spy));
             for (let i = 0; i < series.length; i++) ctx.lineTo(x(i), y(series[i].spy + series[i].eng));
