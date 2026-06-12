@@ -1556,18 +1556,30 @@
         const calc = document.getElementById('arithCalc');
         if (!calc) return;
 
-        // S&P 500 total returns (decimal), calendar year — index values from public sources
+        // S&P 500 total returns (decimal, incl. dividends), calendar year — public
+        // historical series (Damodaran / S&P). 1975–2024 = a full 50-year span.
         const SP_TR = {
+            1975: 0.3720, 1976: 0.2384, 1977: -0.0718, 1978: 0.0656, 1979: 0.1844,
+            1980: 0.3242, 1981: -0.0491, 1982: 0.2155, 1983: 0.2256, 1984: 0.0627,
+            1985: 0.3173, 1986: 0.1867, 1987: 0.0525, 1988: 0.1661, 1989: 0.3169,
+            1990: -0.0310, 1991: 0.3047, 1992: 0.0762, 1993: 0.1008, 1994: 0.0132,
+            1995: 0.3758, 1996: 0.2296, 1997: 0.3336, 1998: 0.2858, 1999: 0.2104,
+            2000: -0.0910, 2001: -0.1189, 2002: -0.2210, 2003: 0.2868, 2004: 0.1088,
             2005: 0.0483, 2006: 0.1585, 2007: 0.0549, 2008: -0.3700, 2009: 0.2646,
             2010: 0.1506, 2011: 0.0211, 2012: 0.1600, 2013: 0.3239, 2014: 0.1369,
             2015: 0.0138, 2016: 0.1196, 2017: 0.2183, 2018: -0.0438, 2019: 0.3149,
             2020: 0.1840, 2021: 0.2871, 2022: -0.1811, 2023: 0.2629, 2024: 0.2502
         };
 
+        // Inclusive year-range helper.
+        function yrSpan(a, b) { const o = []; for (let y = a; y <= b; y++) o.push(y); return o; }
+
+        // `card: false` → chart-tab only, kept out of the 3-card comparison snapshot.
         const windows = [
-            { id: 'calm',  label: 'Calm bull run',        range: '2013 – 2019', years: [2013,2014,2015,2016,2017,2018,2019] },
-            { id: 'crash', label: 'Crash window',          range: '2007 – 2010', years: [2007,2008,2009,2010] },
-            { id: 'full',  label: 'Full 20-year span',     range: '2005 – 2024', years: Object.keys(SP_TR).map(Number).sort() }
+            { id: 'calm',   label: 'Calm bull run',     range: '2013 – 2019', years: yrSpan(2013, 2019) },
+            { id: 'crash',  label: 'Crash window',      range: '2007 – 2010', years: yrSpan(2007, 2010) },
+            { id: 'full',   label: 'Full 20-year span', range: '2005 – 2024', years: yrSpan(2005, 2024) },
+            { id: 'full50', label: 'Full 50-year span', range: '1975 – 2024', years: yrSpan(1975, 2024), card: false }
         ];
 
         function compound(years, up, down, contracts) {
@@ -1608,7 +1620,7 @@
             const stratLabel = activeRiskPct > 0
                 ? 'Strategy (incl. Booster from live record)'
                 : 'Strategy (capture only)';
-            wrap.innerHTML = windows.map(function (w) {
+            wrap.innerHTML = windows.filter(function (w) { return w.card !== false; }).map(function (w) {
                 const r = compound(w.years, up, down, activeRiskPct);
                 const idxPct = r.idx - 1;
                 const stratPct = r.strat - 1;
@@ -1682,11 +1694,13 @@
             }
 
             // Window label in plain text
-            const winLabel = win.label.toLowerCase() === 'full 20-year span'
-                ? 'over the full 20-year span (2005–2024)'
-                : win.label.toLowerCase() === 'calm bull run'
-                    ? 'across the calm 2013–2019 bull run'
-                    : 'through the 2007–2010 crash window';
+            const winLabelMap = {
+                full:   'over the full 20-year span (2005–2024)',
+                full50: 'over the full 50-year span (1975–2024)',
+                calm:   'across the calm 2013–2019 bull run',
+                crash:  'through the 2007–2010 crash window'
+            };
+            const winLabel = winLabelMap[win.id] || ('over ' + win.range);
 
             el.innerHTML =
                   '<span class="diamond">◆</span> <strong>In plain English ' + winLabel + ':</strong> '
@@ -1885,20 +1899,45 @@
             chartHover = { series: series, PAD_L: PAD_L, PAD_R: PAD_R, PAD_T: PAD_T, PAD_B: PAD_B, W: W, H: H };
             const maxVal = Math.max.apply(null, series.map(function (p) { return Math.max(p.total, p.idx); }));
             const minVal = Math.min.apply(null, series.map(function (p) { return Math.min(p.total, p.idx, p.spy); }));
+            // Long horizons (50-year) compound across multiple decades; a linear axis
+            // crushes the early years into a flat line. Use a log y-axis so equal
+            // vertical distance = equal % move and every decade stays legible.
+            const useLog = win.years.length > 25;
             const yMax = maxVal * 1.05;
-            const yMin = Math.min(minVal * 0.95, 0.5);
+            const yMin = useLog ? Math.max(0.4, minVal * 0.9) : Math.min(minVal * 0.95, 0.5);
+            const lyMin = Math.log10(yMin), lyMax = Math.log10(yMax);
+            const yFloor = useLog ? yMin : 0;
 
             function x(i) { return PAD_L + (i / xN) * (W - PAD_L - PAD_R); }
-            function y(v) { return PAD_T + (yMax - v) / (yMax - yMin) * (H - PAD_T - PAD_B); }
+            function y(v) {
+                if (useLog) {
+                    const lv = Math.log10(Math.max(v, yMin));
+                    return PAD_T + (lyMax - lv) / (lyMax - lyMin) * (H - PAD_T - PAD_B);
+                }
+                return PAD_T + (yMax - v) / (yMax - yMin) * (H - PAD_T - PAD_B);
+            }
 
-            // Grid lines + Y-axis labels (every 0.5x roughly)
+            // Grid lines + Y-axis labels
             ctx.strokeStyle = 'rgba(27, 42, 74, 0.06)'; ctx.lineWidth = 1;
             ctx.fillStyle = '#64748B'; ctx.font = '11px "Source Sans 3", sans-serif';
-            const yStep = (yMax - yMin) > 6 ? 1 : 0.5;
-            for (let v = Math.ceil(yMin / yStep) * yStep; v <= yMax; v += yStep) {
-                const yy = y(v);
-                ctx.beginPath(); ctx.moveTo(PAD_L, yy); ctx.lineTo(W - PAD_R, yy); ctx.stroke();
-                ctx.textAlign = 'right'; ctx.fillText(v.toFixed(yStep >= 1 ? 1 : 2) + 'x', PAD_L - 6, yy + 4);
+            if (useLog) {
+                const ticks = [0.5, 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000].filter(function (t) { return t >= yMin * 0.95 && t <= yMax; });
+                ctx.textAlign = 'right';
+                ticks.forEach(function (v) {
+                    const yy = y(v);
+                    ctx.beginPath(); ctx.moveTo(PAD_L, yy); ctx.lineTo(W - PAD_R, yy); ctx.stroke();
+                    ctx.fillText((v < 1 ? v.toFixed(1) : v) + 'x', PAD_L - 6, yy + 4);
+                });
+                ctx.textAlign = 'left'; ctx.fillStyle = '#94A3B8';
+                ctx.fillText('log scale', PAD_L + 4, PAD_T + 10);
+                ctx.fillStyle = '#64748B';
+            } else {
+                const yStep = (yMax - yMin) > 6 ? 1 : 0.5;
+                for (let v = Math.ceil(yMin / yStep) * yStep; v <= yMax; v += yStep) {
+                    const yy = y(v);
+                    ctx.beginPath(); ctx.moveTo(PAD_L, yy); ctx.lineTo(W - PAD_R, yy); ctx.stroke();
+                    ctx.textAlign = 'right'; ctx.fillText(v.toFixed(yStep >= 1 ? 1 : 2) + 'x', PAD_L - 6, yy + 4);
+                }
             }
             // Start line (1.0x) emphasized
             const y1 = y(1);
@@ -1909,17 +1948,19 @@
             // X-axis labels (years), spaced
             ctx.fillStyle = '#64748B'; ctx.textAlign = 'center';
             const labelEvery = Math.max(1, Math.ceil(series.length / 8));
+            const lastI = series.length - 1;
+            const showLast = (lastI % labelEvery) >= 2;   // suppress final label if it would collide
             for (let i = 0; i < series.length; i++) {
-                if (i % labelEvery !== 0 && i !== series.length - 1) continue;
-                ctx.fillText(String(series[i].yr + (i === 0 ? '' : '')), x(i), H - PAD_B + 18);
+                if (i % labelEvery !== 0 && !(showLast && i === lastI)) continue;
+                ctx.fillText(String(series[i].yr), x(i), H - PAD_B + 18);
             }
 
             // Stacked area: SPY foundation (teal — data color)
             ctx.fillStyle = 'rgba(13, 148, 136, 0.16)';
             ctx.beginPath();
-            ctx.moveTo(x(0), y(0));
+            ctx.moveTo(x(0), y(yFloor));
             for (let i = 0; i < series.length; i++) ctx.lineTo(x(i), y(series[i].spy));
-            ctx.lineTo(x(xN), y(0));
+            ctx.lineTo(x(xN), y(yFloor));
             ctx.closePath();
             ctx.fill();
             ctx.strokeStyle = '#0D9488'; ctx.lineWidth = 1.6;
