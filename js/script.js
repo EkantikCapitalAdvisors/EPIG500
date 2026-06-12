@@ -1864,6 +1864,8 @@
             return out;
         }
 
+        let chartHover = null;   // geometry of the last draw, for the hover tooltip
+
         function drawEquityChart(up, down) {
             const canvas = document.getElementById('arithEquityCanvas');
             if (!canvas) return;
@@ -1880,6 +1882,7 @@
 
             const PAD_L = 56, PAD_R = 24, PAD_T = 24, PAD_B = 36;
             const xN = series.length - 1;
+            chartHover = { series: series, PAD_L: PAD_L, PAD_R: PAD_R, PAD_T: PAD_T, PAD_B: PAD_B, W: W, H: H };
             const maxVal = Math.max.apply(null, series.map(function (p) { return Math.max(p.total, p.idx); }));
             const minVal = Math.min.apply(null, series.map(function (p) { return Math.min(p.total, p.idx, p.spy); }));
             const yMax = maxVal * 1.05;
@@ -1973,7 +1976,87 @@
             ctx.fillText(last.total.toFixed(2) + 'x · Strategy', x(xN) - 90, y(last.total) - 8);
             ctx.fillStyle = '#1B2A4A';
             ctx.fillText(last.idx.toFixed(2) + 'x · S&P 500', x(xN) - 90, y(last.idx) + 16);
+
+            updateChartReading(up, down);
         }
+
+        /* ------------------------------------------------
+           Dynamic chart interpretation — derived arithmetic
+           from the user's slider inputs over the active
+           window. M = how much the capture settings multiply
+           the foundation's cumulative growth vs the index;
+           M* = the bar needed to overcome the 80% allocation
+           haircut + flat 20% cash.
+           ------------------------------------------------ */
+        function updateChartReading(up, down) {
+            const el = document.getElementById('arithChartReading');
+            if (!el) return;
+            const win = windows.find(function (w) { return w.id === activeWindow; }) || windows[2];
+            let m = 1, idx = 1;
+            for (let i = 0; i < win.years.length; i++) {
+                const r = SP_TR[win.years[i]];
+                const c = r >= 0 ? up : down;
+                m *= (1 + r * c) / (1 + r);
+                idx *= (1 + r);
+            }
+            const mStar = (idx - ALLOC_ENG) / (ALLOC_SPY * idx);
+            const cleared = m >= mStar;
+            el.innerHTML =
+                  '<span class="diamond">◆</span> <strong>Reading the chart:</strong> at these capture settings, the overlay multiplies the foundation\'s cumulative growth by <strong>≈' + m.toFixed(2) + '×</strong> relative to the index over this window. Beating 100% S&amp;P requires <strong>≈' + mStar.toFixed(2) + '×</strong> — the bar set by the 80% allocation and the flat 20% cash. '
+                + (cleared
+                    ? 'Cleared here, so the strategy line ends above the benchmark: the drawdowns avoided in the down years raise the base that every later up year compounds from.'
+                    : 'Not cleared here — there isn\'t enough drawdown in this window to step aside from, so the cash drag dominates and the strategy lags the index.')
+                + ' Hover or tap any year on the chart for exact readings. <em>Hypothetical inputs, historical illustration.</em>';
+        }
+
+        /* ------------------------------------------------
+           Hover / tap tooltip — exact per-year readings.
+           ------------------------------------------------ */
+        (function setupChartTooltip() {
+            const canvas = document.getElementById('arithEquityCanvas');
+            if (!canvas) return;
+            const box = canvas.parentElement;            // .arith-chart
+            const tip = document.createElement('div');
+            tip.className = 'arith-tooltip';
+            tip.hidden = true;
+            const line = document.createElement('div');
+            line.className = 'arith-tooltip__line';
+            line.hidden = true;
+            box.appendChild(tip); box.appendChild(line);
+
+            function hide() { tip.hidden = true; line.hidden = true; }
+            function onPointer(e) {
+                const g = chartHover;
+                if (!g) return;
+                const rect = canvas.getBoundingClientRect();
+                const px = e.clientX - rect.left;
+                const innerW = g.W - g.PAD_L - g.PAD_R;
+                if (innerW <= 0) return;
+                const xN = g.series.length - 1;
+                let i = Math.round((px - g.PAD_L) / innerW * xN);
+                if (i < 0) i = 0;
+                if (i > xN) i = xN;
+                const p = g.series[i];
+                const delta = p.total - p.idx;
+                tip.innerHTML =
+                      '<strong>' + (i === 0 ? 'Start · ' : '') + p.yr + '</strong><br>'
+                    + 'Strategy <strong>' + p.total.toFixed(2) + 'x</strong> · ' + fmtUSD0(p.total * 100000) + ' on $100K<br>'
+                    + 'S&amp;P 500 ' + p.idx.toFixed(2) + 'x · ' + fmtUSD0(p.idx * 100000) + '<br>'
+                    + 'Δ ' + (delta >= 0 ? '+' : '') + delta.toFixed(2) + 'x';
+                tip.hidden = false; line.hidden = false;
+                const xpx = g.PAD_L + (i / xN) * innerW;
+                const cLeft = canvas.offsetLeft, cTop = canvas.offsetTop;
+                line.style.left = (cLeft + xpx) + 'px';
+                line.style.top = (cTop + g.PAD_T) + 'px';
+                line.style.height = (canvas.clientHeight - g.PAD_T - g.PAD_B) + 'px';
+                const flip = xpx > g.W - 200;
+                tip.style.left = (cLeft + xpx + (flip ? -(tip.offsetWidth + 14) : 14)) + 'px';
+                tip.style.top = (cTop + g.PAD_T + 8) + 'px';
+            }
+            canvas.addEventListener('pointermove', onPointer);
+            canvas.addEventListener('pointerdown', onPointer);
+            canvas.addEventListener('pointerleave', hide);
+        })();
 
         // Window tabs
         document.querySelectorAll('.arith-tab').forEach(function (tab) {
