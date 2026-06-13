@@ -65,6 +65,10 @@
         '</div>',
         '<p class="calc__pair" id="toHead" aria-live="polite"></p>',
         '<div class="calc__decomp" id="toDecomp" aria-live="polite"></div>',
+        '<div class="calc__chart" id="toChart" role="img" aria-label="Step-aside advantage versus correction depth under fractional lags: monotonic in depth, sign set by whether exit-give-back plus re-entry-miss is under or over 100%."></div>',
+        '<p class="calc__breakeven" id="toBreakeven"></p>',
+        '<details class="calc-disclose"><summary>Show full analysis — annualized cumulative alpha, false-alarm cost, whiplash drag</summary>',
+        '<div class="calc-disclose__body">',
         '<div class="to-annual" aria-label="Annual cumulative alpha across multiple step-aside opportunities">',
         '  <label class="arith-control to-annual__control">',
         '    <span class="arith-control__label">Step-aside opportunities / yr <span class="calc__info" tabindex="0" aria-label="How many independent round-trip drawdowns of this depth and profile the strategy catches in a year. Cumulative alpha compounds across them.">i</span></span>',
@@ -74,8 +78,6 @@
         '  </label>',
         '  <div class="to-annual__readout" id="toAnnual" aria-live="polite"></div>',
         '</div>',
-        '<div class="calc__chart" id="toChart" role="img" aria-label="Step-aside advantage versus correction depth under fractional lags: monotonic in depth, sign set by whether exit-give-back plus re-entry-miss is under or over 100%."></div>',
-        '<p class="calc__breakeven" id="toBreakeven"></p>',
         '<p class="calc__verdict" id="toHonesty">Everything above assumes the correction actually arrives. Under fractional lags, sign is set by whether you caught more of the move than you missed — depth amplifies the magnitude either way. <strong>The real lag isn\'t here — it\'s below, in the false-alarm case where no correction comes at all.</strong></p>',
         '<div class="to-fa" aria-label="False-alarm cost: exited at highs but no correction came">',
         '  <h4 class="to-fa__h">The true lag — exited at highs, no correction came</h4>',
@@ -107,6 +109,7 @@
         '  </div>',
         '  <div class="to-wh__readout" id="toWhip" aria-live="polite"></div>',
         '</div>',
+        '</div></details>',
         '<p class="calc__reset-row"><button type="button" class="calc__reset" id="toReset">Reset to default</button></p>'
     ].join('');
 

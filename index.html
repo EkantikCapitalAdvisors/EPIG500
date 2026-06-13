@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260612z">
+    <link rel="stylesheet" href="css/style.css?v=20260613a">
 
     <script type="application/ld+json">
     {
@@ -162,6 +162,63 @@
         </figure>
 
         <p class="compliance" style="text-align:center;margin-top:var(--s-5)"><em>Design intent. The synthetic-passive overlay has no live track record; it is being built and published trade by trade. Nothing here is a forecast or a guarantee.</em></p>
+    </div>
+</section>
+
+<!-- ============ 1c. CALCULATOR HUB — overview cards ============ -->
+<section class="section section--ivory" id="calc-hub">
+    <div class="container">
+        <header class="section__head">
+            <p class="eyebrow"><span class="diamond">◆</span> Run the math yourself</p>
+            <h2 class="section__h">Four calculators. Skim or go deep — your call.</h2>
+            <p class="section__sub">Every claim on this page is reducible to arithmetic. Pick a card to jump to the interactive version; each calculator lives in its own narrative section below so you can read the argument it supports.</p>
+        </header>
+        <div class="calc-hub__grid">
+            <a class="calc-hub__card" href="#calcRepairWrap" data-jump="repair">
+                <p class="calc-hub__eyebrow">◆ The Repair Bill</p>
+                <h3 class="calc-hub__h">A loss needs an asymmetric gain to repair.</h3>
+                <p class="calc-hub__line"><strong>−50%</strong> needs <strong class="calc-hub__num">+100%</strong> back · <strong>−74%</strong> needs <strong class="calc-hub__num">+285%</strong></p>
+                <svg class="calc-hub__thumb" viewBox="0 0 200 80" aria-hidden="true">
+                    <line x1="10" y1="70" x2="190" y2="10" stroke="#94A3B8" stroke-width="1.2" stroke-dasharray="3 3"/>
+                    <path d="M 10 70 Q 100 68 150 50 T 190 5" fill="none" stroke="#b8962e" stroke-width="2.2"/>
+                </svg>
+                <p class="calc-hub__cta">Recovery convexity →</p>
+            </a>
+            <a class="calc-hub__card" href="#calcVolTaxWrap" data-jump="voltax">
+                <p class="calc-hub__eyebrow">◆ The Volatility Tax</p>
+                <h3 class="calc-hub__h">Averages overstate what actually compounds.</h3>
+                <p class="calc-hub__line">S&amp;P 2005–2024: <strong>+11.9%/yr</strong> average but only <strong class="calc-hub__num">+10.4%/yr</strong> compounded — <strong>1.5 pp</strong> tax</p>
+                <svg class="calc-hub__thumb" viewBox="0 0 200 80" aria-hidden="true">
+                    <rect x="10" y="20" width="170" height="14" fill="#e2c97a"/>
+                    <rect x="10" y="44" width="148" height="14" fill="#b8962e"/>
+                    <text x="185" y="50" font-size="9" fill="#E05A6B" font-weight="700" text-anchor="end">−1.5pp</text>
+                </svg>
+                <p class="calc-hub__cta">Arithmetic vs geometric →</p>
+            </a>
+            <a class="calc-hub__card" href="#calcTradeoffWrap" data-jump="tradeoff">
+                <p class="calc-hub__eyebrow">◆ Volatility opportunity — or lag?</p>
+                <h3 class="calc-hub__h">When does step-aside harvest, when does it whipsaw?</h3>
+                <p class="calc-hub__line">At <strong>D=20%, g=25%, m=25%</strong>: per round-trip <strong class="calc-hub__num">+6.2%</strong> · annual @ 2/yr <strong class="calc-hub__num">+12.8%</strong></p>
+                <svg class="calc-hub__thumb" viewBox="0 0 200 80" aria-hidden="true">
+                    <line x1="10" y1="45" x2="190" y2="45" stroke="rgba(18,38,74,0.35)" stroke-dasharray="3 3"/>
+                    <path d="M 10 50 Q 60 50 100 40 T 190 12" fill="none" stroke="#12264a" stroke-width="2.2"/>
+                    <circle cx="100" cy="40" r="3" fill="#d4af37"/>
+                </svg>
+                <p class="calc-hub__cta">Fractional-lag explorer →</p>
+            </a>
+            <a class="calc-hub__card" href="#calcBoundsWrap" data-jump="bounds">
+                <p class="calc-hub__eyebrow">◆ The Worst Case, Priced</p>
+                <h3 class="calc-hub__h">Bounded loss at any account size.</h3>
+                <p class="calc-hub__line">Hard kill at <strong>$1M NLV</strong> = <strong class="calc-hub__num">−$50,000</strong> (5% of NLV at Standard sizing)</p>
+                <svg class="calc-hub__thumb" viewBox="0 0 200 80" aria-hidden="true">
+                    <rect x="10" y="14" width="180" height="12" rx="2" fill="#e2c97a" opacity="0.6"/>
+                    <rect x="10" y="32" width="180" height="12" rx="2" fill="#e2c97a" opacity="0.8"/>
+                    <rect x="10" y="50" width="180" height="12" rx="2" fill="#E05A6B" opacity="0.85"/>
+                    <text x="100" y="59" font-size="9" fill="#fff" font-weight="700" text-anchor="middle">HARD KILL · ED-05b</text>
+                </svg>
+                <p class="calc-hub__cta">Loss-side architecture →</p>
+            </a>
+        </div>
     </div>
 </section>
 
@@ -1207,6 +1264,6 @@
 <script src="js/calc-repair.js?v=20260612a" defer></script>
 <script src="js/calc-voltax.js?v=20260612u" defer></script>
 <script src="js/calc-bounds.js?v=20260612z" defer></script>
-<script src="js/calc-tradeoff.js?v=20260613a" defer></script>
+<script src="js/calc-tradeoff.js?v=20260613b" defer></script>
 </body>
 </html>
