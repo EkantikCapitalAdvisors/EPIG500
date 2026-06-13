@@ -1,11 +1,12 @@
 /* ================================================
    Calculator 3 — "The Honest Trade-off"
-   (Break-Even Lag Explorer) · Spec §3.
-   MODEL NOTE: lags are absolute index-level
-   percentages (closed form D* = g + m) — see the
-   documented derivation in calc-core.js: the spec's
-   fractional-lag draft makes the sign independent of
-   depth, contradicting its own acceptance criteria.
+   (Volatility Opportunity vs Lag Explorer) · Spec §3.
+   MODEL NOTE (v2, 2026-06-13): lags are FRACTIONS
+   of the correction depth — g·D given back from
+   the peak, m·D missed off the rebound. Sign of
+   Adv is depth-independent; the depth amplifies
+   magnitude only. Break-even is the depth-free
+   line g + m = 1. See calc-core.js for derivation.
    ================================================ */
 (function () {
     'use strict';
@@ -23,10 +24,25 @@
         } catch (e) {}
     }
 
-    const DEF = { D: 20, g: 25, m: 25, N: 2, R: 20 };
+    // g and m are now FRACTIONS of D (0–100%). g=20 means "exited after
+    // giving back 20% of the correction depth"; m=10 means "re-entered
+    // after 10% of the rebound was missed."
+    const DEF = { D: 20, g: 25, m: 25, N: 2, R: 20, K: 1, W: 3 };
+    const PRESETS = {
+        mechanical: { label: 'Mechanical overlay', D: 20, g: 60, m: 60, N: 2, R: 20, K: 1, W: 3,
+            note: 'Trigger-based: laggy exit (60% of correction given back) and laggy re-entry (60% of rebound missed). Sum > 100% → re-entry above exit → whipsaw. All three honest negatives apply.' },
+        ekantik:    { label: 'Operator style (discretionary)', D: 20, g: 0,  m: 0,  N: 2, R: 20, K: 0, W: 3,
+            note: 'Exit at highs (catch 100% of correction down), re-enter at the low (catch 100% of rebound up), no mid-trade stops. Whipsaw impossible; whiplash zero. The false alarm is the only remaining honest negative.' }
+    };
     const D_MIN = 0.05, D_MAX = 0.55;
 
     root.innerHTML = [
+        '<div class="to-presets" role="radiogroup" aria-label="Step-aside execution style">',
+        '  <span class="to-presets__label">Execution style:</span>',
+        '  <button type="button" class="to-presets__chip is-active" data-preset="mechanical" role="radio" aria-checked="true">Mechanical overlay</button>',
+        '  <button type="button" class="to-presets__chip" data-preset="ekantik" role="radio" aria-checked="false">Operator style</button>',
+        '  <p class="to-presets__note" id="toPresetNote" aria-live="polite">' + PRESETS.mechanical.note + '</p>',
+        '</div>',
         '<div class="calc__controls to-controls">',
         '  <label class="arith-control">',
         '    <span class="arith-control__label">Correction depth <span class="calc__info" tabindex="0" aria-label="How far the round-trip drawdown goes, peak to trough to back to peak.">i</span></span>',
@@ -35,16 +51,16 @@
         '    <span class="arith-control__hint">Peak → trough → back to peak. E.g. −25% = a one-quarter drawdown that fully retraces.</span>',
         '  </label>',
         '  <label class="arith-control">',
-        '    <span class="arith-control__label">Exit give-back <span class="calc__info" tabindex="0" aria-label="Absolute index decline absorbed before the overlay step-aside trigger fires. E.g. 25% = strategy rides through a 25% drop, then exits.">i</span></span>',
+        '    <span class="arith-control__label">Exit give-back <span class="calc__info" tabindex="0" aria-label="What fraction of the correction depth you gave back before exiting. 0% = perfect exit at the peak. 100% = no exit, rode the whole drawdown down to the trough.">i</span></span>',
         '    <span class="arith-control__val"><span id="toGVal">' + DEF.g + '</span>%</span>',
-        '    <input type="range" id="toG" min="0" max="60" step="5" value="' + DEF.g + '" aria-label="Exit give-back percent of index level">',
-        '    <span class="arith-control__hint"><strong>Absolute</strong> decline absorbed before exit — not a fraction of the drawdown. 25% = strategy exits at −25% off peak.</span>',
+        '    <input type="range" id="toG" min="0" max="100" step="5" value="' + DEF.g + '" aria-label="Exit give-back as percent of correction depth">',
+        '    <span class="arith-control__hint"><strong>Fraction of the correction</strong> given back before exit. 0% = perfect exit at peak. 25% with D=10% = exit at −2.5% off peak. 100% = no exit, rode the full drawdown.</span>',
         '  </label>',
         '  <label class="arith-control">',
-        '    <span class="arith-control__label">Re-entry miss <span class="calc__info" tabindex="0" aria-label="Absolute rebound off the bottom absorbed before the overlay re-entry trigger fires. E.g. 0% = perfect catch at the bottom; 10% = re-enters after market has bounced 10% off the trough.">i</span></span>',
+        '    <span class="arith-control__label">Re-entry miss <span class="calc__info" tabindex="0" aria-label="What fraction of the rebound you missed before re-entering. 0% = perfect bottom-tick re-entry. 100% = missed the whole rebound, re-entered at the prior peak.">i</span></span>',
         '    <span class="arith-control__val"><span id="toMVal">' + DEF.m + '</span>%</span>',
-        '    <input type="range" id="toM" min="0" max="60" step="5" value="' + DEF.m + '" aria-label="Re-entry miss percent of index level">',
-        '    <span class="arith-control__hint"><strong>Absolute</strong> rebound absorbed before re-entry. 0% = perfect catch at the bottom; 10% = re-enters 10% off the trough.</span>',
+        '    <input type="range" id="toM" min="0" max="100" step="5" value="' + DEF.m + '" aria-label="Re-entry miss as percent of correction depth">',
+        '    <span class="arith-control__hint"><strong>Fraction of the rebound</strong> missed before re-entry. 0% = bottom-tick. 25% with D=10% = re-entered after market rallied 2.5 pts off the low. 100% = missed the entire rebound, bought back at the peak.</span>',
         '  </label>',
         '</div>',
         '<p class="calc__pair" id="toHead" aria-live="polite"></p>',
@@ -58,9 +74,9 @@
         '  </label>',
         '  <div class="to-annual__readout" id="toAnnual" aria-live="polite"></div>',
         '</div>',
-        '<div class="calc__chart" id="toChart" role="img" aria-label="Step-aside advantage versus correction depth: negative in shallow corrections where the lags cost more than the protection, positive in deep ones where the avoided middle wins."></div>',
+        '<div class="calc__chart" id="toChart" role="img" aria-label="Step-aside advantage versus correction depth under fractional lags: monotonic in depth, sign set by whether exit-give-back plus re-entry-miss is under or over 100%."></div>',
         '<p class="calc__breakeven" id="toBreakeven"></p>',
-        '<p class="calc__verdict" id="toHonesty">Everything above assumes the correction actually arrives. When the lags are large relative to depth, the mechanism whipsaws; when depth dwarfs the lags and opportunities repeat, alpha compounds. <strong>But the real lag isn\'t in either of those — it\'s below.</strong></p>',
+        '<p class="calc__verdict" id="toHonesty">Everything above assumes the correction actually arrives. Under fractional lags, sign is set by whether you caught more of the move than you missed — depth amplifies the magnitude either way. <strong>The real lag isn\'t here — it\'s below, in the false-alarm case where no correction comes at all.</strong></p>',
         '<div class="to-fa" aria-label="False-alarm cost: exited at highs but no correction came">',
         '  <h4 class="to-fa__h">The true lag — exited at highs, no correction came</h4>',
         '  <p class="to-fa__sub">When the step-aside fires and a drawdown <em>does</em> materialize, deep + frequent vol is an opportunity (above). When it <em>doesn\'t</em> — market just breaks out higher — being flat is the real, undeniable lag. You held cash through a rally your $1 will never buy back at the same price.</p>',
@@ -72,10 +88,29 @@
         '  </label>',
         '  <div class="to-fa__readout" id="toFalseAlarm" aria-live="polite"></div>',
         '</div>',
+        '<div class="to-wh" aria-label="Whiplash cost: wrong-footed mid-correction">',
+        '  <h4 class="to-wh__h">Whiplash — wrong-footed inside the correction</h4>',
+        '  <p class="to-wh__sub">Two patterns sit between the opportunity and the false alarm: (1) you re-enter during a correction, market drops further, you bail again — selling lower than you re-bought; (2) market rebounds to highs, you re-enter at the top, then it corrects again — long into a fresh drawdown. Each whip is a sell-low / buy-high cycle that costs slippage.</p>',
+        '  <div class="to-wh__sliders">',
+        '    <label class="arith-control">',
+        '      <span class="arith-control__label">Whip cycles per round trip <span class="calc__info" tabindex="0" aria-label="Number of extra exit/re-entry cycles inside the trade where you were wrong-footed (sold lower than your re-entry).">i</span></span>',
+        '      <span class="arith-control__val"><span id="toKVal">' + DEF.K + '</span></span>',
+        '      <input type="range" id="toK" min="0" max="3" step="1" value="' + DEF.K + '" aria-label="Whip cycles per round trip">',
+        '      <span class="arith-control__hint">0 = clean trade. 1 = faked out once (e.g. re-entered too early). 2 = faked out twice.</span>',
+        '    </label>',
+        '    <label class="arith-control">',
+        '      <span class="arith-control__label">Slippage per whip <span class="calc__info" tabindex="0" aria-label="Average % shrinkage of the position per whip cycle. Equals (re-entry price − exit price) / re-entry price. E.g. 3% means you sold at 100 and re-bought at ~103.">i</span></span>',
+        '      <span class="arith-control__val"><span id="toWVal">' + DEF.W + '</span>%</span>',
+        '      <input type="range" id="toW" min="0" max="10" step="1" value="' + DEF.W + '" aria-label="Slippage per whip percent">',
+        '      <span class="arith-control__hint">Average shortfall per whip = (re-entry − exit) / re-entry. Position shrinks by this factor each cycle.</span>',
+        '    </label>',
+        '  </div>',
+        '  <div class="to-wh__readout" id="toWhip" aria-live="polite"></div>',
+        '</div>',
         '<p class="calc__reset-row"><button type="button" class="calc__reset" id="toReset">Reset to default</button></p>'
     ].join('');
 
-    const dEl = document.getElementById('toD'), gEl = document.getElementById('toG'), mEl = document.getElementById('toM'), nEl = document.getElementById('toN'), rEl = document.getElementById('toR');
+    const dEl = document.getElementById('toD'), gEl = document.getElementById('toG'), mEl = document.getElementById('toM'), nEl = document.getElementById('toN'), rEl = document.getElementById('toR'), kEl = document.getElementById('toK'), wEl = document.getElementById('toW');
 
     function render() {
         const D = parseInt(dEl.value, 10) / 100;
@@ -83,50 +118,47 @@
         const m = parseInt(mEl.value, 10) / 100;
         const N = parseInt(nEl.value, 10);
         const R = parseInt(rEl.value, 10) / 100;
+        const K = parseInt(kEl.value, 10);
+        const W = parseInt(wEl.value, 10) / 100;
         document.getElementById('toDVal').textContent = Math.round(D * 100);
         document.getElementById('toGVal').textContent = Math.round(g * 100);
         document.getElementById('toMVal').textContent = Math.round(m * 100);
         document.getElementById('toNVal').textContent = N;
         document.getElementById('toRVal').textContent = Math.round(R * 100);
+        document.getElementById('toKVal').textContent = K;
+        document.getElementById('toWVal').textContent = Math.round(W * 100);
 
         const S = core.tradeoffOutcome(D, g, m);
         const advNow = S - 1;
-        const dStar = core.tradeoffBreakEven(g, m, D_MAX);
 
-        const headNote = D <= g
-            ? ' <span class="calc__pair-label">(a ' + Math.round(D * 100) + '% correction never reaches a ' + Math.round(g * 100) + '% give-back — the step-aside never triggers; you held through)</span>'
-            : '';
+        // Fractional-lag derived prices (per $1 starting at peak)
+        const givenBackPct = g * D;                       // fraction of peak given back to exit
+        const exitLevel  = 1 - givenBackPct;              // $ at exit
+        const trough     = 1 - D;                         // $ at bottom
+        const missedPct  = m * D;                         // fraction of peak missed on rebound
+        const reentry    = 1 - D + missedPct;             // $ where you re-enter
+        const recover    = reentry > 0 ? 1 / reentry : 1;
+        const finalVal   = exitLevel * recover;
+        const avoidedMiddle = exitLevel - trough;         // % of peak skipped in cash
+
         document.getElementById('toHead').innerHTML =
               '<span class="calc__pair-label">Hold-through:</span> <span class="calc__num">0.0%</span> <span class="calc__pair-label">round trip ·</span> '
-            + '<span class="calc__pair-label">Step-aside:</span> <span class="calc__num" style="color:' + (advNow > 0 ? '#0D9488' : advNow < 0 ? '#E05A6B' : '#12264a') + '">' + (advNow >= 0 ? '+' : '') + (advNow * 100).toFixed(1) + '%</span>' + headNote;
+            + '<span class="calc__pair-label">Step-aside:</span> <span class="calc__num" style="color:' + (advNow > 0 ? '#0D9488' : advNow < 0 ? '#E05A6B' : '#12264a') + '">' + (advNow >= 0 ? '+' : '') + (advNow * 100).toFixed(1) + '%</span>';
 
         // Decomposition readout — walks through the math step by step
         const decompEl = document.getElementById('toDecomp');
-        if (D <= g) {
-            decompEl.innerHTML =
-                  '<p class="calc__decomp-h">Why <span class="calc__num">0.0%</span>?</p>'
-                + '<ol class="calc__decomp-steps">'
-                + '<li>Drawdown only reaches <strong>−' + Math.round(D * 100) + '%</strong>, which is shallower than the <strong>−' + Math.round(g * 100) + '%</strong> exit trigger.</li>'
-                + '<li>The step-aside <strong>never fires</strong> — you held the index through the full round trip.</li>'
-                + '<li>Round trip back to peak ⇒ <strong>0.0%</strong> on both legs.</li>'
-                + '</ol>';
-        } else {
-            const exitLevel = (1 - g);                       // $ at exit, from $1 peak
-            const trough   = (1 - D);                        // $ at the bottom
-            const reentry  = Math.min(1 - D + m, 1);         // $ where you re-enter
-            const recover  = 1 / reentry;                    // multiple to get back to peak
-            const finalVal = exitLevel * recover;            // step-aside ending $
-            const avoidedMiddle = (1 - g) - (1 - D);         // % of peak you skipped in cash
-            decompEl.innerHTML =
-                  '<p class="calc__decomp-h">Where the <span class="calc__num" style="color:' + (advNow > 0 ? '#0D9488' : advNow < 0 ? '#E05A6B' : '#12264a') + '">' + (advNow >= 0 ? '+' : '') + (advNow * 100).toFixed(1) + '%</span> comes from <span class="calc__decomp-sub">(starting from $1.000 at the peak)</span></p>'
-                + '<ol class="calc__decomp-steps">'
-                + '<li><strong>Ride down to the exit trigger:</strong> market drops to −' + Math.round(g * 100) + '% → you exit at <strong>$' + exitLevel.toFixed(3) + '</strong>. <span class="calc__decomp-cost">(this is the <em>exit lag</em> — −' + (g * 100).toFixed(0) + '% paid)</span></li>'
-                + '<li><strong>Sit in cash through the avoided middle:</strong> market falls another ' + (avoidedMiddle * 100).toFixed(0) + ' pts (−' + Math.round(g * 100) + '% → −' + Math.round(D * 100) + '%), you stay flat at $' + exitLevel.toFixed(3) + '. <span class="calc__decomp-gain">(this is the <em>protection</em>)</span></li>'
-                + '<li><strong>Re-enter after the bounce:</strong> market troughs at $' + trough.toFixed(3) + ', rebounds ' + (m * 100).toFixed(0) + ' pts, you re-enter at <strong>$' + reentry.toFixed(3) + '</strong>. <span class="calc__decomp-cost">(this is the <em>re-entry miss</em> — ' + (m * 100).toFixed(0) + '% paid)</span></li>'
-                + '<li><strong>Ride the recovery back to peak:</strong> $' + exitLevel.toFixed(3) + ' <span class="calc__decomp-sub">(cash from step 1)</span> × ' + recover.toFixed(3) + ' <span class="calc__decomp-sub">(peak ÷ re-entry price)</span> = <strong>$' + finalVal.toFixed(3) + '</strong>.</li>'
-                + '<li><strong>Net vs hold-through ($1.000):</strong> <span class="calc__num" style="color:' + (advNow > 0 ? '#0D9488' : advNow < 0 ? '#E05A6B' : '#12264a') + '">' + (advNow >= 0 ? '+' : '') + (advNow * 100).toFixed(1) + '%</span> on the round trip.</li>'
-                + '</ol>';
-        }
+        const exitTagText = g === 0 ? 'perfect exit at peak' : g >= 1 ? 'no exit — rode to the trough' : 'gave back ' + (g * 100).toFixed(0) + '% of the ' + (D * 100).toFixed(0) + '% correction';
+        const missTagText = m === 0 ? 'bottom-tick re-entry' : m >= 1 ? 'missed the entire rebound — re-entered at the peak' : 'missed ' + (m * 100).toFixed(0) + '% of the rebound';
+
+        decompEl.innerHTML =
+              '<p class="calc__decomp-h">Where the <span class="calc__num" style="color:' + (advNow > 0 ? '#0D9488' : advNow < 0 ? '#E05A6B' : '#12264a') + '">' + (advNow >= 0 ? '+' : '') + (advNow * 100).toFixed(1) + '%</span> comes from <span class="calc__decomp-sub">(starting from $1.000 at the peak · correction depth ' + (D * 100).toFixed(0) + '%)</span></p>'
+            + '<ol class="calc__decomp-steps">'
+            + '<li><strong>Exit point:</strong> ' + (g * 100).toFixed(0) + '% × ' + (D * 100).toFixed(0) + '% = ' + (givenBackPct * 100).toFixed(1) + '% given back → you exit at <strong>$' + exitLevel.toFixed(3) + '</strong>. <span class="calc__decomp-cost">(' + exitTagText + ')</span></li>'
+            + '<li><strong>Sit in cash through the avoided middle:</strong> market falls from $' + exitLevel.toFixed(3) + ' to the trough at $' + trough.toFixed(3) + ' (' + (avoidedMiddle * 100).toFixed(1) + ' pts skipped). You stay flat at $' + exitLevel.toFixed(3) + '. <span class="calc__decomp-gain">(this is the <em>protection</em>)</span></li>'
+            + '<li><strong>Re-entry point:</strong> ' + (m * 100).toFixed(0) + '% × ' + (D * 100).toFixed(0) + '% = ' + (missedPct * 100).toFixed(1) + '% of rebound missed → you re-enter at <strong>$' + reentry.toFixed(3) + '</strong>. <span class="calc__decomp-cost">(' + missTagText + ')</span></li>'
+            + '<li><strong>Ride the recovery back to peak:</strong> $' + exitLevel.toFixed(3) + ' <span class="calc__decomp-sub">(cash from step 1)</span> × ' + recover.toFixed(3) + ' <span class="calc__decomp-sub">(peak ÷ re-entry price)</span> = <strong>$' + finalVal.toFixed(3) + '</strong>.</li>'
+            + '<li><strong>Net vs hold-through ($1.000):</strong> <span class="calc__num" style="color:' + (advNow > 0 ? '#0D9488' : advNow < 0 ? '#E05A6B' : '#12264a') + '">' + (advNow >= 0 ? '+' : '') + (advNow * 100).toFixed(1) + '%</span> on the round trip.</li>'
+            + '</ol>';
 
         // Annual cumulative alpha — compounding N identical step-aside trips per year
         const annEl = document.getElementById('toAnnual');
@@ -187,13 +219,49 @@
                 + '<p class="to-fa__synthesis"><strong>The honest picture:</strong> a defensive exit is a coin flip on regime. If the correction comes, the math above (volatility opportunity) applies. If it doesn\'t, this drag does. Expected value depends on how often the call is right — which is exactly what the <a href="/falsifiability-protocol.html" target="_blank" rel="noopener">Expression Layer gate</a> measures.</p>';
         }
 
-        // Break-even formula legend
+        // Whiplash: wrong-footed mid-correction (K whip cycles × W slippage each)
+        const whipMult = Math.pow(1 - W, K);          // surviving fraction of the position
+        const whipDrag = whipMult - 1;                  // negative
+        // Combined per-trip outcome: opportunity (S) × whip survival
+        const sCombined = S * whipMult;
+        const advCombined = sCombined - 1;
+        const annualCombined = N === 0 ? 0 : Math.pow(sCombined, N) - 1;
+        const whipEl = document.getElementById('toWhip');
+        function pctTxt(x) { return (x >= 0 ? '+' : '') + (x * 100).toFixed(1) + '%'; }
+        function colTxt(x) { return x > 0 ? '#0D9488' : x < 0 ? '#E05A6B' : '#12264a'; }
+        if (K === 0 || W === 0) {
+            whipEl.innerHTML =
+                  '<p class="to-wh__h2">No whips → <span class="calc__num" style="color:#12264a;font-size:22px">0.0%</span> extra drag</p>'
+                + '<p class="to-wh__formula">Dial up cycles and slippage to see how a wrong-footed trade compounds onto the per-trip number above.</p>';
+        } else {
+            whipEl.innerHTML =
+                  '<p class="to-wh__h2">Whip drag this trip: <span class="calc__num" style="color:#E05A6B;font-size:22px">' + (whipDrag * 100).toFixed(1) + '%</span></p>'
+                + '<p class="to-wh__formula">drag = (1 − ' + (W * 100).toFixed(0) + '%)<sup>' + K + '</sup> − 1 = (' + (1 - W).toFixed(2) + ')<sup>' + K + '</sup> − 1 = <strong>' + (whipDrag * 100).toFixed(1) + '%</strong></p>'
+                + '<div class="to-wh__combined">'
+                + '  <p class="to-wh__combined-h">Combined per round-trip (opportunity × whip survival):</p>'
+                + '  <p class="to-wh__combined-eq">'
+                + '    <span>Per-trip alpha: <strong style="color:' + colTxt(advNow) + '">' + pctTxt(advNow) + '</strong></span> '
+                + '    <span class="to-wh__sep">×</span> '
+                + '    <span>Whip survival: <strong>' + (whipMult).toFixed(3) + '</strong></span> '
+                + '    <span class="to-wh__sep">⇒</span> '
+                + '    <span>Net per-trip: <strong style="color:' + colTxt(advCombined) + ';font-size:17px">' + pctTxt(advCombined) + '</strong></span>'
+                + '  </p>'
+                + (N > 0
+                    ? '  <p class="to-wh__combined-eq">Annual at <strong>' + N + '/yr</strong>: <strong style="color:' + colTxt(annualCombined) + ';font-size:17px">' + pctTxt(annualCombined) + '</strong> <span class="to-wh__sub-note">(was ' + pctTxt(Math.pow(S, N) - 1) + ' without whips)</span></p>'
+                    : '')
+                + '</div>'
+                + '<p class="to-wh__synthesis"><strong>Two patterns to keep in mind:</strong> (1) <em>continuation whip</em> — you re-enter during the correction, market drops further, you sell again; (2) <em>second-leg whip</em> — market rebounds to highs, you re-enter at the top, then it corrects again. Each is one cycle here. Both cost the same arithmetically — your position shrinks by the slippage factor.</p>';
+        }
+
+        // Break-even legend — under fractional lags this is depth-independent
         const beEl = document.getElementById('toBreakeven');
-        const dStarPct = Math.round((g + m) * 100);
+        const lagSumPct = Math.round((g + m) * 100);
+        const sign = (g + m) < 1 ? 'opportunity (alpha grows with depth)' : (g + m) > 1 ? 'whipsaw (drag grows with depth)' : 'exact zero alpha at any depth';
+        const signColor = (g + m) < 1 ? '#0D9488' : (g + m) > 1 ? '#E05A6B' : '#12264a';
         beEl.innerHTML =
-              '<span class="calc__breakeven-formula">break-even depth = exit give-back + re-entry miss</span> '
-            + '<span class="calc__breakeven-eq">= ' + Math.round(g * 100) + '% + ' + Math.round(m * 100) + '% = <strong>' + dStarPct + '%</strong></span> '
-            + '<span class="calc__breakeven-note">— shallower than this and the lags cost more than the protection; deeper and the avoided middle wins.</span>';
+              '<span class="calc__breakeven-formula">break-even line: exit give-back + re-entry miss = 100%</span> '
+            + '<span class="calc__breakeven-eq">→ your sum = ' + Math.round(g * 100) + '% + ' + Math.round(m * 100) + '% = <strong style="color:' + signColor + '">' + lagSumPct + '%</strong></span> '
+            + '<span class="calc__breakeven-note">— ' + sign + '. Under fractional lags, depth amplifies magnitude only; sign is set by whether you caught more of the move than you missed.</span>';
 
         // Advantage curve
         const W = 640, H = 280, PL = 56, PR = 18, PT = 18, PB = 34;
@@ -220,22 +288,20 @@
         for (let v = 0.05; v <= 0.55 + 1e-9; v += 0.10) {
             s.push('<text x="' + X(v) + '" y="' + (H - PB + 16) + '" text-anchor="middle" font-size="11" fill="#64748B">−' + Math.round(v * 100) + '%</text>');
         }
-        // mandatory region labels (§3.3 — the honesty feature)
-        s.push('<text x="' + X(0.30) + '" y="' + Math.min(H - PB - 8, y0 + 20) + '" font-size="12" font-weight="700" fill="#E05A6B">the lags cost more than the protection</text>');
-        s.push('<text x="' + X(0.30) + '" y="' + Math.max(PT + 14, y0 - 10) + '" font-size="12" font-weight="700" fill="#0D9488">the avoided middle wins</text>');
+        // region labels: under fractional lags one regime dominates the whole chart
+        const isOpp = (g + m) < 1, isWhip = (g + m) > 1;
+        if (isOpp) {
+            s.push('<text x="' + X(0.30) + '" y="' + Math.max(PT + 14, y0 - 10) + '" font-size="12" font-weight="700" fill="#0D9488">volatility opportunity — deeper = more alpha</text>');
+        } else if (isWhip) {
+            s.push('<text x="' + X(0.30) + '" y="' + Math.min(H - PB - 8, y0 + 20) + '" font-size="12" font-weight="700" fill="#E05A6B">whipsaw — deeper = more drag (re-entry above exit)</text>');
+        } else {
+            s.push('<text x="' + X(0.30) + '" y="' + (y0 - 6) + '" font-size="12" font-weight="700" fill="#12264a">flat — exit equals re-entry at any depth</text>');
+        }
         // advantage curve
         let path = '';
         pts.forEach(function (p, i) { path += (i ? ' L ' : 'M ') + X(p[0]) + ' ' + Y(p[1]); });
         s.push('<path d="' + path + '" fill="none" stroke="#12264a" stroke-width="2.2"/>');
-        // break-even marker
-        if (dStar !== null && dStar >= D_MIN && dStar <= D_MAX) {
-            s.push('<line x1="' + X(dStar) + '" y1="' + PT + '" x2="' + X(dStar) + '" y2="' + (H - PB) + '" stroke="#b8962e" stroke-width="1.6" stroke-dasharray="5 4"/>');
-            const flip = X(dStar) > PL + (W - PL - PR) * 0.7;
-            s.push('<text x="' + (X(dStar) + (flip ? -5 : 5)) + '" y="' + (PT + 12) + '" text-anchor="' + (flip ? 'end' : 'start') + '" font-size="11.5" font-weight="700" fill="#b8962e">break-even ≈ ' + Math.round(dStar * 100) + '%</text>');
-        } else {
-            s.push('<text x="' + X(0.30) + '" y="' + (PT + 12) + '" text-anchor="middle" font-size="11.5" font-weight="700" fill="#b8962e">no break-even below 55% at these lags</text>');
-        }
-        // three named walk-through callouts: mild / break-even / crash
+        // three named walk-through callouts: mild / typical / crash
         function callout(vDepth, label, anchor) {
             const a = core.tradeoffAdv(vDepth, g, m);
             const cx = X(vDepth), cy = Y(a);
@@ -246,11 +312,9 @@
             const tx = tAnchor === 'start' ? cx + 6 : tAnchor === 'end' ? cx - 6 : cx;
             s.push('<text x="' + tx + '" y="' + ty + '" text-anchor="' + tAnchor + '" font-size="10.5" font-weight="600" fill="#12264a">' + label + ' <tspan fill="#64748B" font-weight="400">(' + (a >= 0 ? '+' : '') + (a * 100).toFixed(1) + '%)</tspan></text>');
         }
-        callout(0.10, 'mild correction', 'start');
-        if (dStar !== null && dStar >= D_MIN + 0.03 && dStar <= D_MAX - 0.03) {
-            callout(dStar, 'break-even', 'middle');
-        }
-        callout(0.50, 'crash', 'end');
+        callout(0.10, 'mild −10%', 'start');
+        callout(0.30, 'typical −30%', 'middle');
+        callout(0.50, 'crash −50%', 'end');
         // live dot at current D
         s.push('<circle cx="' + X(D) + '" cy="' + Y(advNow) + '" r="6" fill="#d4af37" stroke="#fff" stroke-width="1.5"/>');
         document.getElementById('toChart').innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" preserveAspectRatio="xMidYMid meet">' + s.join('') + '</svg>';
@@ -263,9 +327,26 @@
         raf = true;
         requestAnimationFrame(function () { raf = false; render(); });
     }
-    [dEl, gEl, mEl, nEl, rEl].forEach(function (el) { el.addEventListener('input', queue); });
+    [dEl, gEl, mEl, nEl, rEl, kEl, wEl].forEach(function (el) { el.addEventListener('input', queue); });
+
+    function applyPreset(name) {
+        const p = PRESETS[name]; if (!p) return;
+        dEl.value = p.D; gEl.value = p.g; mEl.value = p.m; nEl.value = p.N;
+        rEl.value = p.R; kEl.value = p.K; wEl.value = p.W;
+        root.querySelectorAll('.to-presets__chip').forEach(function (c) {
+            const active = c.dataset.preset === name;
+            c.classList.toggle('is-active', active);
+            c.setAttribute('aria-checked', String(active));
+        });
+        document.getElementById('toPresetNote').textContent = p.note;
+        queue();
+    }
+    root.querySelectorAll('.to-presets__chip').forEach(function (chip) {
+        chip.addEventListener('click', function () { applyPreset(chip.dataset.preset); });
+    });
+
     document.getElementById('toReset').addEventListener('click', function () {
-        dEl.value = DEF.D; gEl.value = DEF.g; mEl.value = DEF.m; nEl.value = DEF.N; rEl.value = DEF.R; queue();
+        applyPreset('mechanical');
     });
     render();
 })();

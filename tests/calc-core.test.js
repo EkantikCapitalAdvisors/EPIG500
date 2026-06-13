@@ -39,13 +39,18 @@ ok('parser rejects >50 values', !C.parseReturnSeries(Array(51).fill('5').join(',
 /* ---- Calc 3 (§3.5) ---- */
 let allPos = true;
 for (let D = 0.001; D <= 0.55; D += 0.001) if (C.tradeoffAdv(D, 0, 0) <= 0) allPos = false;
-ok('g=m=0 → Adv > 0 for all D > 0', allPos);
-const dStar = C.tradeoffBreakEven(0.25, 0.25, 0.55);
-eq('D* (numeric) at g=m=25% = 50% ±0.1pp', dStar, 0.50, 0.001);
-eq('closed form D* = g + m', dStar, 0.25 + 0.25, 0.001);
-ok('default D=20% with g=25%: step-aside never triggers (Adv = 0)', C.tradeoffAdv(0.20, 0.25, 0.25) === 0);
-ok('red zone exists at defaults (Adv < 0 at D=40%)', C.tradeoffAdv(0.40, 0.25, 0.25) < 0);
-ok('teal zone beyond D* (Adv > 0 at D=55%)', C.tradeoffAdv(0.55, 0.25, 0.25) > 0);
+ok('g=m=0 → Adv > 0 for all D > 0 (fractional model)', allPos);
+ok('fractional g=m=0 at D=20% yields max alpha D/(1−D) = 25%',
+    Math.abs(C.tradeoffAdv(0.20, 0, 0) - 0.25) < 1e-9);
+ok('fractional g=m=1 at D=20% yields worst case −D = −20%',
+    Math.abs(C.tradeoffAdv(0.20, 1, 1) - (-0.20)) < 1e-9);
+ok('fractional g+m=1 → Adv = 0 regardless of depth (D=10%)',
+    Math.abs(C.tradeoffAdv(0.10, 0.4, 0.6)) < 1e-9);
+ok('fractional g+m=1 → Adv = 0 regardless of depth (D=50%)',
+    Math.abs(C.tradeoffAdv(0.50, 0.7, 0.3)) < 1e-9);
+ok('fractional g+m<1 → Adv > 0 for any D > 0', C.tradeoffAdv(0.10, 0.2, 0.1) > 0 && C.tradeoffAdv(0.40, 0.2, 0.1) > 0);
+ok('fractional g+m>1 → Adv < 0 for any D > 0', C.tradeoffAdv(0.10, 0.7, 0.5) < 0 && C.tradeoffAdv(0.40, 0.7, 0.5) < 0);
+eq('break-even is depth-independent constant 1.0 (g+m sum)', C.tradeoffBreakEven(), 1.0);
 
 /* ---- Calc 4 (§4.5, updated to the v1.5 two-contract ceiling) ---- */
 const K = require('../data/protocol-constants.json');
