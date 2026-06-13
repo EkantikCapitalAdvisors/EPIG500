@@ -23,7 +23,7 @@
         } catch (e) {}
     }
 
-    const DEF = { D: 20, g: 25, m: 25, N: 2, R: 20 };
+    const DEF = { D: 20, g: 25, m: 25, N: 2, R: 20, K: 1, W: 3 };
     const D_MIN = 0.05, D_MAX = 0.55;
 
     root.innerHTML = [
@@ -72,10 +72,29 @@
         '  </label>',
         '  <div class="to-fa__readout" id="toFalseAlarm" aria-live="polite"></div>',
         '</div>',
+        '<div class="to-wh" aria-label="Whiplash cost: wrong-footed mid-correction">',
+        '  <h4 class="to-wh__h">Whiplash — wrong-footed inside the correction</h4>',
+        '  <p class="to-wh__sub">Two patterns sit between the opportunity and the false alarm: (1) you re-enter during a correction, market drops further, you bail again — selling lower than you re-bought; (2) market rebounds to highs, you re-enter at the top, then it corrects again — long into a fresh drawdown. Each whip is a sell-low / buy-high cycle that costs slippage.</p>',
+        '  <div class="to-wh__sliders">',
+        '    <label class="arith-control">',
+        '      <span class="arith-control__label">Whip cycles per round trip <span class="calc__info" tabindex="0" aria-label="Number of extra exit/re-entry cycles inside the trade where you were wrong-footed (sold lower than your re-entry).">i</span></span>',
+        '      <span class="arith-control__val"><span id="toKVal">' + DEF.K + '</span></span>',
+        '      <input type="range" id="toK" min="0" max="3" step="1" value="' + DEF.K + '" aria-label="Whip cycles per round trip">',
+        '      <span class="arith-control__hint">0 = clean trade. 1 = faked out once (e.g. re-entered too early). 2 = faked out twice.</span>',
+        '    </label>',
+        '    <label class="arith-control">',
+        '      <span class="arith-control__label">Slippage per whip <span class="calc__info" tabindex="0" aria-label="Average % shrinkage of the position per whip cycle. Equals (re-entry price − exit price) / re-entry price. E.g. 3% means you sold at 100 and re-bought at ~103.">i</span></span>',
+        '      <span class="arith-control__val"><span id="toWVal">' + DEF.W + '</span>%</span>',
+        '      <input type="range" id="toW" min="0" max="10" step="1" value="' + DEF.W + '" aria-label="Slippage per whip percent">',
+        '      <span class="arith-control__hint">Average shortfall per whip = (re-entry − exit) / re-entry. Position shrinks by this factor each cycle.</span>',
+        '    </label>',
+        '  </div>',
+        '  <div class="to-wh__readout" id="toWhip" aria-live="polite"></div>',
+        '</div>',
         '<p class="calc__reset-row"><button type="button" class="calc__reset" id="toReset">Reset to default</button></p>'
     ].join('');
 
-    const dEl = document.getElementById('toD'), gEl = document.getElementById('toG'), mEl = document.getElementById('toM'), nEl = document.getElementById('toN'), rEl = document.getElementById('toR');
+    const dEl = document.getElementById('toD'), gEl = document.getElementById('toG'), mEl = document.getElementById('toM'), nEl = document.getElementById('toN'), rEl = document.getElementById('toR'), kEl = document.getElementById('toK'), wEl = document.getElementById('toW');
 
     function render() {
         const D = parseInt(dEl.value, 10) / 100;
@@ -83,11 +102,15 @@
         const m = parseInt(mEl.value, 10) / 100;
         const N = parseInt(nEl.value, 10);
         const R = parseInt(rEl.value, 10) / 100;
+        const K = parseInt(kEl.value, 10);
+        const W = parseInt(wEl.value, 10) / 100;
         document.getElementById('toDVal').textContent = Math.round(D * 100);
         document.getElementById('toGVal').textContent = Math.round(g * 100);
         document.getElementById('toMVal').textContent = Math.round(m * 100);
         document.getElementById('toNVal').textContent = N;
         document.getElementById('toRVal').textContent = Math.round(R * 100);
+        document.getElementById('toKVal').textContent = K;
+        document.getElementById('toWVal').textContent = Math.round(W * 100);
 
         const S = core.tradeoffOutcome(D, g, m);
         const advNow = S - 1;
@@ -187,6 +210,40 @@
                 + '<p class="to-fa__synthesis"><strong>The honest picture:</strong> a defensive exit is a coin flip on regime. If the correction comes, the math above (volatility opportunity) applies. If it doesn\'t, this drag does. Expected value depends on how often the call is right — which is exactly what the <a href="/falsifiability-protocol.html" target="_blank" rel="noopener">Expression Layer gate</a> measures.</p>';
         }
 
+        // Whiplash: wrong-footed mid-correction (K whip cycles × W slippage each)
+        const whipMult = Math.pow(1 - W, K);          // surviving fraction of the position
+        const whipDrag = whipMult - 1;                  // negative
+        // Combined per-trip outcome: opportunity (S) × whip survival
+        const sCombined = S * whipMult;
+        const advCombined = sCombined - 1;
+        const annualCombined = N === 0 ? 0 : Math.pow(sCombined, N) - 1;
+        const whipEl = document.getElementById('toWhip');
+        function pctTxt(x) { return (x >= 0 ? '+' : '') + (x * 100).toFixed(1) + '%'; }
+        function colTxt(x) { return x > 0 ? '#0D9488' : x < 0 ? '#E05A6B' : '#12264a'; }
+        if (K === 0 || W === 0) {
+            whipEl.innerHTML =
+                  '<p class="to-wh__h2">No whips → <span class="calc__num" style="color:#12264a;font-size:22px">0.0%</span> extra drag</p>'
+                + '<p class="to-wh__formula">Dial up cycles and slippage to see how a wrong-footed trade compounds onto the per-trip number above.</p>';
+        } else {
+            whipEl.innerHTML =
+                  '<p class="to-wh__h2">Whip drag this trip: <span class="calc__num" style="color:#E05A6B;font-size:22px">' + (whipDrag * 100).toFixed(1) + '%</span></p>'
+                + '<p class="to-wh__formula">drag = (1 − ' + (W * 100).toFixed(0) + '%)<sup>' + K + '</sup> − 1 = (' + (1 - W).toFixed(2) + ')<sup>' + K + '</sup> − 1 = <strong>' + (whipDrag * 100).toFixed(1) + '%</strong></p>'
+                + '<div class="to-wh__combined">'
+                + '  <p class="to-wh__combined-h">Combined per round-trip (opportunity × whip survival):</p>'
+                + '  <p class="to-wh__combined-eq">'
+                + '    <span>Per-trip alpha: <strong style="color:' + colTxt(advNow) + '">' + pctTxt(advNow) + '</strong></span> '
+                + '    <span class="to-wh__sep">×</span> '
+                + '    <span>Whip survival: <strong>' + (whipMult).toFixed(3) + '</strong></span> '
+                + '    <span class="to-wh__sep">⇒</span> '
+                + '    <span>Net per-trip: <strong style="color:' + colTxt(advCombined) + ';font-size:17px">' + pctTxt(advCombined) + '</strong></span>'
+                + '  </p>'
+                + (N > 0
+                    ? '  <p class="to-wh__combined-eq">Annual at <strong>' + N + '/yr</strong>: <strong style="color:' + colTxt(annualCombined) + ';font-size:17px">' + pctTxt(annualCombined) + '</strong> <span class="to-wh__sub-note">(was ' + pctTxt(Math.pow(S, N) - 1) + ' without whips)</span></p>'
+                    : '')
+                + '</div>'
+                + '<p class="to-wh__synthesis"><strong>Two patterns to keep in mind:</strong> (1) <em>continuation whip</em> — you re-enter during the correction, market drops further, you sell again; (2) <em>second-leg whip</em> — market rebounds to highs, you re-enter at the top, then it corrects again. Each is one cycle here. Both cost the same arithmetically — your position shrinks by the slippage factor.</p>';
+        }
+
         // Break-even formula legend
         const beEl = document.getElementById('toBreakeven');
         const dStarPct = Math.round((g + m) * 100);
@@ -263,9 +320,10 @@
         raf = true;
         requestAnimationFrame(function () { raf = false; render(); });
     }
-    [dEl, gEl, mEl, nEl, rEl].forEach(function (el) { el.addEventListener('input', queue); });
+    [dEl, gEl, mEl, nEl, rEl, kEl, wEl].forEach(function (el) { el.addEventListener('input', queue); });
     document.getElementById('toReset').addEventListener('click', function () {
-        dEl.value = DEF.D; gEl.value = DEF.g; mEl.value = DEF.m; nEl.value = DEF.N; rEl.value = DEF.R; queue();
+        dEl.value = DEF.D; gEl.value = DEF.g; mEl.value = DEF.m; nEl.value = DEF.N;
+        rEl.value = DEF.R; kEl.value = DEF.K; wEl.value = DEF.W; queue();
     });
     render();
 })();
