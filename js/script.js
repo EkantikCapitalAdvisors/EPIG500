@@ -1641,7 +1641,7 @@
                 const years = w.years.length;
                 const alphaCagr = years > 0 ? Math.pow(r.strat / r.idx, 1 / years) - 1 : 0;
                 // Dollar reference: a $100K model portfolio.
-                const NLV0 = 100000;
+                const NLV0 = activeNLV;
                 const idxDollar = r.idx * NLV0;
                 const stratDollar = r.strat * NLV0;
                 const alphaDollar = alpha * NLV0;   // = stratDollar - idxDollar
@@ -1656,7 +1656,7 @@
                     +     '<span class="arith-window__alpha-lbl">Outperformance<br><span class="arith-window__alpha-vs">vs 100% S&amp;P 500</span></span>'
                     +     '<span class="arith-window__alpha-stack">'
                     +       '<span class="arith-window__alpha-val' + moodClass(alphaPct) + '">' + fmtPct(alphaPct) + ' <span class="arith-window__alpha-suffix">total</span></span>'
-                    +       '<span class="arith-window__alpha-dollars">' + fmtPct(alphaCagr) + '/yr CAGR · ' + (alphaDollar >= 0 ? '+' : '−') + fmtUSD0(Math.abs(alphaDollar)) + ' on $100K</span>'
+                    +       '<span class="arith-window__alpha-dollars">' + fmtPct(alphaCagr) + '/yr CAGR · ' + (alphaDollar >= 0 ? '+' : '−') + fmtUSD0(Math.abs(alphaDollar)) + ' on ' + fmtNLV(activeNLV) + '</span>'
                     +     '</span>'
                     +   '</div>'
                     + '</div>';
@@ -1678,7 +1678,7 @@
             const series = buildSeries(activeYears, up, down, activeRiskPct);
             const last = series[series.length - 1];
             const years = activeYears.length;
-            const NLV0 = 100000;
+            const NLV0 = activeNLV;
             const stratDollar = last.total * NLV0;
             const idxDollar = last.idx * NLV0;
             const ratio = last.total / last.idx;
@@ -1715,7 +1715,7 @@
                 + 'if the overlay captures <strong>' + upPct + '%</strong> of every up year '
                 + 'and only <strong>' + downPct + '%</strong> of every down year for <strong>' + years + ' straight years</strong>'
                 + boosterClause + ', '
-                + 'a $100K portfolio ends at <strong>' + fmtUSD0(stratDollar) + '</strong> — '
+                + 'a ' + fmtNLV(activeNLV) + ' portfolio ends at <strong>' + fmtUSD0(stratDollar) + '</strong> — '
                 + comparePhrase + ' the <strong>' + fmtUSD0(idxDollar) + '</strong> '
                 + 'an investor would have gotten from just buying SPY and holding.';
         }
@@ -1736,6 +1736,18 @@
         // when BOOSTER_TOGGLE_ENABLED is countersigned on (spec §5), and is then
         // computed from protocol-bound Period 2 trades only.
         let activeRiskPct = 0;
+
+        // Model portfolio NLV — drives all dollar amounts shown in the cards,
+        // the plain-English summary, and the Booster baseline indicator.
+        // Contract count scales linearly: 1 /ES per $100K NLV at the 0.5%
+        // per-trade architectural risk anchor.
+        let activeNLV = 1000000;
+        function nlvUnits() { return activeNLV / 100000; }   // contracts under base sizing
+        function fmtNLV(n) {
+            if (n >= 1e6) return '$' + (n / 1e6).toFixed(n % 1e6 === 0 ? 0 : 1) + 'M';
+            if (n >= 1e3) return '$' + (n / 1e3).toFixed(0) + 'K';
+            return '$' + n.toFixed(0);
+        }
 
         // Annual throughput as a fraction of $100K starting NLV at the 0.5% per-trade
         // architectural risk anchor. No hardcoded fallback: the rate stays 0 until it
@@ -1840,9 +1852,20 @@
             const trades = m.tradeCount || 0;
             const months = m.activeMonths || 0;
 
+            const ratePctNum = parseFloat(ratePct);
+            const dollarsPerYear = Math.round(ratePctNum / 100 * activeNLV);
+            const dollarsPerMonth = Math.round(dollarsPerYear / 12);
+            const units = nlvUnits();   // base contracts at 1 /ES per $100K
+            const hardKillDollar = 100 * 50 * units;   // 100 pts × $50/pt × N contracts
+
             el.innerHTML =
                   '<p class="arith-baseline__headline">'
-                +   '<span class="diamond">◆</span> Booster Engine throughput on the protocol-bound live record · <strong>+' + ratePct + '% NLV / yr</strong> on a $100K portfolio · sample: <strong>' + trades + ' trades</strong>'
+                +   '<span class="diamond">◆</span> Booster Engine throughput on the protocol-bound live record · <strong>+' + ratePct + '% NLV / yr</strong> on ' + fmtNLV(activeNLV) + ' · '
+                +   '<span class="arith-baseline__dollars">≈ ' + fmtUSD0(dollarsPerYear) + '/yr · ' + fmtUSD0(dollarsPerMonth) + '/month</span>'
+                +   ' · sample: <strong>' + trades + ' trades</strong>'
+                + '</p>'
+                + '<p class="arith-baseline__scaling">'
+                +   '<span class="diamond">◆</span> At this portfolio size the engine runs <strong>' + units.toFixed(units === Math.floor(units) ? 0 : 1) + ' /ES base contracts</strong> under the 0.5% per-trade architectural anchor. <strong>Hard kill</strong> (ED-05b, −100 pts) fires at a portfolio drawdown of <strong>' + fmtUSD0(hardKillDollar) + '</strong> on this NLV. Contracts and dollar kill both scale linearly with portfolio size.'
                 + '</p>'
                 + '<p class="arith-baseline__src">'
                 +   '<em>Source: protocol-bound Period 2 live record (' + trades + ' trades · ' + totalPts + ' pts · ' + months + ' active months). Updates automatically with every admin publish. Throughput modeled at the 0.5% per-trade architectural risk anchor — the level the record was generated at. Historical illustration of past throughput extrapolated forward at constant contract count; not a projection of any Ekantik strategy.</em>'
@@ -2087,8 +2110,8 @@
                 const delta = p.total - p.idx;
                 tip.innerHTML =
                       '<strong>' + (i === 0 ? 'Start · ' : '') + p.yr + '</strong><br>'
-                    + 'Strategy <strong>' + p.total.toFixed(2) + 'x</strong> · ' + fmtUSD0(p.total * 100000) + ' on $100K<br>'
-                    + 'S&amp;P 500 ' + p.idx.toFixed(2) + 'x · ' + fmtUSD0(p.idx * 100000) + '<br>'
+                    + 'Strategy <strong>' + p.total.toFixed(2) + 'x</strong> · ' + fmtUSD0(p.total * activeNLV) + ' on ' + fmtNLV(activeNLV) + '<br>'
+                    + 'S&amp;P 500 ' + p.idx.toFixed(2) + 'x · ' + fmtUSD0(p.idx * activeNLV) + '<br>'
                     + 'Δ ' + (delta >= 0 ? '+' : '') + delta.toFixed(2) + 'x';
                 tip.hidden = false; line.hidden = false;
                 const xpx = g.PAD_L + (i / xN) * innerW;
@@ -2182,6 +2205,19 @@
             });
         });
         syncThroughLegend();
+
+        // Portfolio NLV chip handler — drives every dollar amount on §The Arithmetic.
+        document.querySelectorAll('.arith-nlv__chip').forEach(function (chip) {
+            chip.addEventListener('click', function () {
+                const nlv = parseInt(chip.getAttribute('data-nlv'), 10);
+                if (!nlv || nlv <= 0) return;
+                activeNLV = nlv;
+                document.querySelectorAll('.arith-nlv__chip').forEach(function (c) { c.classList.toggle('is-active', c === chip); });
+                // Refresh baseline indicator (which now depends on activeNLV for its $/yr line)
+                if (typeof updateBaselineIndicator === 'function') updateBaselineIndicator();
+                render();   // re-render cards + plain-English summary + chart with new NLV scaling
+            });
+        });
 
         window.addEventListener('resize', function () {
             const up = parseInt(document.getElementById('arithUp').value, 10) / 100;
