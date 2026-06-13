@@ -67,38 +67,32 @@
        MODEL NOTE (documented deviation): the spec drafts the lags as
        fractions of the decline: S = (1 − g·D) / (1 − D·(1 − m)).
        Closed form of its sign: Adv = D·(1 − m − g) / (1 − D·(1 − m)),
-       so the SIGN IS INDEPENDENT OF D — there is no depth-dependent
-       break-even, which contradicts the spec's own acceptance criteria
-       (mid-range D* at g=m=25%; red region visible at defaults).
-       The lags are therefore modeled as ABSOLUTE index-level
-       percentages: exit after giving back g points of the index;
-       re-enter m points above the trough.
-           exit price   = 1 − g            (only reached if D > g)
-           re-entry     = min(1 − D + m, 1)
-           S            = (1 − g) / re-entry      (hold-through H = 1)
-       Closed form: for D > g and m < D,
-           Adv(D) = (D − g − m) / (1 − D + m)  →  break-even D* = g + m.
-       With g = m = 0 this reduces to Adv = D/(1−D) > 0 for all D > 0,
-       satisfying acceptance test §3.5(1).                              */
+       FRACTIONAL-LAG MODEL (v2, 2026-06-13). g and m are fractions
+       of the correction depth D — exit after g·D given back from the
+       peak; re-enter after m·D rebound above the trough. This matches
+       discretionary execution semantics (operator thinks in terms of
+       "what % of the move did I catch", not absolute index levels).
+           exit price   = 1 − g·D
+           re-entry     = 1 − D + m·D = 1 − D(1−m)
+           S            = (1 − g·D) / (1 − D(1−m))
+       Sign of Adv is then independent of D — the depth amplifies
+       magnitude, not direction. Whether step-aside wins depends only
+       on whether g + m < 1 (you exited above where you re-entered).
+       Edge cases: g=m=0 → max alpha D/(1−D); g=m=1 → −D (worst case,
+       sold trough / bought peak); g+m=1 → zero (exit price equals
+       re-entry price).                                                  */
     function tradeoffOutcome(D, g, m) {
-        if (D <= g) return 1;                       // decline never reaches the exit trigger: held through
-        const reentry = Math.min(1 - D + m, 1);     // m ≥ D → re-enter at the prior high
-        return (1 - g) / reentry;
+        const exit = 1 - g * D;
+        const reentry = 1 - D * (1 - m);
+        return reentry > 0 ? exit / reentry : 1;
     }
     function tradeoffAdv(D, g, m) { return tradeoffOutcome(D, g, m) - 1; }
-    function tradeoffBreakEven(g, m, maxD) {
-        // Smallest D in (0, maxD] with Adv(D) > 0 (strictly — the D ≤ g
-        // "never triggered" plateau sits at exactly 0 and does not count).
-        // Closed form: D* = g + m. Verified numerically to 1e-4 below.
-        const closed = g + m;
-        if (closed <= 0) return 1e-4;               // frictionless: wins immediately
-        if (closed >= maxD) return null;            // no break-even in range
-        let lo = closed - 0.01, hi = closed + 0.01;
-        for (let i = 0; i < 40; i++) {
-            const mid = (lo + hi) / 2;
-            if (tradeoffAdv(mid, g, m) > 0) hi = mid; else lo = mid;
-        }
-        return (lo + hi) / 2;
+    function tradeoffBreakEven() {
+        // Under fractional lags the break-even is depth-independent:
+        // Adv = 0 iff g + m = 1. Returned as the constant 1.0 (sum of
+        // fractional lags). The chart's break-even marker is therefore
+        // drawn against the slider sum, not against D.
+        return 1.0;
     }
 
     /* ---------- Calculator 4 — The Worst Case, Priced (§4.2) ----------
