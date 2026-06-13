@@ -4504,3 +4504,33 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 /* ---- Calculator 3 — Honest Trade-off ---- */
 .to-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-6); }
 @media (max-width: 720px) { .to-controls { grid-template-columns: 1fr; } }
+
+/* Portfolio NLV selector — drives all dollar amounts on §The Arithmetic */
+.arith-nlv {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    margin-bottom: var(--s-4); padding-bottom: var(--s-3);
+    border-bottom: 1px dashed var(--line);
+}
+.arith-nlv__label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px;
+    color: var(--gold-deep); margin-right: 4px;
+}
+.arith-nlv__chip {
+    background: transparent; border: 1px solid var(--line); border-radius: 999px;
+    padding: 4px 12px; font-family: inherit; font-size: 12px; font-weight: 600;
+    color: var(--slate-dark); cursor: pointer; transition: all .15s ease;
+    white-space: nowrap;
+}
+.arith-nlv__chip:hover { border-color: var(--gold); color: var(--navy); }
+.arith-nlv__chip.is-active { background: var(--navy); border-color: var(--navy); color: #fff; }
+.arith-nlv__hint {
+    flex-basis: 100%; margin-top: 6px; font-size: 12px; color: var(--slate); line-height: 1.55;
+}
+.arith-nlv__hint strong { color: var(--navy); }
+
+/* Baseline indicator scaling line — Hard kill dollar at the chosen NLV */
+.arith-baseline__scaling {
+    margin: 6px 0 0; font-size: 12.5px; color: var(--slate-dark); line-height: 1.5;
+}
+.arith-baseline__scaling .diamond { color: var(--gold); margin-right: 4px; }
+.arith-baseline__scaling strong { color: var(--navy); }

@@ -486,6 +486,17 @@
 
         <!-- Doubling Arithmetic calculator — real S&P 500 total-return data, three windows -->
         <div class="arith-calc" id="arithCalc">
+            <div class="arith-nlv" role="radiogroup" aria-label="Model portfolio size">
+                <span class="arith-nlv__label">Model portfolio size</span>
+                <button class="arith-nlv__chip" data-nlv="100000" type="button">$100K</button>
+                <button class="arith-nlv__chip" data-nlv="250000" type="button">$250K</button>
+                <button class="arith-nlv__chip" data-nlv="500000" type="button">$500K</button>
+                <button class="arith-nlv__chip is-active" data-nlv="1000000" type="button">$1M</button>
+                <button class="arith-nlv__chip" data-nlv="2500000" type="button">$2.5M</button>
+                <button class="arith-nlv__chip" data-nlv="5000000" type="button">$5M</button>
+                <span class="arith-nlv__hint">All dollar amounts below scale with this. Contract count scales linearly: <strong>1 /ES per $100K NLV</strong> at the 0.5% per-trade architectural risk anchor.</span>
+            </div>
+
             <div class="arith-controls">
                 <label class="arith-control">
                     <span class="arith-control__label">Upside capture</span>
@@ -707,7 +718,7 @@
                     <div class="cb-rung"><span class="cb-rung__id">OP-02</span><div class="cb-rung__body"><p class="cb-rung__title">Per trade</p><p class="cb-rung__fig">−$500 (0.5% of NLV)</p><p class="cb-rung__text">Per-contract risk fixed at 0.5% of NLV. After any closed losing trade, the day is over (one-loss daily rule).</p></div></div>
                     <div class="cb-rung"><span class="cb-rung__id">OP-03</span><div class="cb-rung__body"><p class="cb-rung__title">Daily floor</p><p class="cb-rung__fig">−$500 (starting)</p><p class="cb-rung__text">Trailing high-water-mark floor — ratchets up with every new equity peak, never down.</p></div></div>
                     <div class="cb-rung"><span class="cb-rung__id">OP-05</span><div class="cb-rung__body"><p class="cb-rung__title">Weekly stand-down</p><p class="cb-rung__fig cb-rung__fig--rule">2–3 consecutive losing days halts the week (OP-05)</p><p class="cb-rung__text">A rule, not a dollar figure: consecutive losing days halt the week pending witness review.</p></div></div>
-                    <div class="cb-rung cb-rung--kill"><span class="cb-rung__id">ED-05b</span><div class="cb-rung__body"><p class="cb-rung__title">Hard kill</p><p class="cb-rung__fig">−$5,000</p><p class="cb-rung__text">The most the engine can lose before it is declared dead, in public: $5,000 (100 /ES pts × $50/pt × 1). $5,000 budgeted in advance.</p></div></div>
+                    <div class="cb-rung cb-rung--kill"><span class="cb-rung__id">ED-05b</span><div class="cb-rung__body"><p class="cb-rung__title">Hard kill</p><p class="cb-rung__fig">−$5,000 / /ES</p><p class="cb-rung__text">100 /ES pts × $50/pt = <strong>$5,000 per contract</strong>. Scales linearly with portfolio: at the 1 /ES per $100K NLV base sizing, hard kill = <strong>$50,000 on a $1M portfolio · $250,000 on $5M</strong>. Budgeted in advance whatever the size.</p></div></div>
                 </div>
             </div>
             <p class="calc__caption"><em>These figures compute the published Falsifiability Protocol v1.5 loss bounds at a hypothetical account size. Caps and the hard kill are sizing and exit rules enforced by rule — fast markets can gap beyond them. Not a guarantee, not an offer, and not a statement of expected results. Past performance does not guarantee future results.</em></p>
