@@ -4718,6 +4718,9 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 
 /* ---- Calculator 2 — Volatility Tax ---- */
 .calc__tabs { display: flex; gap: var(--s-2); margin-bottom: var(--s-4); }
+.calc__tabs-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); margin-bottom: var(--s-4); }
+.calc__tabs-row .calc__tabs { margin-bottom: 0; }
+.calc__tabs-hint { font-size: 12.5px; color: var(--slate); font-style: italic; flex: 1 1 220px; line-height: 1.45; }
 .calc__paste { margin-bottom: var(--s-4); }
 .calc__paste textarea {
     width: 100%;
