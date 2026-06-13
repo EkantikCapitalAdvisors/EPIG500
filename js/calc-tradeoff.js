@@ -24,9 +24,21 @@
     }
 
     const DEF = { D: 20, g: 25, m: 25, N: 2, R: 20, K: 1, W: 3 };
+    const PRESETS = {
+        mechanical: { label: 'Mechanical overlay', D: 20, g: 25, m: 25, N: 2, R: 20, K: 1, W: 3,
+            note: 'Trigger-based: exit after a 25% drawdown, re-enter after a 25% rebound. All three honest negatives apply — whipsaw, false alarm, whiplash.' },
+        ekantik:    { label: 'Operator style (discretionary)', D: 20, g: 0,  m: 0,  N: 2, R: 20, K: 0, W: 3,
+            note: 'Exit at highs (g=0), bottom-tick or breakout re-entry (m=0), no mid-trade stops (K=0). Whipsaw region collapses; whiplash goes to zero. The false alarm is the only remaining honest negative.' }
+    };
     const D_MIN = 0.05, D_MAX = 0.55;
 
     root.innerHTML = [
+        '<div class="to-presets" role="radiogroup" aria-label="Step-aside execution style">',
+        '  <span class="to-presets__label">Execution style:</span>',
+        '  <button type="button" class="to-presets__chip is-active" data-preset="mechanical" role="radio" aria-checked="true">Mechanical overlay</button>',
+        '  <button type="button" class="to-presets__chip" data-preset="ekantik" role="radio" aria-checked="false">Operator style</button>',
+        '  <p class="to-presets__note" id="toPresetNote" aria-live="polite">' + PRESETS.mechanical.note + '</p>',
+        '</div>',
         '<div class="calc__controls to-controls">',
         '  <label class="arith-control">',
         '    <span class="arith-control__label">Correction depth <span class="calc__info" tabindex="0" aria-label="How far the round-trip drawdown goes, peak to trough to back to peak.">i</span></span>',
@@ -321,9 +333,25 @@
         requestAnimationFrame(function () { raf = false; render(); });
     }
     [dEl, gEl, mEl, nEl, rEl, kEl, wEl].forEach(function (el) { el.addEventListener('input', queue); });
+
+    function applyPreset(name) {
+        const p = PRESETS[name]; if (!p) return;
+        dEl.value = p.D; gEl.value = p.g; mEl.value = p.m; nEl.value = p.N;
+        rEl.value = p.R; kEl.value = p.K; wEl.value = p.W;
+        root.querySelectorAll('.to-presets__chip').forEach(function (c) {
+            const active = c.dataset.preset === name;
+            c.classList.toggle('is-active', active);
+            c.setAttribute('aria-checked', String(active));
+        });
+        document.getElementById('toPresetNote').textContent = p.note;
+        queue();
+    }
+    root.querySelectorAll('.to-presets__chip').forEach(function (chip) {
+        chip.addEventListener('click', function () { applyPreset(chip.dataset.preset); });
+    });
+
     document.getElementById('toReset').addEventListener('click', function () {
-        dEl.value = DEF.D; gEl.value = DEF.g; mEl.value = DEF.m; nEl.value = DEF.N;
-        rEl.value = DEF.R; kEl.value = DEF.K; wEl.value = DEF.W; queue();
+        applyPreset('mechanical');
     });
     render();
 })();
