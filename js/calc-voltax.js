@@ -34,9 +34,12 @@
 
     root.innerHTML = [
         '<div class="calc__controls">',
-        '  <div class="calc__tabs" role="tablist" aria-label="Return series">',
-        '    <button type="button" class="calc__chip is-active" data-mode="preset" role="tab" aria-selected="true">S&amp;P 2005–2024</button>',
-        '    <button type="button" class="calc__chip" data-mode="paste" role="tab" aria-selected="false">Paste your own</button>',
+        '  <div class="calc__tabs-row">',
+        '    <div class="calc__tabs" role="tablist" aria-label="Return series">',
+        '      <button type="button" class="calc__chip is-active" data-mode="preset" role="tab" aria-selected="true">S&amp;P 2005–2024</button>',
+        '      <button type="button" class="calc__chip" data-mode="paste" role="tab" aria-selected="false">Your own series</button>',
+        '    </div>',
+        '    <span class="calc__tabs-hint">Run the same arithmetic-vs-geometric math on a different return series (your portfolio, a different index, a different window).</span>',
         '  </div>',
         '  <div class="calc__paste" id="vtPaste" hidden>',
         '    <textarea id="vtPasteText" rows="3" placeholder="Annual % returns, comma/space/newline separated — e.g. 12, -8, 21.5 (max 50 values, −95%..+200%)"></textarea>',
@@ -87,18 +90,31 @@
             + ' <span class="vt-tax__base">(at 100% participation: A ' + (base.A * 100).toFixed(1) + '% · G ' + (base.G * 100).toFixed(1) + '% · tax ' + (base.T * 100).toFixed(1) + ' pp)</span></p>';
 
         // Wealth sparkline: p=100% fixed gray vs current p live.
-        const W = 640, H = 150, PL = 8, PR = 118, PT = 10, PB = 10;
+        const W = 640, H = 170, PL = 8, PR = 132, PT = 32, PB = 12;
         const n = base.wealthPath.length - 1;
         const maxW = Math.max.apply(null, base.wealthPath.concat(cur.wealthPath));
         const minW = Math.min.apply(null, base.wealthPath.concat(cur.wealthPath));
         function X(i) { return PL + (i / n) * (W - PL - PR); }
         function Y(v) { return PT + (1 - (v - minW) / (maxW - minW || 1)) * (H - PT - PB); }
         function path(arr) { return arr.map(function (v, i) { return (i ? 'L ' : 'M ') + X(i) + ' ' + Y(v); }).join(' '); }
+        const pPct = Math.round(p * 100);
+        const delta = cur.wealth - base.wealth;
+        const deltaTxt = (delta >= 0 ? '+' : '−') + fmtUSD(Math.abs(delta)) + ' vs full participation';
+        const deltaColor = delta >= 0 ? '#0D9488' : '#E05A6B';
+        const isSame = pPct === 100;
         sparkEl.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" preserveAspectRatio="xMidYMid meet">'
-            + '<path d="' + path(base.wealthPath) + '" fill="none" stroke="#94A3B8" stroke-width="1.6"/>'
+            // Legend (top-left)
+            + '<g font-size="11" font-family="\'Source Sans 3\',sans-serif">'
+            + '<line x1="' + PL + '" y1="10" x2="' + (PL + 18) + '" y2="10" stroke="#94A3B8" stroke-width="1.6"/>'
+            + '<text x="' + (PL + 24) + '" y="13" fill="#64748B">Full participation — took every down year</text>'
+            + '<line x1="' + PL + '" y1="24" x2="' + (PL + 18) + '" y2="24" stroke="#b8962e" stroke-width="2.2"/>'
+            + '<text x="' + (PL + 24) + '" y="27" fill="#12264a" font-weight="600">Your setting: ' + pPct + '% downside participation</text>'
+            + '</g>'
+            + '<path d="' + path(base.wealthPath) + '" fill="none" stroke="#94A3B8" stroke-width="1.6"' + (isSame ? ' stroke-dasharray="4 3"' : '') + '/>'
             + '<path d="' + path(cur.wealthPath) + '" fill="none" stroke="#b8962e" stroke-width="2.2"/>'
             + '<text x="' + (X(n) + 6) + '" y="' + (Y(cur.wealth) + 4) + '" font-size="12" font-weight="700" fill="#b8962e">' + fmtUSD(cur.wealth) + '</text>'
-            + '<text x="' + (X(n) + 6) + '" y="' + (Y(base.wealth) + (Math.abs(Y(base.wealth) - Y(cur.wealth)) < 14 ? 16 : 4)) + '" font-size="11" fill="#64748B">' + fmtUSD(base.wealth) + ' at 100%</text>'
+            + '<text x="' + (X(n) + 6) + '" y="' + (Y(cur.wealth) + 18) + '" font-size="10.5" font-weight="600" fill="' + deltaColor + '">' + deltaTxt + '</text>'
+            + '<text x="' + (X(n) + 6) + '" y="' + (Y(base.wealth) + (Math.abs(Y(base.wealth) - Y(cur.wealth)) < 28 ? 30 : 4)) + '" font-size="11" fill="#64748B">' + fmtUSD(base.wealth) + ' at 100%</text>'
             + '<text x="' + PL + '" y="' + (H - 2) + '" font-size="10" fill="#8E99AC" font-style="italic">hypothetical $100K, this series (' + seriesLabel + ')</text>'
             + '</svg>';
 
