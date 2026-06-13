@@ -52,19 +52,24 @@ ok('fractional g+m<1 → Adv > 0 for any D > 0', C.tradeoffAdv(0.10, 0.2, 0.1) >
 ok('fractional g+m>1 → Adv < 0 for any D > 0', C.tradeoffAdv(0.10, 0.7, 0.5) < 0 && C.tradeoffAdv(0.40, 0.7, 0.5) < 0);
 eq('break-even is depth-independent constant 1.0 (g+m sum)', C.tradeoffBreakEven(), 1.0);
 
-/* ---- Calc 4 (§4.5, updated to the v1.5 two-contract ceiling) ---- */
+/* ---- Calc 4 (§4.5, updated to the v1.6 uncapped Standard sizing) ---- */
 const K = require('../data/protocol-constants.json');
-ok('constants: maxContracts = 2 (v1.5 ceiling)', K.maxContracts === 2);
+ok('constants: protocolVersion = 1.6', K.protocolVersion === '1.6');
+ok('constants: maxContracts raised to a practical cap (>= 100)', K.maxContracts >= 100);
+ok('constants: standardSizingNLVPerContract = $100K', K.standardSizingNLVPerContract === 100000);
 const b1 = C.bounds(100000, 1, K);
-eq('NLV $100K n=1: per-trade $500', b1.perContractDollars, 500);
+eq('NLV $100K n=1 (Standard): per-trade $500', b1.perContractDollars, 500);
 eq('NLV $100K n=1: daily floor −$500 (starting)', b1.dailyFloorStartDollars, 500);
-eq('NLV $100K n=1: hard kill $5,000', b1.hardKillDollars, 5000);
-const b2 = C.bounds(400000, 2, K);
-eq('NLV $400K n=2: per-contract $2,000', b2.perContractDollars, 2000);
-eq('NLV $400K n=2: total exposure 1% = $4,000', b2.totalDollars, 4000);
-eq('NLV $400K n=2: hard kill $10,000', b2.hardKillDollars, 10000);
-ok('sizing warning at NLV $100K n=2', C.bounds(100000, 2, K).exceedsStandardSizing === true);
-ok('no warning at NLV $200K n=2', C.bounds(200000, 2, K).exceedsStandardSizing === false);
+eq('NLV $100K n=1: hard kill $5,000 = 5% of NLV', b1.hardKillDollars, 5000);
+const b12 = C.bounds(1200000, 12, K);
+eq('NLV $1.2M n=12 (Standard): per-contract $6,000', b12.perContractDollars, 6000);
+eq('NLV $1.2M n=12 (Standard): hard kill $60,000', b12.hardKillDollars, 60000);
+ok('hard kill at Standard sizing is consistently 5% of NLV',
+    Math.abs((C.bounds(500000, 5, K).hardKillDollars / 500000) - (C.bounds(2000000, 20, K).hardKillDollars / 2000000)) < 1e-9);
+ok('exceedsStandardSizing flag fires when n exceeds NLV/100K',
+    C.bounds(100000, 2, K).exceedsStandardSizing === true);
+ok('exceedsStandardSizing flag does not fire at exact Standard',
+    C.bounds(200000, 2, K).exceedsStandardSizing === false);
 
 console.log(pass + ' passed, ' + fail + ' failed');
 process.exit(fail ? 1 : 0);

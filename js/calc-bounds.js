@@ -27,9 +27,14 @@
     let K = null;       // protocol constants — loaded from the shared JSON
     let nlv = DEFAULT_NLV;
     let n = 1;
+    let userTouchedN = false;   // once the user adjusts contracts manually, stop auto-snapping
 
     function fmt(v) { return '$' + Math.round(v).toLocaleString('en-US'); }
     function fmtK(v) { return v >= 1e6 ? '$' + (v / 1e6).toFixed(2) + 'M' : '$' + Math.round(v / 1000) + 'K'; }
+    function stdContractsFor(v) {
+        if (!K) return 1;
+        return Math.max(1, Math.min(K.maxContracts, Math.floor(v / K.standardSizingNLVPerContract)));
+    }
 
     function build() {
         root.innerHTML = [
@@ -59,21 +64,30 @@
     function render() {
         if (!K) return;
         const b = core.bounds(nlv, n, K);
+        const hardKillPct = (b.hardKillDollars / nlv) * 100;
         document.getElementById('cbNlvVal').textContent = fmtK(nlv);
         document.getElementById('cbN').textContent = n;
         const warn = document.getElementById('cbWarn');
-        warn.hidden = !b.exceedsStandardSizing;
-        if (b.exceedsStandardSizing) warn.textContent = 'exceeds 1 /ES per $' + (K.standardSizingNLVPerContract / 1000) + 'K Standard sizing';
+        const stdN = stdContractsFor(nlv);
+        if (n < stdN) {
+            warn.hidden = false;
+            warn.textContent = 'below Standard sizing (1 /ES per $' + (K.standardSizingNLVPerContract / 1000) + 'K → ' + stdN + ' contracts at this NLV)';
+        } else if (n > stdN) {
+            warn.hidden = false;
+            warn.textContent = 'above Standard sizing (1 /ES per $' + (K.standardSizingNLVPerContract / 1000) + 'K → ' + stdN + ' contracts at this NLV)';
+        } else {
+            warn.hidden = true;
+        }
 
         const rungs = [
             { id: 'OP-02', title: 'Per trade', fig: '−' + fmt(b.perContractDollars) + (n > 1 ? ' per contract · −' + fmt(b.totalDollars) + ' total (' + b.totalPct.toFixed(1) + '% of NLV)' : ' (' + b.totalPct.toFixed(1) + '% of NLV)'),
-              text: 'Per-contract risk fixed at ' + K.perContractRiskPctNLV + '% of NLV. After any closed losing trade, the day is over (one-loss daily rule).' },
+              text: 'Per-contract risk fixed at ' + K.perContractRiskPctNLV + '% of NLV. Contract count scales 1 per $' + (K.standardSizingNLVPerContract / 1000) + 'K NLV at Standard sizing — earned, not assumed. After any closed losing trade, the day is over (one-loss daily rule).' },
             { id: 'OP-03', title: 'Daily floor', fig: '−' + fmt(b.dailyFloorStartDollars) + ' (starting)',
               text: 'Trailing high-water-mark floor — ratchets up with every new equity peak, never down.' },
             { id: 'OP-05', title: 'Weekly stand-down', fig: K.weeklyStandDownRule,
               text: 'A rule, not a dollar figure: consecutive losing days halt the week pending witness review.', chip: true },
-            { id: 'ED-05b', title: 'Hard kill', fig: '−' + fmt(b.hardKillDollars),
-              text: 'The most the engine can lose before it is declared dead, in public: ' + fmt(b.hardKillDollars) + ' (' + K.hardKillPoints + ' /ES pts × $' + K.dollarsPerPoint + '/pt × ' + n + '). ' + fmt(b.hardKillDollars) + ' budgeted in advance.', kill: true }
+            { id: 'ED-05b', title: 'Hard kill', fig: '−' + fmt(b.hardKillDollars) + ' (' + hardKillPct.toFixed(1) + '% of NLV)',
+              text: 'The most the engine can lose before it is declared dead, in public: ' + fmt(b.hardKillDollars) + ' = ' + K.hardKillPoints + ' /ES pts × $' + K.dollarsPerPoint + '/pt × ' + n + ' contracts. At Standard sizing this is ' + hardKillPct.toFixed(1) + '% of NLV. Budgeted in advance.', kill: true }
         ];
         document.getElementById('cbLadder').innerHTML = rungs.map(function (r) {
             return '<div class="cb-rung' + (r.kill ? ' cb-rung--kill' : '') + '">'
@@ -95,18 +109,19 @@
         nlv = Math.min(2000000, Math.max(100000, Math.round(v / 25000) * 25000));
         document.getElementById('cbNlv').value = nlv;
         document.getElementById('cbNlvNum').value = nlv;
+        if (!userTouchedN) n = stdContractsFor(nlv);
         queue();
     }
     function wire() {
         document.getElementById('cbNlv').addEventListener('input', function (e) { setNlv(parseInt(e.target.value, 10)); });
         document.getElementById('cbNlvNum').addEventListener('change', function (e) { setNlv(parseInt(e.target.value, 10) || DEFAULT_NLV); });
-        document.getElementById('cbMinus').addEventListener('click', function () { if (n > 1) { n--; queue(); } });
-        document.getElementById('cbPlus').addEventListener('click', function () { if (K && n < K.maxContracts) { n++; queue(); } });
-        document.getElementById('cbReset').addEventListener('click', function () { n = 1; setNlv(DEFAULT_NLV); });
+        document.getElementById('cbMinus').addEventListener('click', function () { if (n > 1) { userTouchedN = true; n--; queue(); } });
+        document.getElementById('cbPlus').addEventListener('click', function () { if (K && n < K.maxContracts) { userTouchedN = true; n++; queue(); } });
+        document.getElementById('cbReset').addEventListener('click', function () { userTouchedN = false; nlv = DEFAULT_NLV; n = stdContractsFor(nlv); setNlv(nlv); });
     }
 
     fetch('data/protocol-constants.json?t=' + Date.now(), { cache: 'no-store' })
         .then(function (r) { return r.ok ? r.json() : Promise.reject(new Error('HTTP ' + r.status)); })
-        .then(function (json) { K = json; build(); })
+        .then(function (json) { K = json; n = stdContractsFor(nlv); build(); })
         .catch(function () { /* static default-state HTML remains — never blank */ });
 })();

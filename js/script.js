@@ -388,10 +388,11 @@
     /* ------------------------------------------------
        3. SCENARIO TOGGLE (Ladder section)
        ------------------------------------------------ */
-    /* Compounding Ladder model — v4
+    /* Compounding Ladder model — v4 (updated for protocol v1.6)
        Starting capital: $100K NLV. 1-year horizon. 60 days of no-trading buffer
-       up front (~2 months observation/protocol-warmup). Contract scaling capped
-       at 2 /ES maximum. Three discrete scenarios (Floor / Realistic / Cooperative).
+       up front (~2 months observation/protocol-warmup). Contract count scales
+       with NLV at Standard sizing (1 /ES per $100K NLV, v1.6 — uncapped). Three
+       discrete scenarios (Floor / Realistic / Cooperative).
        Per-/ES monthly throughput is a DESIGN TARGET used by the ladder
        illustration. The actual throughput will be reported from the live
        pre-registration record as it accumulates. */
@@ -449,14 +450,14 @@
             ]
         },
         realistic: {
-            label: 'Realistic — 1 /ES after the buffer, then a mid-year scale to 2 /ES once the rolling-50 verdict confirms edge.',
+            label: 'Realistic — 1 /ES after the buffer, then a mid-year scale to 2 /ES once the rolling-50 verdict confirms edge and NLV growth supports the second contract at Standard sizing.',
             transitions: [
                 { startMonth: BUFFER_MONTHS, contracts: 1 },
                 { startMonth: 6.0,           contracts: 2 }  // mid-year switch
             ]
         },
         cooperative: {
-            label: 'Cooperative — scaling 1 → 2 (the margin ceiling). The second contract is earned by ≈$5K profit at the current contract count.',
+            label: 'Cooperative — Standard sizing scales 1 → 2 → 3 → 4 as NLV crosses each $100K threshold (v1.6 — no fixed ceiling). Each additional contract is earned by ≈$5K profit at the current contract count.',
             transitions: [
                 { startMonth: COOP_T1, contracts: 1 },
                 { startMonth: COOP_T2, contracts: 2 },
