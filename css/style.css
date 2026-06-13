@@ -4786,6 +4786,24 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .calc-hub__grid { grid-template-columns: 1fr; }
 }
 
+/* Step-aside opportunities/yr slider — hoisted above the chart so the chart can reflect it */
+.to-n-control {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "label val" "input input" "hint hint";
+    column-gap: var(--s-3);
+    row-gap: 6px;
+    margin: var(--s-3) 0;
+    padding: var(--s-3) var(--s-4);
+    background: linear-gradient(0deg, rgba(212,175,55,0.06), rgba(212,175,55,0.02));
+    border: 1px solid rgba(184,150,46,0.25);
+    border-radius: 6px;
+}
+.to-n-control > .arith-control__label { grid-area: label; }
+.to-n-control > .arith-control__val { grid-area: val; text-align: right; }
+.to-n-control > input[type="range"] { grid-area: input; width: 100%; }
+.to-n-control > .arith-control__hint { grid-area: hint; }
+
 /* Progressive disclosure inside calculators — collapses auxiliary blocks behind a single toggle */
 .calc-disclose {
     margin: var(--s-3) 0;

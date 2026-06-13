@@ -27,7 +27,8 @@
     // g and m are now FRACTIONS of D (0–100%). g=20 means "exited after
     // giving back 20% of the correction depth"; m=10 means "re-entered
     // after 10% of the rebound was missed."
-    const DEF = { D: 20, g: 25, m: 25, N: 2, R: 20, K: 1, W: 3 };
+    // Defaults match the Operator-style preset — the strategy actually being run
+    const DEF = { D: 20, g: 0, m: 0, N: 2, R: 20, K: 0, W: 3 };
     const PRESETS = {
         mechanical: { label: 'Mechanical overlay', D: 20, g: 60, m: 60, N: 2, R: 20, K: 1, W: 3,
             note: 'Trigger-based: laggy exit (60% of correction given back) and laggy re-entry (60% of rebound missed). Sum > 100% → re-entry above exit → whipsaw. All three honest negatives apply.' },
@@ -39,9 +40,9 @@
     root.innerHTML = [
         '<div class="to-presets" role="radiogroup" aria-label="Step-aside execution style">',
         '  <span class="to-presets__label">Execution style:</span>',
-        '  <button type="button" class="to-presets__chip is-active" data-preset="mechanical" role="radio" aria-checked="true">Mechanical overlay</button>',
-        '  <button type="button" class="to-presets__chip" data-preset="ekantik" role="radio" aria-checked="false">Operator style</button>',
-        '  <p class="to-presets__note" id="toPresetNote" aria-live="polite">' + PRESETS.mechanical.note + '</p>',
+        '  <button type="button" class="to-presets__chip" data-preset="mechanical" role="radio" aria-checked="false">Mechanical overlay</button>',
+        '  <button type="button" class="to-presets__chip is-active" data-preset="ekantik" role="radio" aria-checked="true">Operator style</button>',
+        '  <p class="to-presets__note" id="toPresetNote" aria-live="polite">' + PRESETS.ekantik.note + '</p>',
         '</div>',
         '<div class="calc__controls to-controls">',
         '  <label class="arith-control">',
@@ -65,17 +66,17 @@
         '</div>',
         '<p class="calc__pair" id="toHead" aria-live="polite"></p>',
         '<div class="calc__decomp" id="toDecomp" aria-live="polite"></div>',
-        '<div class="calc__chart" id="toChart" role="img" aria-label="Step-aside advantage versus correction depth under fractional lags: monotonic in depth, sign set by whether exit-give-back plus re-entry-miss is under or over 100%."></div>',
+        '<label class="arith-control to-n-control">',
+        '  <span class="arith-control__label">Step-aside opportunities / yr <span class="calc__info" tabindex="0" aria-label="How many independent round-trip drawdowns of this depth and profile the strategy catches in a year. Cumulative alpha compounds across them — this multiplier is reflected directly in the chart below.">i</span></span>',
+        '  <span class="arith-control__val"><span id="toNVal">' + DEF.N + '</span> / yr</span>',
+        '  <input type="range" id="toN" min="0" max="6" step="1" value="' + DEF.N + '" aria-label="Step-aside opportunities per year">',
+        '  <span class="arith-control__hint">Chart and callouts below show <strong>annual cumulative alpha</strong> = (1 + per-trip)<sup>N</sup> − 1.</span>',
+        '</label>',
+        '<div class="calc__chart" id="toChart" role="img" aria-label="Annual cumulative step-aside alpha versus correction depth, compounded across N opportunities per year, under fractional lags."></div>',
         '<p class="calc__breakeven" id="toBreakeven"></p>',
-        '<details class="calc-disclose"><summary>Show full analysis — annualized cumulative alpha, false-alarm cost, whiplash drag</summary>',
+        '<details class="calc-disclose"><summary>Show full analysis — opportunity-count ladder, false-alarm cost, whiplash drag</summary>',
         '<div class="calc-disclose__body">',
-        '<div class="to-annual" aria-label="Annual cumulative alpha across multiple step-aside opportunities">',
-        '  <label class="arith-control to-annual__control">',
-        '    <span class="arith-control__label">Step-aside opportunities / yr <span class="calc__info" tabindex="0" aria-label="How many independent round-trip drawdowns of this depth and profile the strategy catches in a year. Cumulative alpha compounds across them.">i</span></span>',
-        '    <span class="arith-control__val"><span id="toNVal">' + DEF.N + '</span> / yr</span>',
-        '    <input type="range" id="toN" min="0" max="6" step="1" value="' + DEF.N + '" aria-label="Step-aside opportunities per year">',
-        '    <span class="arith-control__hint">Assumes each opportunity has the same depth / lag profile. Cumulative alpha = (1 + per-trip)<sup>N</sup> − 1.</span>',
-        '  </label>',
+        '<div class="to-annual" aria-label="Annual cumulative alpha ladder across 1–6 opportunities">',
         '  <div class="to-annual__readout" id="toAnnual" aria-live="polite"></div>',
         '</div>',
         '<p class="calc__verdict" id="toHonesty">Everything above assumes the correction actually arrives. Under fractional lags, sign is set by whether you caught more of the move than you missed — depth amplifies the magnitude either way. <strong>The real lag isn\'t here — it\'s below, in the false-alarm case where no correction comes at all.</strong></p>',
@@ -266,12 +267,14 @@
             + '<span class="calc__breakeven-eq">→ your sum = ' + Math.round(g * 100) + '% + ' + Math.round(m * 100) + '% = <strong style="color:' + signColor + '">' + lagSumPct + '%</strong></span> '
             + '<span class="calc__breakeven-note">— ' + sign + '. Under fractional lags, depth amplifies magnitude only; sign is set by whether you caught more of the move than you missed.</span>';
 
-        // Advantage curve (CW = chart width; the user-facing W slippage var is already in scope)
+        // Advantage curve — compounded to ANNUAL at the live N opportunities/yr
+        // (per-trip alpha) → (1 + per-trip)^N − 1.  At N=0 the chart shows per-trip only.
         const CW = 640, CH = 280, PL = 56, PR = 18, PT = 18, PB = 34;
+        function annualize(a) { return N === 0 ? a : Math.pow(1 + a, N) - 1; }
         const pts = [];
         let aMin = 0, aMax = 0;
         for (let v = D_MIN; v <= D_MAX + 1e-9; v += 0.005) {
-            const a = core.tradeoffAdv(v, g, m);
+            const a = annualize(core.tradeoffAdv(v, g, m));
             pts.push([v, a]);
             if (a < aMin) aMin = a; if (a > aMax) aMax = a;
         }
@@ -304,9 +307,9 @@
         let path = '';
         pts.forEach(function (p, i) { path += (i ? ' L ' : 'M ') + X(p[0]) + ' ' + Y(p[1]); });
         s.push('<path d="' + path + '" fill="none" stroke="#12264a" stroke-width="2.2"/>');
-        // three named walk-through callouts: mild / typical / crash
+        // three named walk-through callouts: mild / typical / crash — values are ANNUAL at current N
         function callout(vDepth, label, anchor) {
-            const a = core.tradeoffAdv(vDepth, g, m);
+            const a = annualize(core.tradeoffAdv(vDepth, g, m));
             const cx = X(vDepth), cy = Y(a);
             s.push('<circle cx="' + cx + '" cy="' + cy + '" r="3.5" fill="#12264a" stroke="#fff" stroke-width="1"/>');
             const above = a >= 0;
@@ -318,8 +321,19 @@
         callout(0.10, 'mild −10%', 'start');
         callout(0.30, 'typical −30%', 'middle');
         callout(0.50, 'crash −50%', 'end');
-        // live dot at current D
-        s.push('<circle cx="' + X(D) + '" cy="' + Y(advNow) + '" r="6" fill="#d4af37" stroke="#fff" stroke-width="1.5"/>');
+        // live dot at current D — positioned at the annualized advantage and labelled with the live numbers
+        const advLive = annualize(advNow);
+        const dotCx = X(D), dotCy = Y(advLive);
+        s.push('<circle cx="' + dotCx + '" cy="' + dotCy + '" r="6" fill="#d4af37" stroke="#fff" stroke-width="1.5"/>');
+        const liveLabel = 'your selection: D=−' + Math.round(D * 100) + '%' + (N > 0 ? ' · ' + N + '/yr' : '') + ' → ' + (advLive >= 0 ? '+' : '') + (advLive * 100).toFixed(1) + '% annual';
+        const liveLabelAbove = dotCy > PT + 30;
+        const liveLabelY = liveLabelAbove ? dotCy - 12 : dotCy + 22;
+        const liveLabelAnchor = X(D) < PL + (CW - PL - PR) * 0.5 ? 'start' : 'end';
+        const liveLabelX = liveLabelAnchor === 'start' ? dotCx + 10 : dotCx - 10;
+        s.push('<text x="' + liveLabelX + '" y="' + liveLabelY + '" text-anchor="' + liveLabelAnchor + '" font-size="11" font-weight="700" fill="#b8962e">' + liveLabel + '</text>');
+        // chart subtitle: what view we're showing
+        const subtitle = N === 0 ? 'showing: per round-trip alpha (set opportunities/yr to compound)' : 'showing: annual cumulative alpha at ' + N + ' opportunities/yr · (1 + per-trip)^' + N + ' − 1';
+        s.push('<text x="' + (PL) + '" y="' + (PT - 4) + '" font-size="11" font-style="italic" fill="#64748B">' + subtitle + '</text>');
         document.getElementById('toChart').innerHTML = '<svg viewBox="0 0 ' + CW + ' ' + CH + '" width="100%" preserveAspectRatio="xMidYMid meet">' + s.join('') + '</svg>';
     }
 
