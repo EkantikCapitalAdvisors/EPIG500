@@ -99,7 +99,7 @@
                 + '<li><strong>Ride down to the exit trigger:</strong> market drops to −' + Math.round(g * 100) + '% → you exit at <strong>$' + exitLevel.toFixed(3) + '</strong>. <span class="calc__decomp-cost">(this is the <em>exit lag</em> — −' + (g * 100).toFixed(0) + '% paid)</span></li>'
                 + '<li><strong>Sit in cash through the avoided middle:</strong> market falls another ' + (avoidedMiddle * 100).toFixed(0) + ' pts (−' + Math.round(g * 100) + '% → −' + Math.round(D * 100) + '%), you stay flat at $' + exitLevel.toFixed(3) + '. <span class="calc__decomp-gain">(this is the <em>protection</em>)</span></li>'
                 + '<li><strong>Re-enter after the bounce:</strong> market troughs at $' + trough.toFixed(3) + ', rebounds ' + (m * 100).toFixed(0) + ' pts, you re-enter at <strong>$' + reentry.toFixed(3) + '</strong>. <span class="calc__decomp-cost">(this is the <em>re-entry miss</em> — ' + (m * 100).toFixed(0) + '% paid)</span></li>'
-                + '<li><strong>Ride the recovery back to peak:</strong> $' + reentry.toFixed(3) + ' × ' + recover.toFixed(3) + ' = <strong>$' + finalVal.toFixed(3) + '</strong>.</li>'
+                + '<li><strong>Ride the recovery back to peak:</strong> $' + exitLevel.toFixed(3) + ' <span class="calc__decomp-sub">(cash from step 1)</span> × ' + recover.toFixed(3) + ' <span class="calc__decomp-sub">(peak ÷ re-entry price)</span> = <strong>$' + finalVal.toFixed(3) + '</strong>.</li>'
                 + '<li><strong>Net vs hold-through ($1.000):</strong> <span class="calc__num" style="color:' + (advNow > 0 ? '#0D9488' : advNow < 0 ? '#E05A6B' : '#12264a') + '">' + (advNow >= 0 ? '+' : '') + (advNow * 100).toFixed(1) + '%</span> on the round trip.</li>'
                 + '</ol>';
         }
