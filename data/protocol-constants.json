@@ -1,9 +1,9 @@
 {
-  "protocolVersion": "1.5",
-  "docRef": "FP-MOPS-V1.5-2026-06",
+  "protocolVersion": "1.6",
+  "docRef": "FP-MOPS-V1.6-2026-06",
   "perContractRiskPctNLV": 0.5,
-  "maxContracts": 2,
-  "maxPerTradeExposurePctNLV": 1.0,
+  "maxContracts": 100,
+  "maxPerTradeExposurePctNLV": 0.5,
   "dollarsPerPoint": 50,
   "hardKillPoints": 100,
   "hardKillDollarsPerContract": 5000,
