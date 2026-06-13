@@ -4527,11 +4527,80 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     line-height: 1.5;
 }
 
+/* False-alarm block: exited at highs, no correction came */
+.to-fa {
+    margin: var(--s-3) 0 var(--s-4);
+    padding: var(--s-4);
+    background: linear-gradient(0deg, rgba(224,90,107,0.05), rgba(224,90,107,0.01));
+    border: 1px solid rgba(224,90,107,0.25);
+    border-radius: 6px;
+}
+.to-fa__h {
+    margin: 0 0 4px;
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--navy);
+}
+.to-fa__sub {
+    margin: 0 0 var(--s-3);
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--slate-dark);
+}
+.to-fa__control { margin-bottom: var(--s-3); }
+.to-fa__readout { margin-top: var(--s-2); }
+.to-fa__h2 {
+    margin: 0 0 var(--s-2);
+    font-size: 14px;
+    color: var(--navy);
+}
+.to-fa__formula {
+    margin: var(--s-2) 0;
+    font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+    font-size: 12px;
+    color: var(--slate);
+}
+.to-fa__ladder {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    margin: var(--s-2) 0;
+}
+.to-fa__cell {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 6px 4px;
+    background: var(--ivory);
+    border: 1px solid var(--card-border);
+    border-radius: 4px;
+}
+.to-fa__cell.is-active {
+    background: rgba(224,90,107,0.12);
+    border-color: #E05A6B;
+}
+.to-fa__k { color: var(--slate); font-size: 10.5px; }
+.to-fa__v {
+    font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+    font-weight: 700;
+    font-size: 13px;
+    color: #E05A6B;
+    margin-top: 2px;
+}
+.to-fa__synthesis {
+    margin: var(--s-3) 0 0;
+    padding-top: var(--s-3);
+    border-top: 1px dashed rgba(224,90,107,0.30);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--slate-dark);
+}
+
 @media (max-width: 720px) {
     .calc { padding: var(--s-6); }
     .calc__num { font-size: 22px; }
     .calc__decomp { font-size: 12.5px; }
     .to-annual__ladder { grid-template-columns: repeat(3, 1fr); }
+    .to-fa__ladder { grid-template-columns: repeat(5, 1fr); }
 }
 
 /* ---- Calculator 2 — Volatility Tax ---- */
