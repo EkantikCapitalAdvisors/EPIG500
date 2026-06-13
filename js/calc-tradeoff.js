@@ -29,26 +29,28 @@
     root.innerHTML = [
         '<div class="calc__controls to-controls">',
         '  <label class="arith-control">',
-        '    <span class="arith-control__label">Correction depth</span>',
+        '    <span class="arith-control__label">Correction depth <span class="calc__info" tabindex="0" aria-label="How far the round-trip drawdown goes, peak to trough to back to peak.">i</span></span>',
         '    <span class="arith-control__val">−<span id="toDVal">' + DEF.D + '</span>%</span>',
         '    <input type="range" id="toD" min="5" max="55" step="1" value="' + DEF.D + '" aria-label="Correction depth percent">',
-        '    <span class="arith-control__hint">how deep the round-trip correction goes</span>',
+        '    <span class="arith-control__hint">Peak → trough → back to peak. E.g. −25% = a one-quarter drawdown that fully retraces.</span>',
         '  </label>',
         '  <label class="arith-control">',
-        '    <span class="arith-control__label">Exit give-back</span>',
+        '    <span class="arith-control__label">Exit give-back <span class="calc__info" tabindex="0" aria-label="Absolute index decline absorbed before the overlay step-aside trigger fires. E.g. 25% = strategy rides through a 25% drop, then exits.">i</span></span>',
         '    <span class="arith-control__val"><span id="toGVal">' + DEF.g + '</span>%</span>',
         '    <input type="range" id="toG" min="0" max="60" step="5" value="' + DEF.g + '" aria-label="Exit give-back percent of index level">',
-        '    <span class="arith-control__hint">index decline absorbed before stepping aside</span>',
+        '    <span class="arith-control__hint"><strong>Absolute</strong> decline absorbed before exit — not a fraction of the drawdown. 25% = strategy exits at −25% off peak.</span>',
         '  </label>',
         '  <label class="arith-control">',
-        '    <span class="arith-control__label">Re-entry miss</span>',
+        '    <span class="arith-control__label">Re-entry miss <span class="calc__info" tabindex="0" aria-label="Absolute rebound off the bottom absorbed before the overlay re-entry trigger fires. E.g. 0% = perfect catch at the bottom; 10% = re-enters after market has bounced 10% off the trough.">i</span></span>',
         '    <span class="arith-control__val"><span id="toMVal">' + DEF.m + '</span>%</span>',
         '    <input type="range" id="toM" min="0" max="60" step="5" value="' + DEF.m + '" aria-label="Re-entry miss percent of index level">',
-        '    <span class="arith-control__hint">rebound absorbed before re-entering</span>',
+        '    <span class="arith-control__hint"><strong>Absolute</strong> rebound absorbed before re-entry. 0% = perfect catch at the bottom; 10% = re-enters 10% off the trough.</span>',
         '  </label>',
         '</div>',
         '<p class="calc__pair" id="toHead" aria-live="polite"></p>',
+        '<div class="calc__decomp" id="toDecomp" aria-live="polite"></div>',
         '<div class="calc__chart" id="toChart" role="img" aria-label="Step-aside advantage versus correction depth: negative in shallow corrections where the lags cost more than the protection, positive in deep ones where the avoided middle wins."></div>',
+        '<p class="calc__breakeven" id="toBreakeven"></p>',
         '<p class="calc__verdict" id="toHonesty">In shallow corrections this mechanism loses by design — its value concentrates in deep drawdowns. That regime-dependence is exactly what the overlay’s <a href="/falsifiability-protocol.html" target="_blank" rel="noopener">Expression Layer gate measures across full cycles</a>.</p>',
         '<p class="calc__reset-row"><button type="button" class="calc__reset" id="toReset">Reset to default</button></p>'
     ].join('');
@@ -73,6 +75,42 @@
         document.getElementById('toHead').innerHTML =
               '<span class="calc__pair-label">Hold-through:</span> <span class="calc__num">0.0%</span> <span class="calc__pair-label">round trip ·</span> '
             + '<span class="calc__pair-label">Step-aside:</span> <span class="calc__num" style="color:' + (advNow > 0 ? '#0D9488' : advNow < 0 ? '#E05A6B' : '#12264a') + '">' + (advNow >= 0 ? '+' : '') + (advNow * 100).toFixed(1) + '%</span>' + headNote;
+
+        // Decomposition readout — walks through the math step by step
+        const decompEl = document.getElementById('toDecomp');
+        if (D <= g) {
+            decompEl.innerHTML =
+                  '<p class="calc__decomp-h">Why <span class="calc__num">0.0%</span>?</p>'
+                + '<ol class="calc__decomp-steps">'
+                + '<li>Drawdown only reaches <strong>−' + Math.round(D * 100) + '%</strong>, which is shallower than the <strong>−' + Math.round(g * 100) + '%</strong> exit trigger.</li>'
+                + '<li>The step-aside <strong>never fires</strong> — you held the index through the full round trip.</li>'
+                + '<li>Round trip back to peak ⇒ <strong>0.0%</strong> on both legs.</li>'
+                + '</ol>';
+        } else {
+            const exitLevel = (1 - g);                       // $ at exit, from $1 peak
+            const trough   = (1 - D);                        // $ at the bottom
+            const reentry  = Math.min(1 - D + m, 1);         // $ where you re-enter
+            const recover  = 1 / reentry;                    // multiple to get back to peak
+            const finalVal = exitLevel * recover;            // step-aside ending $
+            const avoidedMiddle = (1 - g) - (1 - D);         // % of peak you skipped in cash
+            decompEl.innerHTML =
+                  '<p class="calc__decomp-h">Where the <span class="calc__num" style="color:' + (advNow > 0 ? '#0D9488' : advNow < 0 ? '#E05A6B' : '#12264a') + '">' + (advNow >= 0 ? '+' : '') + (advNow * 100).toFixed(1) + '%</span> comes from <span class="calc__decomp-sub">(starting from $1.000 at the peak)</span></p>'
+                + '<ol class="calc__decomp-steps">'
+                + '<li><strong>Ride down to the exit trigger:</strong> market drops to −' + Math.round(g * 100) + '% → you exit at <strong>$' + exitLevel.toFixed(3) + '</strong>. <span class="calc__decomp-cost">(this is the <em>exit lag</em> — −' + (g * 100).toFixed(0) + '% paid)</span></li>'
+                + '<li><strong>Sit in cash through the avoided middle:</strong> market falls another ' + (avoidedMiddle * 100).toFixed(0) + ' pts (−' + Math.round(g * 100) + '% → −' + Math.round(D * 100) + '%), you stay flat at $' + exitLevel.toFixed(3) + '. <span class="calc__decomp-gain">(this is the <em>protection</em>)</span></li>'
+                + '<li><strong>Re-enter after the bounce:</strong> market troughs at $' + trough.toFixed(3) + ', rebounds ' + (m * 100).toFixed(0) + ' pts, you re-enter at <strong>$' + reentry.toFixed(3) + '</strong>. <span class="calc__decomp-cost">(this is the <em>re-entry miss</em> — ' + (m * 100).toFixed(0) + '% paid)</span></li>'
+                + '<li><strong>Ride the recovery back to peak:</strong> $' + reentry.toFixed(3) + ' × ' + recover.toFixed(3) + ' = <strong>$' + finalVal.toFixed(3) + '</strong>.</li>'
+                + '<li><strong>Net vs hold-through ($1.000):</strong> <span class="calc__num" style="color:' + (advNow > 0 ? '#0D9488' : advNow < 0 ? '#E05A6B' : '#12264a') + '">' + (advNow >= 0 ? '+' : '') + (advNow * 100).toFixed(1) + '%</span> on the round trip.</li>'
+                + '</ol>';
+        }
+
+        // Break-even formula legend
+        const beEl = document.getElementById('toBreakeven');
+        const dStarPct = Math.round((g + m) * 100);
+        beEl.innerHTML =
+              '<span class="calc__breakeven-formula">break-even depth = exit give-back + re-entry miss</span> '
+            + '<span class="calc__breakeven-eq">= ' + Math.round(g * 100) + '% + ' + Math.round(m * 100) + '% = <strong>' + dStarPct + '%</strong></span> '
+            + '<span class="calc__breakeven-note">— shallower than this and the lags cost more than the protection; deeper and the avoided middle wins.</span>';
 
         // Advantage curve
         const W = 640, H = 280, PL = 56, PR = 18, PT = 18, PB = 34;
@@ -114,6 +152,22 @@
         } else {
             s.push('<text x="' + X(0.30) + '" y="' + (PT + 12) + '" text-anchor="middle" font-size="11.5" font-weight="700" fill="#b8962e">no break-even below 55% at these lags</text>');
         }
+        // three named walk-through callouts: mild / break-even / crash
+        function callout(vDepth, label, anchor) {
+            const a = core.tradeoffAdv(vDepth, g, m);
+            const cx = X(vDepth), cy = Y(a);
+            s.push('<circle cx="' + cx + '" cy="' + cy + '" r="3.5" fill="#12264a" stroke="#fff" stroke-width="1"/>');
+            const above = a >= 0;
+            const ty = above ? (cy - 10) : (cy + 18);
+            const tAnchor = anchor || 'middle';
+            const tx = tAnchor === 'start' ? cx + 6 : tAnchor === 'end' ? cx - 6 : cx;
+            s.push('<text x="' + tx + '" y="' + ty + '" text-anchor="' + tAnchor + '" font-size="10.5" font-weight="600" fill="#12264a">' + label + ' <tspan fill="#64748B" font-weight="400">(' + (a >= 0 ? '+' : '') + (a * 100).toFixed(1) + '%)</tspan></text>');
+        }
+        callout(0.10, 'mild correction', 'start');
+        if (dStar !== null && dStar >= D_MIN + 0.03 && dStar <= D_MAX - 0.03) {
+            callout(dStar, 'break-even', 'middle');
+        }
+        callout(0.50, 'crash', 'end');
         // live dot at current D
         s.push('<circle cx="' + X(D) + '" cy="' + Y(advNow) + '" r="6" fill="#d4af37" stroke="#fff" stroke-width="1.5"/>');
         document.getElementById('toChart').innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" preserveAspectRatio="xMidYMid meet">' + s.join('') + '</svg>';
