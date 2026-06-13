@@ -4716,6 +4716,109 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .to-wh__sliders { grid-template-columns: 1fr; }
 }
 
+/* ---- Calculator hub — overview cards ---- */
+.calc-hub__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s-4);
+    margin-top: var(--s-5);
+}
+.calc-hub__card {
+    display: block;
+    padding: var(--s-5);
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    position: relative;
+}
+.calc-hub__card:hover {
+    transform: translateY(-2px);
+    border-color: var(--gold-deep);
+    box-shadow: 0 4px 18px rgba(184,150,46,0.15);
+    text-decoration: none;
+    color: inherit;
+}
+.calc-hub__eyebrow {
+    margin: 0 0 var(--s-2);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    font-weight: 700;
+}
+.calc-hub__h {
+    margin: 0 0 var(--s-3);
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--navy);
+}
+.calc-hub__line {
+    margin: 0 0 var(--s-3);
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--slate-dark);
+}
+.calc-hub__num {
+    font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+    color: var(--gold-deep);
+    font-weight: 700;
+}
+.calc-hub__thumb {
+    width: 100%;
+    height: 80px;
+    margin: var(--s-3) 0;
+    display: block;
+}
+.calc-hub__cta {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: 0.02em;
+}
+.calc-hub__card:hover .calc-hub__cta { color: var(--gold-deep); }
+@media (max-width: 720px) {
+    .calc-hub__grid { grid-template-columns: 1fr; }
+}
+
+/* Progressive disclosure inside calculators — collapses auxiliary blocks behind a single toggle */
+.calc-disclose {
+    margin: var(--s-3) 0;
+    border-top: 1px dashed var(--card-border);
+    padding-top: var(--s-3);
+}
+.calc-disclose > summary {
+    cursor: pointer;
+    list-style: none;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    padding: 10px 14px;
+    background: var(--ivory);
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    user-select: none;
+    transition: background 0.15s;
+}
+.calc-disclose > summary::-webkit-details-marker { display: none; }
+.calc-disclose > summary::before {
+    content: '+';
+    display: inline-block;
+    width: 16px;
+    color: var(--gold-deep);
+    font-weight: 700;
+    margin-right: 4px;
+    transition: transform 0.15s;
+}
+.calc-disclose[open] > summary::before { content: '−'; }
+.calc-disclose > summary:hover { background: rgba(212,175,55,0.10); }
+.calc-disclose__body { padding-top: var(--s-3); }
+
 /* ---- Calculator 2 — Volatility Tax ---- */
 .calc__tabs { display: flex; gap: var(--s-2); margin-bottom: var(--s-4); }
 .calc__tabs-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); margin-bottom: var(--s-4); }
