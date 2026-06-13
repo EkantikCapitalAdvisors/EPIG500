@@ -4411,9 +4411,70 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     cursor: pointer;
 }
 .calc__reset:hover { color: var(--navy); }
+
+/* Inline info icon next to slider labels */
+.calc__info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px; height: 15px;
+    margin-left: 4px;
+    border-radius: 50%;
+    background: var(--ivory);
+    border: 1px solid var(--card-border);
+    color: var(--slate);
+    font-size: 10px;
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+    cursor: help;
+    vertical-align: baseline;
+}
+.calc__info:hover, .calc__info:focus { background: var(--gold-soft); color: var(--navy); outline: none; }
+
+/* Step-aside decomposition readout */
+.calc__decomp {
+    margin: var(--s-3) 0 var(--s-4);
+    padding: var(--s-3) var(--s-4);
+    background: var(--ivory);
+    border-left: 3px solid var(--gold-deep);
+    border-radius: 4px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--slate-dark);
+}
+.calc__decomp-h { margin: 0 0 var(--s-2); font-size: 13px; font-weight: 600; color: var(--navy); }
+.calc__decomp-sub { font-weight: 400; color: var(--slate); font-size: 12px; }
+.calc__decomp-steps { margin: 0; padding-left: 18px; }
+.calc__decomp-steps li { margin: 4px 0; }
+.calc__decomp-steps strong { color: var(--navy); }
+.calc__decomp-cost { color: #E05A6B; font-size: 12px; }
+.calc__decomp-gain { color: #0D9488; font-size: 12px; }
+
+/* Break-even formula legend */
+.calc__breakeven {
+    margin: calc(var(--s-2) * -1) 0 var(--s-4);
+    padding: var(--s-2) var(--s-3);
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--slate);
+    text-align: center;
+}
+.calc__breakeven-formula {
+    font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+    font-weight: 600;
+    color: var(--navy);
+}
+.calc__breakeven-eq {
+    font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+    color: var(--gold-deep);
+}
+.calc__breakeven-note { display: block; margin-top: 2px; font-size: 11.5px; font-style: italic; }
+
 @media (max-width: 720px) {
     .calc { padding: var(--s-6); }
     .calc__num { font-size: 22px; }
+    .calc__decomp { font-size: 12.5px; }
 }
 
 /* ---- Calculator 2 — Volatility Tax ---- */
