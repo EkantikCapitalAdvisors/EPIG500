@@ -4471,10 +4471,67 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 }
 .calc__breakeven-note { display: block; margin-top: 2px; font-size: 11.5px; font-style: italic; }
 
+/* Annualized step-aside (compounding N opportunities/yr) */
+.to-annual {
+    margin: 0 0 var(--s-4);
+    padding: var(--s-3) var(--s-4);
+    background: linear-gradient(0deg, rgba(212,175,55,0.06), rgba(212,175,55,0.02));
+    border: 1px solid rgba(184,150,46,0.25);
+    border-radius: 6px;
+}
+.to-annual__control { margin-bottom: var(--s-3); }
+.to-annual__readout { margin-top: var(--s-2); }
+.to-annual__h {
+    margin: 0 0 4px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--slate-dark);
+    display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline;
+}
+.to-annual__sep { color: var(--slate); font-weight: 700; }
+.to-annual__formula {
+    margin: 0 0 var(--s-2);
+    font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+    font-size: 12px;
+    color: var(--slate);
+}
+.to-annual__ladder {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+    margin: var(--s-2) 0;
+}
+.to-annual__cell {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 6px 4px;
+    background: var(--ivory);
+    border: 1px solid var(--card-border);
+    border-radius: 4px;
+    font-size: 11px;
+}
+.to-annual__cell.is-active {
+    background: rgba(212,175,55,0.18);
+    border-color: var(--gold-deep);
+}
+.to-annual__k { color: var(--slate); font-size: 10.5px; }
+.to-annual__v {
+    font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+    font-weight: 700;
+    font-size: 13px;
+    margin-top: 2px;
+}
+.to-annual__caveat {
+    margin: var(--s-2) 0 0;
+    font-size: 11.5px;
+    color: var(--slate);
+    line-height: 1.5;
+}
+
 @media (max-width: 720px) {
     .calc { padding: var(--s-6); }
     .calc__num { font-size: 22px; }
     .calc__decomp { font-size: 12.5px; }
+    .to-annual__ladder { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* ---- Calculator 2 — Volatility Tax ---- */

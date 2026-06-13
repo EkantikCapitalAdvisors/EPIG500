@@ -23,7 +23,7 @@
         } catch (e) {}
     }
 
-    const DEF = { D: 20, g: 25, m: 25 };
+    const DEF = { D: 20, g: 25, m: 25, N: 2 };
     const D_MIN = 0.05, D_MAX = 0.55;
 
     root.innerHTML = [
@@ -49,21 +49,32 @@
         '</div>',
         '<p class="calc__pair" id="toHead" aria-live="polite"></p>',
         '<div class="calc__decomp" id="toDecomp" aria-live="polite"></div>',
+        '<div class="to-annual" aria-label="Annual cumulative alpha across multiple step-aside opportunities">',
+        '  <label class="arith-control to-annual__control">',
+        '    <span class="arith-control__label">Step-aside opportunities / yr <span class="calc__info" tabindex="0" aria-label="How many independent round-trip drawdowns of this depth and profile the strategy catches in a year. Cumulative alpha compounds across them.">i</span></span>',
+        '    <span class="arith-control__val"><span id="toNVal">' + DEF.N + '</span> / yr</span>',
+        '    <input type="range" id="toN" min="0" max="6" step="1" value="' + DEF.N + '" aria-label="Step-aside opportunities per year">',
+        '    <span class="arith-control__hint">Assumes each opportunity has the same depth / lag profile. Cumulative alpha = (1 + per-trip)<sup>N</sup> − 1.</span>',
+        '  </label>',
+        '  <div class="to-annual__readout" id="toAnnual" aria-live="polite"></div>',
+        '</div>',
         '<div class="calc__chart" id="toChart" role="img" aria-label="Step-aside advantage versus correction depth: negative in shallow corrections where the lags cost more than the protection, positive in deep ones where the avoided middle wins."></div>',
         '<p class="calc__breakeven" id="toBreakeven"></p>',
         '<p class="calc__verdict" id="toHonesty">In shallow corrections this mechanism loses by design — its value concentrates in deep drawdowns. That regime-dependence is exactly what the overlay’s <a href="/falsifiability-protocol.html" target="_blank" rel="noopener">Expression Layer gate measures across full cycles</a>.</p>',
         '<p class="calc__reset-row"><button type="button" class="calc__reset" id="toReset">Reset to default</button></p>'
     ].join('');
 
-    const dEl = document.getElementById('toD'), gEl = document.getElementById('toG'), mEl = document.getElementById('toM');
+    const dEl = document.getElementById('toD'), gEl = document.getElementById('toG'), mEl = document.getElementById('toM'), nEl = document.getElementById('toN');
 
     function render() {
         const D = parseInt(dEl.value, 10) / 100;
         const g = parseInt(gEl.value, 10) / 100;
         const m = parseInt(mEl.value, 10) / 100;
+        const N = parseInt(nEl.value, 10);
         document.getElementById('toDVal').textContent = Math.round(D * 100);
         document.getElementById('toGVal').textContent = Math.round(g * 100);
         document.getElementById('toMVal').textContent = Math.round(m * 100);
+        document.getElementById('toNVal').textContent = N;
 
         const S = core.tradeoffOutcome(D, g, m);
         const advNow = S - 1;
@@ -99,10 +110,37 @@
                 + '<li><strong>Ride down to the exit trigger:</strong> market drops to −' + Math.round(g * 100) + '% → you exit at <strong>$' + exitLevel.toFixed(3) + '</strong>. <span class="calc__decomp-cost">(this is the <em>exit lag</em> — −' + (g * 100).toFixed(0) + '% paid)</span></li>'
                 + '<li><strong>Sit in cash through the avoided middle:</strong> market falls another ' + (avoidedMiddle * 100).toFixed(0) + ' pts (−' + Math.round(g * 100) + '% → −' + Math.round(D * 100) + '%), you stay flat at $' + exitLevel.toFixed(3) + '. <span class="calc__decomp-gain">(this is the <em>protection</em>)</span></li>'
                 + '<li><strong>Re-enter after the bounce:</strong> market troughs at $' + trough.toFixed(3) + ', rebounds ' + (m * 100).toFixed(0) + ' pts, you re-enter at <strong>$' + reentry.toFixed(3) + '</strong>. <span class="calc__decomp-cost">(this is the <em>re-entry miss</em> — ' + (m * 100).toFixed(0) + '% paid)</span></li>'
-                + '<li><strong>Ride the recovery back to peak:</strong> $' + reentry.toFixed(3) + ' × ' + recover.toFixed(3) + ' = <strong>$' + finalVal.toFixed(3) + '</strong>.</li>'
+                + '<li><strong>Ride the recovery back to peak:</strong> $' + exitLevel.toFixed(3) + ' <span class="calc__decomp-sub">(cash from step 1)</span> × ' + recover.toFixed(3) + ' <span class="calc__decomp-sub">(peak ÷ re-entry price)</span> = <strong>$' + finalVal.toFixed(3) + '</strong>.</li>'
                 + '<li><strong>Net vs hold-through ($1.000):</strong> <span class="calc__num" style="color:' + (advNow > 0 ? '#0D9488' : advNow < 0 ? '#E05A6B' : '#12264a') + '">' + (advNow >= 0 ? '+' : '') + (advNow * 100).toFixed(1) + '%</span> on the round trip.</li>'
                 + '</ol>';
         }
+
+        // Annual cumulative alpha — compounding N identical step-aside trips per year
+        const annEl = document.getElementById('toAnnual');
+        function fmtPct(x) { return (x >= 0 ? '+' : '') + (x * 100).toFixed(1) + '%'; }
+        function colorFor(x) { return x > 0 ? '#0D9488' : x < 0 ? '#E05A6B' : '#12264a'; }
+        const annual = N === 0 ? 0 : Math.pow(S, N) - 1;
+        const ladder = [1, 2, 3, 4, 5, 6].map(function (k) {
+            const v = Math.pow(S, k) - 1;
+            const active = k === N;
+            return '<div class="to-annual__cell' + (active ? ' is-active' : '') + '">'
+                 + '<span class="to-annual__k">' + k + '/yr</span>'
+                 + '<span class="to-annual__v" style="color:' + colorFor(v) + '">' + fmtPct(v) + '</span></div>';
+        }).join('');
+        annEl.innerHTML =
+              '<p class="to-annual__h">'
+            + '<span>Per round-trip: <strong style="color:' + colorFor(advNow) + '">' + fmtPct(advNow) + '</strong></span> '
+            + '<span class="to-annual__sep">×</span> '
+            + '<span><strong>' + N + '</strong> opportunities</span> '
+            + '<span class="to-annual__sep">⇒</span> '
+            + '<span>Annual alpha: <strong style="color:' + colorFor(annual) + ';font-size:18px">' + fmtPct(annual) + '</strong></span>'
+            + '</p>'
+            + '<p class="to-annual__formula">' + (advNow === 0
+                ? 'Lags exactly cancel protection — compounding zero gives zero, no matter how many opportunities.'
+                : '(1 ' + (advNow >= 0 ? '+ ' : '− ') + Math.abs(advNow * 100).toFixed(1) + '%)<sup>' + N + '</sup> − 1 = ' + fmtPct(annual))
+            + '</p>'
+            + '<div class="to-annual__ladder" aria-label="Cumulative alpha at 1 through 6 opportunities per year">' + ladder + '</div>'
+            + '<p class="to-annual__caveat"><em>Upper bound:</em> assumes every opportunity has the same depth / lag profile and that lags compound independently. Real years vary — some give one opportunity, some give none, some give an opportunity the strategy mis-times.</p>';
 
         // Break-even formula legend
         const beEl = document.getElementById('toBreakeven');
@@ -180,9 +218,9 @@
         raf = true;
         requestAnimationFrame(function () { raf = false; render(); });
     }
-    [dEl, gEl, mEl].forEach(function (el) { el.addEventListener('input', queue); });
+    [dEl, gEl, mEl, nEl].forEach(function (el) { el.addEventListener('input', queue); });
     document.getElementById('toReset').addEventListener('click', function () {
-        dEl.value = DEF.D; gEl.value = DEF.g; mEl.value = DEF.m; queue();
+        dEl.value = DEF.D; gEl.value = DEF.g; mEl.value = DEF.m; nEl.value = DEF.N; queue();
     });
     render();
 })();
