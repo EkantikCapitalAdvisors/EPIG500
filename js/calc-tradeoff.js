@@ -263,8 +263,8 @@
             + '<span class="calc__breakeven-eq">→ your sum = ' + Math.round(g * 100) + '% + ' + Math.round(m * 100) + '% = <strong style="color:' + signColor + '">' + lagSumPct + '%</strong></span> '
             + '<span class="calc__breakeven-note">— ' + sign + '. Under fractional lags, depth amplifies magnitude only; sign is set by whether you caught more of the move than you missed.</span>';
 
-        // Advantage curve
-        const W = 640, H = 280, PL = 56, PR = 18, PT = 18, PB = 34;
+        // Advantage curve (CW = chart width; the user-facing W slippage var is already in scope)
+        const CW = 640, CH = 280, PL = 56, PR = 18, PT = 18, PB = 34;
         const pts = [];
         let aMin = 0, aMax = 0;
         for (let v = D_MIN; v <= D_MAX + 1e-9; v += 0.005) {
@@ -273,27 +273,27 @@
             if (a < aMin) aMin = a; if (a > aMax) aMax = a;
         }
         aMax = Math.max(aMax, 0.02) * 1.15; aMin = Math.min(aMin, -0.02) * 1.15;
-        function X(v) { return PL + ((v - D_MIN) / (D_MAX - D_MIN)) * (W - PL - PR); }
-        function Y(a) { return PT + (1 - (a - aMin) / (aMax - aMin)) * (H - PT - PB); }
+        function X(v) { return PL + ((v - D_MIN) / (D_MAX - D_MIN)) * (CW - PL - PR); }
+        function Y(a) { return PT + (1 - (a - aMin) / (aMax - aMin)) * (CH - PT - PB); }
         const s = [];
         // zero line + region shading
         const y0 = Y(0);
-        s.push('<rect x="' + PL + '" y="' + PT + '" width="' + (W - PL - PR) + '" height="' + (y0 - PT) + '" fill="rgba(13,148,136,0.07)"/>');
-        s.push('<rect x="' + PL + '" y="' + y0 + '" width="' + (W - PL - PR) + '" height="' + (H - PB - y0) + '" fill="rgba(224,90,107,0.10)"/>');
-        s.push('<line x1="' + PL + '" y1="' + y0 + '" x2="' + (W - PR) + '" y2="' + y0 + '" stroke="rgba(18,38,74,0.35)" stroke-dasharray="3 3"/>');
+        s.push('<rect x="' + PL + '" y="' + PT + '" width="' + (CW - PL - PR) + '" height="' + (y0 - PT) + '" fill="rgba(13,148,136,0.07)"/>');
+        s.push('<rect x="' + PL + '" y="' + y0 + '" width="' + (CW - PL - PR) + '" height="' + (CH - PB - y0) + '" fill="rgba(224,90,107,0.10)"/>');
+        s.push('<line x1="' + PL + '" y1="' + y0 + '" x2="' + (CW - PR) + '" y2="' + y0 + '" stroke="rgba(18,38,74,0.35)" stroke-dasharray="3 3"/>');
         // axis labels
         [aMin, 0, aMax].forEach(function (a) {
             s.push('<text x="' + (PL - 6) + '" y="' + (Y(a) + 4) + '" text-anchor="end" font-size="11" fill="#64748B">' + (a >= 0 ? '+' : '') + (a * 100).toFixed(0) + '%</text>');
         });
         for (let v = 0.05; v <= 0.55 + 1e-9; v += 0.10) {
-            s.push('<text x="' + X(v) + '" y="' + (H - PB + 16) + '" text-anchor="middle" font-size="11" fill="#64748B">−' + Math.round(v * 100) + '%</text>');
+            s.push('<text x="' + X(v) + '" y="' + (CH - PB + 16) + '" text-anchor="middle" font-size="11" fill="#64748B">−' + Math.round(v * 100) + '%</text>');
         }
         // region labels: under fractional lags one regime dominates the whole chart
         const isOpp = (g + m) < 1, isWhip = (g + m) > 1;
         if (isOpp) {
             s.push('<text x="' + X(0.30) + '" y="' + Math.max(PT + 14, y0 - 10) + '" font-size="12" font-weight="700" fill="#0D9488">volatility opportunity — deeper = more alpha</text>');
         } else if (isWhip) {
-            s.push('<text x="' + X(0.30) + '" y="' + Math.min(H - PB - 8, y0 + 20) + '" font-size="12" font-weight="700" fill="#E05A6B">whipsaw — deeper = more drag (re-entry above exit)</text>');
+            s.push('<text x="' + X(0.30) + '" y="' + Math.min(CH - PB - 8, y0 + 20) + '" font-size="12" font-weight="700" fill="#E05A6B">whipsaw — deeper = more drag (re-entry above exit)</text>');
         } else {
             s.push('<text x="' + X(0.30) + '" y="' + (y0 - 6) + '" font-size="12" font-weight="700" fill="#12264a">flat — exit equals re-entry at any depth</text>');
         }
@@ -317,7 +317,7 @@
         callout(0.50, 'crash −50%', 'end');
         // live dot at current D
         s.push('<circle cx="' + X(D) + '" cy="' + Y(advNow) + '" r="6" fill="#d4af37" stroke="#fff" stroke-width="1.5"/>');
-        document.getElementById('toChart').innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" preserveAspectRatio="xMidYMid meet">' + s.join('') + '</svg>';
+        document.getElementById('toChart').innerHTML = '<svg viewBox="0 0 ' + CW + ' ' + CH + '" width="100%" preserveAspectRatio="xMidYMid meet">' + s.join('') + '</svg>';
     }
 
     let raf = false;
