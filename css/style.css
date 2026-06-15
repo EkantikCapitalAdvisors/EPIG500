@@ -4716,6 +4716,89 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .to-wh__sliders { grid-template-columns: 1fr; }
 }
 
+/* ---- v2.1 §3 Configuration Selector ---- */
+.config-selector {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s-4);
+    margin-top: var(--s-5);
+}
+.config-card {
+    display: block;
+    padding: var(--s-6);
+    background: #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+    position: relative;
+}
+.config-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(18,38,74,0.10);
+    text-decoration: none;
+    color: inherit;
+}
+.config-card--overlay { border-top: 3px solid var(--gold-deep); }
+.config-card--overlay:hover { border-color: var(--gold-deep); border-top-color: var(--gold-deep); }
+.config-card--fullstack { border-top: 3px solid #94A3B8; }
+.config-card--fullstack:hover { border-color: #64748B; border-top-color: #64748B; }
+
+.config-card__badge {
+    margin: 0 0 var(--s-3);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.config-card__badge--live { color: var(--gold-deep); }
+.config-card__badge--testing { color: #64748B; }
+
+.config-card__h {
+    margin: 0 0 var(--s-2);
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--navy);
+}
+.config-card__tagline {
+    margin: 0 0 var(--s-3);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--navy);
+}
+.config-card__body {
+    margin: 0 0 var(--s-4);
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--slate-dark);
+}
+.config-card__cta {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: 0.02em;
+}
+.config-card--overlay:hover .config-card__cta { color: var(--gold-deep); }
+.config-card--fullstack:hover .config-card__cta { color: #64748B; }
+
+.config-notsure {
+    margin: var(--s-5) 0 0;
+    text-align: center;
+    font-size: 14px;
+    color: var(--slate-dark);
+    font-style: italic;
+}
+.config-notsure a { color: var(--navy); font-style: normal; font-weight: 600; }
+.config-notsure a:hover { color: var(--gold-deep); }
+
+@media (max-width: 720px) {
+    .config-selector { grid-template-columns: 1fr; }
+}
+
 /* ---- Calculator hub — overview cards ---- */
 .calc-hub__grid {
     display: grid;
