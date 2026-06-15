@@ -4716,6 +4716,69 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .to-wh__sliders { grid-template-columns: 1fr; }
 }
 
+/* ---- v2.1 §7 Configuration B — Full Stack (EPIG) ---- */
+#full-stack { border-top: 3px solid #64748B; }
+.fullstack__lede {
+    max-width: 780px;
+    margin: 0 auto var(--s-6);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.55;
+    text-align: center;
+    color: var(--navy);
+}
+.testing-badge {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-3);
+    max-width: 820px;
+    margin: 0 auto var(--s-7);
+    padding: var(--s-4) var(--s-5);
+    background: #EEF1F5;
+    border: 1px solid #CBD2DC;
+    border-left: 3px solid #64748B;
+    border-radius: 4px;
+    color: #374151;
+}
+.testing-badge--lg { font-size: 14.5px; }
+.testing-badge__mark { color: #64748B; line-height: 1.6; }
+.testing-badge__body { line-height: 1.6; letter-spacing: 0.01em; }
+.testing-badge__body strong { color: #1F2937; letter-spacing: 0.06em; }
+
+.fullstack__gates,
+.fullstack__pillars-intro {
+    max-width: 820px;
+    margin: 0 auto var(--s-7);
+    padding-left: var(--s-5);
+    border-left: 2px solid rgba(100,116,139,0.35);
+}
+.fullstack__h {
+    margin: 0 0 var(--s-3);
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--navy);
+}
+.fullstack__gates p,
+.fullstack__pillars-intro p {
+    margin: 0 0 var(--s-3);
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: var(--slate-dark);
+}
+.fullstack__gates p:last-child,
+.fullstack__pillars-intro p:last-child { margin-bottom: 0; }
+.fullstack__gates-cta { font-weight: 700; font-size: 14.5px !important; }
+.fullstack__gates-cta a { color: #64748B; }
+.fullstack__gates-cta a:hover { color: var(--navy); }
+
+@media (max-width: 720px) {
+    .fullstack__lede { font-size: 18px; }
+    .fullstack__h { font-size: 19px; }
+    .testing-badge { flex-direction: column; gap: var(--s-2); }
+}
+
 /* ---- v2.1 §6 Configuration A — Overlay Service ---- */
 #overlay-service { border-top: 3px solid var(--gold-deep); }
 .overlay__lede {
