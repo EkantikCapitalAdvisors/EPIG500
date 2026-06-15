@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260615a">
+    <link rel="stylesheet" href="css/style.css?v=20260615b">
 
     <script type="application/ld+json">
     {
@@ -156,6 +156,329 @@
         <p class="config-notsure">
             Not sure which fits? It usually comes down to one question — what you hold, and whether it's marginable. <a href="#talk" data-cta="founder-call-selector">Talk to the founder →</a>
         </p>
+    </div>
+</section>
+
+<!-- ============ 1c. THE PROVEN ENGINE (v2.1 §5 — elevated) ============ -->
+<section class="section section--white" id="proven-engine">
+    <div class="container">
+        <header class="section__head proven-engine__head">
+            <p class="eyebrow"><span class="diamond">◆</span> The Proven Engine</p>
+            <h2 class="section__h">The engine is the part with a track record. So we lead with it.</h2>
+        </header>
+        <aside class="proven-engine__callout" role="note">
+            <p>This engine pursues return, not a fixed income schedule. Results are variable and realized as positions close. We do not project a number — we publish the record, trade by trade, and the exact conditions under which we'd declare the edge dead and stop.</p>
+            <p class="proven-engine__callout-cta"><a href="/dashboard.html" data-cta="dashboard-proven-engine">Open the live dashboard →</a></p>
+        </aside>
+    </div>
+</section>
+
+<!-- ============ 5. THE PROOF — 8-Test Battery ============ -->
+<section class="section section--ivory" id="battery">
+    <div class="container">
+        <header class="section__header">
+            <p class="eyebrow"><span class="diamond">◆</span> The Proof</p>
+            <h2 class="section__h">The methodology — documented over 12 years, now verified in public.</h2>
+        </header>
+
+        <!-- Trade countdown toward battery activation -->
+        <div class="trade-countdown js-trade-countdown" data-variant="full"></div>
+
+        <!-- Methodology Provenance — 12+ years of development, live record accumulating -->
+        <div class="provenance">
+            <p class="provenance__h">Methodology Provenance</p>
+            <div class="provenance__timeline">
+                <div class="provenance__phase">
+                    <p class="provenance__phase-num">01</p>
+                    <p class="provenance__phase-h">12+ years of development</p>
+                    <p class="provenance__phase-body">Over a decade of methodology refinement — iterating on entry criteria, risk anchoring, regime behaviour, and operator discipline — to reach the point where the documented methodology can be executed trade-for-trade against a frozen process.</p>
+                </div>
+                <div class="provenance__phase">
+                    <p class="provenance__phase-num">02</p>
+                    <p class="provenance__phase-h">Live pre-registration record</p>
+                    <p class="provenance__phase-body">Every trade from the May 2026 restart published to the live dashboard within 24 hours of close. Tagged per-trade, witnessed, and held to the published Stage 1 fidelity criteria from day one.</p>
+                </div>
+                <div class="provenance__phase">
+                    <p class="provenance__phase-num">03</p>
+                    <p class="provenance__phase-h">Battery, computed live</p>
+                    <p class="provenance__phase-body">The same eight tests that define the Stage 2 kill conditions are computed in your browser as the live record accumulates. The battery activates once the record reaches 30+ closed trades — until then the sample is too small for statistical inference.</p>
+                </div>
+            </div>
+            <p class="compliance">Past performance does not guarantee future results. The 8-test battery is a statistical claim about the entire trade record and requires a meaningful sample to produce a verdict — the threshold is 30+ closed trades, with a binding determination at 100+. Until then the dashboard shows individual KPIs and the equity curve, but no battery verdict.</p>
+        </div>
+
+        <!-- Transition rule -->
+        <div class="gold-rule">
+            <div class="gold-rule__bar"></div>
+            <p class="gold-rule__text">The eight tests below are computed live, in your browser, against the published live record. The battery activates at 30+ closed trades.</p>
+            <div class="gold-rule__bar"></div>
+        </div>
+
+        <!-- Live battery -->
+        <div class="battery">
+            <div class="battery__verdict">
+                <div class="battery__verdict-main">
+                    <p class="battery__verdict-label">8-Test Sustainability Battery · Live Record</p>
+                    <p class="battery__verdict-value" id="batteryVerdict">Activates at 30+ trades</p>
+                    <p class="battery__verdict-meta">Last recomputed: <span id="batteryTimestamp">pending first compute</span> · Dataset: <span id="batteryDataset">live pre-registration record</span></p>
+                </div>
+                <div class="battery__verdict-actions">
+                    <button class="btn btn--secondary btn--sm" id="batteryResetBtn">Reset to live record</button>
+                </div>
+            </div>
+
+            <p class="battery__intro">Each test measures one attribute of a sustainable edge. The bar shows the dataset's actual reading against the pass threshold — the gold fill is the headroom above it.</p>
+            <div class="battery__rows" id="batteryGrid"><!-- 8 rows rendered by JS --></div>
+
+            <!-- Upload module -->
+            <div class="upload-module">
+                <div class="upload-module__h">
+                    <p class="eyebrow"><span class="diamond">◆</span> Run the battery on your own data</p>
+                    <h3>Three input modes — all processed client-side.</h3>
+                    <p class="upload-module__privacy">All file handling is client-side. Your data never leaves the browser. Format auto-detection supports Tradovate CSV, TradeZella CSV, Interactive Brokers Orders CSV, and Discord JSON exports.</p>
+                </div>
+
+                <div class="upload-module__tabs" role="tablist">
+                    <button class="upload-tab is-active" data-mode="file" role="tab" aria-selected="true">File upload</button>
+                    <button class="upload-tab" data-mode="paste" role="tab" aria-selected="false">Paste text</button>
+                    <button class="upload-tab" data-mode="reset" role="tab" aria-selected="false">Reset to sample</button>
+                </div>
+
+                <div class="upload-module__panel" data-panel="file">
+                    <label class="upload-drop" for="uploadFile">
+                        <input type="file" id="uploadFile" accept=".csv,.json,.txt" hidden>
+                        <div class="upload-drop__inner">
+                            <p class="upload-drop__icon">↑</p>
+                            <p class="upload-drop__primary">Drop a CSV or JSON file here, or click to browse</p>
+                            <p class="upload-drop__secondary">Supports Tradovate, TradeZella, IB Orders, Discord exports</p>
+                        </div>
+                    </label>
+                </div>
+                <div class="upload-module__panel" data-panel="paste" hidden>
+                    <textarea id="uploadPaste" rows="6" placeholder="Paste raw CSV rows or Discord/alert text here…"></textarea>
+                    <button class="btn btn--secondary btn--sm" id="uploadPasteBtn">Run battery on pasted data</button>
+                </div>
+                <div class="upload-module__panel" data-panel="reset" hidden>
+                    <p>Reset the battery to the live pre-registration record.</p>
+                    <button class="btn btn--primary btn--sm" id="uploadResetBtn">Reset now</button>
+                </div>
+
+                <div class="upload-module__status" id="uploadStatus" hidden></div>
+            </div>
+
+            <p class="battery__source">
+                ◆ Battery implementation is open-source. <a href="https://github.com/EkantikCapitalAdvisors/EPIG500" target="_blank" rel="noopener">View on GitHub →</a>
+            </p>
+            <p class="compliance">Battery activates at 30+ closed trades and is binding at 100+. Below 30 the sample is too small for statistical inference and the battery returns no verdict. Past performance is not indicative of future results. You can upload your own trade record above and the battery runs against it instead.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- ============ 6. SIGNAL CONTINUITY ============ -->
+<section class="section section--ivory" id="continuity">
+    <div class="container">
+        <header class="section__header">
+            <p class="eyebrow"><span class="diamond">◆</span> Signal Continuity</p>
+            <h2 class="section__h">Methodology development, then live publication.</h2>
+            <p class="section__sub">The methodology was refined privately over 12+ years. A 196-trade Telegram-channel record from Apr 2023 – Oct 2024 exists and is viewable on the dashboard, but it predates the locked Falsifiability Protocol. The protocol-bound, witnessed record begins with the pre-registration window in May 2026.</p>
+        </header>
+
+        <div class="continuity">
+            <article class="period period--gap">
+                <div class="period__head">
+                    <p class="period__num">Period 1 <span class="period-badge period-badge--slate">Transparency only — pre-protocol</span></p>
+                    <p class="period__range">12+ years through May 2026</p>
+                </div>
+                <p class="period__h">Methodology development &amp; informal record</p>
+                <p class="period__body">Over a decade of iteration on entry criteria, risk anchoring, regime behaviour, and operator discipline. A subset of trades — <strong>196 calls, Apr 2023 – Oct 2024</strong> — was posted in real time to a private Telegram channel and is viewable on the live dashboard. That record predates the locked Falsifiability Protocol: no witness, no Stage-1 / Stage-2 gates armed, no OP-04 per-trade tagging at the time. During the most recent stretch (Oct 2024 – present), the operator's public focus shifted to the <strong>Ekantik Cash-Flow Strategy (ECFS)</strong> — a pure-futures, intraday-only methodology built on the same fail-safe engineering principles that govern EPIG: pre-committed rules, capped per-trade risk, kill conditions written before any capital is deployed. The system trades during the day, goes flat every night, and is publicly demonstrated and verifiable below. Ekantik 500 itself was being refined in parallel to the point where the documented methodology can be executed trade-for-trade against a frozen process.</p>
+                <div class="period__actions">
+                    <a href="https://cashflow.ekantikcapital.com/" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">View the cash-flow strategy →</a>
+                    <a href="/dashboard.html" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">View the historical record →</a>
+                </div>
+                <p class="period__stat"><strong>Pre-protocol record.</strong> The 196-trade block is published for transparency but is <em>not</em> the basis for any sustainability claim — the protocol-bound record begins in Period 2.</p>
+            </article>
+
+            <article class="period period--prereg">
+                <div class="period__head">
+                    <p class="period__num">Period 2 <span class="period-badge period-badge--gold">Protocol-bound · Witnessed</span></p>
+                    <p class="period__range">May 2026 → product launch</p>
+                </div>
+                <p class="period__h">Pre-registration live publication</p>
+                <p class="period__body">Every trade on the strategy published to the live dashboard within 24 hours of close. Tagged as process breach (H2) or normal variance (H3) per OP-04. Witnessed per the locked Falsifiability Protocol v1.6. Pre-registration participants get a continuous live record from restart through product launch — built openly, in public, trade by trade.</p>
+                <div class="period__actions">
+                    <a href="/dashboard.html" target="_blank" rel="noopener" class="btn btn--primary btn--sm">Open live dashboard ↗</a>
+                </div>
+                <p class="period__stat" id="continuityLiveCount"><strong>Every protocol-bound trade</strong> is published to the live dashboard within 24 hours of close.</p>
+            </article>
+        </div>
+
+        <p class="compliance">The 196-trade Period 1 Telegram record predates the locked Falsifiability Protocol (no witness, no gates armed, no per-trade OP-04 tagging in advance) and is published for transparency, not as a sustainability claim. The 8-test sustainability battery activates at 30+ closed trades on the protocol-bound Period 2 record and is binding at 100+; until then the live dashboard surfaces KPIs and the equity curve without a battery verdict. Pre-registration participants are the first cohort with a continuous, witnessed live record from public restart through launch. Nothing on this page constitutes a forecast or guarantee.</p>
+    </div>
+</section>
+
+<!-- ============ 3. COMPOUNDING LADDER + RISK MANAGEMENT CADENCE ============ -->
+<section class="section section--white" id="ladder">
+    <div class="container">
+        <header class="section__header section__header--center">
+            <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Mechanism + The Discipline</p>
+            <h2 class="section__h section__h--lg">The Compounding Ladder</h2>
+            <p class="section__sub">Starting at <strong>$100K NLV</strong>. <strong>80% allocated to SPY</strong> for baseline market exposure (the position also serves as portfolio-margin collateral). <strong>20% held in cash</strong> as an operational settlement buffer that backs the /ES futures engine. <strong>Per-contract risk is fixed at 0.5% of NLV</strong>; total per-trade exposure scales <strong>0.5% → 1%</strong> as contracts scale <strong>1 → 2</strong> with the earned profit buffer. The cadence rules that bound drawdown are listed first — they govern the engine whichever way the year plays out.</p>
+        </header>
+
+        <!-- Theoretical disclaimer banner — leading so investors can't miss it -->
+        <div class="theoretical-banner">
+            <p class="theoretical-banner__h"><span class="diamond">◆</span> Theoretical · <span class="js-prereg-count">pre-registration record accumulating</span></p>
+            <p class="theoretical-banner__body">The cadence rules, position-scaling logic, and target returns shown below are <strong>design intent</strong> — engineered, not yet demonstrated. <strong>The live pre-registration record is the only published trading record for this strategy and is still accumulating.</strong> A statistically meaningful track record will take many more closed trades; the 8-test sustainability battery activates at 30+ trades. Pre-registration participants see every trade as it happens; nothing on this page constitutes a forecast or guarantee.</p>
+        </div>
+
+        <!-- Earned-scale staircase — structural rules from the locked protocol only.
+             Contract counts, the fixed 0.5% per-contract anchor, unlock and de-scale
+             conditions are documented architecture; no dollars, no timeline, no
+             projection (forward equity curve removed per compliance redline T1-A). -->
+        <div class="ladder-stairs" role="img" aria-label="The earned-scale staircase: contracts scale with NLV at Standard sizing (1 /ES per $100K NLV), each one paid for by a realized profit buffer. The per-contract risk anchor of 0.5% NLV never changes. v1.6 removes the prior 2-contract ceiling — the engine scales with the account. The ladder also de-scales: OP-06 cuts size to half after a second consecutive losing week.">
+            <div class="ladder-stairs__track">
+                <div class="ladder-stair">
+                    <div class="ladder-stair__stack"><span class="ladder-stair__block ladder-stair__block--base"></span></div>
+                    <p class="ladder-stair__contracts">1 /ES</p>
+                    <p class="ladder-stair__risk">0.5% NLV per trade</p>
+                    <p class="ladder-stair__gate">The architectural base — where every account at $100K NLV starts</p>
+                </div>
+                <div class="ladder-stairs__arrow" aria-hidden="true"><span class="diamond">◆</span><span class="ladder-stairs__arrow-label">+1 contract per +$100K NLV at Standard sizing, each earned by realized profit buffer</span>→</div>
+                <div class="ladder-stair ladder-stair--ceiling">
+                    <div class="ladder-stair__stack"><span class="ladder-stair__block ladder-stair__block--base"></span><span class="ladder-stair__block ladder-stair__block--earned"></span></div>
+                    <p class="ladder-stair__contracts">N /ES</p>
+                    <p class="ladder-stair__risk">0.5% × N per trade</p>
+                    <p class="ladder-stair__gate"><strong>Standard sizing</strong> at NLV/$100K contracts. v1.6 removed the prior 2-contract ceiling — contract count scales with the account, each new contract earned through realized profit buffer, never assumed. The 0.5% per-contract anchor never escalates.</p>
+                </div>
+            </div>
+            <div class="ladder-stairs__legend">
+                <span class="ladder-stairs__legend-item"><span class="ladder-stair__block ladder-stair__block--base ladder-stair__block--mini"></span> base contract</span>
+                <span class="ladder-stairs__legend-item"><span class="ladder-stair__block ladder-stair__block--earned ladder-stair__block--mini"></span> earned contract — paid for by realized profit</span>
+            </div>
+            <div class="ladder-stairs__notes">
+                <p class="ladder-stairs__note"><span class="diamond">◆</span> <strong>The per-contract anchor never moves.</strong> Risk per contract is fixed at 0.5% of NLV at every step; only the contract count scales — and only when the realized profit buffer has paid for it.</p>
+                <p class="ladder-stairs__note ladder-stairs__note--kill"><strong>And the ladder moves both ways.</strong> A second consecutive losing week (OP-06) cuts size to half until five clean trades reinstate it (OP-07). All eight ED kill conditions stay armed at every step — see the rail below.</p>
+            </div>
+        </div>
+
+        <!-- Three-panel risk-management cadence -->
+        <header class="section__header" style="margin-top: var(--s-12); margin-bottom: var(--s-4);">
+            <p class="eyebrow"><span class="diamond">◆</span> Risk Management Cadence · governs the engine</p>
+            <h3 class="section__h section__h--mid">The discipline that bounds drawdown</h3>
+        </header>
+        <div class="rm-grid">
+
+            <article class="rm-card rm-card--gold">
+                <span class="rm-card__cadence">Daily</span>
+                <h3 class="rm-card__h">One day, one shot</h3>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-02</span> One-loss daily rule</p>
+                    <p class="rm-rule__body">After any closed losing trade, no further entries that session. The day ends on the first loss — regardless of setup quality, conviction, or remaining time.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-03</span> Trailing daily cap <em class="rm-new">v1.2</em></p>
+                    <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. <strong>Per-contract risk is fixed at 0.5% of NLV</strong>; total per-trade exposure scales 0.5% → 1% as contracts scale 1 → 2 with the earned profit buffer. The daily floor ratchets up with every new peak. Replaces the v1.0 fixed −12 ES pts cap.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">·</span> Auto-resume</p>
+                    <p class="rm-rule__body">Engine resumes at standard sizing on the <strong>next trading session</strong>. No witness review required for an isolated daily-cap event.</p>
+                </div>
+            </article>
+
+            <article class="rm-card">
+                <span class="rm-card__cadence">Weekly</span>
+                <h3 class="rm-card__h">Two strikes, sit down</h3>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-05</span> Weekly sit-down trigger <em class="rm-new">v1.2</em></p>
+                    <p class="rm-rule__body"><strong>2–3 consecutive losing days within a single week</strong> halts trading for the remainder of that week. Engine resumes Monday with standard sizing pending witness review.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">·</span> Witness audit</p>
+                    <p class="rm-rule__body">Witness reviews the loss cluster during the sit-down: process breach (H2) or normal variance (H3)? Trade attribution log filed within 48 hours.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">·</span> Logged, not killed</p>
+                    <p class="rm-rule__body">A single weekly sit-down is a Tier-1 event — logged in the Discord journal, investor disclosure within 7 days. No size reduction yet.</p>
+                </div>
+            </article>
+
+            <article class="rm-card rm-card--signal">
+                <span class="rm-card__cadence">Bi-weekly · Recovery</span>
+                <h3 class="rm-card__h">Two losing weeks → reduce</h3>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-06</span> Size reduction <em class="rm-new">v1.4</em></p>
+                    <p class="rm-rule__body"><strong>2nd consecutive losing week</strong> → engine sizing cuts to <strong>half of normal</strong> (e.g. 5 /MES in place of 1 /ES — equivalent dollar exposure cut by 50%). Daily filing under witness oversight for the duration.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">OP-07</span> Reinstatement <em class="rm-new">v1.2</em></p>
+                    <p class="rm-rule__body">Standard sizing reinstates only after <strong>5 good trades</strong> at reduced size — defined as 5 closed trades with no OP breach and net positive P&amp;L. Witness countersignature on resumption.</p>
+                </div>
+                <div class="rm-rule">
+                    <p class="rm-rule__h"><span class="op">·</span> Escalation</p>
+                    <p class="rm-rule__body">If reduced-size window produces a 3rd consecutive losing week, escalates to Stage-1 Tier-2 cessation. Stage-2 (Edge Gate) is independent and may fire at any time.</p>
+                </div>
+            </article>
+        </div>
+
+
+        <!-- Calculator 4 — The Worst Case, Priced (bounded-loss architecture) · Calculator Spec v1.0 §4.
+             LOSS-SIDE ONLY: no gain, throughput, or expectancy figure may render here. -->
+        <div class="calc" id="calcBoundsWrap">
+            <header class="calc__head">
+                <p class="eyebrow"><span class="diamond">◆</span> The Worst Case, Priced</p>
+                <h3 class="calc__h">A risk with a number can be financed. An unbounded risk can only be feared.</h3>
+                <p class="calc__sub">The engine's published loss bounds — per trade, per day, per week, and the hard kill — at a hypothetical account size. Loss-side only, by construction.</p>
+            </header>
+            <div id="calcBounds">
+                <!-- static default state (NLV $100K, 1 contract) — replaced on hydration -->
+                <div class="cb-ladder">
+                    <div class="cb-rung"><span class="cb-rung__id">OP-02</span><div class="cb-rung__body"><p class="cb-rung__title">Per trade</p><p class="cb-rung__fig">−$500 (0.5% of NLV)</p><p class="cb-rung__text">Per-contract risk fixed at 0.5% of NLV. After any closed losing trade, the day is over (one-loss daily rule).</p></div></div>
+                    <div class="cb-rung"><span class="cb-rung__id">OP-03</span><div class="cb-rung__body"><p class="cb-rung__title">Daily floor</p><p class="cb-rung__fig">−$500 (starting)</p><p class="cb-rung__text">Trailing high-water-mark floor — ratchets up with every new equity peak, never down.</p></div></div>
+                    <div class="cb-rung"><span class="cb-rung__id">OP-05</span><div class="cb-rung__body"><p class="cb-rung__title">Weekly stand-down</p><p class="cb-rung__fig cb-rung__fig--rule">2–3 consecutive losing days halts the week (OP-05)</p><p class="cb-rung__text">A rule, not a dollar figure: consecutive losing days halt the week pending witness review.</p></div></div>
+                    <div class="cb-rung cb-rung--kill"><span class="cb-rung__id">ED-05b</span><div class="cb-rung__body"><p class="cb-rung__title">Hard kill</p><p class="cb-rung__fig">−$5,000 / /ES</p><p class="cb-rung__text">100 /ES pts × $50/pt = <strong>$5,000 per contract</strong>. Scales linearly with portfolio: at the 1 /ES per $100K NLV base sizing, hard kill = <strong>$50,000 on a $1M portfolio · $250,000 on $5M</strong>. Budgeted in advance whatever the size.</p></div></div>
+                </div>
+            </div>
+            <p class="calc__caption"><em>These figures compute the published Falsifiability Protocol v1.6 loss bounds at a hypothetical account size. Caps and the hard kill are sizing and exit rules enforced by rule — fast markets can gap beyond them. Not a guarantee, not an offer, and not a statement of expected results. Past performance does not guarantee future results.</em></p>
+        </div>
+
+        <!-- Removed: forward-projection equity curve. SVG and chips deleted per compliance redline T1-A.
+             What remains below — kill-condition chips and three-col risk/leverage/velocity explainers —
+             are structural commitments, not projections, and stay.
+        -->
+
+        <!-- Tangible kill conditions rail: all 8 ED conditions as named chips -->
+        <div class="cl-kills">
+            <div class="cl-kills__head">
+                <p class="cl-kills__h">↑ All eight kill conditions are armed at every step</p>
+                <p class="cl-kills__sub">Hover or tap any chip to reveal its trigger. The ladder halts when any one fires — regardless of which step has been reached.</p>
+            </div>
+            <div class="cl-kills__chips" id="cl-kills-chips"><!-- 8 chips rendered by JS --></div>
+        </div>
+
+        <div class="three-col">
+            <article class="explainer">
+                <p class="eyebrow"><span class="diamond">◆</span> Disciplined Risk</p>
+                <p>Risk is anchored <em>per contract</em> at <strong>0.5% of total NLV</strong> — fixed, architectural, never escalated. Total per-trade exposure scales via <strong>contract count</strong>, which itself scales with capital at <strong>Standard sizing: 1 /ES per $100K NLV</strong> (v1.6, uncapped — the v1.5 2-contract ceiling was removed). Each additional contract is earned by accumulated profit buffer, never assumed. The dollar amount grows two ways — the capital base grows, AND the Standard contract count grows with it — but the per-contract percentage never changes, and the ED-05b hard kill stays at a consistent 5% of NLV at Standard sizing regardless of account size.</p>
+            </article>
+            <article class="explainer">
+                <p class="eyebrow"><span class="diamond">◆</span> Earned Leverage</p>
+                <p>Position size increases only when verified profits compound the base. The second contract is paid for by the first. Scale is <em>earned</em> — never borrowed, never assumed.</p>
+            </article>
+            <article class="explainer">
+                <p class="eyebrow"><span class="diamond">◆</span> Velocity Compounds</p>
+                <p>Each step shortens the time to the next as throughput grows linearly with contract count. By the 2-/ES ceiling, the engine is doing the heavy lifting and dollar outcomes climb non-linearly.</p>
+            </article>
+        </div>
+
+    </div>
+</section>
+
+<!-- ============ 1c-end. PROVEN ENGINE → OVERLAY SERVICE bridge ============ -->
+<section class="section section--ivory proven-engine__bridge">
+    <div class="container container--narrow">
+        <p class="proven-engine__bridge-lede"><span class="diamond">◆</span> The Overlay Service is this engine, deployed on the portfolio you already own. The proof above — plus the Worst-Case bounds — is how it earns the seat.</p>
+        <p class="proven-engine__bridge-cta"><a class="btn btn--ghost" href="#overlay-service" data-cta="overlay-from-proven-engine">Explore the Overlay Service →</a></p>
     </div>
 </section>
 
@@ -383,150 +706,6 @@
 </section>
 
 
-<!-- ============ 5. THE PROOF — 8-Test Battery ============ -->
-<section class="section section--ivory" id="battery">
-    <div class="container">
-        <header class="section__header">
-            <p class="eyebrow"><span class="diamond">◆</span> The Proof</p>
-            <h2 class="section__h">The methodology — documented over 12 years, now verified in public.</h2>
-        </header>
-
-        <!-- Trade countdown toward battery activation -->
-        <div class="trade-countdown js-trade-countdown" data-variant="full"></div>
-
-        <!-- Methodology Provenance — 12+ years of development, live record accumulating -->
-        <div class="provenance">
-            <p class="provenance__h">Methodology Provenance</p>
-            <div class="provenance__timeline">
-                <div class="provenance__phase">
-                    <p class="provenance__phase-num">01</p>
-                    <p class="provenance__phase-h">12+ years of development</p>
-                    <p class="provenance__phase-body">Over a decade of methodology refinement — iterating on entry criteria, risk anchoring, regime behaviour, and operator discipline — to reach the point where the documented methodology can be executed trade-for-trade against a frozen process.</p>
-                </div>
-                <div class="provenance__phase">
-                    <p class="provenance__phase-num">02</p>
-                    <p class="provenance__phase-h">Live pre-registration record</p>
-                    <p class="provenance__phase-body">Every trade from the May 2026 restart published to the live dashboard within 24 hours of close. Tagged per-trade, witnessed, and held to the published Stage 1 fidelity criteria from day one.</p>
-                </div>
-                <div class="provenance__phase">
-                    <p class="provenance__phase-num">03</p>
-                    <p class="provenance__phase-h">Battery, computed live</p>
-                    <p class="provenance__phase-body">The same eight tests that define the Stage 2 kill conditions are computed in your browser as the live record accumulates. The battery activates once the record reaches 30+ closed trades — until then the sample is too small for statistical inference.</p>
-                </div>
-            </div>
-            <p class="compliance">Past performance does not guarantee future results. The 8-test battery is a statistical claim about the entire trade record and requires a meaningful sample to produce a verdict — the threshold is 30+ closed trades, with a binding determination at 100+. Until then the dashboard shows individual KPIs and the equity curve, but no battery verdict.</p>
-        </div>
-
-        <!-- Transition rule -->
-        <div class="gold-rule">
-            <div class="gold-rule__bar"></div>
-            <p class="gold-rule__text">The eight tests below are computed live, in your browser, against the published live record. The battery activates at 30+ closed trades.</p>
-            <div class="gold-rule__bar"></div>
-        </div>
-
-        <!-- Live battery -->
-        <div class="battery">
-            <div class="battery__verdict">
-                <div class="battery__verdict-main">
-                    <p class="battery__verdict-label">8-Test Sustainability Battery · Live Record</p>
-                    <p class="battery__verdict-value" id="batteryVerdict">Activates at 30+ trades</p>
-                    <p class="battery__verdict-meta">Last recomputed: <span id="batteryTimestamp">pending first compute</span> · Dataset: <span id="batteryDataset">live pre-registration record</span></p>
-                </div>
-                <div class="battery__verdict-actions">
-                    <button class="btn btn--secondary btn--sm" id="batteryResetBtn">Reset to live record</button>
-                </div>
-            </div>
-
-            <p class="battery__intro">Each test measures one attribute of a sustainable edge. The bar shows the dataset's actual reading against the pass threshold — the gold fill is the headroom above it.</p>
-            <div class="battery__rows" id="batteryGrid"><!-- 8 rows rendered by JS --></div>
-
-            <!-- Upload module -->
-            <div class="upload-module">
-                <div class="upload-module__h">
-                    <p class="eyebrow"><span class="diamond">◆</span> Run the battery on your own data</p>
-                    <h3>Three input modes — all processed client-side.</h3>
-                    <p class="upload-module__privacy">All file handling is client-side. Your data never leaves the browser. Format auto-detection supports Tradovate CSV, TradeZella CSV, Interactive Brokers Orders CSV, and Discord JSON exports.</p>
-                </div>
-
-                <div class="upload-module__tabs" role="tablist">
-                    <button class="upload-tab is-active" data-mode="file" role="tab" aria-selected="true">File upload</button>
-                    <button class="upload-tab" data-mode="paste" role="tab" aria-selected="false">Paste text</button>
-                    <button class="upload-tab" data-mode="reset" role="tab" aria-selected="false">Reset to sample</button>
-                </div>
-
-                <div class="upload-module__panel" data-panel="file">
-                    <label class="upload-drop" for="uploadFile">
-                        <input type="file" id="uploadFile" accept=".csv,.json,.txt" hidden>
-                        <div class="upload-drop__inner">
-                            <p class="upload-drop__icon">↑</p>
-                            <p class="upload-drop__primary">Drop a CSV or JSON file here, or click to browse</p>
-                            <p class="upload-drop__secondary">Supports Tradovate, TradeZella, IB Orders, Discord exports</p>
-                        </div>
-                    </label>
-                </div>
-                <div class="upload-module__panel" data-panel="paste" hidden>
-                    <textarea id="uploadPaste" rows="6" placeholder="Paste raw CSV rows or Discord/alert text here…"></textarea>
-                    <button class="btn btn--secondary btn--sm" id="uploadPasteBtn">Run battery on pasted data</button>
-                </div>
-                <div class="upload-module__panel" data-panel="reset" hidden>
-                    <p>Reset the battery to the live pre-registration record.</p>
-                    <button class="btn btn--primary btn--sm" id="uploadResetBtn">Reset now</button>
-                </div>
-
-                <div class="upload-module__status" id="uploadStatus" hidden></div>
-            </div>
-
-            <p class="battery__source">
-                ◆ Battery implementation is open-source. <a href="https://github.com/EkantikCapitalAdvisors/EPIG500" target="_blank" rel="noopener">View on GitHub →</a>
-            </p>
-            <p class="compliance">Battery activates at 30+ closed trades and is binding at 100+. Below 30 the sample is too small for statistical inference and the battery returns no verdict. Past performance is not indicative of future results. You can upload your own trade record above and the battery runs against it instead.</p>
-        </div>
-    </div>
-</section>
-
-
-<!-- ============ 6. SIGNAL CONTINUITY ============ -->
-<section class="section section--ivory" id="continuity">
-    <div class="container">
-        <header class="section__header">
-            <p class="eyebrow"><span class="diamond">◆</span> Signal Continuity</p>
-            <h2 class="section__h">Methodology development, then live publication.</h2>
-            <p class="section__sub">The methodology was refined privately over 12+ years. A 196-trade Telegram-channel record from Apr 2023 – Oct 2024 exists and is viewable on the dashboard, but it predates the locked Falsifiability Protocol. The protocol-bound, witnessed record begins with the pre-registration window in May 2026.</p>
-        </header>
-
-        <div class="continuity">
-            <article class="period period--gap">
-                <div class="period__head">
-                    <p class="period__num">Period 1 <span class="period-badge period-badge--slate">Transparency only — pre-protocol</span></p>
-                    <p class="period__range">12+ years through May 2026</p>
-                </div>
-                <p class="period__h">Methodology development &amp; informal record</p>
-                <p class="period__body">Over a decade of iteration on entry criteria, risk anchoring, regime behaviour, and operator discipline. A subset of trades — <strong>196 calls, Apr 2023 – Oct 2024</strong> — was posted in real time to a private Telegram channel and is viewable on the live dashboard. That record predates the locked Falsifiability Protocol: no witness, no Stage-1 / Stage-2 gates armed, no OP-04 per-trade tagging at the time. During the most recent stretch (Oct 2024 – present), the operator's public focus shifted to the <strong>Ekantik Cash-Flow Strategy (ECFS)</strong> — a pure-futures, intraday-only methodology built on the same fail-safe engineering principles that govern EPIG: pre-committed rules, capped per-trade risk, kill conditions written before any capital is deployed. The system trades during the day, goes flat every night, and is publicly demonstrated and verifiable below. Ekantik 500 itself was being refined in parallel to the point where the documented methodology can be executed trade-for-trade against a frozen process.</p>
-                <div class="period__actions">
-                    <a href="https://cashflow.ekantikcapital.com/" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">View the cash-flow strategy →</a>
-                    <a href="/dashboard.html" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">View the historical record →</a>
-                </div>
-                <p class="period__stat"><strong>Pre-protocol record.</strong> The 196-trade block is published for transparency but is <em>not</em> the basis for any sustainability claim — the protocol-bound record begins in Period 2.</p>
-            </article>
-
-            <article class="period period--prereg">
-                <div class="period__head">
-                    <p class="period__num">Period 2 <span class="period-badge period-badge--gold">Protocol-bound · Witnessed</span></p>
-                    <p class="period__range">May 2026 → product launch</p>
-                </div>
-                <p class="period__h">Pre-registration live publication</p>
-                <p class="period__body">Every trade on the strategy published to the live dashboard within 24 hours of close. Tagged as process breach (H2) or normal variance (H3) per OP-04. Witnessed per the locked Falsifiability Protocol v1.6. Pre-registration participants get a continuous live record from restart through product launch — built openly, in public, trade by trade.</p>
-                <div class="period__actions">
-                    <a href="/dashboard.html" target="_blank" rel="noopener" class="btn btn--primary btn--sm">Open live dashboard ↗</a>
-                </div>
-                <p class="period__stat" id="continuityLiveCount"><strong>Every protocol-bound trade</strong> is published to the live dashboard within 24 hours of close.</p>
-            </article>
-        </div>
-
-        <p class="compliance">The 196-trade Period 1 Telegram record predates the locked Falsifiability Protocol (no witness, no gates armed, no per-trade OP-04 tagging in advance) and is published for transparency, not as a sustainability claim. The 8-test sustainability battery activates at 30+ closed trades on the protocol-bound Period 2 record and is binding at 100+; until then the live dashboard surfaces KPIs and the equity curve without a battery verdict. Pre-registration participants are the first cohort with a continuous, witnessed live record from public restart through launch. Nothing on this page constitutes a forecast or guarantee.</p>
-    </div>
-</section>
-
 <!-- ============ 2d. THE ARITHMETIC — historical illustration (ADD-2; moved out of Ladder section) ============ -->
 <section class="section section--white" id="arithmetic">
     <div class="container">
@@ -685,163 +864,6 @@
     </div>
 </section>
 
-
-<!-- ============ 3. COMPOUNDING LADDER + RISK MANAGEMENT CADENCE ============ -->
-<section class="section section--white" id="ladder">
-    <div class="container">
-        <header class="section__header section__header--center">
-            <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Mechanism + The Discipline</p>
-            <h2 class="section__h section__h--lg">The Compounding Ladder</h2>
-            <p class="section__sub">Starting at <strong>$100K NLV</strong>. <strong>80% allocated to SPY</strong> for baseline market exposure (the position also serves as portfolio-margin collateral). <strong>20% held in cash</strong> as an operational settlement buffer that backs the /ES futures engine. <strong>Per-contract risk is fixed at 0.5% of NLV</strong>; total per-trade exposure scales <strong>0.5% → 1%</strong> as contracts scale <strong>1 → 2</strong> with the earned profit buffer. The cadence rules that bound drawdown are listed first — they govern the engine whichever way the year plays out.</p>
-        </header>
-
-        <!-- Theoretical disclaimer banner — leading so investors can't miss it -->
-        <div class="theoretical-banner">
-            <p class="theoretical-banner__h"><span class="diamond">◆</span> Theoretical · <span class="js-prereg-count">pre-registration record accumulating</span></p>
-            <p class="theoretical-banner__body">The cadence rules, position-scaling logic, and target returns shown below are <strong>design intent</strong> — engineered, not yet demonstrated. <strong>The live pre-registration record is the only published trading record for this strategy and is still accumulating.</strong> A statistically meaningful track record will take many more closed trades; the 8-test sustainability battery activates at 30+ trades. Pre-registration participants see every trade as it happens; nothing on this page constitutes a forecast or guarantee.</p>
-        </div>
-
-        <!-- Earned-scale staircase — structural rules from the locked protocol only.
-             Contract counts, the fixed 0.5% per-contract anchor, unlock and de-scale
-             conditions are documented architecture; no dollars, no timeline, no
-             projection (forward equity curve removed per compliance redline T1-A). -->
-        <div class="ladder-stairs" role="img" aria-label="The earned-scale staircase: contracts scale with NLV at Standard sizing (1 /ES per $100K NLV), each one paid for by a realized profit buffer. The per-contract risk anchor of 0.5% NLV never changes. v1.6 removes the prior 2-contract ceiling — the engine scales with the account. The ladder also de-scales: OP-06 cuts size to half after a second consecutive losing week.">
-            <div class="ladder-stairs__track">
-                <div class="ladder-stair">
-                    <div class="ladder-stair__stack"><span class="ladder-stair__block ladder-stair__block--base"></span></div>
-                    <p class="ladder-stair__contracts">1 /ES</p>
-                    <p class="ladder-stair__risk">0.5% NLV per trade</p>
-                    <p class="ladder-stair__gate">The architectural base — where every account at $100K NLV starts</p>
-                </div>
-                <div class="ladder-stairs__arrow" aria-hidden="true"><span class="diamond">◆</span><span class="ladder-stairs__arrow-label">+1 contract per +$100K NLV at Standard sizing, each earned by realized profit buffer</span>→</div>
-                <div class="ladder-stair ladder-stair--ceiling">
-                    <div class="ladder-stair__stack"><span class="ladder-stair__block ladder-stair__block--base"></span><span class="ladder-stair__block ladder-stair__block--earned"></span></div>
-                    <p class="ladder-stair__contracts">N /ES</p>
-                    <p class="ladder-stair__risk">0.5% × N per trade</p>
-                    <p class="ladder-stair__gate"><strong>Standard sizing</strong> at NLV/$100K contracts. v1.6 removed the prior 2-contract ceiling — contract count scales with the account, each new contract earned through realized profit buffer, never assumed. The 0.5% per-contract anchor never escalates.</p>
-                </div>
-            </div>
-            <div class="ladder-stairs__legend">
-                <span class="ladder-stairs__legend-item"><span class="ladder-stair__block ladder-stair__block--base ladder-stair__block--mini"></span> base contract</span>
-                <span class="ladder-stairs__legend-item"><span class="ladder-stair__block ladder-stair__block--earned ladder-stair__block--mini"></span> earned contract — paid for by realized profit</span>
-            </div>
-            <div class="ladder-stairs__notes">
-                <p class="ladder-stairs__note"><span class="diamond">◆</span> <strong>The per-contract anchor never moves.</strong> Risk per contract is fixed at 0.5% of NLV at every step; only the contract count scales — and only when the realized profit buffer has paid for it.</p>
-                <p class="ladder-stairs__note ladder-stairs__note--kill"><strong>And the ladder moves both ways.</strong> A second consecutive losing week (OP-06) cuts size to half until five clean trades reinstate it (OP-07). All eight ED kill conditions stay armed at every step — see the rail below.</p>
-            </div>
-        </div>
-
-        <!-- Three-panel risk-management cadence -->
-        <header class="section__header" style="margin-top: var(--s-12); margin-bottom: var(--s-4);">
-            <p class="eyebrow"><span class="diamond">◆</span> Risk Management Cadence · governs the engine</p>
-            <h3 class="section__h section__h--mid">The discipline that bounds drawdown</h3>
-        </header>
-        <div class="rm-grid">
-
-            <article class="rm-card rm-card--gold">
-                <span class="rm-card__cadence">Daily</span>
-                <h3 class="rm-card__h">One day, one shot</h3>
-                <div class="rm-rule">
-                    <p class="rm-rule__h"><span class="op">OP-02</span> One-loss daily rule</p>
-                    <p class="rm-rule__body">After any closed losing trade, no further entries that session. The day ends on the first loss — regardless of setup quality, conviction, or remaining time.</p>
-                </div>
-                <div class="rm-rule">
-                    <p class="rm-rule__h"><span class="op">OP-03</span> Trailing daily cap <em class="rm-new">v1.2</em></p>
-                    <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. <strong>Per-contract risk is fixed at 0.5% of NLV</strong>; total per-trade exposure scales 0.5% → 1% as contracts scale 1 → 2 with the earned profit buffer. The daily floor ratchets up with every new peak. Replaces the v1.0 fixed −12 ES pts cap.</p>
-                </div>
-                <div class="rm-rule">
-                    <p class="rm-rule__h"><span class="op">·</span> Auto-resume</p>
-                    <p class="rm-rule__body">Engine resumes at standard sizing on the <strong>next trading session</strong>. No witness review required for an isolated daily-cap event.</p>
-                </div>
-            </article>
-
-            <article class="rm-card">
-                <span class="rm-card__cadence">Weekly</span>
-                <h3 class="rm-card__h">Two strikes, sit down</h3>
-                <div class="rm-rule">
-                    <p class="rm-rule__h"><span class="op">OP-05</span> Weekly sit-down trigger <em class="rm-new">v1.2</em></p>
-                    <p class="rm-rule__body"><strong>2–3 consecutive losing days within a single week</strong> halts trading for the remainder of that week. Engine resumes Monday with standard sizing pending witness review.</p>
-                </div>
-                <div class="rm-rule">
-                    <p class="rm-rule__h"><span class="op">·</span> Witness audit</p>
-                    <p class="rm-rule__body">Witness reviews the loss cluster during the sit-down: process breach (H2) or normal variance (H3)? Trade attribution log filed within 48 hours.</p>
-                </div>
-                <div class="rm-rule">
-                    <p class="rm-rule__h"><span class="op">·</span> Logged, not killed</p>
-                    <p class="rm-rule__body">A single weekly sit-down is a Tier-1 event — logged in the Discord journal, investor disclosure within 7 days. No size reduction yet.</p>
-                </div>
-            </article>
-
-            <article class="rm-card rm-card--signal">
-                <span class="rm-card__cadence">Bi-weekly · Recovery</span>
-                <h3 class="rm-card__h">Two losing weeks → reduce</h3>
-                <div class="rm-rule">
-                    <p class="rm-rule__h"><span class="op">OP-06</span> Size reduction <em class="rm-new">v1.4</em></p>
-                    <p class="rm-rule__body"><strong>2nd consecutive losing week</strong> → engine sizing cuts to <strong>half of normal</strong> (e.g. 5 /MES in place of 1 /ES — equivalent dollar exposure cut by 50%). Daily filing under witness oversight for the duration.</p>
-                </div>
-                <div class="rm-rule">
-                    <p class="rm-rule__h"><span class="op">OP-07</span> Reinstatement <em class="rm-new">v1.2</em></p>
-                    <p class="rm-rule__body">Standard sizing reinstates only after <strong>5 good trades</strong> at reduced size — defined as 5 closed trades with no OP breach and net positive P&amp;L. Witness countersignature on resumption.</p>
-                </div>
-                <div class="rm-rule">
-                    <p class="rm-rule__h"><span class="op">·</span> Escalation</p>
-                    <p class="rm-rule__body">If reduced-size window produces a 3rd consecutive losing week, escalates to Stage-1 Tier-2 cessation. Stage-2 (Edge Gate) is independent and may fire at any time.</p>
-                </div>
-            </article>
-        </div>
-
-
-        <!-- Calculator 4 — The Worst Case, Priced (bounded-loss architecture) · Calculator Spec v1.0 §4.
-             LOSS-SIDE ONLY: no gain, throughput, or expectancy figure may render here. -->
-        <div class="calc" id="calcBoundsWrap">
-            <header class="calc__head">
-                <p class="eyebrow"><span class="diamond">◆</span> The Worst Case, Priced</p>
-                <h3 class="calc__h">A risk with a number can be financed. An unbounded risk can only be feared.</h3>
-                <p class="calc__sub">The engine's published loss bounds — per trade, per day, per week, and the hard kill — at a hypothetical account size. Loss-side only, by construction.</p>
-            </header>
-            <div id="calcBounds">
-                <!-- static default state (NLV $100K, 1 contract) — replaced on hydration -->
-                <div class="cb-ladder">
-                    <div class="cb-rung"><span class="cb-rung__id">OP-02</span><div class="cb-rung__body"><p class="cb-rung__title">Per trade</p><p class="cb-rung__fig">−$500 (0.5% of NLV)</p><p class="cb-rung__text">Per-contract risk fixed at 0.5% of NLV. After any closed losing trade, the day is over (one-loss daily rule).</p></div></div>
-                    <div class="cb-rung"><span class="cb-rung__id">OP-03</span><div class="cb-rung__body"><p class="cb-rung__title">Daily floor</p><p class="cb-rung__fig">−$500 (starting)</p><p class="cb-rung__text">Trailing high-water-mark floor — ratchets up with every new equity peak, never down.</p></div></div>
-                    <div class="cb-rung"><span class="cb-rung__id">OP-05</span><div class="cb-rung__body"><p class="cb-rung__title">Weekly stand-down</p><p class="cb-rung__fig cb-rung__fig--rule">2–3 consecutive losing days halts the week (OP-05)</p><p class="cb-rung__text">A rule, not a dollar figure: consecutive losing days halt the week pending witness review.</p></div></div>
-                    <div class="cb-rung cb-rung--kill"><span class="cb-rung__id">ED-05b</span><div class="cb-rung__body"><p class="cb-rung__title">Hard kill</p><p class="cb-rung__fig">−$5,000 / /ES</p><p class="cb-rung__text">100 /ES pts × $50/pt = <strong>$5,000 per contract</strong>. Scales linearly with portfolio: at the 1 /ES per $100K NLV base sizing, hard kill = <strong>$50,000 on a $1M portfolio · $250,000 on $5M</strong>. Budgeted in advance whatever the size.</p></div></div>
-                </div>
-            </div>
-            <p class="calc__caption"><em>These figures compute the published Falsifiability Protocol v1.6 loss bounds at a hypothetical account size. Caps and the hard kill are sizing and exit rules enforced by rule — fast markets can gap beyond them. Not a guarantee, not an offer, and not a statement of expected results. Past performance does not guarantee future results.</em></p>
-        </div>
-
-        <!-- Removed: forward-projection equity curve. SVG and chips deleted per compliance redline T1-A.
-             What remains below — kill-condition chips and three-col risk/leverage/velocity explainers —
-             are structural commitments, not projections, and stay.
-        -->
-
-        <!-- Tangible kill conditions rail: all 8 ED conditions as named chips -->
-        <div class="cl-kills">
-            <div class="cl-kills__head">
-                <p class="cl-kills__h">↑ All eight kill conditions are armed at every step</p>
-                <p class="cl-kills__sub">Hover or tap any chip to reveal its trigger. The ladder halts when any one fires — regardless of which step has been reached.</p>
-            </div>
-            <div class="cl-kills__chips" id="cl-kills-chips"><!-- 8 chips rendered by JS --></div>
-        </div>
-
-        <div class="three-col">
-            <article class="explainer">
-                <p class="eyebrow"><span class="diamond">◆</span> Disciplined Risk</p>
-                <p>Risk is anchored <em>per contract</em> at <strong>0.5% of total NLV</strong> — fixed, architectural, never escalated. Total per-trade exposure scales via <strong>contract count</strong>, which itself scales with capital at <strong>Standard sizing: 1 /ES per $100K NLV</strong> (v1.6, uncapped — the v1.5 2-contract ceiling was removed). Each additional contract is earned by accumulated profit buffer, never assumed. The dollar amount grows two ways — the capital base grows, AND the Standard contract count grows with it — but the per-contract percentage never changes, and the ED-05b hard kill stays at a consistent 5% of NLV at Standard sizing regardless of account size.</p>
-            </article>
-            <article class="explainer">
-                <p class="eyebrow"><span class="diamond">◆</span> Earned Leverage</p>
-                <p>Position size increases only when verified profits compound the base. The second contract is paid for by the first. Scale is <em>earned</em> — never borrowed, never assumed.</p>
-            </article>
-            <article class="explainer">
-                <p class="eyebrow"><span class="diamond">◆</span> Velocity Compounds</p>
-                <p>Each step shortens the time to the next as throughput grows linearly with contract count. By the 2-/ES ceiling, the engine is doing the heavy lifting and dollar outcomes climb non-linearly.</p>
-            </article>
-        </div>
-
-    </div>
-</section>
 
 <!-- ============ 4. THE EKANTIK STANDARD ============ -->
 <section class="section section--ivory" id="standard">
