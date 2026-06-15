@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260615b">
+    <link rel="stylesheet" href="css/style.css?v=20260615d">
 
     <script type="application/ld+json">
     {
@@ -132,7 +132,7 @@
 <!-- ============ 1a. CONFIGURATION SELECTOR (v2.1 §3) ============ -->
 <section class="section section--white" id="configurations">
     <div class="container">
-        <header class="section__head">
+        <header class="section__header section__header--center">
             <p class="eyebrow"><span class="diamond">◆</span> Two ways to deploy the engine</p>
             <h2 class="section__h">One engine. Two ways to sit it against your capital.</h2>
             <p class="section__sub">The engine is a single disciplined futures system with a live, published record. What changes between configurations is <strong>what sits underneath it</strong> — and how much of your world we touch.</p>
@@ -162,7 +162,7 @@
 <!-- ============ 1c. THE PROVEN ENGINE (v2.1 §5 — elevated) ============ -->
 <section class="section section--white" id="proven-engine">
     <div class="container">
-        <header class="section__head proven-engine__head">
+        <header class="section__header section__header--center proven-engine__head">
             <p class="eyebrow"><span class="diamond">◆</span> The Proven Engine</p>
             <h2 class="section__h">The engine is the part with a track record. So we lead with it.</h2>
         </header>
@@ -479,6 +479,61 @@
     <div class="container container--narrow">
         <p class="proven-engine__bridge-lede"><span class="diamond">◆</span> The Overlay Service is this engine, deployed on the portfolio you already own. The proof above — plus the Worst-Case bounds — is how it earns the seat.</p>
         <p class="proven-engine__bridge-cta"><a class="btn btn--ghost" href="#overlay-service" data-cta="overlay-from-proven-engine">Explore the Overlay Service →</a></p>
+    </div>
+</section>
+
+<!-- ============ 1d. CONFIGURATION A — THE OVERLAY SERVICE (v2.1 §6) ============ -->
+<section class="section section--white" id="overlay-service">
+    <div class="container">
+        <header class="section__header section__header--center">
+            <p class="eyebrow"><span class="diamond">◆</span> Configuration A — The Overlay Service</p>
+            <h2 class="section__h">Keep the portfolio you have. We add one disciplined engine on top.</h2>
+        </header>
+
+        <p class="overlay__lede">
+            At this tier you are not handing us your wealth. You are buying a service: the futures engine, run as an overlay on capital you already own. The underlying is your domain — your allocation, your advisor, your convictions. The engine is ours. We touch nothing but the overlay.
+        </p>
+
+        <div class="overlay__body">
+            <article class="overlay__block">
+                <h3 class="overlay__h">6.1 — How the overlay sits on your capital</h3>
+                <p>The engine trades /ES futures, which require collateral. In the overlay configuration, your existing portfolio — held in your own name at Interactive Brokers — serves as that collateral. You keep your positions; they back the engine. A small cash buffer covers daily futures settlement. No fresh investment capital is required beyond that buffer.</p>
+            </article>
+
+            <article class="overlay__block">
+                <h3 class="overlay__h">6.2 — The one requirement: marginable collateral</h3>
+                <p>The underlying can be almost any type of equity exposure — plain SPY, a diversified 60/40, a broad equity basket all qualify. The single condition is that your holdings are marginable at the custodian. Concentrated single-stock positions, illiquid assets, or holdings parked at another custodian cannot serve as overlay collateral as-is — those move to Interactive Brokers first, or point you toward a different configuration. That one question — what you hold, and whether it's marginable — is what sorts an overlay client from everyone else.</p>
+            </article>
+
+            <article class="overlay__block">
+                <h3 class="overlay__h">6.3 — What the overlay is for</h3>
+                <p>The overlay exists to pursue return on top of your existing market exposure — return the index alone cannot produce. It is a return-seeking engine, not an income schedule. Results are variable, realized as positions close, and reported from the live record in the same units the engine actually trades. We do not project a figure here. What we publish instead is the engine's realized record, trade by trade — and the exact conditions under which we would declare it failed and stop. Per-trade risk is fixed at 0.5% of account value; a published hard kill bounds the worst case. The upside is earned and witnessed — never promised.</p>
+                <p class="overlay__links">
+                    <a href="/dashboard.html" data-cta="dashboard-overlay">Open the live dashboard →</a>
+                    <a href="#calcBoundsWrap" data-cta="bounds-overlay">See the Worst-Case bounds →</a>
+                </p>
+            </article>
+
+            <article class="overlay__block">
+                <h3 class="overlay__h">6.4 — How you'd know if it stopped working (two gates)</h3>
+                <p>The overlay publishes two falsifiability gates, both armed before any capital, both observable in real time: a Fidelity gate (is the published method exactly what's running?) and an Expression gate (is the edge still expressing?). If either fires, new exposure drops to zero and you're notified within 24 hours. The overlay carries the engine's two gates only — the synthetic-passive overlay's separate pair applies to the Full Stack configuration, not here. Fewer moving parts; the same engine discipline.</p>
+            </article>
+
+            <article class="overlay__block">
+                <h3 class="overlay__h">6.5 — Our authority is bounded to the overlay</h3>
+                <p>A one-page Letter of Direction grants trading authority strictly over futures and options activity — never your underlying positions. Read-only broker access exposes every trade. Authority is revocable at any time.</p>
+            </article>
+
+            <article class="overlay__block">
+                <h3 class="overlay__h">6.6 — Who the overlay is for (QEP gate)</h3>
+                <p>A standalone futures overlay is offered only to Qualified Eligible Persons (QEP) — a regulatory standard higher than "accredited." This is a deliberate constraint, not a marketing one: it is the basis on which the overlay is offered. If you're unsure whether you qualify, the founder conversation is where to find out.</p>
+            </article>
+        </div>
+
+        <div class="overlay__cta">
+            <a href="#talk" class="btn btn--primary btn--lg" data-cta="founder-call-overlay">Request a Founder Conversation →</a>
+            <p class="overlay__cta-sub">Educational only — no investment is being offered.</p>
+        </div>
     </div>
 </section>
 
