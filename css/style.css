@@ -4716,6 +4716,42 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .to-wh__sliders { grid-template-columns: 1fr; }
 }
 
+/* ---- v2.1 §5 Proven Engine elevation ---- */
+.proven-engine__head { text-align: center; }
+.proven-engine__callout {
+    margin: var(--s-5) auto 0;
+    max-width: 760px;
+    padding: var(--s-5) var(--s-6);
+    background: linear-gradient(135deg, rgba(196,165,113,0.10) 0%, rgba(196,165,113,0.04) 100%);
+    border-left: 3px solid var(--gold-deep);
+    border-radius: 4px;
+}
+.proven-engine__callout p {
+    margin: 0;
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: var(--navy);
+}
+.proven-engine__callout-cta {
+    margin-top: var(--s-3) !important;
+    font-weight: 700;
+    font-size: 14.5px !important;
+}
+.proven-engine__callout-cta a { color: var(--gold-deep); }
+.proven-engine__callout-cta a:hover { color: var(--navy); }
+
+.proven-engine__bridge { padding-top: var(--s-6); padding-bottom: var(--s-6); }
+.proven-engine__bridge-lede {
+    margin: 0 0 var(--s-4);
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--navy);
+}
+.proven-engine__bridge-cta { margin: 0; text-align: center; }
+
 /* ---- v2.1 §3 Configuration Selector ---- */
 .config-selector {
     display: grid;
