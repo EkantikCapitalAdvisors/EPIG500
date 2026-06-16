@@ -287,8 +287,12 @@
         s.push('<rect x="' + PL + '" y="' + PT + '" width="' + (CW - PL - PR) + '" height="' + (y0 - PT) + '" fill="rgba(13,148,136,0.07)"/>');
         s.push('<rect x="' + PL + '" y="' + y0 + '" width="' + (CW - PL - PR) + '" height="' + (CH - PB - y0) + '" fill="rgba(224,90,107,0.10)"/>');
         s.push('<line x1="' + PL + '" y1="' + y0 + '" x2="' + (CW - PR) + '" y2="' + y0 + '" stroke="rgba(18,38,74,0.35)" stroke-dasharray="3 3"/>');
-        // axis labels
-        [aMin, 0, aMax].forEach(function (a) {
+        // axis labels — skip aMin/aMax if too close to the 0 line (avoids overlapping y-axis text)
+        const MIN_AXIS_GAP_PX = 14;
+        const axisVals = [0];
+        if (Math.abs(Y(aMin) - Y(0)) >= MIN_AXIS_GAP_PX) axisVals.unshift(aMin);
+        if (Math.abs(Y(aMax) - Y(0)) >= MIN_AXIS_GAP_PX) axisVals.push(aMax);
+        axisVals.forEach(function (a) {
             s.push('<text x="' + (PL - 6) + '" y="' + (Y(a) + 4) + '" text-anchor="end" font-size="11" fill="#64748B">' + (a >= 0 ? '+' : '') + (a * 100).toFixed(0) + '%</text>');
         });
         for (let v = 0.05; v <= 0.55 + 1e-9; v += 0.10) {
@@ -307,11 +311,15 @@
         let path = '';
         pts.forEach(function (p, i) { path += (i ? ' L ' : 'M ') + X(p[0]) + ' ' + Y(p[1]); });
         s.push('<path d="' + path + '" fill="none" stroke="#12264a" stroke-width="2.2"/>');
-        // three named walk-through callouts: mild / typical / crash — values are ANNUAL at current N
+        // three named walk-through callouts: mild / typical / crash — values are ANNUAL at current N.
+        // Suppress the LABEL (keep the dot) when the live selector D is right on top of that depth:
+        // the live label already names it, so two labels at the same x would overlap.
+        const CALLOUT_SKIP_PX = 50;
         function callout(vDepth, label, anchor) {
             const a = annualize(core.tradeoffAdv(vDepth, g, m));
             const cx = X(vDepth), cy = Y(a);
             s.push('<circle cx="' + cx + '" cy="' + cy + '" r="3.5" fill="#12264a" stroke="#fff" stroke-width="1"/>');
+            if (Math.abs(X(D) - cx) < CALLOUT_SKIP_PX) return;
             const above = a >= 0;
             const ty = above ? (cy - 10) : (cy + 18);
             const tAnchor = anchor || 'middle';
