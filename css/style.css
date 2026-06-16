@@ -4716,6 +4716,27 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .to-wh__sliders { grid-template-columns: 1fr; }
 }
 
+/* ---- Full Stack architecture diagram ---- */
+.stack-diagram {
+    max-width: 820px;
+    margin: 0 auto var(--s-7);
+    padding: 0;
+}
+.stack-diagram__svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.stack-diagram__caption {
+    margin: var(--s-3) 0 0;
+    text-align: center;
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.6;
+}
+.stack-diagram__caption .diamond { color: var(--gold-deep); }
+.stack-diagram__caption-divider { color: #CBD2DC; margin: 0 var(--s-2); }
+
 /* ---- v2.1 §7 Configuration B — Full Stack (EPIG) ---- */
 #full-stack { border-top: 3px solid #64748B; }
 .fullstack__lede {
