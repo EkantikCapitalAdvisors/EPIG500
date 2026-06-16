@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260615h">
+    <link rel="stylesheet" href="css/style.css?v=20260616a">
 
     <script type="application/ld+json">
     {
@@ -573,6 +573,52 @@
         <p class="fullstack__lede">
             The Full Stack pairs the proven engine with a synthetic-passive S&amp;P 500 foundation engineered to take less of the market's drawdown. This is the complete E·P·I·G architecture — and we will not pretend the foundation is proven. It is published as design intent, under falsifiability gates that are armed but have never fired, and its dataset is being built in the open.
         </p>
+
+        <!-- Full Stack architecture diagram — engine sits on top, collateralized by the 80/20 base -->
+        <figure class="stack-diagram" aria-label="Full Stack capital architecture: the futures engine sits as an overlay on top of an 80% synthetic-passive S&amp;P 500 foundation and a 20% cash buffer. The engine uses the base as collateral and does not consume a capital slice.">
+            <svg class="stack-diagram__svg" viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img">
+                <title>Full Stack capital architecture</title>
+                <!-- Engine band (gold = LIVE) -->
+                <g transform="translate(40 28)">
+                    <rect x="0" y="0" width="680" height="78" rx="4" fill="#FAF8F5" stroke="#C4A571" stroke-width="2"/>
+                    <rect x="0" y="0" width="4" height="78" fill="#C4A571"/>
+                    <text x="20" y="26" font-family="'Source Sans 3', sans-serif" font-size="11" font-weight="700" letter-spacing="1.5" fill="#C4A571">◆ LIVE · PROVEN ENGINE</text>
+                    <text x="20" y="50" font-family="'Playfair Display', serif" font-size="20" font-weight="600" fill="#12264A">Futures Engine</text>
+                    <text x="20" y="68" font-family="'Source Sans 3', sans-serif" font-size="13" fill="#475569">/ES · 0.5% NLV per trade · hard-killed at ED-05b</text>
+                    <text x="660" y="50" text-anchor="end" font-family="'Playfair Display', serif" font-style="italic" font-size="13" fill="#475569">overlay on top</text>
+                </g>
+                <!-- Collateralization arrow + label -->
+                <g transform="translate(40 122)">
+                    <line x1="340" y1="0" x2="340" y2="36" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="4 4"/>
+                    <polygon points="340,44 334,34 346,34" fill="#94A3B8"/>
+                    <text x="354" y="26" font-family="'Source Sans 3', sans-serif" font-style="italic" font-size="12" fill="#64748B">collateralized by the base ↓</text>
+                </g>
+                <!-- Base: 80% Foundation (slate / IN-TESTING) + 20% Cash Buffer -->
+                <g transform="translate(40 180)">
+                    <!-- 80% Foundation -->
+                    <rect x="0" y="0" width="544" height="138" rx="4" fill="#EEF1F5" stroke="#CBD2DC" stroke-width="1.5"/>
+                    <rect x="0" y="0" width="4" height="138" fill="#64748B"/>
+                    <text x="20" y="26" font-family="'Source Sans 3', sans-serif" font-size="11" font-weight="700" letter-spacing="1.5" fill="#64748B">◆ IN TESTING · DESIGN INTENT</text>
+                    <text x="20" y="52" font-family="'Playfair Display', serif" font-size="20" font-weight="600" fill="#12264A">Synthetic-Passive Foundation</text>
+                    <text x="20" y="72" font-family="'Source Sans 3', sans-serif" font-size="13" fill="#475569">S&amp;P 500 · engineered to take less of the index's drawdown</text>
+                    <text x="20" y="118" font-family="'Playfair Display', serif" font-size="44" font-weight="600" fill="#12264A">80%</text>
+                    <text x="80" y="118" font-family="'Source Sans 3', sans-serif" font-size="13" fill="#64748B">of capital</text>
+                    <!-- 20% Cash buffer -->
+                    <rect x="556" y="0" width="124" height="138" rx="4" fill="#FAF8F5" stroke="#E5E7EB" stroke-width="1.5"/>
+                    <text x="568" y="26" font-family="'Source Sans 3', sans-serif" font-size="11" font-weight="700" letter-spacing="1.5" fill="#94A3B8">◆ OPERATIONAL</text>
+                    <text x="568" y="48" font-family="'Playfair Display', serif" font-size="15" font-weight="600" fill="#12264A">Cash Buffer</text>
+                    <text x="568" y="66" font-family="'Source Sans 3', sans-serif" font-size="11" fill="#475569">flat · no exposure</text>
+                    <text x="568" y="118" font-family="'Playfair Display', serif" font-size="34" font-weight="600" fill="#12264A">20%</text>
+                </g>
+                <!-- Footer caption -->
+                <text x="380" y="350" text-anchor="middle" font-family="'Source Sans 3', sans-serif" font-style="italic" font-size="12" fill="#64748B">The engine doesn't take a capital slice — it runs on top of the 80/20 base.</text>
+            </svg>
+            <figcaption class="stack-diagram__caption">
+                <span class="diamond">◆</span> Gold = live, proven (engine record published trade-by-trade).
+                <span class="stack-diagram__caption-divider">·</span>
+                Slate = in testing (foundation has no clean dataset yet; rules published as design intent).
+            </figcaption>
+        </figure>
 
         <aside class="testing-badge testing-badge--lg" role="note">
             <span class="testing-badge__mark"><span class="diamond">◆</span></span>
