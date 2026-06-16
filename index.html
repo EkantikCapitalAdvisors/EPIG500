@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260616a">
+    <link rel="stylesheet" href="css/style.css?v=20260616b">
 
     <script type="application/ld+json">
     {
@@ -129,32 +129,90 @@
     </div>
 </div>
 
-<!-- ============ 1a. CONFIGURATION SELECTOR (v2.1 §3) ============ -->
+<!-- ============ 1b. THE HONEST PROBLEM ============ -->
+<section class="section section--ivory" id="problem">
+    <div class="container container--narrow">
+        <header class="section__header">
+            <p class="eyebrow"><span class="diamond">◆</span> The Honest Problem</p>
+            <h2 class="section__h">Passive indexing has one honest limit: it returns the market.</h2>
+        </header>
+
+        <div class="prose">
+            <p>On the 80% of the book that sits in the S&amp;P 500, passive <em>is</em> the market — pure beta. And beta cannot beat itself. So there are only two ways to make that allocation outperform.</p>
+
+            <p>You can <strong>leverage</strong> it — and double the drawdown in precisely the years that matter. That isn't outperformance; it's the same bet, louder.</p>
+
+            <p>Or you can <strong>capture it asymmetrically</strong> — keep the market's upside, take less of its declines. We do the second. It is the only honest engine for outperformance that survives a bad year, and it does not come from leverage.</p>
+        </div>
+
+        <figure class="pullquote">
+            <blockquote>Beta cannot beat itself.</blockquote>
+        </figure>
+
+        <div class="prose">
+            <h3 class="prose__subh">The mechanism — in plain terms.</h3>
+            <p>The overlay holds your S&amp;P 500 position <strong>fully invested by default</strong> — through new highs, through noise, untouched. It steps exposure down only when the market's largest pools of capital actually begin to sell, and it steps further aside as that selling broadens. Full participation up. Less of the drawdown down. The gap between those two is alpha — and it is manufactured by discipline, not borrowing.</p>
+
+            <h3 class="prose__subh">And because faith is not a strategy —</h3>
+            <p>The overlay carries its own kill condition, published in advance. If, across a full market cycle, it neither beats the index nor takes less of its drawdown, it is declared falsified — and your foundation reverts to pure passive, in public, on the dashboard. We would rather retire a mechanism honestly than defend one quietly.</p>
+        </div>
+
+        <figure class="pullquote">
+            <blockquote>Take what runs on heroics — and put it on a system.</blockquote>
+        </figure>
+
+        <p class="compliance" style="text-align:center;margin-top:var(--s-5)"><em>Design intent. The synthetic-passive overlay has no live track record; it is being built and published trade by trade. Nothing here is a forecast or a guarantee.</em></p>
+    </div>
+</section>
+
+<!-- ============ 1a. EPIG 500 — ARCHITECTURE MAP / NAV HUB (replaces Configuration Selector) ============ -->
 <section class="section section--white" id="configurations">
     <div class="container">
         <header class="section__header section__header--center">
-            <p class="eyebrow"><span class="diamond">◆</span> Two ways to deploy the engine</p>
-            <h2 class="section__h">One engine. Two ways to sit it against your capital.</h2>
-            <p class="section__sub">The engine is a single disciplined futures system with a live, published record. What changes between configurations is <strong>what sits underneath it</strong> — and how much of your world we touch.</p>
+            <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The architecture at a glance</p>
+            <h2 class="section__h">EPIG 500 — one proven engine, two ways to deploy.</h2>
+            <p class="section__sub">The engine is the constant: a single disciplined futures system with a live, published record. What changes between configurations is <strong>what sits underneath it</strong> — and how much of your world we touch.</p>
         </header>
-        <div class="config-selector">
-            <a class="config-card config-card--overlay" href="#overlay-service" data-jump="overlay">
-                <p class="config-card__badge config-card__badge--live"><span class="diamond">◆</span> LIVE RECORD · proven front door</p>
-                <h3 class="config-card__h">Overlay Service</h3>
-                <p class="config-card__tagline">Keep your portfolio. Add the engine.</p>
-                <p class="config-card__body">Your SPY, your allocation, your advisor — untouched. We run the futures engine <em>on top</em> of what you already own. The underlying stays yours; the overlay is the only thing we operate.</p>
-                <p class="config-card__cta">Explore the Overlay Service →</p>
-            </a>
-            <a class="config-card config-card--fullstack" href="#full-stack" data-jump="fullstack">
-                <p class="config-card__badge config-card__badge--testing"><span class="diamond">◆</span> FOUNDATION IN TESTING · engine live</p>
-                <h3 class="config-card__h">Full Stack (EPIG)</h3>
-                <p class="config-card__tagline">The engine inside a complete S&amp;P architecture.</p>
-                <p class="config-card__body">A synthetic-passive S&amp;P 500 foundation — engineered to take less of the market's drawdown — with the engine compounding on top. The foundation is published as design intent; its dataset is still being built in the open.</p>
-                <p class="config-card__cta">Explore the Full Stack →</p>
-            </a>
+
+        <div class="epig-map">
+            <!-- Primary: the proven engine (gold / live) -->
+            <div class="epig-map__engine">
+                <p class="epig-map__badge epig-map__badge--live"><span class="diamond">◆</span> THE PROVEN ENGINE · LIVE RECORD</p>
+                <h3 class="epig-map__engine-h">Disciplined futures engine</h3>
+                <p class="epig-map__engine-sub">/ES futures · 0.5% NLV risk per trade · hard-killed · every trade published within 24h of close</p>
+                <a class="epig-map__engine-link" href="#proven-engine" data-jump="proven-engine">See the live record &rarr;</a>
+            </div>
+
+            <!-- Connector: deploy two ways -->
+            <div class="epig-map__connector" aria-hidden="true">
+                <span class="epig-map__connector-line"></span>
+                <span class="epig-map__connector-label">deploy two ways</span>
+                <span class="epig-map__connector-line"></span>
+            </div>
+
+            <!-- The two substrates the engine can sit on -->
+            <div class="epig-map__configs">
+                <a class="epig-map__config epig-map__config--overlay" href="#overlay-service" data-jump="overlay">
+                    <p class="epig-map__config-tag">Configuration A</p>
+                    <h4 class="epig-map__config-h">Overlay Service</h4>
+                    <p class="epig-map__config-base">engine on <strong>your</strong> portfolio</p>
+                    <p class="epig-map__config-badge epig-map__config-badge--live"><span class="diamond">◆</span> live front door</p>
+                    <p class="epig-map__config-body">Keep what you already own. The engine runs on top, collateralized by your existing holdings — we touch nothing but the overlay.</p>
+                    <p class="epig-map__config-cta">Explore the Overlay &rarr;</p>
+                </a>
+                <a class="epig-map__config epig-map__config--fullstack" href="#full-stack" data-jump="fullstack">
+                    <p class="epig-map__config-tag">Configuration B</p>
+                    <h4 class="epig-map__config-h">Full Stack (EPIG)</h4>
+                    <p class="epig-map__config-base">engine on <strong>our</strong> synthetic-passive S&amp;P 500 base</p>
+                    <p class="epig-map__config-badge epig-map__config-badge--testing"><span class="diamond">◆</span> foundation in testing</p>
+                    <p class="epig-map__config-body">The complete architecture — the engine on a drawdown-aware S&amp;P 500 foundation, published as design intent under armed-but-unfired gates.</p>
+                    <p class="epig-map__config-cta">Explore the Full Stack &rarr;</p>
+                </a>
+            </div>
         </div>
+
         <p class="config-notsure">
-            Not sure which fits? It usually comes down to one question — what you hold, and whether it's marginable. <a href="#talk" data-cta="founder-call-selector">Talk to the founder →</a>
+            Not sure which fits? It usually comes down to one question — what you hold, and whether it's marginable. <a href="#talk" data-cta="founder-call-selector">Talk to the founder &rarr;</a>
         </p>
     </div>
 </section>
@@ -688,41 +746,55 @@
 </section>
 
 
-<!-- ============ 1b. THE HONEST PROBLEM ============ -->
-<section class="section section--ivory" id="problem">
-    <div class="container container--narrow">
-        <header class="section__header">
-            <p class="eyebrow"><span class="diamond">◆</span> The Honest Problem</p>
-            <h2 class="section__h">Passive indexing has one honest limit: it returns the market.</h2>
-        </header>
+<!-- ============ 2. HOW IT WORKS — Synthetic-Passive Architecture ============ -->
+<section class="section section--white" id="how">
+    <div class="container">
+        <div class="two-col">
+            <div class="two-col__left">
+                <p class="eyebrow"><span class="diamond">◆</span> The Architecture (Educational)</p>
+                <h2 class="section__h">One account. A foundation that protects itself, and an engine that compounds on top.</h2>
+                <div class="prose">
+                    <p>Ekantik 500 documents a methodology — a <strong>synthetic-passive S&amp;P 500 foundation</strong> with a futures booster engine on top — being developed for an eventual separately managed account product custodied at Interactive Brokers. Today, it is an educational study: the structure, the live operator record, and the falsifiability conditions are published openly for review before any investor capital is accepted.</p>
+                    <p>The methodology proposes three components inside one account. <strong>The foundation</strong> (~80%) is the S&amp;P 500 — passive by default, with a published, rules-based overlay that reduces exposure in genuine corrections and restores it as buyers return. The foundation no longer simply rides the market both ways; it is engineered to take less of the downside. <strong>The buffer</strong> (~20% cash) is the operational shock absorber that lets the engine run without disturbing the foundation. <strong>The engine</strong> (futures overlay) compounds earned, disciplined scaling on top — each additional contract paid for by realized profit.</p>
+                    <p><strong>The honest dependency:</strong> when the overlay reduces the foundation, the SPY collateral backing the futures engine reduces with it. The two are coordinated by rule, not improvised — the engine's sizing and the cash buffer are governed accordingly per the locked Falsifiability Protocol.</p>
+                </div>
+            </div>
 
-        <div class="prose">
-            <p>On the 80% of the book that sits in the S&amp;P 500, passive <em>is</em> the market — pure beta. And beta cannot beat itself. So there are only two ways to make that allocation outperform.</p>
+            <div class="two-col__right">
+                <div class="component-card">
+                    <article class="component">
+                        <p class="component__tag"><span class="diamond">◆</span> The Foundation</p>
+                        <p class="component__alloc">~80% of net liquidation value (NLV) — SPY · synthetic-passive</p>
+                        <p class="component__role">Market exposure + dividends + margin collateral — overlay reduces in genuine corrections</p>
+                    </article>
+                    <article class="component">
+                        <p class="component__tag"><span class="diamond">◆</span> The Buffer</p>
+                        <p class="component__alloc">~20% of NLV (cash)</p>
+                        <p class="component__role">Daily settlement absorption — NOT parked capital</p>
+                    </article>
+                    <article class="component component--gold">
+                        <p class="component__tag"><span class="diamond">◆</span> The Engine</p>
+                        <p class="component__alloc">1 /ES per $100K (Std) or $75K (Enh)</p>
+                        <p class="component__role">The compounding overlay</p>
+                    </article>
+                </div>
 
-            <p>You can <strong>leverage</strong> it — and double the drawdown in precisely the years that matter. That isn't outperformance; it's the same bet, louder.</p>
-
-            <p>Or you can <strong>capture it asymmetrically</strong> — keep the market's upside, take less of its declines. We do the second. It is the only honest engine for outperformance that survives a bad year, and it does not come from leverage.</p>
+                <details class="structure-accordion">
+                    <summary>How the proposed account structure works (5 commitments)</summary>
+                    <ol class="numbered-card">
+                        <li><h3>Sub-account, investor custody (proposed)</h3><p>At launch, accounts will be opened at Interactive Brokers in the investor's own name. The structure is being documented now so it can be reviewed before the product opens.</p></li>
+                        <li><h3>Limited trading authority (proposed)</h3><p>To be granted via a one-page Letter of Direction. Authority strictly bounded to futures and options activity. Revocable at any time.</p></li>
+                        <li><h3>Synthetic-passive funding</h3><p>SPY foundation governed by the published overlay rules, 20% cash buffer for operational settlement, and the active /ES futures engine on top.</p></li>
+                        <li><h3>Real-time transparency</h3><p>Read-only broker access will expose every trade, every position, every dollar — the same transparency already applied to the published live pre-registration record.</p></li>
+                        <!-- <li><h3>Performance fee structure (proposed)</h3><p>6% high-watermark hurdle plus 25% of profits above that hurdle. Documented in advance for educational review.</p></li> -->
+                        <li><h3>No lock-up (proposed)</h3><p>Capital will be withdrawable at any time subject to ordinary broker settlement timelines.</p></li>
+                    </ol>
+                </details>
+            </div>
         </div>
-
-        <figure class="pullquote">
-            <blockquote>Beta cannot beat itself.</blockquote>
-        </figure>
-
-        <div class="prose">
-            <h3 class="prose__subh">The mechanism — in plain terms.</h3>
-            <p>The overlay holds your S&amp;P 500 position <strong>fully invested by default</strong> — through new highs, through noise, untouched. It steps exposure down only when the market's largest pools of capital actually begin to sell, and it steps further aside as that selling broadens. Full participation up. Less of the drawdown down. The gap between those two is alpha — and it is manufactured by discipline, not borrowing.</p>
-
-            <h3 class="prose__subh">And because faith is not a strategy —</h3>
-            <p>The overlay carries its own kill condition, published in advance. If, across a full market cycle, it neither beats the index nor takes less of its drawdown, it is declared falsified — and your foundation reverts to pure passive, in public, on the dashboard. We would rather retire a mechanism honestly than defend one quietly.</p>
-        </div>
-
-        <figure class="pullquote">
-            <blockquote>Take what runs on heroics — and put it on a system.</blockquote>
-        </figure>
-
-        <p class="compliance" style="text-align:center;margin-top:var(--s-5)"><em>Design intent. The synthetic-passive overlay has no live track record; it is being built and published trade by trade. Nothing here is a forecast or a guarantee.</em></p>
     </div>
 </section>
+
 
 <!-- ============ 1c. CALCULATOR HUB — overview cards ============ -->
 <section class="section section--ivory" id="calc-hub">
@@ -780,56 +852,6 @@
         </div>
     </div>
 </section>
-
-<!-- ============ 2. HOW IT WORKS — Synthetic-Passive Architecture ============ -->
-<section class="section section--white" id="how">
-    <div class="container">
-        <div class="two-col">
-            <div class="two-col__left">
-                <p class="eyebrow"><span class="diamond">◆</span> The Architecture (Educational)</p>
-                <h2 class="section__h">One account. A foundation that protects itself, and an engine that compounds on top.</h2>
-                <div class="prose">
-                    <p>Ekantik 500 documents a methodology — a <strong>synthetic-passive S&amp;P 500 foundation</strong> with a futures booster engine on top — being developed for an eventual separately managed account product custodied at Interactive Brokers. Today, it is an educational study: the structure, the live operator record, and the falsifiability conditions are published openly for review before any investor capital is accepted.</p>
-                    <p>The methodology proposes three components inside one account. <strong>The foundation</strong> (~80%) is the S&amp;P 500 — passive by default, with a published, rules-based overlay that reduces exposure in genuine corrections and restores it as buyers return. The foundation no longer simply rides the market both ways; it is engineered to take less of the downside. <strong>The buffer</strong> (~20% cash) is the operational shock absorber that lets the engine run without disturbing the foundation. <strong>The engine</strong> (futures overlay) compounds earned, disciplined scaling on top — each additional contract paid for by realized profit.</p>
-                    <p><strong>The honest dependency:</strong> when the overlay reduces the foundation, the SPY collateral backing the futures engine reduces with it. The two are coordinated by rule, not improvised — the engine's sizing and the cash buffer are governed accordingly per the locked Falsifiability Protocol.</p>
-                </div>
-            </div>
-
-            <div class="two-col__right">
-                <div class="component-card">
-                    <article class="component">
-                        <p class="component__tag"><span class="diamond">◆</span> The Foundation</p>
-                        <p class="component__alloc">~80% of net liquidation value (NLV) — SPY · synthetic-passive</p>
-                        <p class="component__role">Market exposure + dividends + margin collateral — overlay reduces in genuine corrections</p>
-                    </article>
-                    <article class="component">
-                        <p class="component__tag"><span class="diamond">◆</span> The Buffer</p>
-                        <p class="component__alloc">~20% of NLV (cash)</p>
-                        <p class="component__role">Daily settlement absorption — NOT parked capital</p>
-                    </article>
-                    <article class="component component--gold">
-                        <p class="component__tag"><span class="diamond">◆</span> The Engine</p>
-                        <p class="component__alloc">1 /ES per $100K (Std) or $75K (Enh)</p>
-                        <p class="component__role">The compounding overlay</p>
-                    </article>
-                </div>
-
-                <details class="structure-accordion">
-                    <summary>How the proposed account structure works (5 commitments)</summary>
-                    <ol class="numbered-card">
-                        <li><h3>Sub-account, investor custody (proposed)</h3><p>At launch, accounts will be opened at Interactive Brokers in the investor's own name. The structure is being documented now so it can be reviewed before the product opens.</p></li>
-                        <li><h3>Limited trading authority (proposed)</h3><p>To be granted via a one-page Letter of Direction. Authority strictly bounded to futures and options activity. Revocable at any time.</p></li>
-                        <li><h3>Synthetic-passive funding</h3><p>SPY foundation governed by the published overlay rules, 20% cash buffer for operational settlement, and the active /ES futures engine on top.</p></li>
-                        <li><h3>Real-time transparency</h3><p>Read-only broker access will expose every trade, every position, every dollar — the same transparency already applied to the published live pre-registration record.</p></li>
-                        <!-- <li><h3>Performance fee structure (proposed)</h3><p>6% high-watermark hurdle plus 25% of profits above that hurdle. Documented in advance for educational review.</p></li> -->
-                        <li><h3>No lock-up (proposed)</h3><p>Capital will be withdrawable at any time subject to ordinary broker settlement timelines.</p></li>
-                    </ol>
-                </details>
-            </div>
-        </div>
-    </div>
-</section>
-
 
 <!-- ============ 2a. THE FOUNDER ============ -->
 <section class="section section--ivory" id="founder">
@@ -1448,7 +1470,7 @@
     </div>
 </footer>
 
-<script src="js/script.js?v=20260612z"></script>
+<script src="js/script.js?v=20260616b"></script>
 <script src="js/calc-core.js?v=20260612z" defer></script>
 <script src="js/calc-repair.js?v=20260612a" defer></script>
 <script src="js/calc-voltax.js?v=20260612u" defer></script>
