@@ -1460,7 +1460,7 @@
        ------------------------------------------------ */
     if (!reduceMotion && 'IntersectionObserver' in window) {
         const targets = document.querySelectorAll(
-            '.section__h, .prose, .proof-tiles, .component-card, .numbered-card, .ladder-canvas, .three-col, .cadence, .config-card, .principle, .backtest-band, .battery, .ref-stats, .ref-detail-grid, .falsi-intro, .falsi-stage, .binding-rule, .kill-action, .founding__card, .vow-diagram, .faq__item, .booking'
+            '.section__h, .prose, .proof-tiles, .component-card, .numbered-card, .ladder-canvas, .three-col, .cadence, .epig-map__engine, .epig-map__config, .principle, .backtest-band, .battery, .ref-stats, .ref-detail-grid, .falsi-intro, .falsi-stage, .binding-rule, .kill-action, .founding__card, .vow-diagram, .faq__item, .booking'
         );
         targets.forEach(function (el) { el.classList.add('reveal'); });
         const io = new IntersectionObserver(function (entries) {
