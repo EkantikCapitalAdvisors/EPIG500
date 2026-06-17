@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=20260612f">
-    <link rel="stylesheet" href="css/dashboard.css?v=20260612f">
+    <link rel="stylesheet" href="css/style.css?v=20260617e">
+    <link rel="stylesheet" href="css/dashboard.css?v=20260617e">
 </head>
 <body class="dash-body">
 
@@ -31,10 +31,33 @@
 
 <main class="container dash-main">
     <header class="dash-header">
-        <p class="eyebrow"><span class="diamond">◆</span> Live Trades · Majority Opinion Predisposal Strategy</p>
-        <h1 class="dash-title">Operator record — live execution</h1>
+        <p class="eyebrow" id="dashEyebrow"><span class="diamond">◆</span> Live Trades · Majority Opinion Predisposal Strategy</p>
+        <h1 class="dash-title" id="dashTitle">Operator record — live execution</h1>
         <p class="dash-sub" id="dashMeta">Loading dataset…</p>
     </header>
+
+    <!-- Book switcher — engine (ES points) vs synthetic-passive overlay (SPY $).
+         Self-hides when there are 0 synthetic_passive trades; the dashboard stays
+         engine-only and looks unchanged. Reveals the moment SPY trades publish. -->
+    <section class="dash-bookbar" id="dashBookbar" hidden aria-label="Book">
+        <div class="dash-bookbar__row">
+            <p class="dash-bookbar__label"><span class="diamond">◆</span> Book</p>
+            <div class="dash-bookbar__tabs" role="tablist">
+                <button class="book-tab is-active" data-book="engine" type="button" role="tab" aria-selected="true">
+                    Booster Engine
+                    <span class="book-tab__sub">/ES · /MES · points</span>
+                </button>
+                <button class="book-tab book-tab--testing" data-book="synthetic_passive" type="button" role="tab" aria-selected="false">
+                    Synthetic-Passive Overlay
+                    <span class="book-tab__sub">SPY · $ · IN TESTING</span>
+                </button>
+            </div>
+        </div>
+        <!-- SPY-view "verdict pending" notice (only renders while the SPY tab is active) -->
+        <aside class="dash-bookbar__notice" id="dashSpyNotice" hidden role="note">
+            <p><span class="diamond">◆</span> <strong>SYNTHETIC-PASSIVE OVERLAY — IN TESTING.</strong> Accumulating record only — <strong>not a verdict</strong>. The overlay's beat-or-protect gate (<a href="/falsifiability-protocol.html" target="_blank" rel="noopener">Article VIII.B</a>) is evaluated over a <strong>full market cycle</strong>; the 8-test sustainability battery is engine-specific and does not apply here. Per-trade P&amp;L shown in dollars (no ES-equivalent point for this book).</p>
+        </aside>
+    </section>
 
     <!-- Timeframe selector -->
     <section class="dash-timeframe" id="dashTimeframe" aria-label="KPI timeframe">
@@ -57,8 +80,8 @@
         <!-- rendered by JS -->
     </section>
 
-    <!-- Battery verdict band -->
-    <section class="dash-battery" aria-label="8-Test Sustainability Battery">
+    <!-- Battery verdict band (engine-only; hidden when the SPY book is active) -->
+    <section class="dash-battery" id="dashBatterySection" aria-label="8-Test Sustainability Battery">
         <div class="dash-battery__verdict">
             <p class="dash-battery__label">8-Test Sustainability Battery</p>
             <p class="dash-battery__value" id="dashBatteryVerdict">—</p>
@@ -72,7 +95,7 @@
     <!-- Equity curve -->
     <section class="dash-chart" aria-label="Equity curve">
         <header class="dash-chart__head">
-            <h2 class="dash-chart__h">Cumulative P&amp;L · /ES points <span style="color:var(--gold-deep);font-weight:400">+ $ per contract</span></h2>
+            <h2 class="dash-chart__h" id="dashChartTitle">Cumulative P&amp;L · /ES points <span style="color:var(--gold-deep);font-weight:400">+ $ per contract</span></h2>
             <p class="dash-chart__sub" id="dashChartSub">—</p>
         </header>
         <canvas id="dashEquityCurve" width="1100" height="320"></canvas>
@@ -87,7 +110,7 @@
         <canvas id="dashMonthlyChart" width="1100" height="220" aria-label="Monthly net P&amp;L bar chart — gold bars are positive months, red bars are negative months."></canvas>
         <div class="dash-monthly__table-wrap">
             <table class="dash-monthly__table">
-                <thead>
+                <thead id="dashMonthlyHead">
                     <tr>
                         <th>Month</th>
                         <th class="num">Trades</th>
@@ -125,7 +148,7 @@
         </header>
         <div class="dash-table__wrap">
             <table class="dash-table__table">
-                <thead>
+                <thead id="dashTableHead">
                     <tr>
                         <th>#</th>
                         <th>Date</th>
@@ -150,6 +173,6 @@
     </footer>
 </main>
 
-<script src="js/dashboard.js?v=20260617c"></script>
+<script src="js/dashboard.js?v=20260617e"></script>
 </body>
 </html>

@@ -5,10 +5,33 @@
 (function () {
     'use strict';
 
-    let TRADES = [];
+    // ---- BOOK MODEL ------------------------------------------------------
+    // The dashboard renders one BOOK at a time. The engine view is points-based
+    // (ES-equivalent /ES /MES); the synthetic-passive (SPY overlay) view is
+    // dollar-based. To keep the compute() / equity-curve / monthly / table
+    // pipeline shared, the SPY view PROJECTS each trade's `dollars` into the
+    // `pts` slot — so the same statistics run, and only the LABELS swap. The
+    // raw trade fields stay accessible for the trade table (symbol, $ amount).
+    let TRADES = [];           // active book's trades (engine OR projected SPY)
     let META = {};
     let filteredTrades = [];
     let currentTf = 'all';     // active timeframe key
+    let currentBook = 'engine';
+    let ENGINE_TRADES = [];
+    let SPY_TRADES_RAW = [];   // original SPY rows (dollars authoritative, pts=null)
+    let SPY_TRADES = [];       // same rows with pts := dollars for the shared pipeline
+
+    function unitOf(book) { return book === 'synthetic_passive' ? '$' : 'pts'; }
+    function fmtUnit(v, unit) {
+        const sign = v >= 0 ? '+' : '−';
+        if (unit === '$') return sign + '$' + Math.abs(v).toLocaleString('en-US', { maximumFractionDigits: 0 });
+        return sign + Math.abs(v).toFixed(2) + ' pts';
+    }
+    function fmtUnitInt(v, unit) {
+        const sign = v >= 0 ? '+' : '−';
+        if (unit === '$') return sign + '$' + Math.abs(Math.round(v)).toLocaleString();
+        return sign + Math.abs(v).toFixed(0) + ' pts';
+    }
 
     /* ---------- Timeframe filter ----------
        Returns a subset of trades whose timestamps fall in the selected window.
@@ -47,24 +70,87 @@
     fetch('data/trades.json?t=' + Date.now(), { cache: 'no-store' })
         .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
         .then(function (json) {
-            // The dashboard is the public ES-points engine record. Per the
-            // store-and-bucket model, exclude the synthetic-passive (SPY) book
-            // and any dollar-denominated trade without an ES-equivalent point
-            // (IB stock / option / non-ES futures booster trades). They remain
-            // in data/trades.json; a dollar-denominated multi-asset view is a
-            // separate follow-up. No-op for the current all-/ES dataset.
-            TRADES = (json.trades || []).filter(function (t) {
+            META = json.meta || {};
+            const all = (json.trades || []).slice();
+            // Engine record: points-based, no synthetic-passive trades, no
+            // dollar-only IB booster trades (no ES-equivalent point).
+            ENGINE_TRADES = all.filter(function (t) {
                 return t.book !== 'synthetic_passive' && typeof t.pts === 'number';
             });
-            META = json.meta || {};
-            // Sort newest first for display
-            TRADES.sort(function (a, b) { return new Date(b.timestamp) - new Date(a.timestamp); });
-            filteredTrades = TRADES.slice();
-            render();
+            // SPY overlay record: dollar-authoritative. Project dollars → pts
+            // so compute()/equity/monthly run unchanged; the table still shows
+            // the raw dollar field. Skip rows missing dollars (defensive).
+            SPY_TRADES_RAW = all.filter(function (t) {
+                return t.book === 'synthetic_passive' && typeof t.dollars === 'number';
+            });
+            SPY_TRADES = SPY_TRADES_RAW.map(function (t) {
+                const proj = {};
+                for (const k in t) if (Object.prototype.hasOwnProperty.call(t, k)) proj[k] = t[k];
+                proj.pts = t.dollars;        // project for the shared pipeline
+                proj._raw_pts = t.pts;       // keep originals for the table
+                return proj;
+            });
+            // Sort each book newest-first for display
+            [ENGINE_TRADES, SPY_TRADES].forEach(function (arr) {
+                arr.sort(function (a, b) { return new Date(b.timestamp) - new Date(a.timestamp); });
+            });
+            // Reveal the book switcher only when there ARE SPY trades — keeps
+            // the dashboard looking identical until the first overlay publishes.
+            const bookbar = document.getElementById('dashBookbar');
+            if (bookbar) bookbar.hidden = SPY_TRADES.length === 0;
+            setActiveBook('engine');
         })
         .catch(function (err) {
             document.getElementById('dashMeta').textContent = 'Error loading dataset: ' + err.message;
         });
+
+    function setActiveBook(book) {
+        currentBook = (book === 'synthetic_passive') ? 'synthetic_passive' : 'engine';
+        TRADES = (currentBook === 'synthetic_passive') ? SPY_TRADES : ENGINE_TRADES;
+        filteredTrades = TRADES.slice();
+
+        // Visual state: tab is-active + aria, SPY notice, battery section toggle,
+        // dynamic chart/table headers reflecting the active book's unit.
+        document.querySelectorAll('.book-tab').forEach(function (b) {
+            const active = b.getAttribute('data-book') === currentBook;
+            b.classList.toggle('is-active', active);
+            b.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        const isSpy = currentBook === 'synthetic_passive';
+        const eyebrow = document.getElementById('dashEyebrow');
+        if (eyebrow) eyebrow.innerHTML = isSpy
+            ? '<span class="diamond">◆</span> Synthetic-Passive Overlay · accumulating record · <em>in testing</em>'
+            : '<span class="diamond">◆</span> Live Trades · Majority Opinion Predisposal Strategy';
+        const title = document.getElementById('dashTitle');
+        if (title) title.textContent = isSpy ? 'Overlay record — early, accumulating' : 'Operator record — live execution';
+        const notice = document.getElementById('dashSpyNotice');
+        if (notice) notice.hidden = !isSpy;
+        const battery = document.getElementById('dashBatterySection');
+        if (battery) battery.hidden = isSpy;   // battery is ES-points only
+        const chartH = document.getElementById('dashChartTitle');
+        if (chartH) chartH.innerHTML = isSpy
+            ? 'Cumulative P&amp;L · $ realized <span style="color:var(--slate);font-weight:400">· synthetic-passive overlay</span>'
+            : 'Cumulative P&amp;L · /ES points <span style="color:var(--gold-deep);font-weight:400">+ $ per contract</span>';
+        // Trade-table header swaps the "Points / $ per contract" pair for "$ P&L"
+        const tHead = document.getElementById('dashTableHead');
+        if (tHead) tHead.innerHTML = isSpy
+            ? '<tr><th>#</th><th>Date</th><th>Symbol</th><th>Side</th><th>Result</th><th class="num">$ P&amp;L</th><th>Tag</th></tr>'
+            : '<tr><th>#</th><th>Date</th><th>Symbol</th><th>Side</th><th>Result</th><th class="num">Points</th><th class="num">$ / contract</th><th>Tag</th></tr>';
+        // Monthly-table header
+        const mHead = document.getElementById('dashMonthlyHead');
+        if (mHead) mHead.innerHTML = isSpy
+            ? '<tr><th>Month</th><th class="num">Trades</th><th class="num">W / L</th><th class="num">WR</th><th class="num">Net $</th><th class="num">Best</th><th class="num">Worst</th></tr>'
+            : '<tr><th>Month</th><th class="num">Trades</th><th class="num">W / L</th><th class="num">WR</th><th class="num">Net pts</th><th class="num">Net $ / ctr</th><th class="num">Best</th><th class="num">Worst</th></tr>';
+
+        render();
+    }
+
+    // Book-tab click handler (delegated; survives tab swaps + zero SPY → reveal)
+    document.addEventListener('click', function (e) {
+        const t = e.target.closest('.book-tab');
+        if (!t) return;
+        setActiveBook(t.getAttribute('data-book'));
+    });
 
     /* ---------- Computation ---------- */
     function compute(trades) {
@@ -312,26 +398,38 @@
         const negatives = months.filter(function (m) { return m.net < 0; }).length;
         const total = months.reduce(function (a, m) { return a + m.net; }, 0);
         const avg = total / months.length;
+        const isSpy = currentBook === 'synthetic_passive';
+        const avgStr = isSpy
+            ? '<strong>' + (avg >= 0 ? '+$' : '−$') + Math.abs(Math.round(avg)).toLocaleString() + '/mo</strong>'
+            : '<strong>' + (avg >= 0 ? '+' : '') + avg.toFixed(1) + ' pts/mo</strong> '
+              + '<span style="color:var(--slate)">(≈ $' + Math.round(avg * 50).toLocaleString() + '/mo per /ES)</span>';
         sub.innerHTML = months.length + ' months · '
             + '<span style="color:var(--forest,#2D5016)">' + positives + ' up</span> · '
             + '<span style="color:var(--signal,#DC2626)">' + negatives + ' down</span> · '
-            + 'avg <strong>' + (avg >= 0 ? '+' : '') + avg.toFixed(1) + ' pts/mo</strong> '
-            + '<span style="color:var(--slate)">(≈ $' + Math.round(avg * 50).toLocaleString() + '/mo per /ES)</span>';
+            + 'avg ' + avgStr;
 
-        // Table rows
+        // Table rows — engine: pts + $/ctr pair; SPY: single $ column
         body.innerHTML = months.map(function (m) {
             const netClass = m.net > 0 ? 'pos' : m.net < 0 ? 'neg' : 'zero';
             const wrPct = (m.wr * 100).toFixed(0) + '%';
-            return ''
-                + '<tr>'
+            const head = '<tr>'
                 +   '<td>' + m.label + '</td>'
                 +   '<td class="num">' + m.n + '</td>'
                 +   '<td class="num">' + m.wins + ' / ' + m.losses + (m.be ? ' / ' + m.be + ' BE' : '') + '</td>'
-                +   '<td class="num">' + wrPct + '</td>'
-                +   '<td class="num ' + netClass + '">' + (m.net >= 0 ? '+' : '') + m.net.toFixed(2) + '</td>'
-                +   '<td class="num ' + netClass + '">$' + Math.round(m.dollars).toLocaleString() + '</td>'
-                +   '<td class="num pos">+' + m.best.toFixed(1) + '</td>'
-                +   '<td class="num neg">' + m.worst.toFixed(1) + '</td>'
+                +   '<td class="num">' + wrPct + '</td>';
+            if (isSpy) {
+                // For SPY, m.net is already $ (projected from `dollars`); ignore m.dollars (which would be net × 50, wrong here)
+                return head
+                    + '<td class="num ' + netClass + '">' + (m.net >= 0 ? '+$' : '−$') + Math.abs(Math.round(m.net)).toLocaleString() + '</td>'
+                    + '<td class="num pos">+$' + Math.round(Math.abs(m.best)).toLocaleString() + '</td>'
+                    + '<td class="num neg">−$' + Math.round(Math.abs(m.worst)).toLocaleString() + '</td>'
+                    + '</tr>';
+            }
+            return head
+                + '<td class="num ' + netClass + '">' + (m.net >= 0 ? '+' : '') + m.net.toFixed(2) + '</td>'
+                + '<td class="num ' + netClass + '">$' + Math.round(m.dollars).toLocaleString() + '</td>'
+                + '<td class="num pos">+' + m.best.toFixed(1) + '</td>'
+                + '<td class="num neg">' + m.worst.toFixed(1) + '</td>'
                 + '</tr>';
         }).join('');
 
@@ -423,12 +521,22 @@
         const parts = [];
         if (hist > 0) parts.push('<span class="dash-meta-period dash-meta-period--hist">' + hist + ' historical</span>');
         parts.push('<span class="dash-meta-period dash-meta-period--live">' + live + ' pre-reg live</span>');
-        meta.innerHTML = (META.dataset_label || 'Dataset') + ' · <strong>Last updated:</strong> ' + updated + '<br>' + parts.join(' · ');
+        const bookLabel = currentBook === 'synthetic_passive'
+            ? '<span class="dash-meta-period dash-meta-period--testing">Synthetic-Passive Overlay (SPY · $)</span>'
+            : '<span class="dash-meta-period dash-meta-period--engine">Booster Engine (/ES · /MES · pts)</span>';
+        meta.innerHTML = (META.dataset_label || 'Dataset') + ' · <strong>Last updated:</strong> ' + updated + '<br>'
+            + bookLabel + ' · ' + parts.join(' · ');
     }
 
     function renderKpis(s) {
         const k = document.getElementById('dashKpis');
-        const totalDollars = (s.total * 50).toLocaleString('en-US', { maximumFractionDigits: 0 });
+        const unit = unitOf(currentBook);
+        const isSpy = unit === '$';
+        // Engine sub: "$/ctr" derived from points × $50; SPY sub: blank (no
+        // per-contract concept) since `pts` already IS the realized dollar P&L.
+        const totalDollars = isSpy
+            ? Math.round(s.total).toLocaleString('en-US', { maximumFractionDigits: 0 })
+            : (s.total * 50).toLocaleString('en-US', { maximumFractionDigits: 0 });
         const streakLabel = s.currentStreak === 0
             ? 'flat'
             : (s.currentStreak > 0 ? s.currentStreak + ' W' : Math.abs(s.currentStreak) + ' L');
@@ -477,16 +585,21 @@
             // Row 1 — return / throughput
             { label: 'Total trades',  val: String(s.n),                       sub: s.wins + ' W · ' + s.losses + ' L · ' + s.be + ' BE' },
             { label: 'Win rate',      val: (s.winRate*100).toFixed(1) + '%',  sub: 'excl. BE' },
-            { label: 'EV / trade',    val: (s.evMean>=0?'+':'') + s.evMean.toFixed(2) + ' pts', sub: '$' + Math.round(s.evMean*50).toLocaleString() + ' / ctr', mood: s.evMean>=0?'pos':'neg' },
+            { label: 'EV / trade',    val: fmtUnit(s.evMean, unit),
+                                      sub: isSpy ? 'avg realized $ per trade' : '$' + Math.round(s.evMean*50).toLocaleString() + ' / ctr',
+                                      mood: s.evMean>=0?'pos':'neg' },
             { label: 'Profit Factor', val: isFinite(s.pf) ? s.pf.toFixed(2) : '∞', sub: 'gross W / gross L', mood: s.pf>=1.5?'pos':'neg' },
-            { label: 'Total P&L',     val: (s.total>=0?'+':'') + s.total.toFixed(0) + ' pts', sub: '$' + totalDollars + ' / ctr', mood: s.total>=0?'pos':'neg' },
-            { label: 'Max DD',        val: s.maxDD.toFixed(1) + ' pts',       sub: 'cur: ' + s.curDD.toFixed(1) + ' pts', mood: 'neg' },
+            { label: 'Total P&L',     val: fmtUnitInt(s.total, unit),
+                                      sub: isSpy ? 'realized · synthetic-passive' : '$' + totalDollars + ' / ctr',
+                                      mood: s.total>=0?'pos':'neg' },
+            { label: 'Max DD',        val: fmtUnit(s.maxDD, unit),
+                                      sub: 'cur: ' + fmtUnit(s.curDD, unit), mood: 'neg' },
             // Row 2 — distribution / quality
-            { label: 'Avg win',       val: '+' + s.avgWin.toFixed(2) + ' pts',  sub: 'over ' + s.wins + ' winners', mood: 'pos' },
-            { label: 'Avg loss',      val: '−' + s.avgLoss.toFixed(2) + ' pts', sub: 'over ' + s.losses + ' losers', mood: 'neg' },
+            { label: 'Avg win',       val: fmtUnit(s.avgWin, unit),  sub: 'over ' + s.wins + ' winners', mood: 'pos' },
+            { label: 'Avg loss',      val: fmtUnit(-s.avgLoss, unit), sub: 'over ' + s.losses + ' losers', mood: 'neg' },
             { label: 'W/L ratio',     val: wlStr,                              sub: 'avg win ÷ avg loss', mood: s.wlRatio>=1?'pos':'neg' },
-            { label: 'Best trade',    val: '+' + s.best.toFixed(2) + ' pts',    sub: 'single best', mood: 'pos' },
-            { label: 'Worst trade',   val:       s.worst.toFixed(2) + ' pts',   sub: 'single worst', mood: 'neg' },
+            { label: 'Best trade',    val: fmtUnit(s.best, unit),    sub: 'single best', mood: 'pos' },
+            { label: 'Worst trade',   val: fmtUnit(s.worst, unit),   sub: 'single worst', mood: 'neg' },
             { label: 'R-Expectancy',  val: rExpStr,                             sub: 'EV ÷ avg loss · 1R units', mood: s.rExp>=0.2?'pos':'neg' },
             // Row 3 — durability & throughput
             { label: 'Max loss streak', val: s.maxStreak + ' in a row',         sub: 'longest consecutive losses', mood: s.maxStreak<=7?'pos':'neg' },
@@ -541,10 +654,11 @@
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.clearRect(0, 0, W, H);
 
+        const isSpy = currentBook === 'synthetic_passive';
         const eq = s.equity;
         const min = Math.min.apply(null, eq);
         const max = Math.max.apply(null, eq);
-        const PAD_L = 64, PAD_R = 80, PAD_T = 20, PAD_B = 40;   // extra right pad for $ axis
+        const PAD_L = 64, PAD_R = isSpy ? 20 : 80, PAD_T = 20, PAD_B = 40;
         const xStep = (W - PAD_L - PAD_R) / Math.max(1, eq.length - 1);
         const yScale = (H - PAD_T - PAD_B) / (max - min || 1);
 
@@ -557,30 +671,40 @@
             return sign + '$' + a.toFixed(0);
         }
 
-        // grid + dual-axis labels: /ES points on the left, $ per contract on the right
+        // grid + axis labels.
+        //   Engine:   left axis = /ES points (navy)  · right axis = $ per contract (gold)
+        //   SPY:      left axis = $ realized (slate) · no right axis (single unit)
         ctx.strokeStyle = 'rgba(27, 42, 74, 0.06)'; ctx.lineWidth = 1;
         ctx.font = '11px "Source Sans 3", sans-serif';
         for (let g = 0; g <= 4; g++) {
             const v = min + (max - min) * g / 4;
             const y = PAD_T + (max - v) * yScale;
             ctx.beginPath(); ctx.moveTo(PAD_L, y); ctx.lineTo(W - PAD_R, y); ctx.stroke();
-            // Left axis: points (navy)
-            ctx.fillStyle = '#1B2A4A';
-            ctx.textAlign = 'right';
-            ctx.fillText((v>=0?'+':'') + v.toFixed(0) + ' pts', PAD_L - 8, y + 4);
-            // Right axis: dollars per /ES contract (gold-deep)
-            ctx.fillStyle = '#A88A38';
-            ctx.textAlign = 'left';
-            ctx.fillText(fmtDollars(v * 50), W - PAD_R + 8, y + 4);
+            if (isSpy) {
+                ctx.fillStyle = '#475569';            // slate for the overlay book
+                ctx.textAlign = 'right';
+                ctx.fillText(fmtDollars(v), PAD_L - 8, y + 4);
+            } else {
+                ctx.fillStyle = '#1B2A4A';
+                ctx.textAlign = 'right';
+                ctx.fillText((v>=0?'+':'') + v.toFixed(0) + ' pts', PAD_L - 8, y + 4);
+                ctx.fillStyle = '#A88A38';
+                ctx.textAlign = 'left';
+                ctx.fillText(fmtDollars(v * 50), W - PAD_R + 8, y + 4);
+            }
         }
         ctx.textAlign = 'left';
         // Axis legends
-        ctx.fillStyle = '#1B2A4A'; ctx.font = '10px "Source Sans 3", sans-serif';
-        ctx.textAlign = 'right';
-        ctx.fillText('/ES pts', PAD_L - 8, PAD_T - 6);
-        ctx.fillStyle = '#A88A38';
-        ctx.textAlign = 'left';
-        ctx.fillText('$ / contract', W - PAD_R + 8, PAD_T - 6);
+        ctx.font = '10px "Source Sans 3", sans-serif';
+        if (isSpy) {
+            ctx.fillStyle = '#475569'; ctx.textAlign = 'right';
+            ctx.fillText('$ realized', PAD_L - 8, PAD_T - 6);
+        } else {
+            ctx.fillStyle = '#1B2A4A'; ctx.textAlign = 'right';
+            ctx.fillText('/ES pts', PAD_L - 8, PAD_T - 6);
+            ctx.fillStyle = '#A88A38'; ctx.textAlign = 'left';
+            ctx.fillText('$ / contract', W - PAD_R + 8, PAD_T - 6);
+        }
         ctx.textAlign = 'left';
         ctx.font = '11px "Source Sans 3", sans-serif';
         // zero line
@@ -656,11 +780,28 @@
 
     function renderTable() {
         const body = document.getElementById('dashTableBody');
+        const isSpy = currentBook === 'synthetic_passive';
         body.innerHTML = filteredTrades.map(function (t) {
             const date = new Date(t.timestamp).toLocaleDateString('en-US', { year: '2-digit', month: 'short', day: 'numeric' });
-            const ptsClass = t.pts > 0 ? 'pos' : t.pts < 0 ? 'neg' : 'zero';
-            const ptsStr = (t.pts >= 0 ? '+' : '') + t.pts.toFixed(2);
-            const dollars = Math.round(t.pts * 50);
+            // SPY rows: `pts` is the projected $ realized; render one merged $ cell.
+            // Engine rows: render the points cell + the $/contract cell, both with the
+            // same mood, matching the prior engine layout exactly.
+            const v = t.pts;
+            const cls = v > 0 ? 'pos' : v < 0 ? 'neg' : 'zero';
+            if (isSpy) {
+                const dStr = (v >= 0 ? '+$' : '-$') + Math.abs(Math.round(v)).toLocaleString();
+                return '<tr>'
+                     + '<td>' + t.id + '</td>'
+                     + '<td>' + date + '</td>'
+                     + '<td>' + (t.symbol || 'SPY') + '</td>'
+                     + '<td>' + (t.side || '—') + '</td>'
+                     + '<td>' + t.result + '</td>'
+                     + '<td class="num ' + cls + '">' + dStr + '</td>'
+                     + '<td><span class="tag tag--' + (t.tag || 'H3') + '">' + (t.tag || 'H3') + '</span></td>'
+                     + '</tr>';
+            }
+            const ptsStr = (v >= 0 ? '+' : '') + v.toFixed(2);
+            const dollars = Math.round(v * 50);
             const dollarStr = (dollars >= 0 ? '+$' : '-$') + Math.abs(dollars).toLocaleString();
             return '<tr>'
                  + '<td>' + t.id + '</td>'
@@ -668,8 +809,8 @@
                  + '<td>' + (t.symbol || '/ES') + '</td>'
                  + '<td>' + (t.side || '—') + '</td>'
                  + '<td>' + t.result + '</td>'
-                 + '<td class="num ' + ptsClass + '">' + ptsStr + '</td>'
-                 + '<td class="num ' + ptsClass + '">' + dollarStr + '</td>'
+                 + '<td class="num ' + cls + '">' + ptsStr + '</td>'
+                 + '<td class="num ' + cls + '">' + dollarStr + '</td>'
                  + '<td><span class="tag tag--' + (t.tag || 'H3') + '">' + (t.tag || 'H3') + '</span></td>'
                  + '</tr>';
         }).join('');
@@ -710,15 +851,23 @@
 
     /* ---------- CSV export ---------- */
     document.getElementById('dashExportCsv').addEventListener('click', function () {
-        const header = ['id','timestamp','symbol','side','result','pts','dollars','tag'];
+        const isSpy = currentBook === 'synthetic_passive';
+        const header = isSpy
+            ? ['id','timestamp','symbol','side','result','dollars','tag','book','assetClass']
+            : ['id','timestamp','symbol','side','result','pts','dollars','tag'];
         const lines = [header.join(',')];
         filteredTrades.forEach(function (t) {
-            lines.push([t.id, t.timestamp, t.symbol||'/ES', t.side||'', t.result, t.pts, t.dollars, t.tag||'H3'].join(','));
+            if (isSpy) {
+                // SPY: write the authoritative `dollars` (NOT the projected `pts` slot).
+                lines.push([t.id, t.timestamp, t.symbol||'SPY', t.side||'', t.result, t.dollars, t.tag||'H3', t.book||'', t.assetClass||''].join(','));
+            } else {
+                lines.push([t.id, t.timestamp, t.symbol||'/ES', t.side||'', t.result, t.pts, t.dollars, t.tag||'H3'].join(','));
+            }
         });
         const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url; a.download = 'ekantik-500-trades-export.csv';
+        a.href = url; a.download = isSpy ? 'ekantik-500-spy-overlay-export.csv' : 'ekantik-500-trades-export.csv';
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
         setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
     });
