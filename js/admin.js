@@ -275,6 +275,16 @@
     }
     function ibPeriod(iso) { return (iso && iso.slice(0, 10) >= '2026-05-01') ? 'pre_reg' : 'historical'; }
 
+    // ES-equivalent GROSS price points for ES / MES futures (consistent with the
+    // manually-entered /ES record, which is gross price points). pricePts is the
+    // per-unit price move; × qty × multiplier / 50 → ES-equivalent points.
+    function ibEsEquivFromPoints(assetClass, symbol, pricePts, qty, mult) {
+        if (assetClass !== 'FUT') return null;
+        const s = (symbol || '').toUpperCase();
+        if (!(/^MES/.test(s) || /^ES/.test(s))) return null; // non-S&P future: no ES point
+        return Math.round((pricePts * qty * mult / 50) * 100) / 100;
+    }
+
     function ibFlexToTrades(rows, nextId) {
         const keys = Object.keys(rows[0]);
         const pick = function (cands) { return cands.find(function (c) { return keys.indexOf(c) !== -1; }); };
@@ -285,7 +295,6 @@
             dt: pick(['datetime', 'date/time']), date: pick(['tradedate', 'date']), time: pick(['tradetime', 'time']),
             oc: pick(['open/closeindicator', 'openclose']), fifo: pick(['fifopnlrealized'])
         };
-        const hasFifo = !!K.fifo && rows.some(function (r) { return r[K.fifo] != null && r[K.fifo] !== ''; });
         const tsOf = function (r) { return ibDateTime(K.dt ? r[K.dt] : (K.date ? r[K.date] : ''), K.dt ? '' : (K.time ? r[K.time] : '')); };
 
         const out = [];
@@ -297,9 +306,9 @@
                 symbol: o.symbol || (o.assetClass === 'FUT' ? '/ES' : ''),
                 side: o.side,
                 result: o.dollars > 0 ? 'W' : o.dollars < 0 ? 'L' : 'BE',
-                pts: ibEsEquivPts(o.assetClass, o.symbol, o.dollars),
+                pts: o.pts,                                  // ES-equiv GROSS points (futures only) | null
                 rawPts: null,
-                dollars: Math.round(o.dollars * 100) / 100,
+                dollars: Math.round(o.dollars * 100) / 100,  // realized P&L (net, FifoPnlRealized when present)
                 qty: o.qty,
                 instrument: o.assetClass,
                 assetClass: o.assetClass,
@@ -313,59 +322,69 @@
             });
         };
 
-        if (hasFifo) {
-            // Primary: one round-trip per realized (closing) execution.
-            rows.forEach(function (r) {
-                const oc = (r[K.oc] || '').toUpperCase();
-                const fifo = ibNum(r[K.fifo]);
-                if (oc.indexOf('C') === -1 || fifo == null) return; // opens carry no realized P&L
-                const assetClass = (r[K.asset] || '').toUpperCase();
-                const bs = (r[K.side] || '').toUpperCase();
-                const side = (oc === 'C')
-                    ? (bs === 'SELL' ? 'LONG' : 'SHORT')   // pure close: inverse of the closing exec
-                    : (bs === 'BUY' ? 'LONG' : 'SHORT');   // O;C scalp: the open direction
-                emit({
-                    assetClass: assetClass, symbol: r[K.sym], underlying: r[K.under],
-                    side: side, qty: Math.abs(ibNum(r[K.qty]) || 0),
-                    dollars: fifo, openPrice: null, iso: tsOf(r)
-                });
-            });
-        } else {
-            // Fallback: FIFO-pair raw executions per instrument.
-            const execs = rows.map(function (r) {
-                const assetClass = (r[K.asset] || '').toUpperCase();
-                const bs = (r[K.side] || '').toUpperCase();
-                const q = Math.abs(ibNum(r[K.qty]) || 0);
-                const mult = ibNum(r[K.mult]) || (assetClass === 'OPT' || assetClass === 'FOP' ? 100 : assetClass === 'FUT' ? 50 : 1);
-                return {
-                    assetClass: assetClass, symbol: r[K.sym], underlying: r[K.under],
-                    key: assetClass + '|' + (r[K.sym] || '') + '|' + (r[K.under] || ''),
-                    signedQty: bs === 'SELL' ? -q : q,
-                    price: ibNum(r[K.price]) || 0, multiplier: mult, iso: tsOf(r)
-                };
-            }).sort(function (a, b) { return new Date(a.iso || 0) - new Date(b.iso || 0); });
+        // One unified pass: FIFO-pair executions per instrument so each round-trip
+        // has BOTH the open and close price (→ gross ES-equiv points for futures)
+        // while taking the dollar P&L from FifoPnlRealized when present (robust to
+        // IB BookTrade rows that report a 0/placeholder TradePrice on the close).
+        const execs = rows.map(function (r) {
+            const assetClass = (r[K.asset] || '').toUpperCase();
+            const bs = (r[K.side] || '').toUpperCase();
+            const q = Math.abs(ibNum(r[K.qty]) || 0);
+            const mult = ibNum(r[K.mult]) || (assetClass === 'OPT' || assetClass === 'FOP' ? 100 : assetClass === 'FUT' ? 50 : 1);
+            return {
+                assetClass: assetClass, symbol: r[K.sym], underlying: r[K.under],
+                key: assetClass + '|' + (r[K.sym] || '') + '|' + (r[K.under] || ''),
+                bs: bs, qty: q, signedQty: bs === 'SELL' ? -q : q,
+                price: ibNum(r[K.price]) || 0, mult: mult,
+                oc: (r[K.oc] || '').toUpperCase(),
+                fifo: K.fifo ? ibNum(r[K.fifo]) : null,
+                iso: tsOf(r)
+            };
+        }).sort(function (a, b) { return new Date(a.iso || 0) - new Date(b.iso || 0); });
 
-            const lots = {};
-            execs.forEach(function (e) {
-                lots[e.key] = lots[e.key] || [];
-                let rem = e.signedQty;
-                while (rem !== 0 && lots[e.key].length && Math.sign(lots[e.key][0].qty) === -Math.sign(rem)) {
-                    const lot = lots[e.key][0];
-                    const matched = Math.min(Math.abs(lot.qty), Math.abs(rem));
-                    const isLong = lot.qty > 0;
-                    const pnlUnit = isLong ? (e.price - lot.price) : (lot.price - e.price);
-                    emit({
-                        assetClass: e.assetClass, symbol: e.symbol, underlying: e.underlying,
-                        side: isLong ? 'LONG' : 'SHORT', qty: matched,
-                        dollars: pnlUnit * matched * e.multiplier, openPrice: lot.price, iso: e.iso
-                    });
-                    lot.qty += isLong ? -matched : matched;
-                    rem += rem > 0 ? -matched : matched;
-                    if (lot.qty === 0) lots[e.key].shift();
-                }
-                if (rem !== 0) lots[e.key].push({ qty: rem, price: e.price });
-            });
-        }
+        const lots = {};
+        execs.forEach(function (e) {
+            const hasO = e.oc.indexOf('O') !== -1;
+            const hasC = e.oc.indexOf('C') !== -1;
+
+            // Single-row round-trip (Open/CloseIndicator = "O;C"): emit directly
+            // from its realized P&L (no separate open/close price available).
+            if (hasO && hasC) {
+                const d = (e.fifo != null) ? e.fifo : 0;
+                emit({
+                    assetClass: e.assetClass, symbol: e.symbol, underlying: e.underlying,
+                    side: e.bs === 'BUY' ? 'LONG' : 'SHORT', qty: e.qty, dollars: d,
+                    pts: ibEsEquivPts(e.assetClass, e.symbol, d),  // dollars-based fallback for O;C
+                    openPrice: null, iso: e.iso
+                });
+                return;
+            }
+
+            // Pure open ('O'), pure close ('C'), or unmarked: FIFO match against
+            // opposite open lots; any unmatched remainder opens a new lot.
+            lots[e.key] = lots[e.key] || [];
+            let rem = e.signedQty;
+            while (rem !== 0 && lots[e.key].length && Math.sign(lots[e.key][0].qty) === -Math.sign(rem)) {
+                const lot = lots[e.key][0];
+                const matched = Math.min(Math.abs(lot.qty), Math.abs(rem));
+                const isLong = lot.qty > 0;
+                const pricePts = isLong ? (e.price - lot.price) : (lot.price - e.price);
+                const grossDollars = pricePts * matched * e.mult;
+                // Net P&L: allocate this close fill's FifoPnlRealized proportionally
+                // to the matched qty; fall back to gross price math if absent.
+                const dollars = (e.fifo != null && e.qty) ? (e.fifo * (matched / e.qty)) : grossDollars;
+                emit({
+                    assetClass: e.assetClass, symbol: e.symbol, underlying: e.underlying,
+                    side: isLong ? 'LONG' : 'SHORT', qty: matched, dollars: dollars,
+                    pts: ibEsEquivFromPoints(e.assetClass, e.symbol, pricePts, matched, e.mult),
+                    openPrice: lot.price, iso: e.iso
+                });
+                lot.qty += isLong ? -matched : matched;
+                rem += rem > 0 ? -matched : matched;
+                if (lot.qty === 0) lots[e.key].shift();
+            }
+            if (rem !== 0) lots[e.key].push({ qty: rem, price: e.price });
+        });
         return out;
     }
 
