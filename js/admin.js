@@ -69,6 +69,45 @@
     }
     function defaultSymbol() { return currentStrategy() === 'options' ? 'SPX' : '/ES'; }
 
+    /* ---------- Default size (operator preference) ----------
+       Used ONLY when the Discord trade line has no explicit size token. Persisted
+       per-device in localStorage. Belt-and-braces fix for the recurring
+       "2 MES → 1 ES" silent fallback (see PRs #105 #107 for the three operator
+       corrections this caused).
+
+       Codes match the <select> options in admin.html:
+         '1ES' '1MES' '2MES' '3MES' '5MES' '10MES'
+    */
+    const DEFAULT_SIZE_KEY = 'epig500_admin_default_size_v1';
+    function readDefaultSizeCode() {
+        try { return localStorage.getItem(DEFAULT_SIZE_KEY) || '1ES'; } catch (e) { return '1ES'; }
+    }
+    function writeDefaultSizeCode(code) {
+        try { localStorage.setItem(DEFAULT_SIZE_KEY, code); } catch (e) {}
+    }
+    // Resolve a size code into the same shape resolveSize() returns from a regex match.
+    function resolveDefaultSize() {
+        const code = readDefaultSizeCode();
+        const m = code.match(/^(\d+)(ES|MES)$/);
+        const qty = m ? parseInt(m[1], 10) : 1;
+        const inst = m ? m[2] : 'ES';
+        const isMicro = inst === 'MES';
+        return {
+            qty: qty,
+            instrument: inst,
+            esEquiv: isMicro ? qty / 10 : qty,
+            dollarPerPoint: isMicro ? 5 : 50,
+            _fromFallback: true   // tagged so renderPreview() can warn
+        };
+    }
+    // Wire the <select> on page load (idempotent if the element isn't present).
+    (function initDefaultSizeSelect() {
+        const sel = document.getElementById('adminDefaultSize');
+        if (!sel) return;
+        sel.value = readDefaultSizeCode();
+        sel.addEventListener('change', function () { writeDefaultSizeCode(sel.value); });
+    })();
+
     /* ---------- Status ---------- */
     function status(msg, level) {
         const el = document.getElementById('adminStatus');
@@ -247,8 +286,14 @@
     // `#`, etc. — these are preserved in the source channel but treated as
     // cosmetic (e.g. `M1^: +38` parses as a result line; the `^` is dropped).
     const LABEL_RE_FRAG = '[A-Za-z]\\w*[^\\s:]*';
-    // Entry: starts with label, then s/b side letter, then price. Allows trailing inline SL/TP (parsed separately).
-    const JOURNAL_ENTRY_RE  = new RegExp('^\\s*' + LABEL_RE_FRAG + '\\s*:\\s*([sbSB])\\s+(\\d+(?:\\.\\d+)?)');
+    // Entry: starts with label, then s/b side letter, then price.
+    // Whitespace between side and price is OPTIONAL — accepts "b 7584" AND "b7584"
+    // (previously required \s+, which silently dropped the operator's M31 line
+    //  "M31: b7584 2mes sl7573" — see PR fix/admin-parser-mes-bug).
+    // Side letter must be followed by a digit (the `\d+` group), so word-prefixed
+    // tokens like "be -3", "brigade", "backtest" still don't match.
+    // Allows trailing inline SL/TP (parsed separately).
+    const JOURNAL_ENTRY_RE  = new RegExp('^\\s*' + LABEL_RE_FRAG + '\\s*:\\s*([sbSB])\\s*(\\d+(?:\\.\\d+)?)');
     // Result: signed points required. Tag (H2/H3/BE) optional — defaults to H3 if absent.
     const JOURNAL_RESULT_RE = new RegExp('^\\s*' + LABEL_RE_FRAG + '\\s*:\\s*([+-]\\d+(?:\\.\\d+)?)(?:\\s+([Hh][23]|BE|be))?\\s*$');
     const JOURNAL_SL_RE     = /\bsl\s*(\d+(?:\.\d+)?)/i;  // unanchored so it matches inline too
@@ -539,9 +584,15 @@
                 }
                 resultIndex++;
 
-                // Normalize to /ES-equivalent units. If no size was seen, assume 1 /ES
-                // (futures default). Options pass through with $1/pt multiplier.
-                let esEquiv, dollarPerPoint, qty, instrument;
+                // Normalize to /ES-equivalent units.
+                // Options pass through with $1/pt multiplier.
+                // If no size was seen, fall back to the operator's "Default size"
+                // preference (admin.html <select id="adminDefaultSize">). Trades
+                // hitting the fallback path are tagged _sizeFromFallback so the
+                // import preview can WARN the operator before publishing —
+                // closing the silent-default footgun that caused PR #105 and
+                // PR #107.
+                let esEquiv, dollarPerPoint, qty, instrument, sizeFromFallback = false;
                 if (isOptions) {
                     esEquiv = 1; dollarPerPoint = 1; qty = 1; instrument = 'OPT';
                 } else if (pendingSize) {
@@ -550,7 +601,12 @@
                     qty = pendingSize.qty;
                     instrument = pendingSize.instrument;
                 } else {
-                    esEquiv = 1; dollarPerPoint = 50; qty = 1; instrument = 'ES';
+                    const def = resolveDefaultSize();
+                    esEquiv = def.esEquiv;
+                    dollarPerPoint = def.dollarPerPoint;
+                    qty = def.qty;
+                    instrument = def.instrument;
+                    sizeFromFallback = true;
                 }
                 const normPts = rawPts * esEquiv;
                 const dollars = rawPts * qty * dollarPerPoint;
@@ -570,7 +626,10 @@
                     strategy: currentStrategy(),
                     entry: pendingEntry ? pendingEntry.entry : null,
                     sl: pendingSl,
-                    tp: pendingTp
+                    tp: pendingTp,
+                    // _sizeFromFallback is a UI-only tag — renderPreview() shows
+                    // a warning and buildJson() strips it before publish.
+                    _sizeFromFallback: sizeFromFallback
                 });
 
                 // Reset trade context — next result starts fresh
@@ -579,6 +638,28 @@
                 pendingTp = null;
                 pendingSize = null;
                 continue;
+            }
+
+            // Standalone size-annotation line, e.g. "2mes", "/ES", "5 mes sl7553".
+            // Fires only inside a trade context (entry seen OR size pending) and
+            // only when the line ISN'T already consumed by entry / SL / TP / result.
+            // Fixes the case where the operator's Discord splits "M30: b 7594"
+            // and "2mes sl7584" across two messages — previously the second line
+            // was silently dropped because LABEL_PREFIX_RE didn't match.
+            if (!pendingSize && (pendingEntry || pendingSl != null)) {
+                const sizeOnly = trimmed
+                    .replace(/\bsl\s*\d+(?:\.\d+)?/ig, '')
+                    .replace(/\btp\s*\d+(?:\.\d+)?/ig, '');
+                const m2 = sizeOnly.match(JOURNAL_SIZE_RE);
+                if (m2) {
+                    pendingSize = resolveSize(m2);
+                    // Also consume inline SL on this same line if present.
+                    const slInline = trimmed.match(JOURNAL_SL_RE);
+                    if (slInline && pendingSl == null) pendingSl = parseFloat(slInline[1]);
+                    const tpInline = trimmed.match(JOURNAL_TP_RE);
+                    if (tpInline && pendingTp == null) pendingTp = parseFloat(tpInline[1]);
+                    continue;
+                }
             }
             // Author lines / other noise — ignore
         }
@@ -640,6 +721,26 @@
         const count = document.getElementById('adminPreviewCount');
         wrap.hidden = STAGED.length === 0;
         count.textContent = STAGED.length;
+
+        // Surface trades that fell back to the operator's default size — these
+        // are the rows most likely to be wrong (the cause of PRs #105, #107).
+        const warn = document.getElementById('adminFallbackWarn');
+        const warnBody = document.getElementById('adminFallbackWarnBody');
+        if (warn && warnBody) {
+            const fallbackRows = STAGED
+                .map(function (t, i) { return t._sizeFromFallback ? (i + 1) : null; })
+                .filter(function (n) { return n !== null; });
+            if (fallbackRows.length) {
+                const def = readDefaultSizeCode().replace(/^(\d+)/, '$1 /');
+                warnBody.innerHTML =
+                    '<strong>' + fallbackRows.length + ' of ' + STAGED.length + ' trades</strong> had no explicit size token in the Discord and were imported as your current default <strong>' + def + '</strong>. '
+                  + 'Verify <strong>row' + (fallbackRows.length === 1 ? ' #' : 's #') + fallbackRows.join(', #') + '</strong> before publishing — or change the <em>Default size</em> selector above and re-import.';
+                warn.hidden = false;
+            } else {
+                warn.hidden = true;
+            }
+        }
+
         body.innerHTML = STAGED.map(function (t, idx) {
             const date = new Date(t.timestamp).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' });
             const ptsClass = t.pts > 0 ? 'pos' : t.pts < 0 ? 'neg' : 'zero';
@@ -651,9 +752,12 @@
                 ? ' <span style="color:var(--slate);font-size:11px">(' + (t.pts>=0?'+':'') + t.pts.toFixed(2) + ' /ES eq)</span>'
                 : '';
             const sizeBadge = (t.qty && t.instrument && t.instrument !== 'OPT')
-                ? ' <span style="color:var(--slate);font-size:11px">· ' + t.qty + ' /' + t.instrument + '</span>'
+                ? ' <span style="color:var(--slate);font-size:11px">· ' + t.qty + ' /' + t.instrument
+                + (t._sizeFromFallback ? ' <span title="Size came from your Default size preference — no explicit token in the Discord line. Verify before publishing." style="color:var(--gold-deep);font-weight:700">⚠ default</span>' : '')
+                + '</span>'
                 : '';
-            return '<tr>'
+            const rowStyle = t._sizeFromFallback ? ' style="background:rgba(184,150,46,0.06)"' : '';
+            return '<tr' + rowStyle + '>'
                  + '<td>' + (idx+1) + '</td>'
                  + '<td>' + date + '</td>'
                  + '<td>' + (t.symbol||'/ES') + sizeBadge + '</td>'
@@ -690,7 +794,11 @@
         }
         // Sort chronological, re-id
         merged.sort(function (a, b) { return new Date(a.timestamp) - new Date(b.timestamp); });
-        merged.forEach(function (t, i) { t.id = i + 1; });
+        merged.forEach(function (t, i) {
+            t.id = i + 1;
+            // Strip UI-only flags so they don't leak into the published JSON.
+            if ('_sizeFromFallback' in t) delete t._sizeFromFallback;
+        });
 
         const output = {
             meta: {
