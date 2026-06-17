@@ -261,7 +261,14 @@
     window.addEventListener('resize', function () { drawLiveBounded(); });
 
     tradesWithTimeout.then(function (trades) {
-        const live = trades.filter(isProtocolBound);
+        // Public engine record = protocol-bound, ES-equivalent points only.
+        // Excludes the synthetic-passive (SPY) book and any dollar-denominated
+        // IB booster trade (stocks / options / non-ES futures, pts=null) so the
+        // points-based countdown + live-vs-kill chart stay ES-clean. No-op for
+        // the current all-/ES dataset.
+        const live = trades.filter(function (t) {
+            return isProtocolBound(t) && t.book !== 'synthetic_passive' && typeof t.pts === 'number';
+        });
         const n = live.length;
         renderCountdown(n);
         liveBoundedTrades = live;

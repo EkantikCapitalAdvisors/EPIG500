@@ -37,7 +37,10 @@
     function renderKpis() {
         const trades = CURRENT.trades;
         if (!trades.length) { document.getElementById('adminKpis').innerHTML = ''; return; }
-        const pts = trades.map(function (t) { return t.pts; });
+        // Points-based KPI strip is the ES-equivalent engine record — only count
+        // trades that carry numeric ES-equiv points (excludes IB stock/option /
+        // non-ES booster trades, whose P&L is dollar-denominated, and SPY).
+        const pts = trades.map(function (t) { return t.pts; }).filter(function (x) { return typeof x === 'number'; });
         const wins = pts.filter(function (x) { return x > 0; });
         const losses = pts.filter(function (x) { return x < 0; });
         const be = pts.filter(function (x) { return x === 0; });
@@ -188,6 +191,184 @@
         return out;
     }
 
+    /* ---------- Interactive Brokers — Flex Query (Trades) CSV ----------
+       Imports IB Activity Flex Query "Trades" CSV. Produces ROUND-TRIPS
+       (one row per completed trade), not raw fills.
+
+       Book routing (per product spec):
+         - SPY stock OR options whose underlying is SPY  →  'synthetic_passive'
+         - everything else (ES/MES futures, other options/stocks, SPX, NQ…)
+                                                          →  'engine' (Booster)
+
+       P&L:
+         - Primary: one trade per CLOSING execution, using the row's
+           FifoPnlRealized (IB's own realized number).
+         - Fallback (no FifoPnlRealized column): FIFO-pair raw executions
+           per instrument and compute realized P&L from price deltas.
+
+       pts (ES-equivalent points) is set ONLY for ES / MES futures
+       (= realized$ / 50). For every other asset class pts is null and the
+       dollar P&L is authoritative — the points-denominated dashboard /
+       live-vs-kill chart filter to numeric pts so they stay ES-clean. */
+    function looksLikeIbFlex(rows) {
+        if (!Array.isArray(rows) || !rows.length) return false;
+        const k = Object.keys(rows[0]);
+        const has = function (n) { return k.indexOf(n) !== -1; };
+        return has('assetclass')
+            && (has('buy/sell') || has('buysell'))
+            && (has('fifopnlrealized') || has('open/closeindicator') || has('openclose') || has('tradeid') || has('underlyingsymbol'));
+    }
+
+    function ibNum(v) {
+        if (v == null || v === '') return null;
+        const neg = String(v).indexOf('(') === 0;
+        const n = parseFloat(String(v).replace(/[$,()\s]/g, ''));
+        if (isNaN(n)) return null;
+        return neg ? -Math.abs(n) : n;
+    }
+
+    function ibDateTime(dateStr, timeStr) {
+        if (!dateStr && !timeStr) return null;
+        let s = (dateStr || '').trim();
+        let t = (timeStr || '').trim();
+        if (!t && /[;,]/.test(s)) {
+            const parts = s.split(/[;,]/);
+            s = parts[0].trim(); t = (parts[1] || '').trim();
+        } else if (!t && / /.test(s) && /\d[:.]\d/.test(s)) {
+            const sp = s.split(/\s+/); s = sp[0]; t = sp.slice(1).join(' ');
+        }
+        const m1 = s.match(/^(\d{4})-?(\d{2})-?(\d{2})$/);
+        let iso;
+        if (m1) {
+            let hh = '00', mi = '00', ss = '00';
+            if (t) {
+                const m2 = t.replace(/\./g, ':').match(/^(\d{2}):?(\d{2}):?(\d{2})?/);
+                if (m2) { hh = m2[1]; mi = m2[2]; ss = m2[3] || '00'; }
+            }
+            iso = m1[1] + '-' + m1[2] + '-' + m1[3] + 'T' + hh + ':' + mi + ':' + ss + 'Z';
+        } else {
+            const dt = new Date(s + (t ? ' ' + t : ''));
+            if (!isNaN(dt.getTime())) return dt.toISOString();
+            return null;
+        }
+        const test = new Date(iso);
+        return isNaN(test.getTime()) ? null : test.toISOString();
+    }
+
+    function ibClassifyBook(assetClass, symbol, underlying) {
+        const sym = (symbol || '').toUpperCase().trim();
+        const und = (underlying || '').toUpperCase().trim();
+        const isSpyStock  = assetClass === 'STK' && sym === 'SPY';
+        const isSpyOption = (assetClass === 'OPT' || assetClass === 'FOP') && (und === 'SPY' || /^SPY\b/.test(sym));
+        return (isSpyStock || isSpyOption) ? 'synthetic_passive' : 'engine';
+    }
+
+    function ibEsEquivPts(assetClass, symbol, dollars) {
+        if (assetClass !== 'FUT' || dollars == null) return null;
+        const s = (symbol || '').toUpperCase();
+        if (/^MES/.test(s) || /^ES/.test(s)) return Math.round((dollars / 50) * 100) / 100;
+        return null; // non-S&P futures: no ES-equivalent point
+    }
+
+    function ibStrategy(assetClass) {
+        return ({ STK: 'stocks', OPT: 'options', FUT: 'futures', FOP: 'futures_options', CASH: 'forex' })[assetClass] || 'other';
+    }
+    function ibPeriod(iso) { return (iso && iso.slice(0, 10) >= '2026-05-01') ? 'pre_reg' : 'historical'; }
+
+    function ibFlexToTrades(rows, nextId) {
+        const keys = Object.keys(rows[0]);
+        const pick = function (cands) { return cands.find(function (c) { return keys.indexOf(c) !== -1; }); };
+        const K = {
+            asset: pick(['assetclass']), sym: pick(['symbol']), under: pick(['underlyingsymbol']),
+            side: pick(['buy/sell', 'buysell']), qty: pick(['quantity']),
+            price: pick(['tradeprice', 'price']), mult: pick(['multiplier']),
+            dt: pick(['datetime', 'date/time']), date: pick(['tradedate', 'date']), time: pick(['tradetime', 'time']),
+            oc: pick(['open/closeindicator', 'openclose']), fifo: pick(['fifopnlrealized'])
+        };
+        const hasFifo = !!K.fifo && rows.some(function (r) { return r[K.fifo] != null && r[K.fifo] !== ''; });
+        const tsOf = function (r) { return ibDateTime(K.dt ? r[K.dt] : (K.date ? r[K.date] : ''), K.dt ? '' : (K.time ? r[K.time] : '')); };
+
+        const out = [];
+        let id = nextId;
+        const emit = function (o) {
+            out.push({
+                id: id++,
+                timestamp: o.iso || new Date().toISOString(),
+                symbol: o.symbol || (o.assetClass === 'FUT' ? '/ES' : ''),
+                side: o.side,
+                result: o.dollars > 0 ? 'W' : o.dollars < 0 ? 'L' : 'BE',
+                pts: ibEsEquivPts(o.assetClass, o.symbol, o.dollars),
+                rawPts: null,
+                dollars: Math.round(o.dollars * 100) / 100,
+                qty: o.qty,
+                instrument: o.assetClass,
+                assetClass: o.assetClass,
+                book: ibClassifyBook(o.assetClass, o.symbol, o.underlying),
+                tag: 'H3',
+                period: ibPeriod(o.iso),
+                strategy: ibStrategy(o.assetClass),
+                entry: o.openPrice != null ? o.openPrice : null,
+                sl: null, tp: null,
+                source: 'ib_flex'
+            });
+        };
+
+        if (hasFifo) {
+            // Primary: one round-trip per realized (closing) execution.
+            rows.forEach(function (r) {
+                const oc = (r[K.oc] || '').toUpperCase();
+                const fifo = ibNum(r[K.fifo]);
+                if (oc.indexOf('C') === -1 || fifo == null) return; // opens carry no realized P&L
+                const assetClass = (r[K.asset] || '').toUpperCase();
+                const bs = (r[K.side] || '').toUpperCase();
+                const side = (oc === 'C')
+                    ? (bs === 'SELL' ? 'LONG' : 'SHORT')   // pure close: inverse of the closing exec
+                    : (bs === 'BUY' ? 'LONG' : 'SHORT');   // O;C scalp: the open direction
+                emit({
+                    assetClass: assetClass, symbol: r[K.sym], underlying: r[K.under],
+                    side: side, qty: Math.abs(ibNum(r[K.qty]) || 0),
+                    dollars: fifo, openPrice: null, iso: tsOf(r)
+                });
+            });
+        } else {
+            // Fallback: FIFO-pair raw executions per instrument.
+            const execs = rows.map(function (r) {
+                const assetClass = (r[K.asset] || '').toUpperCase();
+                const bs = (r[K.side] || '').toUpperCase();
+                const q = Math.abs(ibNum(r[K.qty]) || 0);
+                const mult = ibNum(r[K.mult]) || (assetClass === 'OPT' || assetClass === 'FOP' ? 100 : assetClass === 'FUT' ? 50 : 1);
+                return {
+                    assetClass: assetClass, symbol: r[K.sym], underlying: r[K.under],
+                    key: assetClass + '|' + (r[K.sym] || '') + '|' + (r[K.under] || ''),
+                    signedQty: bs === 'SELL' ? -q : q,
+                    price: ibNum(r[K.price]) || 0, multiplier: mult, iso: tsOf(r)
+                };
+            }).sort(function (a, b) { return new Date(a.iso || 0) - new Date(b.iso || 0); });
+
+            const lots = {};
+            execs.forEach(function (e) {
+                lots[e.key] = lots[e.key] || [];
+                let rem = e.signedQty;
+                while (rem !== 0 && lots[e.key].length && Math.sign(lots[e.key][0].qty) === -Math.sign(rem)) {
+                    const lot = lots[e.key][0];
+                    const matched = Math.min(Math.abs(lot.qty), Math.abs(rem));
+                    const isLong = lot.qty > 0;
+                    const pnlUnit = isLong ? (e.price - lot.price) : (lot.price - e.price);
+                    emit({
+                        assetClass: e.assetClass, symbol: e.symbol, underlying: e.underlying,
+                        side: isLong ? 'LONG' : 'SHORT', qty: matched,
+                        dollars: pnlUnit * matched * e.multiplier, openPrice: lot.price, iso: e.iso
+                    });
+                    lot.qty += isLong ? -matched : matched;
+                    rem += rem > 0 ? -matched : matched;
+                    if (lot.qty === 0) lots[e.key].shift();
+                }
+                if (rem !== 0) lots[e.key].push({ qty: rem, price: e.price });
+            });
+        }
+        return out;
+    }
+
     function handleUpload(text, filename) {
         try {
             // 0. Discord HTML export — three flavors:
@@ -260,6 +441,18 @@
                 if (!rows) throw new Error('Could not parse CSV or detect a known format.');
             }
             const startId = CURRENT.trades.length + STAGED.length + 1;
+            // 3a. Interactive Brokers Flex Query (Trades) CSV — routed to a dedicated
+            //     round-trip parser that tags book (engine vs synthetic_passive) + assetClass.
+            if (looksLikeIbFlex(rows)) {
+                const ibTrades = ibFlexToTrades(rows, startId);
+                if (!ibTrades.length) throw new Error('IB Flex Query detected but no closing trades found. Ensure the query includes closing executions (Open/CloseIndicator) and, ideally, FifoPnlRealized.');
+                STAGED = STAGED.concat(ibTrades);
+                renderPreview(); renderKpis();
+                const sp = ibTrades.filter(function (t) { return t.book === 'synthetic_passive'; }).length;
+                const eng = ibTrades.length - sp;
+                status('✓ Imported ' + ibTrades.length + ' IB round-trips (' + eng + ' Booster Engine · ' + sp + ' Synthetic-Passive SPY).', 'success');
+                return;
+            }
             const parsed = rowsToTrades(rows, startId);
             if (!parsed.length) throw new Error('No valid trades detected. Need at least a points/pnl column.');
             STAGED = STAGED.concat(parsed);
@@ -743,27 +936,47 @@
 
         body.innerHTML = STAGED.map(function (t, idx) {
             const date = new Date(t.timestamp).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' });
-            const ptsClass = t.pts > 0 ? 'pos' : t.pts < 0 ? 'neg' : 'zero';
-            // Show as-logged points for verification; normalized /ES-equiv shown
-            // alongside when the instrument is MES (or qty > 1).
-            const displayRaw = (typeof t.rawPts === 'number') ? t.rawPts : t.pts;
-            const showNorm = t.instrument === 'MES' || (t.qty && t.qty > 1);
-            const normSuffix = showNorm
-                ? ' <span style="color:var(--slate);font-size:11px">(' + (t.pts>=0?'+':'') + t.pts.toFixed(2) + ' /ES eq)</span>'
-                : '';
-            const sizeBadge = (t.qty && t.instrument && t.instrument !== 'OPT')
+            const hasPts = (typeof t.pts === 'number');
+            // Colour by points when present, else by the dollar P&L (IB stocks/options).
+            const pnlNum = hasPts ? t.pts : (typeof t.dollars === 'number' ? t.dollars : 0);
+            const ptsClass = pnlNum > 0 ? 'pos' : pnlNum < 0 ? 'neg' : 'zero';
+
+            // P&L cell: points-denominated trades (ES/MES futures, journal) show
+            // as-logged points with /ES-equiv norm; dollar-denominated trades
+            // (IB stocks / options / non-ES futures, pts=null) show the $ P&L.
+            let pnlCell;
+            if (hasPts) {
+                const displayRaw = (typeof t.rawPts === 'number') ? t.rawPts : t.pts;
+                const showNorm = t.instrument === 'MES' || (t.qty && t.qty > 1 && /^(ES|MES)/.test(String(t.symbol||'')));
+                const normSuffix = showNorm
+                    ? ' <span style="color:var(--slate);font-size:11px">(' + (t.pts>=0?'+':'') + t.pts.toFixed(2) + ' /ES eq)</span>'
+                    : '';
+                pnlCell = (displayRaw>=0?'+':'') + displayRaw.toFixed(2) + normSuffix;
+            } else {
+                const d = (typeof t.dollars === 'number') ? t.dollars : 0;
+                pnlCell = '<span title="Dollar-denominated — no ES-equivalent point for this asset class">' + (d>=0?'+$':'−$') + Math.abs(d).toLocaleString() + '</span>';
+            }
+
+            // Size / asset badge.
+            const sizeBadge = (t.qty && t.instrument && t.instrument !== 'OPT' && t.instrument !== 'STK')
                 ? ' <span style="color:var(--slate);font-size:11px">· ' + t.qty + ' /' + t.instrument
                 + (t._sizeFromFallback ? ' <span title="Size came from your Default size preference — no explicit token in the Discord line. Verify before publishing." style="color:var(--gold-deep);font-weight:700">⚠ default</span>' : '')
                 + '</span>'
+                : (t.qty && (t.instrument === 'STK' || t.instrument === 'OPT')
+                    ? ' <span style="color:var(--slate);font-size:11px">· ' + t.qty + ' ' + t.instrument + '</span>'
+                    : '');
+            // Book badge for bucketed (IB) trades — engine vs synthetic-passive SPY.
+            const bookBadge = t.book
+                ? ' <span style="font-size:10px;letter-spacing:0.04em;text-transform:uppercase;font-weight:700;color:' + (t.book === 'synthetic_passive' ? '#64748B' : 'var(--gold-deep)') + '">· ' + (t.book === 'synthetic_passive' ? 'SPY' : 'engine') + '</span>'
                 : '';
             const rowStyle = t._sizeFromFallback ? ' style="background:rgba(184,150,46,0.06)"' : '';
             return '<tr' + rowStyle + '>'
                  + '<td>' + (idx+1) + '</td>'
                  + '<td>' + date + '</td>'
-                 + '<td>' + (t.symbol||'/ES') + sizeBadge + '</td>'
+                 + '<td>' + (t.symbol||'/ES') + sizeBadge + bookBadge + '</td>'
                  + '<td>' + (t.side||'—') + '</td>'
                  + '<td>' + t.result + '</td>'
-                 + '<td class="num ' + ptsClass + '">' + (displayRaw>=0?'+':'') + displayRaw.toFixed(2) + normSuffix + '</td>'
+                 + '<td class="num ' + ptsClass + '">' + pnlCell + '</td>'
                  + '<td><span class="tag tag--' + (t.tag||'H3') + '">' + (t.tag||'H3') + '</span></td>'
                  + '</tr>';
         }).join('');
@@ -828,13 +1041,15 @@
         LAST_OUTPUT = json;
         const panel = document.getElementById('adminOutputPanel');
         panel.hidden = false;
-        const wins = json.trades.filter(function (t) { return t.pts > 0; }).length;
-        const losses = json.trades.filter(function (t) { return t.pts < 0; }).length;
-        const total = json.trades.reduce(function (a, t) { return a + t.pts; }, 0);
+        const wins = json.trades.filter(function (t) { return t.pts > 0 || (t.pts == null && t.dollars > 0); }).length;
+        const losses = json.trades.filter(function (t) { return t.pts < 0 || (t.pts == null && t.dollars < 0); }).length;
+        // Total pts is ES-equivalent only (numeric pts); dollar-denominated IB
+        // booster/SPY trades don't contribute an ES point.
+        const total = json.trades.reduce(function (a, t) { return a + (typeof t.pts === 'number' ? t.pts : 0); }, 0);
         document.getElementById('adminOutputStats').innerHTML =
               '<div><em>Trades</em><strong>' + json.trades.length + '</strong></div>'
             + '<div><em>W / L</em><strong>' + wins + ' / ' + losses + '</strong></div>'
-            + '<div><em>Total pts</em><strong>' + (total>=0?'+':'') + total.toFixed(0) + '</strong></div>';
+            + '<div><em>Total pts</em><strong>' + (total>=0?'+':'') + total.toFixed(0) + ' ES-eq</strong></div>';
         document.getElementById('adminJsonPreview').textContent = JSON.stringify(json, null, 2);
         panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }

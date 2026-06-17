@@ -47,7 +47,15 @@
     fetch('data/trades.json?t=' + Date.now(), { cache: 'no-store' })
         .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
         .then(function (json) {
-            TRADES = (json.trades || []).slice();
+            // The dashboard is the public ES-points engine record. Per the
+            // store-and-bucket model, exclude the synthetic-passive (SPY) book
+            // and any dollar-denominated trade without an ES-equivalent point
+            // (IB stock / option / non-ES futures booster trades). They remain
+            // in data/trades.json; a dollar-denominated multi-asset view is a
+            // separate follow-up. No-op for the current all-/ES dataset.
+            TRADES = (json.trades || []).filter(function (t) {
+                return t.book !== 'synthetic_passive' && typeof t.pts === 'number';
+            });
             META = json.meta || {};
             // Sort newest first for display
             TRADES.sort(function (a, b) { return new Date(b.timestamp) - new Date(a.timestamp); });

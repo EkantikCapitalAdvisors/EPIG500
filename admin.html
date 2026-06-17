@@ -104,7 +104,7 @@
                     or <span class="discord-drop__browse">browse for a file</span>
                     — the <a href="https://github.com/Tyrrrz/DiscordChatExporter" target="_blank" rel="noopener" onclick="event.stopPropagation();">DiscordChatExporter</a> <code>.html</code> file
                 </p>
-                <p class="discord-drop__also">Also accepts .csv, .json, or the native trades.json shape</p>
+                <p class="discord-drop__also">Also accepts .csv, .json, the native trades.json shape, or an Interactive Brokers Flex Query (Trades) CSV</p>
             </div>
         </label>
 
@@ -138,7 +138,11 @@ F2: -8.25 H2</code></pre>
                     </div>
                     <div>
                         <h5>CSV / JSON</h5>
-                        <p>Native <code>trades.json</code>, vendor exports (Tradovate, TradeZella, IB), or a generic array of trade objects.</p>
+                        <p>Native <code>trades.json</code>, vendor exports (Tradovate, TradeZella), or a generic array of trade objects.</p>
+                    </div>
+                    <div>
+                        <h5>Interactive Brokers — Flex Query (Trades) CSV</h5>
+                        <p>Auto-detected. Builds <strong>round-trips</strong> from closing executions (uses <code>FifoPnlRealized</code> if present, else FIFO-pairs fills). Each trade is bucketed: <strong>SPY stock / SPY options → Synthetic-Passive</strong>; everything else (ES/MES futures, other options, stocks) → <strong>Booster Engine</strong>. Best results: include <code>AssetClass</code>, <code>UnderlyingSymbol</code>, <code>Buy/Sell</code>, <code>Open/CloseIndicator</code>, <code>FifoPnlRealized</code>, <code>DateTime</code>, <code>Quantity</code>.</p>
                     </div>
                 </div>
             </details>
@@ -247,6 +251,6 @@ git push</code></pre>
     </section>
 </main>
 
-<script src="js/admin.js?v=20260617b"></script>
+<script src="js/admin.js?v=20260617c"></script>
 </body>
 </html>
