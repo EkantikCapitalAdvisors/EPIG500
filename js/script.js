@@ -282,11 +282,11 @@
         });
         const boosterCaption = document.getElementById('arithBoosterCaption');
         if (boosterCaption && !EPIG_FLAGS.BOOSTER_TOGGLE_ENABLED) {
-            boosterCaption.textContent = 'Engine layer unlocks with the protocol-bound record (trade ' + n + ' of 30).';
+            boosterCaption.textContent = 'Engine layer unlocks with the protocol-bound record (' + n + (n < 30 ? ' of 30 trades' : ' trades to date') + ').';
         }
         const baseline = document.getElementById('arithBaselineIndicator');
         if (baseline && !EPIG_FLAGS.CLAIMS_THROUGHPUT_ENABLED) {
-            baseline.innerHTML = '<p class="arith-baseline__headline"><span class="diamond">◆</span> Engine throughput will be reported here from the protocol-bound live record once the battery activates at 30 closed trades (currently ' + n + '). Until then, we publish the trades — not an extrapolation.</p>';
+            baseline.innerHTML = '<p class="arith-baseline__headline"><span class="diamond">◆</span> Engine throughput will be reported here from the protocol-bound live record (' + n + ' closed trades' + (n >= 30 ? '; battery active' : '') + '). The throughput projection is gated off until the operator enables it — until then, we publish the trades, not an extrapolation.</p>';
         }
 
         // Phase 1 — Synthetic-Passive (SPY) overlay self-activation.

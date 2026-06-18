@@ -4,7 +4,7 @@
     "dataset_label": "Ekantik 500 trade record",
     "dataset_range": "2023-04-10 – 2026-06-17",
     "last_updated": "2026-06-18T00:34:46.000Z",
-    "description": "Operator live trading record on the Majority Opinion Predisposal Strategy. Historical block (Apr 2023 - Oct 2024) reconciled trade-by-trade from the operator's Telegram alerts channel export. Pre-registration block (May 2026 -> launch) is the post-restart live record. See /falsifiability-protocol.html."
+    "description": "Operator live trading record on the Majority Opinion Predisposal Strategy. Historical block (Apr 2023 - Oct 2024) reconciled trade-by-trade from the operator's Telegram alerts channel export. Pre-registration block (February 2026 -> launch) is the post-restart, witnessed, protocol-bound live record. See /falsifiability-protocol.html."
   },
   "trades": [
     {
