@@ -261,7 +261,14 @@
     window.addEventListener('resize', function () { drawLiveBounded(); });
 
     tradesWithTimeout.then(function (trades) {
-        const live = trades.filter(isProtocolBound);
+        // Public engine record = protocol-bound, ES-equivalent points only.
+        // Excludes the synthetic-passive (SPY) book and any dollar-denominated
+        // IB booster trade (stocks / options / non-ES futures, pts=null) so the
+        // points-based countdown + live-vs-kill chart stay ES-clean. No-op for
+        // the current all-/ES dataset.
+        const live = trades.filter(function (t) {
+            return isProtocolBound(t) && t.book !== 'synthetic_passive' && typeof t.pts === 'number';
+        });
         const n = live.length;
         renderCountdown(n);
         liveBoundedTrades = live;
@@ -280,6 +287,25 @@
         const baseline = document.getElementById('arithBaselineIndicator');
         if (baseline && !EPIG_FLAGS.CLAIMS_THROUGHPUT_ENABLED) {
             baseline.innerHTML = '<p class="arith-baseline__headline"><span class="diamond">◆</span> Engine throughput will be reported here from the protocol-bound live record once the battery activates at 30 closed trades (currently ' + n + '). Until then, we publish the trades — not an extrapolation.</p>';
+        }
+
+        // Phase 1 — Synthetic-Passive (SPY) overlay self-activation.
+        // While there are 0 synthetic_passive trades the Full Stack section shows
+        // "no clean dataset yet". The moment the first overlay trades publish, flip
+        // the IN-TESTING badge clause to an accumulating count and reveal the
+        // status block. The slate IN-TESTING framing stays — accumulating is NOT a
+        // verdict (the overlay gate is a full-cycle beat-or-protect test).
+        const spN = trades.filter(function (t) { return t && t.book === 'synthetic_passive'; }).length;
+        const spLabel = spN + (spN === 1 ? ' trade' : ' trades');
+        const spBadge = document.getElementById('synpassiveBadgeStatus');
+        if (spBadge && spN > 0) {
+            spBadge.textContent = 'live dataset accumulating · ' + spLabel + ' · no verdict yet';
+        }
+        const spStatus = document.getElementById('synpassiveStatus');
+        const spCount = document.getElementById('synpassiveStatusCount');
+        if (spStatus && spN > 0) {
+            if (spCount) spCount.textContent = spLabel;
+            spStatus.hidden = false;
         }
     }).catch(function () {
         renderCountdownFallback();

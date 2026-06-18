@@ -801,3 +801,75 @@
 .dash-monthly__table tbody td.num.pos { color: var(--forest, #2D5016); font-weight: 600; }
 .dash-monthly__table tbody td.num.neg { color: var(--signal, #DC2626); font-weight: 600; }
 .dash-monthly__table tbody tr:hover td { background: rgba(200,169,81,0.05); }
+
+/* ---- Phase 1.5 — Book switcher (engine vs synthetic-passive overlay) ---- */
+.dash-bookbar {
+    margin: 0 0 var(--s-5);
+    padding: var(--s-4) var(--s-5);
+    background: #FAF8F5;
+    border: 1px solid var(--card-border, #E5E1D8);
+    border-radius: 6px;
+}
+.dash-bookbar__row {
+    display: flex;
+    align-items: center;
+    gap: var(--s-5);
+    flex-wrap: wrap;
+}
+.dash-bookbar__label {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+}
+.dash-bookbar__tabs {
+    display: flex;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+}
+.book-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 10px 16px;
+    background: #fff;
+    border: 1px solid var(--card-border, #E5E1D8);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s;
+}
+.book-tab:hover { transform: translateY(-1px); border-color: var(--gold); }
+.book-tab__sub {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--slate);
+    text-transform: none;
+}
+.book-tab.is-active { border-color: var(--gold-deep); background: rgba(184,150,46,0.06); }
+.book-tab.is-active .book-tab__sub { color: var(--gold-deep); }
+.book-tab--testing.is-active { border-color: #64748B; background: rgba(100,116,139,0.08); }
+.book-tab--testing.is-active .book-tab__sub { color: #64748B; }
+.dash-bookbar__notice {
+    margin: var(--s-4) 0 0;
+    padding: 12px 14px;
+    background: rgba(100,116,139,0.10);
+    border-left: 3px solid #64748B;
+    border-radius: 4px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #374151;
+}
+.dash-bookbar__notice .diamond { color: #64748B; }
+.dash-bookbar__notice a { color: #475569; font-weight: 600; }
+.dash-bookbar__notice a:hover { color: var(--navy); }
+
+.dash-meta-period--engine { background: rgba(184,150,46,0.15); color: var(--gold-deep); }
+.dash-meta-period--testing { background: rgba(100,116,139,0.15); color: #475569; }

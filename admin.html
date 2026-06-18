@@ -78,6 +78,22 @@
             </label>
         </div>
 
+        <!-- Default size when the Discord line doesn't specify one.
+             Belt-and-braces fix for the recurring "2 MES → 1 ES" silent fallback
+             (see PRs #105, #107). The parser still PREFERS an explicit size token
+             from the Discord text; this is only used when none was found. -->
+        <div class="strategy-toggle" role="group" aria-label="Default size">
+            <span class="strategy-toggle__label">Default size <span style="font-size:11px;color:var(--slate);font-weight:400">(only used when Discord line has no explicit size)</span></span>
+            <select id="adminDefaultSize" style="font-family:inherit;font-size:14px;padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:#fff">
+                <option value="1ES">1 /ES</option>
+                <option value="1MES">1 /MES</option>
+                <option value="2MES">2 /MES</option>
+                <option value="3MES">3 /MES</option>
+                <option value="5MES">5 /MES</option>
+                <option value="10MES">10 /MES</option>
+            </select>
+        </div>
+
         <!-- Primary drop zone — Discord HTML export -->
         <label class="discord-drop" for="adminFile">
             <input type="file" id="adminFile" accept=".html,.htm,.json,.csv,.txt" hidden>
@@ -88,7 +104,7 @@
                     or <span class="discord-drop__browse">browse for a file</span>
                     — the <a href="https://github.com/Tyrrrz/DiscordChatExporter" target="_blank" rel="noopener" onclick="event.stopPropagation();">DiscordChatExporter</a> <code>.html</code> file
                 </p>
-                <p class="discord-drop__also">Also accepts .csv, .json, or the native trades.json shape</p>
+                <p class="discord-drop__also">Also accepts .csv, .json, the native trades.json shape, or an Interactive Brokers Flex Query (Trades) CSV</p>
             </div>
         </label>
 
@@ -122,7 +138,11 @@ F2: -8.25 H2</code></pre>
                     </div>
                     <div>
                         <h5>CSV / JSON</h5>
-                        <p>Native <code>trades.json</code>, vendor exports (Tradovate, TradeZella, IB), or a generic array of trade objects.</p>
+                        <p>Native <code>trades.json</code>, vendor exports (Tradovate, TradeZella), or a generic array of trade objects.</p>
+                    </div>
+                    <div>
+                        <h5>Interactive Brokers — Flex Query (Trades) CSV</h5>
+                        <p>Auto-detected. Builds <strong>round-trips</strong> from closing executions (uses <code>FifoPnlRealized</code> if present, else FIFO-pairs fills). Each trade is bucketed: <strong>SPY stock / SPY options → Synthetic-Passive</strong>; everything else (ES/MES futures, other options, stocks) → <strong>Booster Engine</strong>. Best results: include <code>AssetClass</code>, <code>UnderlyingSymbol</code>, <code>Buy/Sell</code>, <code>Open/CloseIndicator</code>, <code>FifoPnlRealized</code>, <code>DateTime</code>, <code>Quantity</code>.</p>
                     </div>
                 </div>
             </details>
@@ -150,6 +170,14 @@ F2: -8.25 H2</code></pre>
                     <button class="btn btn--secondary btn--sm" id="adminClearStage">Clear stage</button>
                 </div>
             </header>
+
+            <!-- Fallback-size warning. Rendered by renderPreview() when any trade used
+                 the default size instead of an explicit Discord token. -->
+            <div id="adminFallbackWarn" hidden style="margin:0 0 12px;padding:12px 14px;border-left:3px solid var(--gold-deep);background:rgba(184,150,46,0.10);border-radius:4px;font-size:13.5px;line-height:1.55;color:var(--navy)">
+                <strong style="color:var(--gold-deep);letter-spacing:0.06em;text-transform:uppercase;font-size:11px;display:block;margin-bottom:6px">◆ Verify size before publishing</strong>
+                <span id="adminFallbackWarnBody"></span>
+            </div>
+
             <div class="admin-preview__wrap">
                 <table class="dash-table__table">
                     <thead><tr><th>#</th><th>Timestamp</th><th>Symbol</th><th>Side</th><th>Result</th><th class="num">Pts</th><th>Tag</th></tr></thead>
@@ -223,6 +251,6 @@ git push</code></pre>
     </section>
 </main>
 
-<script src="js/admin.js?v=20260612f"></script>
+<script src="js/admin.js?v=20260617c"></script>
 </body>
 </html>
