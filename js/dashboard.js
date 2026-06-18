@@ -281,7 +281,8 @@
         const rExp = stats.avgLoss > 0 ? mu / stats.avgLoss : 0;
         const wl = stats.avgLoss > 0 ? stats.avgWin / stats.avgLoss : 0;
         const buffer = (stats.winRate - (wl > 0 ? 1 / (1 + wl) : 1)) * 100;
-        // Quick bootstrap (2,000 samples for speed)
+        // Quick bootstrap (2,000 samples for speed; landing uses 5,000 — both
+        // converge well within rounding at typical sample sizes)
         const BOOTS = 2000;
         let pp = 0;
         for (let b = 0; b < BOOTS; b++) {
@@ -291,6 +292,14 @@
         }
         const pProfit = pp / BOOTS;
 
+        // T7 — Max losing streak vs the expected longest run for this win rate.
+        // Pass requires ≤ 7 AND ≤ 2× expected (matches landing). Without the
+        // 2×-expected ceiling, an anomalously long streak that's still under 7
+        // would quietly pass on a high-WR strategy where 7 in a row is severe.
+        const expectedMax = stats.winRate > 0 && stats.winRate < 1
+            ? Math.ceil(Math.log(n) / -Math.log(1 - stats.winRate))
+            : 0;
+
         return [
             { name: '1 · p-value',       val: 'p ' + (pVal < 0.0001 ? '<0.0001' : '=' + pVal.toFixed(3)),  pass: pVal < 0.05 },
             { name: '2 · 95% CI',        val: '[' + (lower>=0?'+':'') + lower.toFixed(2) + ', …]',           pass: lower > 0 },
@@ -298,20 +307,30 @@
             { name: '4 · Top-3 removal', val: (remPnl>=0?'+':'') + remPnl.toFixed(0) + ' pts',                pass: remPnl > 0 && remPf > 1.30 },
             { name: '5 · R-Expectancy',  val: (rExp>=0?'+':'') + rExp.toFixed(2) + 'R',                       pass: rExp > 0.20 },
             { name: '6 · WR Buffer',     val: (buffer>=0?'+':'') + buffer.toFixed(1) + ' pp',                 pass: buffer > 5 },
-            { name: '7 · Max streak',    val: stats.maxStreak + ' losses',                                   pass: stats.maxStreak <= 7 },
+            { name: '7 · Max streak',    val: stats.maxStreak + ' (expected ~' + expectedMax + ')',           pass: stats.maxStreak <= 7 && stats.maxStreak <= 2 * expectedMax },
             { name: '8 · P(profit)',     val: (pProfit*100).toFixed(0) + '%',                                pass: pProfit > 0.90 }
         ];
     }
 
     /* ---------- Render ----------
-       Battery always uses the full record (the canonical 8-test is a sustainability
-       claim on the entire dataset). KPIs + equity curve + trade table respect the
-       active timeframe.
+       Battery is the SUSTAINABILITY CLAIM — it runs on the protocol-bound
+       record (period === 'pre_reg') only, NOT on the full TRADES array.
+       The 196-trade Telegram block is published for transparency, not as a
+       sustainability claim ("excluded from every figure on this page"); the
+       landing-page battery follows the same rule via isProtocolBound(). KPIs
+       + equity curve + trade table respect the active timeframe.
     */
     function render() {
         const tfSlice = tfFilter(TRADES, currentTf);
         const sTf = compute(tfSlice);
-        const sFull = compute(TRADES);
+        // Battery dataset = protocol-bound subset only. Matches landing's
+        // semantics and the site-wide "Telegram excluded from every figure"
+        // promise. Previously this was `compute(TRADES)`, which silently
+        // floated the verdict on the 196 pre-protocol Telegram trades —
+        // producing a false 8/8 PASS on the dashboard while the landing
+        // (correctly running on the protocol-bound record only) showed FAIL.
+        const protocolBound = TRADES.filter(function (t) { return t.period === 'pre_reg'; });
+        const sBattery = compute(protocolBound);
         renderMeta();
         renderTimeframeMeta(sTf, tfSlice.length);
         if (sTf) {
@@ -325,7 +344,7 @@
             document.getElementById('dashChartSub').textContent = '—';
             clearMonthly();
         }
-        if (sFull) renderBattery(sFull);
+        if (sBattery) renderBattery(sBattery);
         applyFilters();   // re-applies search/result/side over the current timeframe slice
     }
 
