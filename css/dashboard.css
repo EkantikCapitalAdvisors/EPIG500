@@ -777,10 +777,50 @@
     border-radius: var(--radius);
     padding: var(--s-5) var(--s-6) var(--s-4);
     margin-bottom: var(--s-6);
+    position: relative;   /* anchor for #monthlyTooltip */
 }
 .dash-monthly #dashMonthlyChart {
     width: 100%; height: auto; aspect-ratio: 1100 / 220;
     display: block; margin: var(--s-3) 0;
+}
+
+/* Monthly P&L bar-chart hover tooltip — pure DOM overlay, no canvas redraw on hover */
+.monthly-tooltip {
+    position: absolute;
+    width: 220px;
+    padding: 10px 12px;
+    background: rgba(18, 38, 74, 0.96);
+    color: #F8FAFC;
+    border-radius: 6px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12.5px;
+    line-height: 1.4;
+    box-shadow: 0 6px 22px rgba(18, 38, 74, 0.28);
+    pointer-events: none;
+    z-index: 20;
+}
+.monthly-tooltip__h {
+    margin: 0 0 6px;
+    padding: 0 0 6px;
+    border-bottom: 1px solid rgba(248, 250, 252, 0.18);
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #FCD34D;
+}
+.monthly-tooltip__row {
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: #CBD5E1;
+}
+.monthly-tooltip__row + .monthly-tooltip__row { margin-top: 3px; }
+.monthly-tooltip__row > span:last-child { color: #F8FAFC; }
+.monthly-tooltip__row--net {
+    margin-top: 6px !important;
+    padding-top: 6px;
+    border-top: 1px solid rgba(248, 250, 252, 0.18);
 }
 .dash-monthly__table-wrap { overflow-x: auto; margin-top: var(--s-4); }
 .dash-monthly__table {

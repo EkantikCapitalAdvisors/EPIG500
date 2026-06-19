@@ -491,8 +491,11 @@
         ctx.strokeStyle = 'rgba(27,42,74,0.3)'; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(PAD_L, y0); ctx.lineTo(W - PAD_R, y0); ctx.stroke();
 
-        // Bars
+        // Bars — also record hit-boxes for the hover tooltip (one box per
+        // month column; whole column is forgiving hover, not just the bar).
         const barW = Math.min(28, Math.max(6, (W - PAD_L - PAD_R) / n * 0.7));
+        const colW = (W - PAD_L - PAD_R) / Math.max(1, n);
+        canvas._bars = [];
         for (let i = 0; i < n; i++) {
             const m = months[i];
             const cx = x(i);
@@ -500,7 +503,9 @@
             const yBot = y(Math.min(m.net, 0));
             ctx.fillStyle = m.net >= 0 ? '#C8A951' : '#DC2626';
             ctx.fillRect(cx - barW / 2, yTop, barW, Math.max(1, yBot - yTop));
+            canvas._bars.push({ i: i, m: m, cx: cx, colW: colW, yTop: yTop, yBot: yBot });
         }
+        canvas._book = currentBook;
 
         // X labels — first, last, and every few in between
         ctx.fillStyle = '#64748B'; ctx.textAlign = 'center';
@@ -509,6 +514,67 @@
             if (i % every !== 0 && i !== n - 1) continue;
             ctx.fillText(months[i].label, x(i), H - PAD_B + 16);
         }
+
+        attachMonthlyHover(canvas);
+    }
+
+    /* Hover tooltip on the monthly bar chart — per-month points/$.
+       Idempotent listener binding: re-attaches the tooltip element once, then
+       relies on canvas._bars (refreshed every drawMonthlyChart) for hit-test. */
+    function attachMonthlyHover(canvas) {
+        let tip = document.getElementById('monthlyTooltip');
+        if (!tip) {
+            tip = document.createElement('div');
+            tip.id = 'monthlyTooltip';
+            tip.className = 'monthly-tooltip';
+            tip.hidden = true;
+            // Append into the chart section (made position:relative via CSS)
+            canvas.parentElement.appendChild(tip);
+        }
+        if (canvas._tipBound) return;
+        canvas._tipBound = true;
+
+        function fmtPts(v) { return (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(2) + ' pts'; }
+        function fmtDol(v) { return (v >= 0 ? '+$' : '−$') + Math.abs(Math.round(v)).toLocaleString(); }
+
+        canvas.addEventListener('mousemove', function (e) {
+            if (!canvas._bars || !canvas._bars.length) { tip.hidden = true; return; }
+            const rect = canvas.getBoundingClientRect();
+            const mx = e.clientX - rect.left;
+            const hit = canvas._bars.find(function (b) {
+                return mx >= b.cx - b.colW / 2 && mx < b.cx + b.colW / 2;
+            });
+            if (!hit) { tip.hidden = true; return; }
+            const m = hit.m;
+            const isSpy = canvas._book === 'synthetic_passive';
+            const wrPct = (m.wr * 100).toFixed(0) + '%';
+            // For SPY: m.net is already $ (projected from `dollars`). For engine:
+            // m.net is points, $ = m.net × 50 per /ES contract.
+            const netLine = isSpy
+                ? '<strong style="color:' + (m.net >= 0 ? '#C8A951' : '#DC2626') + '">' + fmtDol(m.net) + '</strong>'
+                : '<strong style="color:' + (m.net >= 0 ? '#C8A951' : '#DC2626') + '">' + fmtPts(m.net) + '</strong>'
+                  + ' <span style="color:#94A3B8">· ' + fmtDol(m.net * 50) + ' / ctr</span>';
+            const bestLine = isSpy ? fmtDol(m.best) : fmtPts(m.best);
+            const worstLine = isSpy ? fmtDol(m.worst) : fmtPts(m.worst);
+
+            tip.innerHTML =
+                  '<p class="monthly-tooltip__h">' + m.label + '</p>'
+                + '<p class="monthly-tooltip__row"><span>Trades</span><span><strong>' + m.n + '</strong> · ' + m.wins + ' W / ' + m.losses + (m.be ? ' / ' + m.be + ' BE' : '') + '</span></p>'
+                + '<p class="monthly-tooltip__row"><span>Win rate</span><span>' + wrPct + '</span></p>'
+                + '<p class="monthly-tooltip__row monthly-tooltip__row--net"><span>Net</span><span>' + netLine + '</span></p>'
+                + '<p class="monthly-tooltip__row"><span>Best</span><span style="color:#2D5016">' + bestLine + '</span></p>'
+                + '<p class="monthly-tooltip__row"><span>Worst</span><span style="color:#DC2626">' + worstLine + '</span></p>';
+
+            // Position: prefer right of cursor; flip to the left if it would overflow
+            const W = canvas.clientWidth;
+            const tipW = 220;
+            const xPos = (mx + tipW + 18 < W) ? (mx + 14) : (mx - tipW - 14);
+            const yPos = Math.max(8, Math.min(canvas.clientHeight - 160, e.clientY - rect.top - 10));
+            tip.style.left = xPos + 'px';
+            tip.style.top = yPos + 'px';
+            tip.hidden = false;
+        });
+        canvas.addEventListener('mouseleave', function () { tip.hidden = true; });
     }
 
     function niceStep(maxAbs) {
