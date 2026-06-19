@@ -83,7 +83,7 @@
     */
     const DEFAULT_SIZE_KEY = 'epig500_admin_default_size_v1';
     function readDefaultSizeCode() {
-        try { return localStorage.getItem(DEFAULT_SIZE_KEY) || '1ES'; } catch (e) { return '1ES'; }
+        try { return localStorage.getItem(DEFAULT_SIZE_KEY) || '2MES'; } catch (e) { return '2MES'; }
     }
     function writeDefaultSizeCode(code) {
         try { localStorage.setItem(DEFAULT_SIZE_KEY, code); } catch (e) {}
