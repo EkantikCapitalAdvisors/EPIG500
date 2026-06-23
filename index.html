@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260618f">
+    <link rel="stylesheet" href="css/style.css?v=20260623a">
 
     <script type="application/ld+json">
     {
@@ -93,7 +93,7 @@
                 EPIG 500 targets <span class="hero-num">~17–26%</span> a year — on an architecture engineered to hold drawdown under <span class="hero-num">10%</span>.
             </h1>
             <p class="hero__sub">
-                An <strong>80/20 barbell</strong> — <strong>80% SPY, 20% cash</strong> — with a disciplined, hard-killed <strong>/ES futures engine</strong> compounding on top. <em>Foundation <span class="num">+6–11%/yr</span> + Engine <span class="num">(30R × 0.5% NLV → +11–15%/yr)</span> ≈ <span class="num">17–26%/yr</span>, drawdown standard <span class="num">&lt;10%</span>.</em> We don't promise the range. We publish the live record against it, trade by trade — and every condition under which we'd stop.
+                An <strong>80/20 barbell</strong> — <strong>80% SPY, 20% cash</strong> — with a disciplined, hard-killed <strong>/ES futures engine</strong> compounding on top. We don't promise the range. We publish the live record against it, trade by trade — and every condition under which we'd stop.
             </p>
 
             <aside class="hero__compliance" role="note" aria-label="Hero compliance">
@@ -115,6 +115,42 @@
 
             <p class="hero__cta-sub">Educational only. Not investment advice. No solicitation. Pre-registration creates no obligation on either side.</p>
         </div>
+    </div>
+</section>
+
+<!-- ============ 1b. THE HONEST PROBLEM ============ -->
+<section class="section section--ivory" id="problem">
+    <div class="container container--narrow">
+        <header class="section__header">
+            <p class="eyebrow"><span class="diamond">◆</span> The Honest Problem</p>
+            <h2 class="section__h">Passive indexing has one honest limit: it returns the market.</h2>
+        </header>
+
+        <div class="prose">
+            <p>On the 80% of the book that sits in the S&amp;P 500, passive <em>is</em> the market — pure beta. And beta cannot beat itself. So there are only two ways to make that allocation outperform.</p>
+
+            <p>You can <strong>leverage</strong> it — and double the drawdown in precisely the years that matter. That isn't outperformance; it's the same bet, louder.</p>
+
+            <p>Or you can <strong>capture it asymmetrically</strong> — keep the market's upside, take less of its declines. We do the second. It is the only honest engine for outperformance that survives a bad year, and it does not come from leverage.</p>
+        </div>
+
+        <figure class="pullquote">
+            <blockquote>Beta cannot beat itself.</blockquote>
+        </figure>
+
+        <div class="prose">
+            <h3 class="prose__subh">The mechanism — in plain terms.</h3>
+            <p>The overlay holds your S&amp;P 500 position <strong>fully invested by default</strong> — through new highs, through noise, untouched. It steps exposure down only when the market's largest pools of capital actually begin to sell, and it steps further aside as that selling broadens. Full participation up. Less of the drawdown down. The gap between those two is alpha — and it is manufactured by discipline, not borrowing.</p>
+
+            <h3 class="prose__subh">And because faith is not a strategy —</h3>
+            <p>The overlay carries its own kill condition, published in advance. If, across a full market cycle, it neither beats the index nor takes less of its drawdown, it is declared falsified — and your foundation reverts to pure passive, in public, on the dashboard. We would rather retire a mechanism honestly than defend one quietly.</p>
+        </div>
+
+        <figure class="pullquote">
+            <blockquote>Take what runs on heroics — and put it on a system.</blockquote>
+        </figure>
+
+        <p class="compliance" style="text-align:center;margin-top:var(--s-5)"><em>Design intent. The synthetic-passive overlay carries no verdict yet — its beat-or-protect gate is measured over a full market cycle; any live record is early and published trade by trade for transparency. Nothing here is a forecast or a guarantee.</em></p>
     </div>
 </section>
 
@@ -158,35 +194,6 @@
             <p>The architecture is a barbell. <strong>80% SPY</strong> carries market exposure and dividends, and serves as the engine's collateral. <strong>20% cash</strong> is the operational buffer that lets the engine run without disturbing the foundation. A disciplined <strong>/ES futures engine</strong> rides on top — sized to a fixed <strong class="num">0.5%</strong>-per-trade risk, scaled only on realized profit, and <strong>hard-killed in advance</strong>.</p>
         </div>
 
-        <!-- Decomposition strip — where the 17–26%/yr target comes from. Mirrors
-             the operator deck slide "How the architecture stacks over time" stripe.
-             Foundation range from the modeled synthetic-passive overlay; Engine range
-             from the live dashboard's protocol-bound R-expectancy × trades/yr at the
-             0.5% NLV anchor, haircut to 30R per the operator's conservative pacing. -->
-        <aside class="decomp-strip" aria-label="How the 17–26% per year target adds up">
-            <p class="decomp-strip__eyebrow"><span class="diamond">◆</span> How the target adds up</p>
-            <div class="decomp-strip__grid">
-                <div class="decomp-strip__term">
-                    <p class="decomp-strip__term-label">Foundation <span class="decomp-strip__term-sub">~80% SPY</span></p>
-                    <p class="decomp-strip__term-val num">+6–11%/yr</p>
-                </div>
-                <p class="decomp-strip__op" aria-hidden="true">+</p>
-                <div class="decomp-strip__term">
-                    <p class="decomp-strip__term-label">Engine <span class="decomp-strip__term-sub"><span class="num">30R × 0.5% NLV</span></span></p>
-                    <p class="decomp-strip__term-val num">+11–15%/yr</p>
-                </div>
-                <p class="decomp-strip__op" aria-hidden="true">=</p>
-                <div class="decomp-strip__term decomp-strip__term--total">
-                    <p class="decomp-strip__term-label">Stack target <span class="decomp-strip__term-sub">drawdown standard <span class="num">&lt;10%</span></span></p>
-                    <p class="decomp-strip__term-val num">≈ 17–26%/yr</p>
-                </div>
-            </div>
-            <p class="decomp-strip__basis">
-                <em>Engine basis</em> — Annual R = R-expectancy × trades/yr from the <a href="/dashboard.html" data-cta="dashboard-from-decomp">live dashboard</a>, at the <span class="num">0.5%</span> per-trade architectural risk anchor. <strong><span class="num">30R</span> is a conservative haircut, not a promise.</strong> Foundation range is the modeled overlay (no live verdict yet). <strong>Past performance does not guarantee future results.</strong>
-            </p>
-        </aside>
-
-        <!-- Sub-block: what holds drawdown under 10% — engineered, not promised -->
         <aside class="dd-standard" aria-label="What holds drawdown under 10%">
             <p class="dd-standard__h"><span class="diamond">◆</span> What holds drawdown under <span class="num">10%</span></p>
             <p class="dd-standard__lede">The sub-<span class="num">10%</span> standard is engineered, not promised — it rests on stacked, pre-published constraints:</p>
@@ -212,6 +219,66 @@
             <p>This engine pursues return, not a fixed income schedule. Results are variable and realized as positions close. We do not project a number — we publish the record, trade by trade, and the exact conditions under which we'd declare the edge dead and stop.</p>
             <p class="proven-engine__callout-cta"><a href="/dashboard.html" data-cta="dashboard-proven-engine">Open the live dashboard →</a></p>
         </aside>
+    </div>
+</section>
+
+<!-- ============ 1c-mid. ENGINE LIVE RECORD vs. KILL BOUNDARIES (moved up from Arithmetic; sits adjacent to Overlay) ============ -->
+<section class="section section--ivory" id="engine-live-bounded">
+    <div class="container">
+        <!-- Live record vs. kill boundaries — approved mockup (Manish Dharod countersignature,
+             2026-06-12). Draws only closed, protocol-bound Period 2 trades plus the armed ED-05
+             drawdown thresholds from FP-MOPS-V1.6. No projection, no extrapolation; claim gates
+             (CLAIMS_THROUGHPUT_ENABLED / BOOSTER_TOGGLE_ENABLED) remain OFF. Hidden until the
+             live data loads; stays hidden on fetch failure. -->
+        <div class="live-bounded" id="liveBounded" hidden>
+            <header class="live-bounded__head">
+                <h3 class="live-bounded__h">The live record, drawn against its kill boundaries.</h3>
+                <p class="live-bounded__sub">Every point below is a closed, protocol-bound Period 2 trade, published within 24 hours of close. The red lines are not annotations — they are armed kill conditions from the locked protocol: the <strong>ED-05a drawdown warning (peak − 45 /ES pts)</strong> and the <strong>ED-05b hard kill (peak − 100 /ES pts · $5,000 per contract)</strong>, both measured peak-to-trough, so both floors ratchet up with every new equity high. The upside is witnessed, never promised; the downside is engineered.</p>
+            </header>
+            <canvas id="liveBoundedCanvas" width="1100" height="340" aria-label="Cumulative /ES points of the protocol-bound live record, plotted against the ED-05a warning floor and the ED-05b hard-kill floor, which ratchet up with each new equity high."></canvas>
+            <div class="live-bounded__legend">
+                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--earned"></span> Protocol-bound live record (Period 2) · cumulative /ES points</span>
+                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--hard"></span> ED-05b hard kill floor · peak − 100 pts</span>
+                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--warn"></span> ED-05a warning · peak − 45 pts</span>
+            </div>
+            <p class="live-bounded__stat" id="liveBoundedStat"></p>
+            <p class="compliance">Past performance does not guarantee future results. The 8-test battery is now active on the protocol-bound record (binding at 100+ closed trades). Kill thresholds describe operating commitments by the firm, not guarantees against loss; a gate-fire does not guarantee preservation of capital. Chart shows realized, published trades only — no extrapolation.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 1b. HOW THE TARGET ADDS UP — decomposition strip (moved from §1a; now its own beat after the live proof) ============ -->
+<section class="section section--ivory" id="how-the-target-adds-up">
+    <div class="container">
+        <!-- Decomposition strip — where the 17–26%/yr target comes from. Mirrors
+             the operator deck slide "How the architecture stacks over time" stripe.
+             Foundation range from the modeled synthetic-passive overlay; Engine range
+             from the live dashboard's protocol-bound R-expectancy × trades/yr at the
+             0.5% NLV anchor, haircut to 30R per the operator's conservative pacing. -->
+        <aside class="decomp-strip decomp-strip--standalone" aria-label="How the 17–26% per year target adds up">
+            <p class="decomp-strip__eyebrow"><span class="diamond">◆</span> How the target adds up</p>
+            <div class="decomp-strip__grid">
+                <div class="decomp-strip__term">
+                    <p class="decomp-strip__term-label">Foundation <span class="decomp-strip__term-sub">~80% SPY</span></p>
+                    <p class="decomp-strip__term-val num">+6–11%/yr</p>
+                </div>
+                <p class="decomp-strip__op" aria-hidden="true">+</p>
+                <div class="decomp-strip__term">
+                    <p class="decomp-strip__term-label">Engine <span class="decomp-strip__term-sub"><span class="num">30R × 0.5% NLV</span></span></p>
+                    <p class="decomp-strip__term-val num">+11–15%/yr</p>
+                </div>
+                <p class="decomp-strip__op" aria-hidden="true">=</p>
+                <div class="decomp-strip__term decomp-strip__term--total">
+                    <p class="decomp-strip__term-label">Stack target <span class="decomp-strip__term-sub">drawdown standard <span class="num">&lt;10%</span></span></p>
+                    <p class="decomp-strip__term-val num">≈ 17–26%/yr</p>
+                </div>
+            </div>
+            <p class="decomp-strip__basis">
+                <em>Engine basis</em> — Annual R = R-expectancy × trades/yr from the <a href="/dashboard.html" data-cta="dashboard-from-decomp">live dashboard</a>, at the <span class="num">0.5%</span> per-trade architectural risk anchor. <strong><span class="num">30R</span> is a conservative haircut, not a promise.</strong> Foundation range is the modeled overlay (no live verdict yet). <strong>Past performance does not guarantee future results.</strong>
+            </p>
+        </aside>
+
+        <!-- Sub-block: what holds drawdown under 10% — engineered, not promised -->
     </div>
 </section>
 
@@ -253,6 +320,18 @@
                 <a class="btn btn--primary btn--sm" href="/run-the-math.html#battery" data-cta="runmath-battery-from-proof">Run the battery on the live record →</a>
                 <a class="btn btn--ghost btn--sm" href="/dashboard.html" data-cta="dashboard-from-proof">Open the live dashboard ↗</a>
             </p>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 1c. RUN-THE-MATH STRIP (Simplification §2.13 — replaces 4-calculator hub) ============ -->
+<section class="section section--white" id="run-the-math-strip">
+    <div class="container container--narrow" style="text-align:center">
+        <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> Every claim on this page reduces to arithmetic.</p>
+        <h2 class="section__h section__h--center">Don't take our word for it. Run the math.</h2>
+        <p class="section__sub" style="text-align:center;margin:var(--s-4) auto 0;max-width:680px">Four calculators — the Repair Bill, the Volatility Tax, the volatility opportunity/lag explorer, and the Worst Case Priced — plus the 8-test sustainability battery with a your-own-data uploader. All client-side; your data never leaves the browser.</p>
+        <div class="hero__cta" style="justify-content:center;margin-top:var(--s-5)">
+            <a href="/run-the-math.html" class="btn btn--primary btn--lg" data-cta="runmath-from-strip">Run the Math →</a>
         </div>
     </div>
 </section>
@@ -455,31 +534,6 @@
     </div>
 </section>
 
-<!-- ============ 1c-mid. ENGINE LIVE RECORD vs. KILL BOUNDARIES (moved up from Arithmetic; sits adjacent to Overlay) ============ -->
-<section class="section section--ivory" id="engine-live-bounded">
-    <div class="container">
-        <!-- Live record vs. kill boundaries — approved mockup (Manish Dharod countersignature,
-             2026-06-12). Draws only closed, protocol-bound Period 2 trades plus the armed ED-05
-             drawdown thresholds from FP-MOPS-V1.6. No projection, no extrapolation; claim gates
-             (CLAIMS_THROUGHPUT_ENABLED / BOOSTER_TOGGLE_ENABLED) remain OFF. Hidden until the
-             live data loads; stays hidden on fetch failure. -->
-        <div class="live-bounded" id="liveBounded" hidden>
-            <header class="live-bounded__head">
-                <h3 class="live-bounded__h">The live record, drawn against its kill boundaries.</h3>
-                <p class="live-bounded__sub">Every point below is a closed, protocol-bound Period 2 trade, published within 24 hours of close. The red lines are not annotations — they are armed kill conditions from the locked protocol: the <strong>ED-05a drawdown warning (peak − 45 /ES pts)</strong> and the <strong>ED-05b hard kill (peak − 100 /ES pts · $5,000 per contract)</strong>, both measured peak-to-trough, so both floors ratchet up with every new equity high. The upside is witnessed, never promised; the downside is engineered.</p>
-            </header>
-            <canvas id="liveBoundedCanvas" width="1100" height="340" aria-label="Cumulative /ES points of the protocol-bound live record, plotted against the ED-05a warning floor and the ED-05b hard-kill floor, which ratchet up with each new equity high."></canvas>
-            <div class="live-bounded__legend">
-                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--earned"></span> Protocol-bound live record (Period 2) · cumulative /ES points</span>
-                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--hard"></span> ED-05b hard kill floor · peak − 100 pts</span>
-                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--warn"></span> ED-05a warning · peak − 45 pts</span>
-            </div>
-            <p class="live-bounded__stat" id="liveBoundedStat"></p>
-            <p class="compliance">Past performance does not guarantee future results. The 8-test battery is now active on the protocol-bound record (binding at 100+ closed trades). Kill thresholds describe operating commitments by the firm, not guarantees against loss; a gate-fire does not guarantee preservation of capital. Chart shows realized, published trades only — no extrapolation.</p>
-        </div>
-    </div>
-</section>
-
 <!-- ============ 1c-end. PROVEN ENGINE → OVERLAY SERVICE bridge ============ -->
 <section class="section section--ivory proven-engine__bridge">
     <div class="container container--narrow">
@@ -540,42 +594,6 @@
             <a href="#talk" class="btn btn--primary btn--lg" data-cta="founder-call-overlay">Request a Founder Conversation →</a>
             <p class="overlay__cta-sub">Educational only — no investment is being offered.</p>
         </div>
-    </div>
-</section>
-
-<!-- ============ 1b. THE HONEST PROBLEM ============ -->
-<section class="section section--ivory" id="problem">
-    <div class="container container--narrow">
-        <header class="section__header">
-            <p class="eyebrow"><span class="diamond">◆</span> The Honest Problem</p>
-            <h2 class="section__h">Passive indexing has one honest limit: it returns the market.</h2>
-        </header>
-
-        <div class="prose">
-            <p>On the 80% of the book that sits in the S&amp;P 500, passive <em>is</em> the market — pure beta. And beta cannot beat itself. So there are only two ways to make that allocation outperform.</p>
-
-            <p>You can <strong>leverage</strong> it — and double the drawdown in precisely the years that matter. That isn't outperformance; it's the same bet, louder.</p>
-
-            <p>Or you can <strong>capture it asymmetrically</strong> — keep the market's upside, take less of its declines. We do the second. It is the only honest engine for outperformance that survives a bad year, and it does not come from leverage.</p>
-        </div>
-
-        <figure class="pullquote">
-            <blockquote>Beta cannot beat itself.</blockquote>
-        </figure>
-
-        <div class="prose">
-            <h3 class="prose__subh">The mechanism — in plain terms.</h3>
-            <p>The overlay holds your S&amp;P 500 position <strong>fully invested by default</strong> — through new highs, through noise, untouched. It steps exposure down only when the market's largest pools of capital actually begin to sell, and it steps further aside as that selling broadens. Full participation up. Less of the drawdown down. The gap between those two is alpha — and it is manufactured by discipline, not borrowing.</p>
-
-            <h3 class="prose__subh">And because faith is not a strategy —</h3>
-            <p>The overlay carries its own kill condition, published in advance. If, across a full market cycle, it neither beats the index nor takes less of its drawdown, it is declared falsified — and your foundation reverts to pure passive, in public, on the dashboard. We would rather retire a mechanism honestly than defend one quietly.</p>
-        </div>
-
-        <figure class="pullquote">
-            <blockquote>Take what runs on heroics — and put it on a system.</blockquote>
-        </figure>
-
-        <p class="compliance" style="text-align:center;margin-top:var(--s-5)"><em>Design intent. The synthetic-passive overlay carries no verdict yet — its beat-or-protect gate is measured over a full market cycle; any live record is early and published trade by trade for transparency. Nothing here is a forecast or a guarantee.</em></p>
     </div>
 </section>
 
@@ -713,68 +731,6 @@
     </div>
 </section>
 
-
-<!-- ============ 2. HOW IT WORKS — Synthetic-Passive Architecture (deep detail; nav points to the §1a barbell diagram instead) ============ -->
-<section class="section section--white" id="how-detail">
-    <div class="container">
-        <div class="two-col">
-            <div class="two-col__left">
-                <p class="eyebrow"><span class="diamond">◆</span> The Architecture (Educational)</p>
-                <h2 class="section__h">One account. A foundation that protects itself, and an engine that compounds on top.</h2>
-                <div class="prose">
-                    <p>Ekantik 500 documents a methodology — a <strong>synthetic-passive S&amp;P 500 foundation</strong> with a futures booster engine on top — being developed for an eventual separately managed account product custodied at Interactive Brokers. Today, it is an educational study: the structure, the live operator record, and the falsifiability conditions are published openly for review before any investor capital is accepted.</p>
-                    <p>The methodology proposes three components inside one account. <strong>The foundation</strong> (~80%) is the S&amp;P 500 — passive by default, with a published, rules-based overlay that reduces exposure in genuine corrections and restores it as buyers return. The foundation no longer simply rides the market both ways; it is engineered to take less of the downside. <strong>The buffer</strong> (~20% cash) is the operational shock absorber that lets the engine run without disturbing the foundation. <strong>The engine</strong> (futures overlay) compounds earned, disciplined scaling on top — each additional contract paid for by realized profit.</p>
-                    <p><strong>The honest dependency:</strong> when the overlay reduces the foundation, the SPY collateral backing the futures engine reduces with it. The two are coordinated by rule, not improvised — the engine's sizing and the cash buffer are governed accordingly per the locked Falsifiability Protocol.</p>
-                </div>
-            </div>
-
-            <div class="two-col__right">
-                <div class="component-card">
-                    <article class="component">
-                        <p class="component__tag"><span class="diamond">◆</span> The Foundation</p>
-                        <p class="component__alloc">~80% of net liquidation value (NLV) — SPY · synthetic-passive</p>
-                        <p class="component__role">Market exposure + dividends + margin collateral — overlay reduces in genuine corrections</p>
-                    </article>
-                    <article class="component">
-                        <p class="component__tag"><span class="diamond">◆</span> The Buffer</p>
-                        <p class="component__alloc">~20% of NLV (cash)</p>
-                        <p class="component__role">Daily settlement absorption — NOT parked capital</p>
-                    </article>
-                    <article class="component component--gold">
-                        <p class="component__tag"><span class="diamond">◆</span> The Engine</p>
-                        <p class="component__alloc">1 /ES per $100K (Std) or $75K (Enh)</p>
-                        <p class="component__role">The compounding overlay</p>
-                    </article>
-                </div>
-
-                <details class="structure-accordion">
-                    <summary>How the proposed account structure works (5 commitments)</summary>
-                    <ol class="numbered-card">
-                        <li><h3>Sub-account, investor custody (proposed)</h3><p>At launch, accounts will be opened at Interactive Brokers in the investor's own name. The structure is being documented now so it can be reviewed before the product opens.</p></li>
-                        <li><h3>Limited trading authority (proposed)</h3><p>To be granted via a one-page Letter of Direction. Authority strictly bounded to futures and options activity. Revocable at any time.</p></li>
-                        <li><h3>Synthetic-passive funding</h3><p>SPY foundation governed by the published overlay rules, 20% cash buffer for operational settlement, and the active /ES futures engine on top.</p></li>
-                        <li><h3>Real-time transparency</h3><p>Read-only broker access will expose every trade, every position, every dollar — the same transparency already applied to the published live pre-registration record.</p></li>
-                        <!-- <li><h3>Performance fee structure (proposed)</h3><p>6% high-watermark hurdle plus 25% of profits above that hurdle. Documented in advance for educational review.</p></li> -->
-                        <li><h3>No lock-up (proposed)</h3><p>Capital will be withdrawable at any time subject to ordinary broker settlement timelines.</p></li>
-                    </ol>
-                </details>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<!-- ============ 1c. RUN-THE-MATH STRIP (Simplification §2.13 — replaces 4-calculator hub) ============ -->
-<section class="section section--white" id="run-the-math-strip">
-    <div class="container container--narrow" style="text-align:center">
-        <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> Every claim on this page reduces to arithmetic.</p>
-        <h2 class="section__h section__h--center">Don't take our word for it. Run the math.</h2>
-        <p class="section__sub" style="text-align:center;margin:var(--s-4) auto 0;max-width:680px">Four calculators — the Repair Bill, the Volatility Tax, the volatility opportunity/lag explorer, and the Worst Case Priced — plus the 8-test sustainability battery with a your-own-data uploader. All client-side; your data never leaves the browser.</p>
-        <div class="hero__cta" style="justify-content:center;margin-top:var(--s-5)">
-            <a href="/run-the-math.html" class="btn btn--primary btn--lg" data-cta="runmath-from-strip">Run the Math →</a>
-        </div>
-    </div>
-</section>
 
 <!-- ============ 2a. THE FOUNDER ============ -->
 <section class="section section--ivory" id="founder">
