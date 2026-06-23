@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260623a">
+    <link rel="stylesheet" href="css/style.css?v=20260623b">
 
     <script type="application/ld+json">
     {
@@ -274,7 +274,7 @@
                 </div>
             </div>
             <p class="decomp-strip__basis">
-                <em>Engine basis</em> — Annual R = R-expectancy × trades/yr from the <a href="/dashboard.html" data-cta="dashboard-from-decomp">live dashboard</a>, at the <span class="num">0.5%</span> per-trade architectural risk anchor. <strong><span class="num">30R</span> is a conservative haircut, not a promise.</strong> Foundation range is the modeled overlay (no live verdict yet). <strong>Past performance does not guarantee future results.</strong>
+                <em>Engine basis</em> — Annual R = R-expectancy × trades/yr from the <a href="/dashboard.html" data-cta="dashboard-from-decomp">live dashboard</a>, at the <span class="num">0.5%</span> per-trade architectural risk anchor. <strong><span class="num">30R</span> is a conservative haircut, not a promise</strong> — and the <strong>gate that would <em>stop</em> the engine</strong> is published separately as a hard kill (<a href="#falsifiability">Falsifiability · ED-05b</a>), not as a softer number inside this math. Foundation range is the modeled overlay (no live verdict yet). <strong>Past performance does not guarantee future results.</strong>
             </p>
         </aside>
 
@@ -679,58 +679,47 @@
             <h3 class="fullstack__h">7.3 — EPIG: four design objectives, one architecture</h3>
             <p>The E·P·I·G framing belongs here, with the Full Stack — it names the four engineering objectives the complete architecture is engineered to target. The synthetic-passive references inside the pillars below carry the IN-TESTING signal above.</p>
         </div>
-    </div>
-</section>
 
-<!-- ============ 2b. EPIG FOUR DESIGN PILLARS ============ -->
-<section class="section section--white" id="epig">
-    <div class="container">
-        <header class="section__header section__header--center">
-            <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> What E·P·I·G stands for</p>
-            <h2 class="section__h section__h--lg">Four design objectives, one architecture</h2>
-            <p class="section__sub">The name encodes the design intent. Each letter names an objective the architecture is engineered to target — not a return guarantee, not a promise. Pre-registration is the window to evaluate whether the engineering choices below actually deliver on each objective when the live record accumulates.</p>
-        </header>
+        <div id="epig" class="fullstack__pillars-wrap">
+    <div class="pillars-grid">
+                <article class="pillar-card">
+                    <p class="pillar-card__letter">E</p>
+                    <h3 class="pillar-card__h">Enduring</h3>
+                    <p class="pillar-card__sub">Built to survive market regimes</p>
+                    <p class="pillar-card__body">Two falsifiability gates — armed before live capital — would publish a stop signal the moment edge or operator fidelity breach the published thresholds. The 8-test sustainability battery activates once the live record reaches 30+ closed trades. The architecture is engineered for decades, not headline quarters.</p>
+                    <p class="pillar-card__anchor"><a href="#falsifiability">See the falsifiability gates →</a></p>
+                </article>
 
-        <div class="pillars-grid">
-            <article class="pillar-card">
-                <p class="pillar-card__letter">E</p>
-                <h3 class="pillar-card__h">Enduring</h3>
-                <p class="pillar-card__sub">Built to survive market regimes</p>
-                <p class="pillar-card__body">Two falsifiability gates — armed before live capital — would publish a stop signal the moment edge or operator fidelity breach the published thresholds. The 8-test sustainability battery activates once the live record reaches 30+ closed trades. The architecture is engineered for decades, not headline quarters.</p>
-                <p class="pillar-card__anchor"><a href="#falsifiability">See the falsifiability gates →</a></p>
-            </article>
+                <article class="pillar-card">
+                    <p class="pillar-card__letter">P</p>
+                    <h3 class="pillar-card__h">Principal Preservation</h3>
+                    <p class="pillar-card__sub">Engineered to preserve capital first</p>
+                    <p class="pillar-card__body">80% of capital sits in the <strong>synthetic-passive</strong> S&amp;P 500 foundation — passive by default, reduced by published overlay rules in genuine corrections. 20% is held in cash as an operational settlement buffer. On the futures engine, per-/ES-contract risk is fixed at <strong>0.5% NLV</strong> — the architectural anchor never changes. A trailing daily cap, a HWM−5% NLV floor, and a hard kill at −100 cumulative /ES points ($5,000 per contract) bound the worst case.</p>
+                    <p class="pillar-card__anchor"><a href="#ladder">See the risk cadence →</a></p>
+                </article>
 
-            <article class="pillar-card">
-                <p class="pillar-card__letter">P</p>
-                <h3 class="pillar-card__h">Principal Preservation</h3>
-                <p class="pillar-card__sub">Engineered to preserve capital first</p>
-                <p class="pillar-card__body">80% of capital sits in the <strong>synthetic-passive</strong> S&amp;P 500 foundation — passive by default, reduced by published overlay rules in genuine corrections. 20% is held in cash as an operational settlement buffer. On the futures engine, per-/ES-contract risk is fixed at <strong>0.5% NLV</strong> — the architectural anchor never changes. A trailing daily cap, a HWM−5% NLV floor, and a hard kill at −100 cumulative /ES points ($5,000 per contract) bound the worst case.</p>
-                <p class="pillar-card__anchor"><a href="#ladder">See the risk cadence →</a></p>
-            </article>
+                <article class="pillar-card">
+                    <p class="pillar-card__letter">I</p>
+                    <h3 class="pillar-card__h">Income</h3>
+                    <p class="pillar-card__sub">Realized return from the engine</p>
+                    <p class="pillar-card__body">Income — realized return from the engine as positions close: variable and return-seeking, reported from the live record in the engine's own units. This is not a fixed monthly schedule — a predictable, principal-protected income product is a separate strategy. The engine's role here is earned return on top of the foundation, capped per trade and hard-killed.</p>
+                    <p class="pillar-card__anchor"><a href="/dashboard.html">See the live record →</a></p>
+                </article>
 
-            <article class="pillar-card">
-                <p class="pillar-card__letter">I</p>
-                <h3 class="pillar-card__h">Income</h3>
-                <p class="pillar-card__sub">Realized return from the engine</p>
-                <p class="pillar-card__body">Income — realized return from the engine as positions close: variable and return-seeking, reported from the live record in the engine's own units. This is not a fixed monthly schedule — a predictable, principal-protected income product is a separate strategy. The engine's role here is earned return on top of the foundation, capped per trade and hard-killed.</p>
-                <p class="pillar-card__anchor"><a href="/dashboard.html">See the live record →</a></p>
-            </article>
-
-            <article class="pillar-card">
-                <p class="pillar-card__letter">G</p>
-                <h3 class="pillar-card__h">Growth</h3>
-                <p class="pillar-card__sub">Compounding on a passive foundation</p>
-                <p class="pillar-card__body">A synthetic-passive S&amp;P 500 foundation carries baseline market exposure — held fully invested by default, with the published overlay reducing exposure only in genuine corrections. The /ES engine layers disciplined, <em>earned</em> scaling on top — each additional contract paid for by a realized profit buffer, scaled with capital at Standard sizing (1 /ES per $100K NLV; v1.6 — uncapped). How much that compounds is not projected here; it is reported from the live record as it accumulates.</p>
-                <p class="pillar-card__anchor"><a href="#ladder">See the compounding ladder →</a></p>
-            </article>
+                <article class="pillar-card">
+                    <p class="pillar-card__letter">G</p>
+                    <h3 class="pillar-card__h">Growth</h3>
+                    <p class="pillar-card__sub">Compounding on a passive foundation</p>
+                    <p class="pillar-card__body">A synthetic-passive S&amp;P 500 foundation carries baseline market exposure — held fully invested by default, with the published overlay reducing exposure only in genuine corrections. The /ES engine layers disciplined, <em>earned</em> scaling on top — each additional contract paid for by a realized profit buffer, scaled with capital at Standard sizing (1 /ES per $100K NLV; v1.6 — uncapped). How much that compounds is not projected here; it is reported from the live record as it accumulates.</p>
+                    <p class="pillar-card__anchor"><a href="#ladder">See the compounding ladder →</a></p>
+                </article>
+            </div>
+    <p class="compliance" style="text-align:center;margin-top:24px">
+                E·P·I·G names the four engineering objectives that drive the architecture — they are <strong>design targets</strong>, not return guarantees. Past performance does not guarantee future results. The pre-registration live record is how each pillar gets stress-tested in public, trade by trade. Nothing on this page constitutes investment advice or an offer to sell any security.
+            </p>
         </div>
-
-        <p class="compliance" style="text-align:center;margin-top:24px">
-            E·P·I·G names the four engineering objectives that drive the architecture — they are <strong>design targets</strong>, not return guarantees. Past performance does not guarantee future results. The pre-registration live record is how each pillar gets stress-tested in public, trade by trade. Nothing on this page constitutes investment advice or an offer to sell any security.
-        </p>
     </div>
 </section>
-
 
 <!-- ============ 2a. THE FOUNDER ============ -->
 <section class="section section--ivory" id="founder">
