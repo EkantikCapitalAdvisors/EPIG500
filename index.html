@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260617d">
+    <link rel="stylesheet" href="css/style.css?v=20260618e">
 
     <script type="application/ld+json">
     {
@@ -54,10 +54,11 @@
         </a>
         <nav class="nav__links" aria-label="Primary">
             <a href="#how">How It Works</a>
-            <a href="#battery">The Proof</a>
+            <a href="#proven-engine">The Engine</a>
             <a href="#falsifiability">Falsifiability</a>
             <a href="#founding">Founding Cohort</a>
             <a href="#faq">FAQ</a>
+            <a href="/run-the-math.html" data-cta="runmath-nav">Run the Math ↗</a>
             <a href="/dashboard.html" data-cta="dashboard-nav">Live Dashboard ↗</a>
         </nav>
         <div class="nav__cta">
@@ -70,10 +71,11 @@
     </div>
     <div class="nav__mobile" id="navMobile">
         <a href="#how">How It Works</a>
-        <a href="#battery">The Proof</a>
+        <a href="#proven-engine">The Engine</a>
         <a href="#falsifiability">Falsifiability</a>
         <a href="#founding">Founding Cohort</a>
         <a href="#faq">FAQ</a>
+        <a href="/run-the-math.html" data-cta="runmath-nav-mobile">Run the Math ↗</a>
         <a href="/dashboard.html" data-cta="dashboard-nav-mobile">Live Dashboard ↗</a>
         <div class="nav__mobile-cta">
             <a href="#talk" class="btn btn--secondary btn--block" data-cta="founder-call-nav-mobile">Talk to the Founder</a>
@@ -82,17 +84,22 @@
     </div>
 </header>
 
-<!-- ============ 1. HERO ============ -->
-<section class="hero">
+<!-- ============ 1. HERO (Simplification Spec v1.0 §2.3 — single objective + architecture) ============ -->
+<section class="hero hero--simplification">
     <div class="container hero__inner hero__inner--single">
         <div class="hero__copy">
             <p class="eyebrow"><span class="diamond">◆</span> Educational research · Pre-registration open</p>
             <h1 class="hero__headline">
-                Most investors never double their money more than three times in a lifetime.<a class="hero__footnote-ref" href="#hero-footnote" aria-label="Footnote on the doubling arithmetic">*</a> The ones who do, install a mechanism.
+                EPIG 500 targets a <span class="hero-num">26% CAGR</span> — on an architecture engineered to hold drawdown under <span class="hero-num">10%</span>.
             </h1>
             <p class="hero__sub">
-                Ekantik 500 is built around one proven mechanism: <strong>a disciplined futures engine with a live, published trade record.</strong> You deploy it two ways — as an <strong>overlay</strong> on the portfolio you already own, or inside a <strong>complete S&amp;P 500 architecture.</strong> Every rule, and every condition under which we'd stop, is published before a dollar moves.
+                An <strong>80/20 barbell</strong> — <strong>80% SPY, 20% cash</strong> — with a disciplined, hard-killed <strong>/ES futures engine</strong> compounding on top. We don't promise the number. We publish the live record against it, trade by trade — and every condition under which we'd stop.
             </p>
+
+            <aside class="hero__compliance" role="note" aria-label="Hero compliance">
+                <p><strong>Design targets — not forecasts, projections, or guarantees.</strong> Derived from the modeled synthetic-passive S&amp;P 500 overlay (overlay model v1.3, 1975–2024 total-return window) compounded with the live /ES engine throughput at the 0.5% per-trade risk anchor. The synthetic-passive overlay has not completed a market cycle and carries no verdict yet. <strong>Past performance does not guarantee future results.</strong> We publish the live record, not a projected number.</p>
+            </aside>
+
             <div class="hero__cta">
                 <a href="#prereg" class="btn btn--primary btn--lg" data-cta="prereg-hero">Pre-Register for the Founding Cohort</a>
                 <a href="#talk" class="btn btn--ghost btn--lg" data-cta="founder-call-hero">Request a Founder Conversation</a>
@@ -107,77 +114,62 @@
             </ul>
 
             <p class="hero__cta-sub">Educational only. Not investment advice. No solicitation. Pre-registration creates no obligation on either side.</p>
-
-            <details class="hero__footnote" id="hero-footnote">
-                <summary>* The arithmetic behind the headline</summary>
-                <p>The arithmetic, not a promise: at the index's long-run average annual return, the Rule of 72 implies roughly one doubling per decade — three to four doublings across a typical 40-year investing life. Compressing the time per doubling is the entire design problem this page documents.</p>
-            </details>
         </div>
     </div>
 </section>
 
-<!-- Proof strip — slim links below the hero fold -->
-<div class="proof-strip">
-    <div class="container proof-strip__inner">
-        <div class="proof-strip__countdown js-trade-countdown" data-variant="compact"></div>
-        <nav class="proof-strip__links" aria-label="Proof points">
-            <a href="#battery">8-test battery — live &amp; binding (100+ trades) →</a>
-            <a href="/dashboard.html" data-cta="dashboard-proofstrip">Live record — open the dashboard ↗</a>
-            <a href="#falsifiability">Falsifiability — read the armed gates →</a>
-            <a href="#falsifiability">Hard kill — see the drawdown ceiling →</a>
-        </nav>
-    </div>
-</div>
-
-<!-- ============ 1a. EPIG 500 — ARCHITECTURE MAP / NAV HUB (replaces Configuration Selector) ============ -->
-<section class="section section--white" id="configurations">
+<!-- ============ 1a. ARCHITECTURE AT A GLANCE (Simplification Spec v1.0 §2.4 — barbell + engine on top) ============ -->
+<section class="section section--white" id="how">
     <div class="container">
         <header class="section__header section__header--center">
-            <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The architecture at a glance</p>
-            <h2 class="section__h">EPIG 500 — one proven engine, two ways to deploy.</h2>
-            <p class="section__sub">The engine is the constant: a single disciplined futures system with a live, published record. What changes between configurations is <strong>what sits underneath it</strong> — and how much of your world we touch.</p>
+            <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The architecture — a barbell, with an engine on top.</p>
+            <h2 class="section__h">One picture. The whole architecture.</h2>
         </header>
 
-        <div class="epig-map">
-            <!-- Primary: the proven engine (gold / live) -->
-            <div class="epig-map__engine">
-                <p class="epig-map__badge epig-map__badge--live"><span class="diamond">◆</span> THE PROVEN ENGINE · LIVE RECORD</p>
-                <h3 class="epig-map__engine-h">Disciplined futures engine</h3>
-                <p class="epig-map__engine-sub">/ES futures · 0.5% NLV risk per trade · hard-killed · every trade published within 24h of close</p>
-                <a class="epig-map__engine-link" href="#proven-engine" data-jump="proven-engine">See the live record &rarr;</a>
+        <!-- Barbell stack diagram — mobile-stackable -->
+        <div class="barbell" role="img" aria-label="Architecture: /ES futures engine on top of 80% SPY foundation plus 20% cash buffer.">
+            <div class="barbell__row barbell__row--engine">
+                <div class="barbell__label">
+                    <p class="barbell__tag"><span class="diamond">◆</span> LIVE · PROVEN</p>
+                    <p class="barbell__head">/ES Futures Engine <span class="barbell__top">· on top</span></p>
+                    <p class="barbell__sub"><span class="num">0.5%</span> NLV per trade · earned scaling · hard-killed at ED-05b</p>
+                </div>
+                <div class="barbell__pct"><span class="num">—</span><span class="barbell__pct-label">overlay (no capital slice)</span></div>
             </div>
-
-            <!-- Connector: deploy two ways -->
-            <div class="epig-map__connector" aria-hidden="true">
-                <span class="epig-map__connector-line"></span>
-                <span class="epig-map__connector-label">deploy two ways</span>
-                <span class="epig-map__connector-line"></span>
+            <div class="barbell__row barbell__row--foundation">
+                <div class="barbell__label">
+                    <p class="barbell__tag"><span class="diamond">◆</span> FOUNDATION + COLLATERAL</p>
+                    <p class="barbell__head">SPY</p>
+                    <p class="barbell__sub">market exposure · dividends · serves as engine collateral</p>
+                </div>
+                <div class="barbell__pct"><span class="num">80%</span><span class="barbell__pct-label">of capital</span></div>
             </div>
-
-            <!-- The two substrates the engine can sit on -->
-            <div class="epig-map__configs">
-                <a class="epig-map__config epig-map__config--overlay" href="#overlay-service" data-jump="overlay">
-                    <p class="epig-map__config-tag">Configuration A</p>
-                    <h4 class="epig-map__config-h">Overlay Service</h4>
-                    <p class="epig-map__config-base">engine on <strong>your</strong> portfolio</p>
-                    <p class="epig-map__config-badge epig-map__config-badge--live"><span class="diamond">◆</span> live front door</p>
-                    <p class="epig-map__config-body">Keep what you already own. The engine runs on top, collateralized by your existing holdings — we touch nothing but the overlay.</p>
-                    <p class="epig-map__config-cta">Explore the Overlay &rarr;</p>
-                </a>
-                <a class="epig-map__config epig-map__config--fullstack" href="#full-stack" data-jump="fullstack">
-                    <p class="epig-map__config-tag">Configuration B</p>
-                    <h4 class="epig-map__config-h">Full Stack (EPIG)</h4>
-                    <p class="epig-map__config-base">engine on <strong>our</strong> synthetic-passive S&amp;P 500 base</p>
-                    <p class="epig-map__config-badge epig-map__config-badge--testing"><span class="diamond">◆</span> foundation in testing</p>
-                    <p class="epig-map__config-body">The complete architecture — the engine on a drawdown-aware S&amp;P 500 foundation, published as design intent under armed-but-unfired gates.</p>
-                    <p class="epig-map__config-cta">Explore the Full Stack &rarr;</p>
-                </a>
+            <div class="barbell__row barbell__row--cash">
+                <div class="barbell__label">
+                    <p class="barbell__tag"><span class="diamond">◆</span> OPERATIONAL · FLAT</p>
+                    <p class="barbell__head">Cash Buffer</p>
+                    <p class="barbell__sub">no exposure · lets the engine run without disturbing the foundation</p>
+                </div>
+                <div class="barbell__pct"><span class="num">20%</span><span class="barbell__pct-label">of capital</span></div>
             </div>
         </div>
 
-        <p class="config-notsure">
-            Not sure which fits? It usually comes down to one question — what you hold, and whether it's marginable. <a href="#talk" data-cta="founder-call-selector">Talk to the founder &rarr;</a>
-        </p>
+        <div class="barbell__prose">
+            <p>The architecture is a barbell. <strong>80% SPY</strong> carries market exposure and dividends, and serves as the engine's collateral. <strong>20% cash</strong> is the operational buffer that lets the engine run without disturbing the foundation. A disciplined <strong>/ES futures engine</strong> rides on top — sized to a fixed <strong class="num">0.5%</strong>-per-trade risk, scaled only on realized profit, and <strong>hard-killed in advance</strong>.</p>
+        </div>
+
+        <!-- Sub-block: what holds drawdown under 10% — engineered, not promised -->
+        <aside class="dd-standard" aria-label="What holds drawdown under 10%">
+            <p class="dd-standard__h"><span class="diamond">◆</span> What holds drawdown under <span class="num">10%</span></p>
+            <p class="dd-standard__lede">The sub-<span class="num">10%</span> standard is engineered, not promised — it rests on stacked, pre-published constraints:</p>
+            <ul class="dd-standard__list">
+                <li>the <strong class="num">0.5%</strong>-per-trade risk anchor, fixed at every step, never escalated;</li>
+                <li>the <strong>ED-05b hard kill</strong> (<span class="num">−100 /ES pts</span> = <span class="num">5%</span> of NLV at standard sizing);</li>
+                <li>the <strong>one-loss daily rule</strong>, the <strong>weekly sit-down</strong>, and the <strong>bi-weekly size-reduction</strong> cadence;</li>
+                <li>the <strong>synthetic-passive overlay</strong> stepping SPY exposure down in genuine corrections <em>(design intent — no verdict yet)</em>.</li>
+            </ul>
+            <p class="dd-standard__link"><a href="#ladder" data-cta="dd-standard-cadence">See the full risk cadence →</a></p>
+        </aside>
     </div>
 </section>
 
@@ -195,16 +187,13 @@
     </div>
 </section>
 
-<!-- ============ 5. THE PROOF — 8-Test Battery ============ -->
+<!-- ============ 5. THE PROOF — methodology provenance + link to Run the Math (Simplification §2.5) ============ -->
 <section class="section section--ivory" id="battery">
     <div class="container">
         <header class="section__header">
             <p class="eyebrow"><span class="diamond">◆</span> The Proof</p>
             <h2 class="section__h">The methodology — discovered, tested against itself, now verified in public.</h2>
         </header>
-
-        <!-- Trade countdown toward battery activation -->
-        <div class="trade-countdown js-trade-countdown" data-variant="full"></div>
 
         <!-- Methodology Provenance — discovered 2023, stress-tested against itself, then live publication -->
         <div class="provenance">
@@ -223,79 +212,22 @@
                 <div class="provenance__phase">
                     <p class="provenance__phase-num">03</p>
                     <p class="provenance__phase-h">Battery, computed live</p>
-                    <p class="provenance__phase-body">The same eight tests that define the Stage 2 kill conditions are computed in your browser as the live record accumulates. The battery activates at 30+ closed trades and is binding at 100+ — both thresholds now crossed on the protocol-bound record.</p>
+                    <p class="provenance__phase-body">The same eight tests that define the Stage 2 kill conditions are computed in your browser as the live record accumulates. Activates at 30+ closed trades and is binding at 100+ — both thresholds now crossed on the protocol-bound record.</p>
                 </div>
             </div>
-            <p class="compliance">Past performance does not guarantee future results. The 8-test battery is a statistical claim about the entire trade record and requires a meaningful sample to produce a verdict — the threshold is 30+ closed trades, with a binding determination at 100+. Until then the dashboard shows individual KPIs and the equity curve, but no battery verdict.</p>
+            <p class="compliance">Past performance does not guarantee future results.</p>
         </div>
 
-        <!-- Transition rule -->
-        <div class="gold-rule">
-            <div class="gold-rule__bar"></div>
-            <p class="gold-rule__text">The eight tests below are computed live, in your browser, against the published live record. The battery activates at 30+ closed trades.</p>
-            <div class="gold-rule__bar"></div>
-        </div>
-
-        <!-- Live battery -->
-        <div class="battery">
-            <div class="battery__verdict">
-                <div class="battery__verdict-main">
-                    <p class="battery__verdict-label">8-Test Sustainability Battery · Live Record</p>
-                    <p class="battery__verdict-value" id="batteryVerdict">Activates at 30+ trades</p>
-                    <p class="battery__verdict-meta">Last recomputed: <span id="batteryTimestamp">pending first compute</span> · Dataset: <span id="batteryDataset">live pre-registration record</span></p>
-                </div>
-                <div class="battery__verdict-actions">
-                    <button class="btn btn--secondary btn--sm" id="batteryResetBtn">Reset to live record</button>
-                </div>
-            </div>
-
-            <p class="battery__intro">Each test measures one attribute of a sustainable edge. The bar shows the dataset's actual reading against the pass threshold — the gold fill is the headroom above it.</p>
-            <div class="battery__rows" id="batteryGrid"><!-- 8 rows rendered by JS --></div>
-
-            <!-- Upload module -->
-            <div class="upload-module">
-                <div class="upload-module__h">
-                    <p class="eyebrow"><span class="diamond">◆</span> Run the battery on your own data</p>
-                    <h3>Three input modes — all processed client-side.</h3>
-                    <p class="upload-module__privacy">All file handling is client-side. Your data never leaves the browser. Format auto-detection supports Tradovate CSV, TradeZella CSV, Interactive Brokers Orders CSV, and Discord JSON exports.</p>
-                </div>
-
-                <div class="upload-module__tabs" role="tablist">
-                    <button class="upload-tab is-active" data-mode="file" role="tab" aria-selected="true">File upload</button>
-                    <button class="upload-tab" data-mode="paste" role="tab" aria-selected="false">Paste text</button>
-                    <button class="upload-tab" data-mode="reset" role="tab" aria-selected="false">Reset to sample</button>
-                </div>
-
-                <div class="upload-module__panel" data-panel="file">
-                    <label class="upload-drop" for="uploadFile">
-                        <input type="file" id="uploadFile" accept=".csv,.json,.txt" hidden>
-                        <div class="upload-drop__inner">
-                            <p class="upload-drop__icon">↑</p>
-                            <p class="upload-drop__primary">Drop a CSV or JSON file here, or click to browse</p>
-                            <p class="upload-drop__secondary">Supports Tradovate, TradeZella, IB Orders, Discord exports</p>
-                        </div>
-                    </label>
-                </div>
-                <div class="upload-module__panel" data-panel="paste" hidden>
-                    <textarea id="uploadPaste" rows="6" placeholder="Paste raw CSV rows or Discord/alert text here…"></textarea>
-                    <button class="btn btn--secondary btn--sm" id="uploadPasteBtn">Run battery on pasted data</button>
-                </div>
-                <div class="upload-module__panel" data-panel="reset" hidden>
-                    <p>Reset the battery to the live pre-registration record.</p>
-                    <button class="btn btn--primary btn--sm" id="uploadResetBtn">Reset now</button>
-                </div>
-
-                <div class="upload-module__status" id="uploadStatus" hidden></div>
-            </div>
-
-            <p class="battery__source">
-                ◆ Battery implementation is open-source. <a href="https://github.com/EkantikCapitalAdvisors/EPIG500" target="_blank" rel="noopener">View on GitHub →</a>
+        <!-- Bridge to Run the Math — the interactive battery + uploader live there -->
+        <div class="proof-bridge" role="note">
+            <p class="proof-bridge__lede"><span class="diamond">◆</span> The live battery, the uploader, and the four arithmetic calculators have moved to their own page so this one stays focused on the architecture.</p>
+            <p class="proof-bridge__ctas">
+                <a class="btn btn--primary btn--sm" href="/run-the-math.html#battery" data-cta="runmath-battery-from-proof">Run the battery on the live record →</a>
+                <a class="btn btn--ghost btn--sm" href="/dashboard.html" data-cta="dashboard-from-proof">Open the live dashboard ↗</a>
             </p>
-            <p class="compliance">Battery activates at 30+ closed trades and is binding at 100+. Below 30 the sample is too small for statistical inference and the battery returns no verdict. Past performance is not indicative of future results. You can upload your own trade record above and the battery runs against it instead.</p>
         </div>
     </div>
 </section>
-
 
 <!-- ============ 6. SIGNAL CONTINUITY ============ -->
 <section class="section section--ivory" id="continuity">
@@ -445,24 +377,22 @@
         </div>
 
 
-        <!-- Calculator 4 — The Worst Case, Priced (bounded-loss architecture) · Calculator Spec v1.0 §4.
+        <!-- §2.7 THE WORST CASE, PRICED — static summary at $100K NLV base sizing.
+             The INTERACTIVE calculator (per-NLV sliders, etc.) lives on /run-the-math.html#calcBoundsWrap.
              LOSS-SIDE ONLY: no gain, throughput, or expectancy figure may render here. -->
-        <div class="calc" id="calcBoundsWrap">
+        <div class="calc" id="worst-case">
             <header class="calc__head">
                 <p class="eyebrow"><span class="diamond">◆</span> The Worst Case, Priced</p>
                 <h3 class="calc__h">A risk with a number can be financed. An unbounded risk can only be feared.</h3>
-                <p class="calc__sub">The engine's published loss bounds — per trade, per day, per week, and the hard kill — at a hypothetical account size. Loss-side only, by construction.</p>
+                <p class="calc__sub">The engine's published loss bounds — per trade, per day, per week, and the hard kill — at <span class="num">$100K</span> base sizing. Loss-side only, by construction.</p>
             </header>
-            <div id="calcBounds">
-                <!-- static default state (NLV $100K, 1 contract) — replaced on hydration -->
-                <div class="cb-ladder">
-                    <div class="cb-rung"><span class="cb-rung__id">OP-02</span><div class="cb-rung__body"><p class="cb-rung__title">Per trade</p><p class="cb-rung__fig">−$500 (0.5% of NLV)</p><p class="cb-rung__text">Per-contract risk fixed at 0.5% of NLV. After any closed losing trade, the day is over (one-loss daily rule).</p></div></div>
-                    <div class="cb-rung"><span class="cb-rung__id">OP-03</span><div class="cb-rung__body"><p class="cb-rung__title">Daily floor</p><p class="cb-rung__fig">−$500 (starting)</p><p class="cb-rung__text">Trailing high-water-mark floor — ratchets up with every new equity peak, never down.</p></div></div>
-                    <div class="cb-rung"><span class="cb-rung__id">OP-05</span><div class="cb-rung__body"><p class="cb-rung__title">Weekly stand-down</p><p class="cb-rung__fig cb-rung__fig--rule">2–3 consecutive losing days halts the week (OP-05)</p><p class="cb-rung__text">A rule, not a dollar figure: consecutive losing days halt the week pending witness review.</p></div></div>
-                    <div class="cb-rung cb-rung--kill"><span class="cb-rung__id">ED-05b</span><div class="cb-rung__body"><p class="cb-rung__title">Hard kill</p><p class="cb-rung__fig">−$5,000 / /ES</p><p class="cb-rung__text">100 /ES pts × $50/pt = <strong>$5,000 per contract</strong>. Scales linearly with portfolio: at the 1 /ES per $100K NLV base sizing, hard kill = <strong>$50,000 on a $1M portfolio · $250,000 on $5M</strong>. Budgeted in advance whatever the size.</p></div></div>
-                </div>
+            <div class="cb-ladder">
+                <div class="cb-rung"><span class="cb-rung__id">OP-02</span><div class="cb-rung__body"><p class="cb-rung__title">Per trade</p><p class="cb-rung__fig num">−$500 (0.5% of NLV)</p><p class="cb-rung__text">Per-contract risk fixed at <span class="num">0.5%</span> of NLV. After any closed losing trade, the day is over (one-loss daily rule).</p></div></div>
+                <div class="cb-rung"><span class="cb-rung__id">OP-03</span><div class="cb-rung__body"><p class="cb-rung__title">Daily floor</p><p class="cb-rung__fig num">−$500 (starting)</p><p class="cb-rung__text">Trailing high-water-mark floor — ratchets up with every new equity peak, never down.</p></div></div>
+                <div class="cb-rung"><span class="cb-rung__id">OP-05</span><div class="cb-rung__body"><p class="cb-rung__title">Weekly stand-down</p><p class="cb-rung__fig cb-rung__fig--rule">2–3 consecutive losing days halts the week (OP-05)</p><p class="cb-rung__text">A rule, not a dollar figure: consecutive losing days halt the week pending witness review.</p></div></div>
+                <div class="cb-rung cb-rung--kill"><span class="cb-rung__id">ED-05b</span><div class="cb-rung__body"><p class="cb-rung__title">Hard kill</p><p class="cb-rung__fig num">−$5,000 / /ES</p><p class="cb-rung__text"><span class="num">100 /ES pts × $50/pt</span> = <strong class="num">$5,000 per contract</strong>. Scales linearly with portfolio: at the <span class="num">1 /ES per $100K NLV</span> base sizing, hard kill = <strong class="num">$50,000 on a $1M portfolio · $250,000 on $5M</strong>. Budgeted in advance whatever the size.</p></div></div>
             </div>
-            <p class="calc__caption"><em>These figures compute the published Falsifiability Protocol v1.6 loss bounds at a hypothetical account size. Caps and the hard kill are sizing and exit rules enforced by rule — fast markets can gap beyond them. Not a guarantee, not an offer, and not a statement of expected results. Past performance does not guarantee future results.</em></p>
+            <p class="calc__caption"><em>Static summary at $100K base. Run it at your own portfolio size on the <a href="/run-the-math.html#calcBoundsWrap" data-cta="runmath-bounds-from-worst-case">Worst Case, Priced interactive →</a>. These figures compute the published Falsifiability Protocol v1.6 loss bounds. Caps and the hard kill are sizing and exit rules enforced by rule — fast markets can gap beyond them. Not a guarantee, not an offer, and not a statement of expected results. Past performance does not guarantee future results.</em></p>
         </div>
 
         <!-- Removed: forward-projection equity curve. SVG and chips deleted per compliance redline T1-A.
@@ -558,7 +488,7 @@
                 <p>The overlay exists to pursue return on top of your existing market exposure — return the index alone cannot produce. It is a return-seeking engine, not an income schedule. Results are variable, realized as positions close, and reported from the live record in the same units the engine actually trades. We do not project a figure here. What we publish instead is the engine's realized record, trade by trade — and the exact conditions under which we would declare it failed and stop. Per-trade risk is fixed at 0.5% of account value; a published hard kill bounds the worst case. The upside is earned and witnessed — never promised.</p>
                 <p class="overlay__links">
                     <a href="/dashboard.html" data-cta="dashboard-overlay">Open the live dashboard →</a>
-                    <a href="#calcBoundsWrap" data-cta="bounds-overlay">See the Worst-Case bounds →</a>
+                    <a href="/run-the-math.html#calcBoundsWrap" data-cta="bounds-overlay">See the Worst-Case bounds →</a>
                 </p>
             </article>
 
@@ -756,8 +686,8 @@
 </section>
 
 
-<!-- ============ 2. HOW IT WORKS — Synthetic-Passive Architecture ============ -->
-<section class="section section--white" id="how">
+<!-- ============ 2. HOW IT WORKS — Synthetic-Passive Architecture (deep detail; nav points to the §1a barbell diagram instead) ============ -->
+<section class="section section--white" id="how-detail">
     <div class="container">
         <div class="two-col">
             <div class="two-col__left">
@@ -806,59 +736,14 @@
 </section>
 
 
-<!-- ============ 1c. CALCULATOR HUB — overview cards ============ -->
-<section class="section section--ivory" id="calc-hub">
-    <div class="container">
-        <header class="section__head">
-            <p class="eyebrow"><span class="diamond">◆</span> Run the math yourself</p>
-            <h2 class="section__h">Four calculators. Skim or go deep — your call.</h2>
-            <p class="section__sub">Every claim on this page is reducible to arithmetic. Pick a card to jump to the interactive version; each calculator lives in its own narrative section below so you can read the argument it supports.</p>
-        </header>
-        <div class="calc-hub__grid">
-            <a class="calc-hub__card" href="#calcRepairWrap" data-jump="repair">
-                <p class="calc-hub__eyebrow">◆ The Repair Bill</p>
-                <h3 class="calc-hub__h">A loss needs an asymmetric gain to repair.</h3>
-                <p class="calc-hub__line"><strong>−50%</strong> needs <strong class="calc-hub__num">+100%</strong> back · <strong>−74%</strong> needs <strong class="calc-hub__num">+285%</strong></p>
-                <svg class="calc-hub__thumb" viewBox="0 0 200 80" aria-hidden="true">
-                    <line x1="10" y1="70" x2="190" y2="10" stroke="#94A3B8" stroke-width="1.2" stroke-dasharray="3 3"/>
-                    <path d="M 10 70 Q 100 68 150 50 T 190 5" fill="none" stroke="#b8962e" stroke-width="2.2"/>
-                </svg>
-                <p class="calc-hub__cta">Recovery convexity →</p>
-            </a>
-            <a class="calc-hub__card" href="#calcVolTaxWrap" data-jump="voltax">
-                <p class="calc-hub__eyebrow">◆ The Volatility Tax</p>
-                <h3 class="calc-hub__h">Averages overstate what actually compounds.</h3>
-                <p class="calc-hub__line">S&amp;P 2005–2024: <strong>+11.9%/yr</strong> average but only <strong class="calc-hub__num">+10.4%/yr</strong> compounded — <strong>1.5 pp</strong> tax</p>
-                <svg class="calc-hub__thumb" viewBox="0 0 200 80" aria-hidden="true">
-                    <rect x="10" y="20" width="170" height="14" fill="#e2c97a"/>
-                    <rect x="10" y="44" width="148" height="14" fill="#b8962e"/>
-                    <text x="185" y="50" font-size="9" fill="#E05A6B" font-weight="700" text-anchor="end">−1.5pp</text>
-                </svg>
-                <p class="calc-hub__cta">Arithmetic vs geometric →</p>
-            </a>
-            <a class="calc-hub__card" href="#calcTradeoffWrap" data-jump="tradeoff">
-                <p class="calc-hub__eyebrow">◆ Volatility opportunity — or lag?</p>
-                <h3 class="calc-hub__h">When does step-aside harvest, when does it whipsaw?</h3>
-                <p class="calc-hub__line">At <strong>D=20%, g=25%, m=25%</strong>: per round-trip <strong class="calc-hub__num">+6.2%</strong> · annual @ 2/yr <strong class="calc-hub__num">+12.8%</strong></p>
-                <svg class="calc-hub__thumb" viewBox="0 0 200 80" aria-hidden="true">
-                    <line x1="10" y1="45" x2="190" y2="45" stroke="rgba(18,38,74,0.35)" stroke-dasharray="3 3"/>
-                    <path d="M 10 50 Q 60 50 100 40 T 190 12" fill="none" stroke="#12264a" stroke-width="2.2"/>
-                    <circle cx="100" cy="40" r="3" fill="#d4af37"/>
-                </svg>
-                <p class="calc-hub__cta">Fractional-lag explorer →</p>
-            </a>
-            <a class="calc-hub__card" href="#calcBoundsWrap" data-jump="bounds">
-                <p class="calc-hub__eyebrow">◆ The Worst Case, Priced</p>
-                <h3 class="calc-hub__h">Bounded loss at any account size.</h3>
-                <p class="calc-hub__line">Hard kill at <strong>$1M NLV</strong> = <strong class="calc-hub__num">−$50,000</strong> (5% of NLV at Standard sizing)</p>
-                <svg class="calc-hub__thumb" viewBox="0 0 200 80" aria-hidden="true">
-                    <rect x="10" y="14" width="180" height="12" rx="2" fill="#e2c97a" opacity="0.6"/>
-                    <rect x="10" y="32" width="180" height="12" rx="2" fill="#e2c97a" opacity="0.8"/>
-                    <rect x="10" y="50" width="180" height="12" rx="2" fill="#E05A6B" opacity="0.85"/>
-                    <text x="100" y="59" font-size="9" fill="#fff" font-weight="700" text-anchor="middle">HARD KILL · ED-05b</text>
-                </svg>
-                <p class="calc-hub__cta">Loss-side architecture →</p>
-            </a>
+<!-- ============ 1c. RUN-THE-MATH STRIP (Simplification §2.13 — replaces 4-calculator hub) ============ -->
+<section class="section section--white" id="run-the-math-strip">
+    <div class="container container--narrow" style="text-align:center">
+        <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> Every claim on this page reduces to arithmetic.</p>
+        <h2 class="section__h section__h--center">Don't take our word for it. Run the math.</h2>
+        <p class="section__sub" style="text-align:center;margin:var(--s-4) auto 0;max-width:680px">Four calculators — the Repair Bill, the Volatility Tax, the volatility opportunity/lag explorer, and the Worst Case Priced — plus the 8-test sustainability battery with a your-own-data uploader. All client-side; your data never leaves the browser.</p>
+        <div class="hero__cta" style="justify-content:center;margin-top:var(--s-5)">
+            <a href="/run-the-math.html" class="btn btn--primary btn--lg" data-cta="runmath-from-strip">Run the Math →</a>
         </div>
     </div>
 </section>
@@ -893,146 +778,6 @@
         </div>
     </div>
 </section>
-
-<!-- ============ 2d. THE ARITHMETIC — historical illustration (ADD-2; moved out of Ladder section) ============ -->
-<section class="section section--white" id="arithmetic">
-    <div class="container">
-        <header class="section__header">
-            <p class="eyebrow"><span class="diamond">◆</span> The Arithmetic</p>
-            <h2 class="section__h">The asymmetry isn't a slider you hope for. It's the mechanism you can watch.</h2>
-            <p class="section__sub">The upside/downside capture is no longer a hypothetical input — it is the <strong>modeled output of the synthetic-passive overlay's published rules</strong>, and it now drives the <em>foundation itself</em>, not a token slice. The difference is decisive: with a 20%-slice model, a 50%-downside year still takes ~90% of the market's drawdown. With the overlay driving the foundation, 50% downside participation means the core takes roughly <strong>40%</strong> of that drawdown. That is where outperformance on the 80% is actually produced. Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy.</p>
-            <p class="compliance" style="margin-top:var(--s-4)"><em>Design intent, not a forecast. Ekantik 500 does not target a stated return multiple. The illustration below uses actual past S&amp;P 500 total returns and user-set, hypothetical capture inputs; it does not represent any Ekantik strategy's performance. Past performance does not guarantee future results.</em></p>
-        </header>
-
-        <!-- Calculator 1 — The Repair Bill (Recovery Convexity) · Calculator Spec v1.0 §1 -->
-        <div class="calc" id="calcRepairWrap">
-            <header class="calc__head">
-                <p class="eyebrow"><span class="diamond">◆</span> The Repair Bill</p>
-                <h3 class="calc__h">A −50% year needs +100% back. The math is not symmetric.</h3>
-                <p class="calc__sub">Losses are convex: the gain required to repair a loss grows faster than the loss itself — so cutting a loss in half cuts the repair bill by <em>more</em> than half.</p>
-            </header>
-            <div id="calcRepair">
-                <!-- static default state (d = 37%) — replaced on hydration -->
-                <div class="calc__readout">
-                    <p class="calc__pair"><span class="calc__num">−37%</span> <span class="calc__arrow">→</span> <span class="calc__num">+59%</span> <span class="calc__pair-label">required to repair</span></p>
-                    <p class="calc__pair calc__pair--teal"><span class="calc__num">−18.5%</span> <span class="calc__arrow">→</span> <span class="calc__num">+23%</span> <span class="calc__pair-label">the same loss, cut in half</span></p>
-                </div>
-                <p class="calc__verdict">Cutting this loss in half cuts the repair bill by <strong>61%</strong> — convex losses mean protection pays twice.</p>
-            </div>
-            <p class="calc__caption"><em>Recovery arithmetic is identity math — true for every investor in every era. Illustrative arithmetic, not a projection or a strategy result. Past performance does not guarantee future results.</em></p>
-        </div>
-
-        <!-- Calculator 2 — The Volatility Tax (arithmetic vs geometric mean) · Calculator Spec v1.0 §2 -->
-        <div class="calc" id="calcVolTaxWrap">
-            <header class="calc__head">
-                <p class="eyebrow"><span class="diamond">◆</span> The Volatility Tax</p>
-                <h3 class="calc__h">Same 20 years. +11.9%/yr average — but only +10.4%/yr compounded.</h3>
-                <p class="calc__sub">The gap is the volatility tax: what compounds is the geometric mean, and drawdown years are what drag it below the average. Reducing participation in the down years closes the gap.</p>
-            </header>
-            <div id="calcVolTax">
-                <!-- static default state (p = 100%, S&P 2005–2024) — replaced on hydration -->
-                <p class="calc__pair"><span class="calc__num">+11.9%</span> <span class="calc__pair-label">arithmetic mean</span></p>
-                <p class="calc__pair"><span class="calc__num">+10.4%</span> <span class="calc__pair-label">geometric mean (what compounds)</span></p>
-                <p class="calc__verdict">At 100% downside participation the volatility tax is 1.5 pp — a hypothetical $100K compounds to $717K over this series.</p>
-            </div>
-            <p class="calc__caption"><em>Historical illustration on actual S&amp;P 500 annual total returns (2005–2024 preset) with user-set, hypothetical downside-participation inputs. This models arithmetic, not any Ekantik strategy; it is not the overlay's live record. Not a projection. Past performance does not guarantee future results.</em></p>
-        </div>
-
-        <!-- Doubling Arithmetic calculator — real S&P 500 total-return data, three windows -->
-        <div class="arith-calc" id="arithCalc">
-            <div class="arith-nlv" role="radiogroup" aria-label="Model portfolio size">
-                <span class="arith-nlv__label">Model portfolio size</span>
-                <button class="arith-nlv__chip" data-nlv="100000" type="button">$100K</button>
-                <button class="arith-nlv__chip" data-nlv="250000" type="button">$250K</button>
-                <button class="arith-nlv__chip" data-nlv="500000" type="button">$500K</button>
-                <button class="arith-nlv__chip is-active" data-nlv="1000000" type="button">$1M</button>
-                <button class="arith-nlv__chip" data-nlv="2500000" type="button">$2.5M</button>
-                <button class="arith-nlv__chip" data-nlv="5000000" type="button">$5M</button>
-                <span class="arith-nlv__hint">All dollar amounts below scale with this. Contract count scales linearly: <strong>1 /ES per $100K NLV</strong> at the 0.5% per-trade architectural risk anchor.</span>
-            </div>
-
-            <div class="arith-controls">
-                <label class="arith-control">
-                    <span class="arith-control__label">Upside capture</span>
-                    <span class="arith-control__val"><span id="arithUpVal">100</span>%</span>
-                    <input type="range" id="arithUp" min="50" max="150" step="5" value="100" aria-label="Upside capture percent">
-                    <span class="arith-control__hint">% of index return captured in up years</span>
-                </label>
-                <label class="arith-control">
-                    <span class="arith-control__label">Downside participation</span>
-                    <span class="arith-control__val"><span id="arithDownVal">100</span>%</span>
-                    <input type="range" id="arithDown" min="0" max="150" step="5" value="100" aria-label="Downside participation percent">
-                    <span class="arith-control__hint">% of index drawdown taken in down years</span>
-                </label>
-            </div>
-
-            <div class="arith-windows" id="arithWindows"><!-- 3 window cards rendered by JS --></div>
-
-            <p class="arith-plain-english" id="arithPlainEnglish" aria-live="polite">
-                <!-- Dynamic plain-English summary rendered by JS, updates on every slider/toggle/window change -->
-            </p>
-
-            <p class="arith-regime-note">
-                <span class="diamond">◆</span> <strong>Reading the three windows:</strong> the synthetic-passive overlay's value is realized only when there is meaningful drawdown to step aside from. In a relentless bull window with a shallow dip (Calm 2013–2019), the literal 20% cash drag dominates the overlay's protection benefit and the strategy lags 100% S&amp;P. In crash windows (2007–2010), the overlay's protection dominates. Over full market cycles, the overlay's job is to either <em>beat</em> the index <em>or</em> <em>protect</em> against its drawdown — never required to do both in every sub-window. This is the regime dependence the overlay's <a href="/falsifiability-protocol.html" target="_blank" rel="noopener">Expression Layer gate (Article VIII.B)</a> measures across full cycles.
-            </p>
-
-            <!-- Calculator 3 — The Honest Trade-off (break-even lag explorer) · Calculator Spec v1.0 §3.
-                 Quantifies the regime-dependence note above: publish where the mechanism loses. -->
-            <div class="calc" id="calcTradeoffWrap">
-                <header class="calc__head">
-                    <p class="eyebrow"><span class="diamond">◆</span> Volatility opportunity — or lag?</p>
-                    <h3 class="calc__h">Is the step-aside <em>paying</em> two lags — or <em>harvesting</em> an opportunity?</h3>
-                    <p class="calc__sub">Both, depending on regime. Exit lags the top and re-entry lags the turn — yet across a deep drawdown those same lags buy the avoided middle, and at multiple opportunities a year that advantage compounds. In shallow corrections the lag wins; in deep, repeated ones the opportunity does. Set the dials and let the math answer.</p>
-                </header>
-                <div id="calcTradeoff">
-                    <!-- static default state (D 20% · g 25% · m 25%) — replaced on hydration -->
-                    <p class="calc__pair"><span class="calc__pair-label">Hold-through:</span> <span class="calc__num">0.0%</span> <span class="calc__pair-label">round trip · Step-aside:</span> <span class="calc__num">0.0%</span> <span class="calc__pair-label">(a 20% correction never reaches a 25% give-back — the step-aside never triggers)</span></p>
-                    <p class="calc__verdict">In shallow corrections this mechanism loses by design — its value concentrates in deep drawdowns. That regime-dependence is exactly what the overlay’s <a href="/falsifiability-protocol.html">Expression Layer gate measures across full cycles</a>.</p>
-                </div>
-                <p class="calc__caption"><em>Schematic single-cycle model with user-set, hypothetical lag inputs — unitless, not a track record, not a backtest, not a projection of any Ekantik strategy. This is not the overlay's live record; the overlay's rules are published as design intent under armed-but-unfired falsifiability gates. Past performance does not guarantee future results.</em></p>
-            </div>
-
-            <!-- Stacked equity curve: 80% SPY foundation + capture asymmetry + optional Booster Engine, plotted against the S&P 500 -->
-            <div class="arith-chart">
-                <header class="arith-chart__head">
-                    <h3 class="arith-chart__h">How the architecture stacks over time</h3>
-                    <p class="arith-chart__sub">Two layers on top of the 20% cash buffer: <strong>(1) the synthetic-passive foundation</strong> — 80% S&amp;P 500 with the overlay applying capture asymmetry (modeled output of the published overlay rules, driven by the sliders above); <strong>(2) the Booster Engine</strong> — extrapolated directly from the actual live trading record at the 0.5% per-trade architectural risk anchor. Toggle the Booster off to see the foundation alone, on to see the engine layer as an illustration extrapolated from the live record — an illustration, not an expectation.</p>
-                    <div class="arith-chart__tabs" role="radiogroup" aria-label="Window presets">
-                        <button class="arith-tab is-active" data-window="full" type="button">Full 20-year</button>
-                        <button class="arith-tab" data-window="calm" type="button">Calm (2013–2019)</button>
-                        <button class="arith-tab" data-window="crash" type="button">Crash (2007–2010)</button>
-                    </div>
-                    <div class="arith-chart__range">
-                        <span class="arith-chart__range-label">Or pick any period — last 50 years:</span>
-                        <label class="arith-chart__range-field">From <select id="arithFrom" aria-label="Start year"></select></label>
-                        <span class="arith-chart__range-arrow" aria-hidden="true">→</span>
-                        <label class="arith-chart__range-field">To <select id="arithTo" aria-label="End year"></select></label>
-                    </div>
-                    <div class="arith-chart__contracts" role="radiogroup" aria-label="Booster Engine toggle" id="arithBoosterToggle">
-                        <span class="arith-chart__contracts-label">Booster Engine</span>
-                        <button class="arith-contract is-active" data-risk="0" type="button">Off</button>
-                        <button class="arith-contract" data-risk="0.5" type="button" disabled aria-disabled="true">On · live record</button>
-                        <span class="arith-chart__contracts-caption" id="arithBoosterCaption">Engine layer unlocks with the protocol-bound record.</span>
-                    </div>
-                    <div class="arith-chart__baseline" id="arithBaselineIndicator"><p class="arith-baseline__headline"><span class="diamond">◆</span> Engine throughput will be reported here from the protocol-bound live record once the operator enables the throughput projection. Until then, we publish the trades — not an extrapolation.</p></div>
-                </header>
-                <canvas id="arithEquityCanvas" width="1100" height="360" aria-label="Historical equity curve: S&P 500 vs 80% SPY foundation, plus capture-asymmetry band, plus optional Booster Engine layer extrapolated from the live record."></canvas>
-                <div class="arith-chart__legend">
-                    <span class="arith-chart__legend-item"><span class="arith-chart__swatch" style="background:rgba(13,148,136,0.45);border:1px solid #0D9488"></span> 80% S&amp;P foundation · capture-modified by overlay rules</span>
-                    <span class="arith-chart__legend-item"><span class="arith-chart__swatch" style="background:#94A3B8"></span> + 20% cash buffer (flat)</span>
-                    <span class="arith-chart__legend-item" id="arithLegendThrough" hidden><span class="arith-chart__swatch" style="background:#d4af37"></span> + Booster Engine (live record extrapolated)</span>
-                    <span class="arith-chart__legend-item"><span class="arith-chart__swatch arith-chart__swatch--line" style="background:#b8962e"></span> Strategy total · solid gold line</span>
-                    <span class="arith-chart__legend-item"><span class="arith-chart__swatch arith-chart__swatch--line arith-chart__swatch--dashed" style="background:#12264a"></span> S&amp;P 500 (100% benchmark) · dashed</span>
-                </div>
-                <p class="arith-chart__reading" id="arithChartReading" aria-live="polite"><!-- dynamic interpretation rendered by JS --></p>
-            </div>
-
-
-            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns (incl. dividends), 1975–2024 — selectable as a 20-year, 50-year, calm, or crash window. <strong>Benchmark for Outperformance:</strong> 100% S&amp;P 500 — the conservative comparison (the natural alternative an investor would consider is "just put it all in SPY"). <strong>Foundation layer (overlay model v1.3):</strong> 80% × (capture × index), where capture is the modeled output of the synthetic-passive overlay's published rules — upside slider in up years, downside slider in down years. The overlay drives the foundation itself, not a 20% token slice; this is the meaningful change from the prior model. <strong>Cash buffer:</strong> the remaining 20% is operational cash (flat, no exposure) — this is the literal architecture; it carries a real ~17% drag vs 100%-S&amp;P over a 20-year window, which the overlay's downside protection must overcome to clear the bar. <strong>Booster Engine layer:</strong> extrapolated <em>live</em> from <code>/data/trades.json</code> at the 0.5% per-trade architectural risk anchor (the level the actual record was generated at). Throughput rate = total points ÷ active months × 12 × $50 / $100K starting NLV. Annual R framing: 1R = avg loss in points; R-expectancy = EV/trade ÷ 1R; Annual R = R-expectancy × trades/year. Every admin publish updates the projection automatically. Engine throughput is shown as <em>independent</em> of the year's S&amp;P return — the operator's intraday /ES trading isn't tied to the index's annual direction. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy. The synthetic-passive overlay carries no verdict yet (its gate is measured over a full market cycle); the rule set is published as design intent under armed-but-unfired falsifiability gates.</strong> Dataset: protocol-bound Period 2 trades only. The Period 1 Telegram record is displayed on the dashboard for transparency and is excluded from every figure on this page.</p>
-        </div>
-    </div>
-</section>
-
 
 <!-- ============ 4. THE EKANTIK STANDARD ============ -->
 <section class="section section--ivory" id="standard">
@@ -1461,6 +1206,7 @@
                     <li><a href="https://founding.ekantikcapital.com">Founding Members</a></li>
                     <li><a href="https://discord.gg/cSQFunvNRx" target="_blank" rel="noopener">Discord Community</a></li>
                     <li><a href="/dashboard.html">Live Trades Dashboard</a></li>
+                    <li><a href="/run-the-math.html">Run the Math (calculators + live battery)</a></li>
                 </ul>
             </div>
             <div class="footer__col">
@@ -1475,16 +1221,13 @@
             </div>
         </div>
         <p class="footer__legal">
-            <strong>Educational only.</strong> This site is operated as an educational research property during the pre-registration phase of Ekantik 500. Nothing on this page constitutes investment advice, an offer to sell, or a solicitation to buy any security or interest in any investment product. Ekantik 500 is not yet open for investment. <strong>The synthetic-passive overlay (overlay model v1.3) has not completed a market cycle and carries no verdict yet</strong> — it is presented as <strong>design intent</strong> under published, armed-but-unfired falsifiability gates (overlay Fidelity Layer + overlay Expression Layer). Any overlay trades are an early, accumulating record published for transparency, not a representation of evaluated overlay performance. Performance data shown on the dashboard consists of (i) a 196-trade Telegram-channel record from April 2023 – October 2024 that predates the locked Falsifiability Protocol (no in-advance witness or formal gates) and is published for transparency rather than as a sustainability claim, and (ii) the operator's protocol-bound live pre-registration futures record from February 2026 forward. The combined record is the operator's own futures trading and does not represent actual trading results for any other person; in particular, it is <em>not</em> a record of overlay performance. The historical equity-curve illustration in §The Arithmetic uses real S&amp;P 500 total returns with hypothetical capture inputs to model the overlay's logic; it is not a projection of any Ekantik strategy. Past performance does not guarantee future results. Any investment, when offered, would involve risk including potential loss of principal. © 2026 Ekantik Capital Advisors LLC. All rights reserved.
+            <strong>Educational only.</strong> The <span class="num">26%</span> CAGR objective and the sub-<span class="num">10%</span> drawdown standard are <strong>design targets, not forecasts, projections, or guarantees</strong>. Derived from the modeled synthetic-passive S&amp;P 500 overlay (overlay model v1.3, 1975–2024 total-return window) compounded with the live /ES engine throughput at the <span class="num">0.5%</span> per-trade risk anchor. Hypothetical and design-intent performance figures have inherent limitations and do not reflect actual trading; results may differ materially. The synthetic-passive overlay has not completed a market cycle and carries no verdict yet. <strong>Past performance does not guarantee future results.</strong> This site is operated as an educational research property during the pre-registration phase of Ekantik 500. Nothing on this page constitutes investment advice, an offer to sell, or a solicitation to buy any security or interest in any investment product. Ekantik 500 is not yet open for investment. Performance data shown on the dashboard consists of (i) a 196-trade Telegram-channel record from April 2023 – October 2024 that predates the locked Falsifiability Protocol (no in-advance witness or formal gates) and is published for transparency rather than as a sustainability claim, and (ii) the operator's protocol-bound live pre-registration futures record from February 2026 forward. The combined record is the operator's own futures trading and does not represent actual trading results for any other person; in particular, it is <em>not</em> a record of overlay performance. The historical equity-curve illustration (now on the <a href="/run-the-math.html">Run the Math</a> page) uses real S&amp;P 500 total returns with hypothetical capture inputs to model the overlay's logic; it is not a projection of any Ekantik strategy. Any investment, when offered, would involve risk including potential loss of principal. © 2026 Ekantik Capital Advisors LLC. All rights reserved.
         </p>
     </div>
 </footer>
 
-<script src="js/script.js?v=20260618a"></script>
-<script src="js/calc-core.js?v=20260612z" defer></script>
-<script src="js/calc-repair.js?v=20260612a" defer></script>
-<script src="js/calc-voltax.js?v=20260612u" defer></script>
-<script src="js/calc-bounds.js?v=20260612z" defer></script>
-<script src="js/calc-tradeoff.js?v=20260616d" defer></script>
+<!-- Calculator scripts (calc-core / calc-repair / calc-voltax / calc-bounds / calc-tradeoff)
+     have moved to /run-the-math.html where the calculator DOM lives. -->
+<script src="js/script.js?v=20260618e"></script>
 </body>
 </html>
