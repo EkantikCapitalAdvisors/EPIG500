@@ -5365,3 +5365,202 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 }
 .arith-baseline__scaling .diamond { color: var(--gold); margin-right: 4px; }
 .arith-baseline__scaling strong { color: var(--navy); }
+
+/* ================================================
+   SIMPLIFICATION SPEC v1.0 — Page A re-hero + architecture diagram + cleanup.
+   Companion: /run-the-math.html (Page B) reuses the existing .calc / .battery /
+   .arith-* styles already defined above. This block adds only what's NEW on Page A.
+   ================================================ */
+
+/* JetBrains Mono for numerics — spec §1.1 + acceptance criteria.
+   Applied as a utility (.num) so the hero CAGR/DD figures, NLV chips, and the
+   per-trade / hard-kill amounts in the Worst-Case table use the mono face
+   without rebranding existing components. */
+.num,
+.hero-num {
+    font-family: 'JetBrains Mono', 'Source Code Pro', ui-monospace, monospace;
+    font-feature-settings: 'tnum' on, 'lnum' on;
+}
+
+/* --- Simplification hero — 26% CAGR + sub-10% DD --- */
+.hero--simplification .hero__headline {
+    /* Slightly tighter than the prior hero to make room for the in-line numerics +
+       the compliance block immediately below. */
+    line-height: 1.12;
+}
+.hero-num {
+    color: var(--gold-deep);
+    font-weight: 700;
+    /* Mono numerics need a hair more letter-spacing to read at display size */
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+}
+.hero__compliance {
+    margin: var(--s-5) 0 var(--s-6);
+    padding: var(--s-4) var(--s-5);
+    background: rgba(196,165,113,0.07);
+    border-left: 3px solid var(--gold-deep);
+    border-radius: 4px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--slate-dark);
+}
+.hero__compliance p { margin: 0; }
+.hero__compliance strong { color: var(--navy); }
+
+/* --- Architecture at a glance — barbell stack (mobile-first, single column;
+       optional 2-column label/percent split on larger screens) --- */
+.barbell {
+    max-width: 880px;
+    margin: 0 auto var(--s-7);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--white);
+}
+.barbell__row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--s-5);
+    align-items: center;
+    padding: var(--s-5) var(--s-6);
+    border-bottom: 1px solid var(--card-border);
+}
+.barbell__row:last-child { border-bottom: 0; }
+.barbell__row--engine {
+    background: linear-gradient(135deg, rgba(196,165,113,0.13) 0%, rgba(196,165,113,0.04) 100%);
+    border-bottom: 2px solid var(--gold-deep);
+}
+.barbell__row--foundation { background: #F4F6F9; border-bottom-color: #CBD2DC; }
+.barbell__row--cash { background: var(--white); }
+.barbell__label { min-width: 0; }
+.barbell__tag {
+    margin: 0 0 var(--s-2);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+.barbell__row--engine .barbell__tag { color: var(--gold-deep); }
+.barbell__row--foundation .barbell__tag { color: #64748B; }
+.barbell__row--cash .barbell__tag { color: var(--slate); }
+.barbell__head {
+    margin: 0 0 4px;
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--navy);
+}
+.barbell__top {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--slate);
+    font-weight: 400;
+}
+.barbell__sub {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--slate-dark);
+}
+.barbell__pct {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1;
+}
+.barbell__pct .num {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--navy);
+}
+.barbell__pct-label {
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--slate);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.barbell__row--engine .barbell__pct .num { color: var(--gold-deep); font-size: 18px; font-family: 'Playfair Display', serif; font-style: italic; font-weight: 500; }
+.barbell__row--engine .barbell__pct-label { color: var(--gold-deep); }
+.barbell__prose {
+    max-width: 820px;
+    margin: 0 auto var(--s-6);
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--slate-dark);
+}
+
+/* --- "What holds drawdown under 10%" sub-block --- */
+.dd-standard {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: var(--s-5) var(--s-6);
+    background: var(--ivory);
+    border: 1px solid var(--card-border);
+    border-left: 3px solid var(--gold-deep);
+    border-radius: 4px;
+}
+.dd-standard__h {
+    margin: 0 0 var(--s-3);
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--navy);
+}
+.dd-standard__h .num { color: var(--gold-deep); }
+.dd-standard__lede {
+    margin: 0 0 var(--s-3);
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--slate-dark);
+}
+.dd-standard__list {
+    margin: 0 0 var(--s-3);
+    padding-left: var(--s-5);
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--slate-dark);
+}
+.dd-standard__list li { margin-bottom: var(--s-2); }
+.dd-standard__list strong { color: var(--navy); }
+.dd-standard__link {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+}
+.dd-standard__link a { color: var(--gold-deep); }
+.dd-standard__link a:hover { color: var(--navy); }
+
+/* --- Proof-section bridge to Run-the-Math (slim card) --- */
+.proof-bridge {
+    margin: var(--s-6) auto 0;
+    max-width: 820px;
+    padding: var(--s-5) var(--s-6);
+    background: rgba(196,165,113,0.08);
+    border-left: 3px solid var(--gold-deep);
+    border-radius: 4px;
+}
+.proof-bridge__lede {
+    margin: 0 0 var(--s-4);
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--navy);
+}
+.proof-bridge__ctas {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+}
+
+/* --- Mobile: collapse barbell rows to single column at 380–768px --- */
+@media (max-width: 720px) {
+    .barbell__row { grid-template-columns: 1fr; gap: var(--s-3); }
+    .barbell__pct { flex-direction: row; align-items: baseline; gap: var(--s-2); }
+    .barbell__pct-label { margin-top: 0; }
+    .hero--simplification .hero__headline { font-size: 30px; }
+    .hero-num { white-space: normal; }   /* allow wrap on narrow viewports */
+}
