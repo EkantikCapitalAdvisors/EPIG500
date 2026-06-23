@@ -5651,3 +5651,9 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     .decomp-strip__term-val { font-size: 20px; }
     .decomp-strip__term--total .decomp-strip__term-val { font-size: 22px; }
 }
+
+/* Standalone decomp-strip — when the strip is wrapped in its own section
+   (after the live-vs-kill chart), it gets a centered intro feel. */
+.decomp-strip--standalone {
+    margin-top: 0;
+}
