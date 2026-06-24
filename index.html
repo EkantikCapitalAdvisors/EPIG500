@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260624a">
+    <link rel="stylesheet" href="css/style.css?v=20260624c">
 
     <script type="application/ld+json">
     {
@@ -266,6 +266,7 @@
                 <div class="decomp-strip__term">
                     <p class="decomp-strip__term-label">Engine <span class="decomp-strip__term-sub"><span class="num">30R × 0.5% NLV</span></span></p>
                     <p class="decomp-strip__term-val num">+11–15%/yr</p>
+                    <p class="decomp-strip__term-note">we <em>target</em> this · blended record to date <strong class="num">~17%/yr</strong></p>
                 </div>
                 <p class="decomp-strip__op" aria-hidden="true">=</p>
                 <div class="decomp-strip__term decomp-strip__term--total">
@@ -274,7 +275,7 @@
                 </div>
             </div>
             <p class="decomp-strip__basis">
-                <em>Engine basis</em> — Annual R = R-expectancy × trades/yr from the <a href="/dashboard.html" data-cta="dashboard-from-decomp">live dashboard</a>, at the <span class="num">0.5%</span> per-trade architectural risk anchor. <strong><span class="num">30R</span> is a conservative haircut, not a promise</strong> — and the <strong>gate that would <em>stop</em> the engine</strong> is published separately as a hard kill (<a href="#falsifiability">Falsifiability · ED-05b</a>), not as a softer number inside this math. Foundation range is the modeled overlay (no live verdict yet). <strong>Past performance does not guarantee future results.</strong>
+                <em>Engine basis</em> — we <strong>target</strong> <span class="num">+11–15%/yr</span> (Annual R = R-expectancy × trades/yr at the <span class="num">0.5%</span> anchor, with <span class="num">30R</span> a deliberately conservative haircut). The actual <strong>blended record to date runs ~<span class="num">17%/yr</span></strong> — above the target — across the full engine record (the ~18-month Telegram period plus the protocol-bound period; <a href="#stacks-over-time">see the chart</a>). We publish the target as the conservative number and the record as what it actually is. <strong><span class="num">30R</span> is a haircut, not a promise</strong>, and the <strong>gate that would <em>stop</em> the engine</strong> is published separately as a hard kill (<a href="#falsifiability">Falsifiability · ED-05b</a>). Foundation range is the modeled overlay (no live verdict yet). <strong>Past performance does not guarantee future results.</strong>
             </p>
         </aside>
 
@@ -330,9 +331,9 @@
                         <span class="arith-chart__contracts-label">Booster Engine</span>
                         <button class="arith-contract is-active" data-risk="0" type="button">Off</button>
                         <button class="arith-contract" data-risk="0.5" type="button" disabled aria-disabled="true">On · live record</button>
-                        <span class="arith-chart__contracts-caption" id="arithBoosterCaption">Live-record illustration — an extrapolated shape, not an expectation.</span>
+                        <span class="arith-chart__contracts-caption" id="arithBoosterCaption">Blended-record estimate · ~18-mo Telegram + protocol-bound · an estimate, not an expectation.</span>
                     </div>
-                    <div class="arith-chart__baseline" id="arithBaselineIndicator"><p class="arith-baseline__headline"><span class="diamond">◆</span> Toggle the Booster on to overlay the live-record illustration. Numeric throughput figures stay gated off pending separate countersignature.</p></div>
+                    <div class="arith-chart__baseline" id="arithBaselineIndicator"><p class="arith-baseline__headline"><span class="diamond">◆</span> Toggle the Booster on to overlay the blended-record estimate. The per-$1M figures load from the live engine record.</p></div>
                 </header>
                 <canvas id="arithEquityCanvas" width="1100" height="360" aria-label="Historical equity curve: S&P 500 vs 80% SPY foundation, plus capture-asymmetry band, plus optional Booster Engine layer extrapolated from the live record."></canvas>
                 <div class="arith-chart__legend">
@@ -345,7 +346,7 @@
                 <p class="arith-chart__reading" id="arithChartReading" aria-live="polite"><!-- dynamic interpretation rendered by JS --></p>
             </div>
 
-            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns (incl. dividends), 1975–2024 — selectable as a 20-year, 50-year, calm, or crash window. <strong>Benchmark for Outperformance:</strong> 100% S&amp;P 500 — the conservative comparison. <strong>Foundation layer (overlay model v1.3):</strong> 80% × (capture × index), where capture is the modeled output of the synthetic-passive overlay's published rules — upside slider in up years, downside slider in down years. <strong>Cash buffer:</strong> the remaining 20% is operational cash (flat, no exposure) — it carries a real ~17% drag vs 100%-S&amp;P over a 20-year window, which the overlay's downside protection must overcome to clear the bar. <strong>Booster Engine layer:</strong> the layer's <em>shape</em> is extrapolated <em>live</em> from <code>/data/trades.json</code> at the 0.5% per-trade architectural risk anchor (the level the actual record was generated at); it updates automatically with every admin publish. <strong>Per-trade throughput figures (% NLV/yr, $/yr, $/mo) remain gated off pending separate countersignature.</strong> Engine throughput is shown as <em>independent</em> of the year's S&amp;P return — the operator's intraday /ES trading isn't tied to the index's annual direction. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy. The synthetic-passive overlay carries no verdict yet (its gate is measured over a full market cycle); the rule set is published as design intent under armed-but-unfired falsifiability gates. Past performance does not guarantee future results.</strong> Dataset: protocol-bound Period 2 trades only. The Period 1 Telegram record is displayed on the dashboard for transparency and is excluded from every figure on this page. <a href="/run-the-math.html" data-cta="run-the-math-from-chart">Run the full math — windows, dollars, trade-off explorer →</a></p>
+            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns (incl. dividends), 1975–2024 — selectable as a 20-year, 50-year, calm, or crash window. <strong>Benchmark for Outperformance:</strong> 100% S&amp;P 500 — the conservative comparison. <strong>Foundation layer (overlay model v1.3):</strong> 80% × (capture × index), where capture is the modeled output of the synthetic-passive overlay's published rules — upside slider in up years, downside slider in down years. <strong>Cash buffer:</strong> the remaining 20% is operational cash (flat, no exposure) — it carries a real ~17% drag vs 100%-S&amp;P over a 20-year window, which the overlay's downside protection must overcome to clear the bar. <strong>Booster Engine layer:</strong> the layer's <em>shape</em> and the <strong>$/yr estimate</strong> are computed <em>live</em> from <code>/data/trades.json</code> at the 0.5% per-trade architectural risk anchor (the level the actual record was generated at); they update automatically with every admin publish. <strong>The Booster $/yr figure is a blended estimate over the full /ES engine record — both the ~18-month Telegram period (Apr 2023 – Oct 2024, pre-protocol: no in-advance witness or formal gates) and the protocol-bound pre-registration period (Feb 2026 forward).</strong> Blending raises the sample size at the cost of mixing a witnessed record with an unwitnessed one; it is an estimate from past throughput, <strong>not</strong> a witnessed sustainability claim. Engine throughput is shown as <em>independent</em> of the year's S&amp;P return — the operator's intraday /ES trading isn't tied to the index's annual direction. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy. The synthetic-passive overlay carries no verdict yet (its gate is measured over a full market cycle); the rule set is published as design intent under armed-but-unfired falsifiability gates. Past performance does not guarantee future results.</strong> Every per-trade count and the sustainability battery elsewhere on the site remain protocol-bound (Period 2) only; only this Booster $/yr estimate uses the blended basis. <a href="/run-the-math.html" data-cta="run-the-math-from-chart">Run the full math — windows, dollars, trade-off explorer →</a></p>
         </div>
     </div>
 </section>
@@ -1269,6 +1270,6 @@
 
 <!-- Calculator scripts (calc-core / calc-repair / calc-voltax / calc-bounds / calc-tradeoff)
      have moved to /run-the-math.html where the calculator DOM lives. -->
-<script src="js/script.js?v=20260624a"></script>
+<script src="js/script.js?v=20260624c"></script>
 </body>
 </html>

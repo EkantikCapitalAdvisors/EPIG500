@@ -14,12 +14,14 @@
            live-record illustration (an extrapolated shape, not a
            promise). Drawn live from the protocol-bound record in
            data/trades.json.
-         · CLAIMS_THROUGHPUT_ENABLED — remains OFF: no numeric
-           throughput figure (% NLV/yr, $/yr, $/mo) may render
-           anywhere until separately countersigned.
+         · CLAIMS_THROUGHPUT_ENABLED — countersigned ON: the Booster
+           $/yr estimate renders as a DISCLOSED BLENDED figure over the
+           full engine record (18-month Telegram period + protocol-bound
+           period). Every other page figure (counts, battery) stays
+           Period-2 only.
        ------------------------------------------------ */
     const EPIG_FLAGS = window.EPIG_FLAGS = {
-        CLAIMS_THROUGHPUT_ENABLED: false,
+        CLAIMS_THROUGHPUT_ENABLED: true,
         BOOSTER_TOGGLE_ENABLED: true
     };
 
@@ -937,12 +939,21 @@
     // Period discipline: only protocol-bound Period 2 trades feed the page-level
     // battery. The Period 1 Telegram record stays on the dashboard, never here.
     let REFERENCE_TRADES = [];
+    // Combined booster-throughput basis — the full /ES engine record across BOTH the
+    // 18-month Telegram period and the protocol-bound period. Used ONLY for the
+    // homepage Booster $/yr estimate, which is disclosed as a blended figure.
+    // Every count, the battery, and every other page figure stays Period-2
+    // (REFERENCE_TRADES) — this set never leaks into those.
+    let COMBINED_BASIS_TRADES = [];
     let CURRENT_DATASET_LABEL = 'Live pre-registration record';
     let currentTrades = [];
     const BATTERY_MIN_N = 30;
     tradesWithTimeout
         .then(function (trades) {
             REFERENCE_TRADES = trades.filter(isProtocolBound);
+            // Engine record across both periods (excludes the synthetic-passive SPY
+            // overlay book). Feeds only the disclosed blended Booster $/yr estimate.
+            COMBINED_BASIS_TRADES = trades.filter(function (t) { return t && t.book !== 'synthetic_passive'; });
             currentTrades = REFERENCE_TRADES.slice();
             CURRENT_DATASET_LABEL = 'Live pre-reg record (' + REFERENCE_TRADES.length + ' trades)';
             if (typeof renderBattery === 'function') renderBattery(currentTrades);
@@ -1859,12 +1870,16 @@
         // Refresh the baseline + re-render. Called by the outer fetch handler once
         // REFERENCE_TRADES populates. Safe to call repeatedly.
         function refreshBaselineFromLiveRecord() {
-            // REFERENCE_TRADES is Period-2-only by construction (see fetch handler).
-            const meta = computeBaselineFromTrades(REFERENCE_TRADES);
+            // The Booster $/yr estimate is a DISCLOSED BLENDED figure over the full
+            // engine record (18-month Telegram period + protocol-bound period). This
+            // is the only place the combined basis is used; counts/battery stay Period-2.
+            const basis = (COMBINED_BASIS_TRADES && COMBINED_BASIS_TRADES.length)
+                ? COMBINED_BASIS_TRADES : REFERENCE_TRADES;
+            const meta = computeBaselineFromTrades(basis);
             if (meta && isFinite(meta.rate) && meta.rate > 0) {
                 THROUGHPUT_RATE_AT_HISTORICAL_RISK = meta.rate;
                 throughputBaselineMeta = Object.assign({
-                    source: 'protocol-bound Period 2 live record'
+                    source: 'blended engine record (Telegram + protocol-bound)'
                 }, meta);
             }
             updateBaselineIndicator();
@@ -1900,15 +1915,15 @@
 
             el.innerHTML =
                   '<p class="arith-baseline__headline">'
-                +   '<span class="diamond">◆</span> Booster Engine throughput on the protocol-bound live record · <strong>+' + ratePct + '% NLV / yr</strong> on ' + fmtNLV(activeNLV) + ' · '
+                +   '<span class="diamond">◆</span> Estimated Booster Engine throughput — <strong>blended record</strong> · <strong>+' + ratePct + '% NLV / yr</strong> on ' + fmtNLV(activeNLV) + ' · '
                 +   '<span class="arith-baseline__dollars">≈ ' + fmtUSD0(dollarsPerYear) + '/yr · ' + fmtUSD0(dollarsPerMonth) + '/month</span>'
-                +   ' · sample: <strong>' + trades + ' trades</strong>'
+                +   ' · sample: <strong>' + trades + ' trades</strong> across ' + months + ' active months'
                 + '</p>'
                 + '<p class="arith-baseline__scaling">'
                 +   '<span class="diamond">◆</span> At this portfolio size the engine runs <strong>' + units.toFixed(units === Math.floor(units) ? 0 : 1) + ' /ES base contracts</strong> under the 0.5% per-trade architectural anchor. <strong>Hard kill</strong> (ED-05b, −100 pts) fires at a portfolio drawdown of <strong>' + fmtUSD0(hardKillDollar) + '</strong> on this NLV. Contracts and dollar kill both scale linearly with portfolio size.'
                 + '</p>'
                 + '<p class="arith-baseline__src">'
-                +   '<em>Source: protocol-bound Period 2 live record (' + trades + ' trades · ' + totalPts + ' pts · ' + months + ' active months). Updates automatically with every admin publish. Throughput modeled at the 0.5% per-trade architectural risk anchor — the level the record was generated at. Historical illustration of past throughput extrapolated forward at constant contract count; not a projection of any Ekantik strategy.</em>'
+                +   '<em>Blended basis: the full /ES engine record across <strong>both</strong> the ~18-month Telegram period (Apr 2023 – Oct 2024, pre-protocol — no in-advance witness or formal gates) and the protocol-bound pre-registration period (Feb 2026 forward) — ' + trades + ' trades · ' + totalPts + ' pts · ' + months + ' active months. The Telegram portion is shown elsewhere for transparency and is <strong>not</strong> a witnessed/sustainability claim; blending it here raises the sample size at the cost of mixing witnessed and unwitnessed records. Throughput modeled at the 0.5% per-trade architectural risk anchor — the level the record was generated at — and extrapolated forward at constant contract count. <strong>An estimate from past throughput, not a projection of any Ekantik strategy. Past performance does not guarantee future results.</strong> Updates automatically with every admin publish.</em>'
                 + '</p>';
         }
 
