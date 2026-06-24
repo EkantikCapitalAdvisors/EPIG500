@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260624e">
+    <link rel="stylesheet" href="css/style.css?v=20260624f">
 
     <script type="application/ld+json">
     {
@@ -162,6 +162,9 @@
             <h2 class="section__h">One picture. The whole architecture.</h2>
         </header>
 
+        <!-- Shared-width column: the barbell, the prose, and the drawdown box
+             share one 820px wrapper so their left/right edges can never drift. -->
+        <div class="how-stack">
         <!-- Barbell stack diagram — mobile-stackable -->
         <div class="barbell" role="img" aria-label="Architecture: /ES futures engine on top of 80% SPY foundation plus 20% cash buffer.">
             <div class="barbell__row barbell__row--engine">
@@ -205,6 +208,7 @@
             </ul>
             <p class="dd-standard__link"><a href="#ladder" data-cta="dd-standard-cadence">See the full risk cadence →</a></p>
         </aside>
+        </div><!-- /.how-stack -->
     </div>
 </section>
 
@@ -1290,6 +1294,6 @@
 
 <!-- Calculator scripts (calc-core / calc-repair / calc-voltax / calc-bounds / calc-tradeoff)
      have moved to /run-the-math.html where the calculator DOM lives. -->
-<script src="js/script.js?v=20260624e"></script>
+<script src="js/script.js?v=20260624f"></script>
 </body>
 </html>
