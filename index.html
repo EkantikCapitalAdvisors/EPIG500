@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260624d">
+    <link rel="stylesheet" href="css/style.css?v=20260624e">
 
     <script type="application/ld+json">
     {
@@ -344,6 +344,26 @@
                     <span class="arith-chart__legend-item"><span class="arith-chart__swatch arith-chart__swatch--line arith-chart__swatch--dashed" style="background:#12264a"></span> S&amp;P 500 (100% benchmark) · dashed</span>
                 </div>
                 <p class="arith-chart__reading" id="arithChartReading" aria-live="polite"><!-- dynamic interpretation rendered by JS --></p>
+
+                <!-- How the strategy multiple is built — worked example for the default
+                     Full 20-year view (2005–2024) with the Booster on. The S&P and
+                     foundation terms are fixed history; the Booster term tracks the
+                     live blended rate, so the total moves as the record grows. -->
+                <details class="arith-chart__howbuilt">
+                    <summary><span class="diamond">◆</span> How the strategy multiple is built <span class="arith-chart__howbuilt-eg">(e.g. ≈ 9.4× on the Full 20-year view)</span></summary>
+                    <div class="arith-chart__howbuilt-body">
+                        <p>The gold strategy line is <strong>three layers stacked</strong> over the selected window (default: 2005–2024, real S&amp;P 500 total returns). For the full 20-year view, with the Booster on:</p>
+                        <table class="arith-howbuilt-table">
+                            <tr><td>S&amp;P 500 (benchmark)</td><td class="num">7.17×</td><td>product of (1 + annual total return), 2005–2024</td></tr>
+                            <tr><td>Foundation — 80% SPY</td><td class="num">5.74×</td><td>0.80 × 7.17 (capture sliders at 100/100)</td></tr>
+                            <tr><td>+ Cash buffer — 20%, flat</td><td class="num">+0.20</td><td>held in cash, no exposure</td></tr>
+                            <tr class="arith-howbuilt-table__sub"><td>= Foundation + cash, Booster <em>off</em></td><td class="num">5.94×</td><td>the strategy line with the engine toggled off</td></tr>
+                            <tr><td>+ Booster Engine</td><td class="num">+3.50</td><td>blended rate <span class="num">~17.5%/yr</span> × 20 yr, <strong>linear</strong> (constant 1 /ES per $100K — engine gains are <em>not</em> compounded)</td></tr>
+                            <tr class="arith-howbuilt-table__total"><td>= Strategy total, Booster <em>on</em></td><td class="num">≈ 9.44×</td><td>5.74 + 0.20 + 3.50</td></tr>
+                        </table>
+                        <p class="arith-chart__howbuilt-note">The S&amp;P and foundation terms are fixed history; the Booster term tracks the live blended throughput rate, so the total shifts as the record grows and with the capture sliders, the window, and the Booster toggle. The Booster is added <strong>linearly at constant contract count</strong> — a deliberately conservative choice (no compounding of engine gains). <em>Historical illustration, hypothetical inputs — not a projection of any Ekantik strategy. Past performance does not guarantee future results.</em></p>
+                    </div>
+                </details>
             </div>
 
             <p class="arith-source">◆ Source: S&amp;P 500 annual total returns (incl. dividends), 1975–2024 — selectable as a 20-year, 50-year, calm, or crash window. <strong>Benchmark for Outperformance:</strong> 100% S&amp;P 500 — the conservative comparison. <strong>Foundation layer (overlay model v1.3):</strong> 80% × (capture × index), where capture is the modeled output of the synthetic-passive overlay's published rules — upside slider in up years, downside slider in down years. <strong>Cash buffer:</strong> the remaining 20% is operational cash (flat, no exposure) — it carries a real ~17% drag vs 100%-S&amp;P over a 20-year window, which the overlay's downside protection must overcome to clear the bar. <strong>Booster Engine layer:</strong> the layer's <em>shape</em> and the <strong>$/yr estimate</strong> are computed <em>live</em> from <code>/data/trades.json</code> at the 0.5% per-trade architectural risk anchor (the level the actual record was generated at); they update automatically with every admin publish. <strong>The Booster $/yr figure is a blended estimate over the full /ES engine record — both the ~18-month Telegram period (Apr 2023 – Oct 2024, pre-protocol: no in-advance witness or formal gates) and the protocol-bound pre-registration period (Feb 2026 forward).</strong> Blending raises the sample size at the cost of mixing a witnessed record with an unwitnessed one; it is an estimate from past throughput, <strong>not</strong> a witnessed sustainability claim. Engine throughput is shown as <em>independent</em> of the year's S&amp;P return — the operator's intraday /ES trading isn't tied to the index's annual direction. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy. The synthetic-passive overlay carries no verdict yet (its gate is measured over a full market cycle); the rule set is published as design intent under armed-but-unfired falsifiability gates. Past performance does not guarantee future results.</strong> Every per-trade count and the sustainability battery elsewhere on the site remain protocol-bound (Period 2) only; only this Booster $/yr estimate uses the blended basis. <a href="/run-the-math.html" data-cta="run-the-math-from-chart">Run the full math — windows, dollars, trade-off explorer →</a></p>
@@ -1270,6 +1290,6 @@
 
 <!-- Calculator scripts (calc-core / calc-repair / calc-voltax / calc-bounds / calc-tradeoff)
      have moved to /run-the-math.html where the calculator DOM lives. -->
-<script src="js/script.js?v=20260624d"></script>
+<script src="js/script.js?v=20260624e"></script>
 </body>
 </html>
