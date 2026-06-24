@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260624h">
+    <link rel="stylesheet" href="css/style.css?v=20260624i">
 
     <script type="application/ld+json">
     {
@@ -533,7 +533,7 @@
                 </div>
                 <div class="rm-rule">
                     <p class="rm-rule__h"><span class="op">OP-03</span> Trailing daily cap <em class="rm-new">v1.2</em></p>
-                    <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. <strong>Per-contract risk is fixed at 0.5% of NLV</strong>; total per-trade exposure scales 0.5% → 1% as contracts scale 1 → 2 with the earned profit buffer. The daily floor ratchets up with every new peak. Replaces the v1.0 fixed −12 ES pts cap.</p>
+                    <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. <strong>The 0.5% NLV per-trade is the architectural cap, not the starting size.</strong> At a $100K account, baseline execution is <strong>2 /MES (≈80% of setups) + 5 /MES (≈20%)</strong> — well inside the 0.5% envelope — stepping to <strong>5 /MES + 1 /ES</strong> after the first <span class="num">$5K</span> of realized profit at baseline sizing. The daily floor ratchets up with every new peak. Replaces the v1.0 fixed −12 ES pts cap.</p>
                 </div>
                 <div class="rm-rule">
                     <p class="rm-rule__h"><span class="op">·</span> Auto-resume</p>
@@ -584,13 +584,13 @@
             <header class="calc__head">
                 <p class="eyebrow"><span class="diamond">◆</span> The Worst Case, Priced</p>
                 <h3 class="calc__h">A risk with a number can be financed. An unbounded risk can only be feared.</h3>
-                <p class="calc__sub">The engine's published loss bounds — per trade, per day, per week, and the hard kill — at <span class="num">$100K</span> base sizing. Loss-side only, by construction.</p>
+                <p class="calc__sub">The engine's published loss bounds — per trade, per day, per week, and the hard kill — shown at the <strong>architectural cap</strong> (1 /ES per <span class="num">$100K</span> NLV). Forward execution at $100K starts in /MES baseline (~26% of these dollar figures); the numbers below are the ceiling these never exceed. Loss-side only, by construction.</p>
             </header>
             <div class="cb-ladder">
                 <div class="cb-rung"><span class="cb-rung__id">OP-02</span><div class="cb-rung__body"><p class="cb-rung__title">Per trade</p><p class="cb-rung__fig num">−$500 (0.5% of NLV)</p><p class="cb-rung__text">Per-contract risk fixed at <span class="num">0.5%</span> of NLV. After any closed losing trade, the day is over (one-loss daily rule).</p></div></div>
                 <div class="cb-rung"><span class="cb-rung__id">OP-03</span><div class="cb-rung__body"><p class="cb-rung__title">Daily floor</p><p class="cb-rung__fig num">−$500 (starting)</p><p class="cb-rung__text">Trailing high-water-mark floor — ratchets up with every new equity peak, never down.</p></div></div>
                 <div class="cb-rung"><span class="cb-rung__id">OP-05</span><div class="cb-rung__body"><p class="cb-rung__title">Weekly stand-down</p><p class="cb-rung__fig cb-rung__fig--rule">2–3 consecutive losing days halts the week (OP-05)</p><p class="cb-rung__text">A rule, not a dollar figure: consecutive losing days halt the week pending witness review.</p></div></div>
-                <div class="cb-rung cb-rung--kill"><span class="cb-rung__id">ED-05b</span><div class="cb-rung__body"><p class="cb-rung__title">Hard kill</p><p class="cb-rung__fig num">−$5,000 / /ES</p><p class="cb-rung__text"><span class="num">100 /ES pts × $50/pt</span> = <strong class="num">$5,000 per contract</strong>. Scales linearly with portfolio: at the <span class="num">1 /ES per $100K NLV</span> base sizing, hard kill = <strong class="num">$50,000 on a $1M portfolio · $250,000 on $5M</strong>. Budgeted in advance whatever the size.</p></div></div>
+                <div class="cb-rung cb-rung--kill"><span class="cb-rung__id">ED-05b</span><div class="cb-rung__body"><p class="cb-rung__title">Hard kill</p><p class="cb-rung__fig num">−$5,000 / /ES</p><p class="cb-rung__text"><span class="num">100 /ES pts × $50/pt</span> = <strong class="num">$5,000 per /ES contract</strong>. At baseline /MES execution the dollar kill is proportionally smaller (≈<span class="num">$1,000</span> at 2 /MES; ≈<span class="num">$2,500</span> at 5 /MES). At full Standard sizing (1 /ES per $100K NLV), hard kill = <strong class="num">$50,000 on a $1M portfolio · $250,000 on $5M</strong>. Budgeted in advance whatever the size.</p></div></div>
             </div>
             <p class="calc__caption"><em>Static summary at $100K base. Run it at your own portfolio size on the <a href="/run-the-math.html#calcBoundsWrap" data-cta="runmath-bounds-from-worst-case">Worst Case, Priced interactive →</a>. These figures compute the published Falsifiability Protocol v1.6 loss bounds. Caps and the hard kill are sizing and exit rules enforced by rule — fast markets can gap beyond them. Not a guarantee, not an offer, and not a statement of expected results. Past performance does not guarantee future results.</em></p>
         </div>
@@ -612,7 +612,7 @@
         <div class="three-col">
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Disciplined Risk</p>
-                <p>Risk is anchored <em>per contract</em> at <strong>0.5% of total NLV</strong> — fixed, architectural, never escalated. Total per-trade exposure scales via <strong>contract count</strong>, which itself scales with capital at <strong>Standard sizing: 1 /ES per $100K NLV</strong> (v1.6, uncapped — the v1.5 2-contract ceiling was removed). Each additional contract is earned by accumulated profit buffer, never assumed. The dollar amount grows two ways — the capital base grows, AND the Standard contract count grows with it — but the per-contract percentage never changes, and the ED-05b hard kill stays at a consistent 5% of NLV at Standard sizing regardless of account size.</p>
+                <p>The architectural anchor is <strong>0.5% of NLV per /ES contract</strong> — fixed, never escalated — and <strong>Standard sizing</strong> is 1 /ES per $100K NLV (v1.6, uncapped). That's the <em>cap</em>. Forward execution starts conservatively inside it: at $100K, baseline is <strong>2 /MES + 5 /MES</strong> blend, stepping to <strong>5 /MES + 1 /ES</strong> after the first <span class="num">$5K</span> of realized profit at baseline, then approaching full Standard sizing as NLV grows. Each step is earned by accumulated profit buffer, never assumed. The per-/ES anchor and the ED-05b hard kill (5% NLV at Standard) never change.</p>
             </article>
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Earned Leverage</p>
@@ -620,7 +620,7 @@
             </article>
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Velocity Compounds</p>
-                <p>Each step shortens the time to the next as throughput grows linearly with contract count. By the 2-/ES ceiling, the engine is doing the heavy lifting and dollar outcomes climb non-linearly.</p>
+                <p>Each step shortens the time to the next as throughput grows with contract count. From baseline /MES to <strong>5 /MES + 1 /ES</strong> is a ~5.8× jump in dollar throughput; from there toward full Standard sizing, the engine does the heavy lifting and dollar outcomes climb non-linearly with NLV.</p>
             </article>
         </div>
 
@@ -787,7 +787,7 @@
                     <p class="pillar-card__letter">P</p>
                     <h3 class="pillar-card__h">Principal Preservation</h3>
                     <p class="pillar-card__sub">Engineered to preserve capital first</p>
-                    <p class="pillar-card__body">80% of capital sits in the <strong>synthetic-passive</strong> S&amp;P 500 foundation — passive by default, reduced by published overlay rules in genuine corrections. 20% is held in cash as an operational settlement buffer. On the futures engine, per-/ES-contract risk is fixed at <strong>0.5% NLV</strong> — the architectural anchor never changes. A trailing daily cap, a HWM−5% NLV floor, and a hard kill at −100 cumulative /ES points ($5,000 per contract) bound the worst case.</p>
+                    <p class="pillar-card__body">80% of capital sits in the <strong>synthetic-passive</strong> S&amp;P 500 foundation — passive by default, reduced by published overlay rules in genuine corrections. 20% is held in cash as an operational settlement buffer. On the futures engine, the architectural per-/ES anchor is <strong>0.5% NLV</strong> — the cap, not the starting size. Forward execution at $100K starts in /MES baseline (2 /MES + 5 /MES blend), well inside that envelope. A trailing daily cap, a HWM−5% NLV floor, and a hard kill at −100 cumulative /ES points ($5,000 per /ES) bound the worst case.</p>
                     <p class="pillar-card__anchor"><a href="#ladder">See the risk cadence →</a></p>
                 </article>
 
@@ -803,7 +803,7 @@
                     <p class="pillar-card__letter">G</p>
                     <h3 class="pillar-card__h">Growth</h3>
                     <p class="pillar-card__sub">Compounding on a passive foundation</p>
-                    <p class="pillar-card__body">A synthetic-passive S&amp;P 500 foundation carries baseline market exposure — held fully invested by default, with the published overlay reducing exposure only in genuine corrections. The /ES engine layers disciplined, <em>earned</em> scaling on top — each additional contract paid for by a realized profit buffer, scaled with capital at Standard sizing (1 /ES per $100K NLV; v1.6 — uncapped). How much that compounds is not projected here; it is reported from the live record as it accumulates.</p>
+                    <p class="pillar-card__body">A synthetic-passive S&amp;P 500 foundation carries baseline market exposure — held fully invested by default, with the published overlay reducing exposure only in genuine corrections. The futures engine layers disciplined, <em>earned</em> scaling on top — starting at /MES baseline (2 /MES + 5 /MES blend at $100K), stepping to 5 /MES + 1 /ES after the first $5K-realized-profit buffer, and approaching Standard sizing (1 /ES per $100K NLV; v1.6 — uncapped) as NLV grows. Each step is earned, never assumed. How much that compounds is not projected here; it is reported from the live record as it accumulates.</p>
                     <p class="pillar-card__anchor"><a href="#ladder">See the compounding ladder →</a></p>
                 </article>
             </div>
@@ -1294,6 +1294,6 @@
 
 <!-- Calculator scripts (calc-core / calc-repair / calc-voltax / calc-bounds / calc-tradeoff)
      have moved to /run-the-math.html where the calculator DOM lives. -->
-<script src="js/script.js?v=20260624h"></script>
+<script src="js/script.js?v=20260624i"></script>
 </body>
 </html>
