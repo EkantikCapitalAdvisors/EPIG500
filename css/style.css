@@ -5403,10 +5403,12 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     border-radius: 4px;
     font-size: 13.5px;
     line-height: 1.55;
-    color: var(--slate-dark);
+    /* The hero sits on --navy-950; this fine-print block must read light-on-dark
+       (it was previously --slate-dark / --navy, i.e. dark-on-dark and invisible). */
+    color: rgba(233, 231, 226, 0.72);
 }
 .hero__compliance p { margin: 0; }
-.hero__compliance strong { color: var(--navy); }
+.hero__compliance strong { color: var(--text-on-dark); }
 
 /* --- Architecture at a glance — barbell stack (mobile-first, single column;
        optional 2-column label/percent split on larger screens) --- */
