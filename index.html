@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260624g">
+    <link rel="stylesheet" href="css/style.css?v=20260624i">
 
     <script type="application/ld+json">
     {
@@ -276,7 +276,7 @@
                         <button class="arith-contract" data-risk="0.5" type="button" disabled aria-disabled="true">On · live record</button>
                         <span class="arith-chart__contracts-caption" id="arithBoosterCaption">Blended-record estimate · ~18-mo Telegram + protocol-bound · an estimate, not an expectation.</span>
                     </div>
-                    <div class="arith-chart__baseline" id="arithBaselineIndicator"><p class="arith-baseline__headline"><span class="diamond">◆</span> Toggle the Booster on to overlay the blended-record estimate. Figures shown per <span class="num">$100K</span> = <strong>1 /ES contract</strong>, the unit the record was generated at; they load from the live engine record.</p></div>
+                    <div class="arith-chart__baseline" id="arithBaselineIndicator"><p class="arith-baseline__headline"><span class="diamond">◆</span> Toggle the Booster on to overlay the blended-record estimate. The displayed $/yr is the historical record at <strong>1 /ES per $100K</strong> (the sizing the record was generated at). <strong>Forward execution at a $100K account starts smaller</strong> — typically <span class="num">2 /MES (~80% of setups) + 5 /MES (~20%)</span>, i.e. ~26% of /ES dollar throughput — and steps to <span class="num">5 /MES + 1 /ES</span> after the first profit-buffer milestone.</p></div>
                 </header>
                 <canvas id="arithEquityCanvas" width="1100" height="360" aria-label="Historical equity curve: S&P 500 vs 80% SPY foundation, plus capture-asymmetry band, plus optional Booster Engine layer extrapolated from the live record."></canvas>
                 <div class="arith-chart__legend">
@@ -301,7 +301,7 @@
                             <tr><td>Foundation — 80% SPY</td><td class="num">5.74×</td><td>0.80 × 7.17 (capture sliders at 100/100)</td></tr>
                             <tr><td>+ Cash buffer — 20%, flat</td><td class="num">+0.20</td><td>held in cash, no exposure</td></tr>
                             <tr class="arith-howbuilt-table__sub"><td>= Foundation + cash, Booster <em>off</em></td><td class="num">5.94×</td><td>the strategy line with the engine toggled off</td></tr>
-                            <tr><td>+ Booster Engine</td><td class="num">+3.50</td><td>blended rate <span class="num">~17.5%/yr</span> × 20 yr, <strong>linear</strong> (constant 1 /ES per $100K — engine gains are <em>not</em> compounded)</td></tr>
+                            <tr><td>+ Booster Engine</td><td class="num">+3.50</td><td>blended rate <span class="num">~17.5%/yr</span> × 20 yr, <strong>linear</strong> (constant 1 /ES per $100K — engine gains are <em>not</em> compounded). <em>This row models the architectural cap; forward execution at $100K starts at ~26% of this contribution (2 /MES + 5 /MES blend), stepping to ~150% after the first profit-buffer milestone (5 /MES + 1 /ES).</em></td></tr>
                             <tr class="arith-howbuilt-table__total"><td>= Strategy total, Booster <em>on</em></td><td class="num">≈ 9.44×</td><td>5.74 + 0.20 + 3.50</td></tr>
                         </table>
                         <p class="arith-chart__howbuilt-note">The S&amp;P and foundation terms are fixed history; the Booster term tracks the live blended throughput rate, so the total shifts as the record grows and with the capture sliders, the window, and the Booster toggle. The Booster is added <strong>linearly at constant contract count</strong> — a deliberately conservative choice (no compounding of engine gains). <em>Historical illustration, hypothetical inputs — not a projection of any Ekantik strategy. Past performance does not guarantee future results.</em></p>
@@ -309,7 +309,7 @@
                 </details>
             </div>
 
-            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns (incl. dividends), 1975–2024 — selectable as a 20-year, 50-year, calm, or crash window. <strong>Benchmark for Outperformance:</strong> 100% S&amp;P 500 — the conservative comparison. <strong>Foundation layer (overlay model v1.3):</strong> 80% × (capture × index), where capture is the modeled output of the synthetic-passive overlay's published rules — upside slider in up years, downside slider in down years. <strong>Cash buffer:</strong> the remaining 20% is operational cash (flat, no exposure) — it carries a real ~17% drag vs 100%-S&amp;P over a 20-year window, which the overlay's downside protection must overcome to clear the bar. <strong>Booster Engine layer:</strong> the layer's <em>shape</em> and the <strong>$/yr estimate</strong> are computed <em>live</em> from <code>/data/trades.json</code> at the 0.5% per-trade architectural risk anchor (the level the actual record was generated at); they update automatically with every admin publish. <strong>The Booster $/yr figure is a blended estimate over the full /ES engine record — both the ~18-month Telegram period (Apr 2023 – Oct 2024, pre-protocol: no in-advance witness or formal gates) and the protocol-bound pre-registration period (Feb 2026 forward).</strong> Blending raises the sample size at the cost of mixing a witnessed record with an unwitnessed one; it is an estimate from past throughput, <strong>not</strong> a witnessed sustainability claim. Engine throughput is shown as <em>independent</em> of the year's S&amp;P return — the operator's intraday /ES trading isn't tied to the index's annual direction. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy. The synthetic-passive overlay carries no verdict yet (its gate is measured over a full market cycle); the rule set is published as design intent under armed-but-unfired falsifiability gates. Past performance does not guarantee future results.</strong> Every per-trade count and the sustainability battery elsewhere on the site remain protocol-bound (Period 2) only; only this Booster $/yr estimate uses the blended basis. <a href="/run-the-math.html" data-cta="run-the-math-from-chart">Run the full math — windows, dollars, trade-off explorer →</a></p>
+            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns (incl. dividends), 1975–2024 — selectable as a 20-year, 50-year, calm, or crash window. <strong>Benchmark for Outperformance:</strong> 100% S&amp;P 500 — the conservative comparison. <strong>Foundation layer (overlay model v1.3):</strong> 80% × (capture × index), where capture is the modeled output of the synthetic-passive overlay's published rules — upside slider in up years, downside slider in down years. <strong>Cash buffer:</strong> the remaining 20% is operational cash (flat, no exposure) — it carries a real ~17% drag vs 100%-S&amp;P over a 20-year window, which the overlay's downside protection must overcome to clear the bar. <strong>Booster Engine layer:</strong> the layer's <em>shape</em> and the <strong>$/yr estimate</strong> are computed <em>live</em> from <code>/data/trades.json</code> at the 0.5% per-trade architectural risk anchor (the level the actual record was generated at); they update automatically with every admin publish. <strong>The Booster $/yr figure is a blended estimate over the full /ES engine record — both the ~18-month Telegram period (Apr 2023 – Oct 2024, pre-protocol: no in-advance witness or formal gates) and the protocol-bound pre-registration period (Feb 2026 forward).</strong> Blending raises the sample size at the cost of mixing a witnessed record with an unwitnessed one; it is an estimate from past throughput, <strong>not</strong> a witnessed sustainability claim. <strong>Forward sizing policy at a $100K account</strong> is more conservative than the /ES rate the record was generated at: baseline execution is <span class="num">2 /MES (~80% of setups)</span> + <span class="num">5 /MES (~20%)</span> — a blended <span class="num">$13/pt</span> versus <span class="num">$50/pt</span> for 1 /ES, i.e. ~26% of /ES dollar throughput — so the realistic per-$100K forward dollar expectation is ≈ <span class="num">$4,500/yr</span>, not the displayed ~$17,500. After the first profit-buffer milestone the engine steps to <span class="num">5 /MES + 1 /ES</span> (~150% of /ES throughput), and at full Standard sizing scales to <span class="num">1 /ES per $100K</span> as NLV grows. Engine throughput is shown as <em>independent</em> of the year's S&amp;P return — the operator's intraday /ES trading isn't tied to the index's annual direction. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy. The synthetic-passive overlay carries no verdict yet (its gate is measured over a full market cycle); the rule set is published as design intent under armed-but-unfired falsifiability gates. Past performance does not guarantee future results.</strong> Every per-trade count and the sustainability battery elsewhere on the site remain protocol-bound (Period 2) only; only this Booster $/yr estimate uses the blended basis. <a href="/run-the-math.html" data-cta="run-the-math-from-chart">Run the full math — windows, dollars, trade-off explorer →</a></p>
         </div>
     </div>
 </section>
@@ -478,7 +478,7 @@
         <header class="section__header section__header--center">
             <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Mechanism + The Discipline</p>
             <h2 class="section__h section__h--lg">The Compounding Ladder</h2>
-            <p class="section__sub">Starting at <strong>$100K NLV</strong>. <strong>80% allocated to SPY</strong> for baseline market exposure (the position also serves as portfolio-margin collateral). <strong>20% held in cash</strong> as an operational settlement buffer that backs the /ES futures engine. <strong>Per-contract risk is fixed at 0.5% of NLV</strong>; total per-trade exposure scales <strong>0.5% → 1%</strong> as contracts scale <strong>1 → 2</strong> with the earned profit buffer. The cadence rules that bound drawdown are listed first — they govern the engine whichever way the year plays out.</p>
+            <p class="section__sub">Starting at <strong>$100K NLV</strong>. <strong>80% allocated to SPY</strong> for baseline market exposure (the position also serves as portfolio-margin collateral). <strong>20% held in cash</strong> as an operational settlement buffer that backs the futures engine. <strong>The 0.5% per-trade architectural risk anchor is the cap, not the starting size.</strong> At $100K the engine starts more conservatively in micros — <strong class="num">2 /MES</strong> on roughly <strong>80%</strong> of setups and <strong class="num">5 /MES</strong> on the remaining <strong>20%</strong> (higher-conviction) — and steps to <strong class="num">5 /MES + 1 /ES</strong> after the first earned profit buffer. Full Standard sizing (1 /ES per $100K NLV) is the architectural cap that scaling approaches as the account grows. The cadence rules below bound drawdown whichever way the year plays out.</p>
         </header>
 
         <!-- Theoretical disclaimer banner — leading so investors can't miss it -->
@@ -533,7 +533,7 @@
                 </div>
                 <div class="rm-rule">
                     <p class="rm-rule__h"><span class="op">OP-03</span> Trailing daily cap <em class="rm-new">v1.2</em></p>
-                    <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. <strong>Per-contract risk is fixed at 0.5% of NLV</strong>; total per-trade exposure scales 0.5% → 1% as contracts scale 1 → 2 with the earned profit buffer. The daily floor ratchets up with every new peak. Replaces the v1.0 fixed −12 ES pts cap.</p>
+                    <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. <strong>The 0.5% NLV per-trade is the architectural cap, not the starting size.</strong> At a $100K account, baseline execution is <strong>2 /MES (≈80% of setups) + 5 /MES (≈20%)</strong> — well inside the 0.5% envelope — stepping to <strong>5 /MES + 1 /ES</strong> after the first <span class="num">$5K</span> of realized profit at baseline sizing. The daily floor ratchets up with every new peak. Replaces the v1.0 fixed −12 ES pts cap.</p>
                 </div>
                 <div class="rm-rule">
                     <p class="rm-rule__h"><span class="op">·</span> Auto-resume</p>
@@ -584,13 +584,13 @@
             <header class="calc__head">
                 <p class="eyebrow"><span class="diamond">◆</span> The Worst Case, Priced</p>
                 <h3 class="calc__h">A risk with a number can be financed. An unbounded risk can only be feared.</h3>
-                <p class="calc__sub">The engine's published loss bounds — per trade, per day, per week, and the hard kill — at <span class="num">$100K</span> base sizing. Loss-side only, by construction.</p>
+                <p class="calc__sub">The engine's published loss bounds — per trade, per day, per week, and the hard kill — shown at the <strong>architectural cap</strong> (1 /ES per <span class="num">$100K</span> NLV). Forward execution at $100K starts in /MES baseline (~26% of these dollar figures); the numbers below are the ceiling these never exceed. Loss-side only, by construction.</p>
             </header>
             <div class="cb-ladder">
                 <div class="cb-rung"><span class="cb-rung__id">OP-02</span><div class="cb-rung__body"><p class="cb-rung__title">Per trade</p><p class="cb-rung__fig num">−$500 (0.5% of NLV)</p><p class="cb-rung__text">Per-contract risk fixed at <span class="num">0.5%</span> of NLV. After any closed losing trade, the day is over (one-loss daily rule).</p></div></div>
                 <div class="cb-rung"><span class="cb-rung__id">OP-03</span><div class="cb-rung__body"><p class="cb-rung__title">Daily floor</p><p class="cb-rung__fig num">−$500 (starting)</p><p class="cb-rung__text">Trailing high-water-mark floor — ratchets up with every new equity peak, never down.</p></div></div>
                 <div class="cb-rung"><span class="cb-rung__id">OP-05</span><div class="cb-rung__body"><p class="cb-rung__title">Weekly stand-down</p><p class="cb-rung__fig cb-rung__fig--rule">2–3 consecutive losing days halts the week (OP-05)</p><p class="cb-rung__text">A rule, not a dollar figure: consecutive losing days halt the week pending witness review.</p></div></div>
-                <div class="cb-rung cb-rung--kill"><span class="cb-rung__id">ED-05b</span><div class="cb-rung__body"><p class="cb-rung__title">Hard kill</p><p class="cb-rung__fig num">−$5,000 / /ES</p><p class="cb-rung__text"><span class="num">100 /ES pts × $50/pt</span> = <strong class="num">$5,000 per contract</strong>. Scales linearly with portfolio: at the <span class="num">1 /ES per $100K NLV</span> base sizing, hard kill = <strong class="num">$50,000 on a $1M portfolio · $250,000 on $5M</strong>. Budgeted in advance whatever the size.</p></div></div>
+                <div class="cb-rung cb-rung--kill"><span class="cb-rung__id">ED-05b</span><div class="cb-rung__body"><p class="cb-rung__title">Hard kill</p><p class="cb-rung__fig num">−$5,000 / /ES</p><p class="cb-rung__text"><span class="num">100 /ES pts × $50/pt</span> = <strong class="num">$5,000 per /ES contract</strong>. At baseline /MES execution the dollar kill is proportionally smaller (≈<span class="num">$1,000</span> at 2 /MES; ≈<span class="num">$2,500</span> at 5 /MES). At full Standard sizing (1 /ES per $100K NLV), hard kill = <strong class="num">$50,000 on a $1M portfolio · $250,000 on $5M</strong>. Budgeted in advance whatever the size.</p></div></div>
             </div>
             <p class="calc__caption"><em>Static summary at $100K base. Run it at your own portfolio size on the <a href="/run-the-math.html#calcBoundsWrap" data-cta="runmath-bounds-from-worst-case">Worst Case, Priced interactive →</a>. These figures compute the published Falsifiability Protocol v1.6 loss bounds. Caps and the hard kill are sizing and exit rules enforced by rule — fast markets can gap beyond them. Not a guarantee, not an offer, and not a statement of expected results. Past performance does not guarantee future results.</em></p>
         </div>
@@ -612,7 +612,7 @@
         <div class="three-col">
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Disciplined Risk</p>
-                <p>Risk is anchored <em>per contract</em> at <strong>0.5% of total NLV</strong> — fixed, architectural, never escalated. Total per-trade exposure scales via <strong>contract count</strong>, which itself scales with capital at <strong>Standard sizing: 1 /ES per $100K NLV</strong> (v1.6, uncapped — the v1.5 2-contract ceiling was removed). Each additional contract is earned by accumulated profit buffer, never assumed. The dollar amount grows two ways — the capital base grows, AND the Standard contract count grows with it — but the per-contract percentage never changes, and the ED-05b hard kill stays at a consistent 5% of NLV at Standard sizing regardless of account size.</p>
+                <p>The architectural anchor is <strong>0.5% of NLV per /ES contract</strong> — fixed, never escalated — and <strong>Standard sizing</strong> is 1 /ES per $100K NLV (v1.6, uncapped). That's the <em>cap</em>. Forward execution starts conservatively inside it: at $100K, baseline is <strong>2 /MES + 5 /MES</strong> blend, stepping to <strong>5 /MES + 1 /ES</strong> after the first <span class="num">$5K</span> of realized profit at baseline, then approaching full Standard sizing as NLV grows. Each step is earned by accumulated profit buffer, never assumed. The per-/ES anchor and the ED-05b hard kill (5% NLV at Standard) never change.</p>
             </article>
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Earned Leverage</p>
@@ -620,7 +620,7 @@
             </article>
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Velocity Compounds</p>
-                <p>Each step shortens the time to the next as throughput grows linearly with contract count. By the 2-/ES ceiling, the engine is doing the heavy lifting and dollar outcomes climb non-linearly.</p>
+                <p>Each step shortens the time to the next as throughput grows with contract count. From baseline /MES to <strong>5 /MES + 1 /ES</strong> is a ~5.8× jump in dollar throughput; from there toward full Standard sizing, the engine does the heavy lifting and dollar outcomes climb non-linearly with NLV.</p>
             </article>
         </div>
 
@@ -787,7 +787,7 @@
                     <p class="pillar-card__letter">P</p>
                     <h3 class="pillar-card__h">Principal Preservation</h3>
                     <p class="pillar-card__sub">Engineered to preserve capital first</p>
-                    <p class="pillar-card__body">80% of capital sits in the <strong>synthetic-passive</strong> S&amp;P 500 foundation — passive by default, reduced by published overlay rules in genuine corrections. 20% is held in cash as an operational settlement buffer. On the futures engine, per-/ES-contract risk is fixed at <strong>0.5% NLV</strong> — the architectural anchor never changes. A trailing daily cap, a HWM−5% NLV floor, and a hard kill at −100 cumulative /ES points ($5,000 per contract) bound the worst case.</p>
+                    <p class="pillar-card__body">80% of capital sits in the <strong>synthetic-passive</strong> S&amp;P 500 foundation — passive by default, reduced by published overlay rules in genuine corrections. 20% is held in cash as an operational settlement buffer. On the futures engine, the architectural per-/ES anchor is <strong>0.5% NLV</strong> — the cap, not the starting size. Forward execution at $100K starts in /MES baseline (2 /MES + 5 /MES blend), well inside that envelope. A trailing daily cap, a HWM−5% NLV floor, and a hard kill at −100 cumulative /ES points ($5,000 per /ES) bound the worst case.</p>
                     <p class="pillar-card__anchor"><a href="#ladder">See the risk cadence →</a></p>
                 </article>
 
@@ -803,7 +803,7 @@
                     <p class="pillar-card__letter">G</p>
                     <h3 class="pillar-card__h">Growth</h3>
                     <p class="pillar-card__sub">Compounding on a passive foundation</p>
-                    <p class="pillar-card__body">A synthetic-passive S&amp;P 500 foundation carries baseline market exposure — held fully invested by default, with the published overlay reducing exposure only in genuine corrections. The /ES engine layers disciplined, <em>earned</em> scaling on top — each additional contract paid for by a realized profit buffer, scaled with capital at Standard sizing (1 /ES per $100K NLV; v1.6 — uncapped). How much that compounds is not projected here; it is reported from the live record as it accumulates.</p>
+                    <p class="pillar-card__body">A synthetic-passive S&amp;P 500 foundation carries baseline market exposure — held fully invested by default, with the published overlay reducing exposure only in genuine corrections. The futures engine layers disciplined, <em>earned</em> scaling on top — starting at /MES baseline (2 /MES + 5 /MES blend at $100K), stepping to 5 /MES + 1 /ES after the first $5K-realized-profit buffer, and approaching Standard sizing (1 /ES per $100K NLV; v1.6 — uncapped) as NLV grows. Each step is earned, never assumed. How much that compounds is not projected here; it is reported from the live record as it accumulates.</p>
                     <p class="pillar-card__anchor"><a href="#ladder">See the compounding ladder →</a></p>
                 </article>
             </div>
@@ -1294,6 +1294,6 @@
 
 <!-- Calculator scripts (calc-core / calc-repair / calc-voltax / calc-bounds / calc-tradeoff)
      have moved to /run-the-math.html where the calculator DOM lives. -->
-<script src="js/script.js?v=20260624g"></script>
+<script src="js/script.js?v=20260624i"></script>
 </body>
 </html>
