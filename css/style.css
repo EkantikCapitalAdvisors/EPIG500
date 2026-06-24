@@ -5412,11 +5412,16 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 
 /* --- Architecture at a glance — barbell stack (mobile-first, single column;
        optional 2-column label/percent split on larger screens) --- */
+/* Shared 820px column — the barbell, prose, and drawdown box live inside this
+   one wrapper, so their edges are physically identical and can never drift,
+   regardless of viewport. */
+.how-stack { max-width: 820px; margin: 0 auto; }
+.how-stack > .barbell,
+.how-stack > .barbell__prose,
+.how-stack > .dd-standard { max-width: 100%; margin-left: 0; margin-right: 0; }
+
 .barbell {
-    /* Match .barbell__prose / .dd-standard (820px) so the diagram, the prose,
-       and the drawdown box form one clean centered column at every width —
-       previously 880px, which crowded the container edges on ~960px viewports
-       and sat wider than everything below it. */
+    /* max-width now governed by .how-stack; kept as a fallback if used standalone. */
     max-width: 820px;
     margin: 0 auto var(--s-7);
     border: 1px solid var(--card-border);
