@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260623b">
+    <link rel="stylesheet" href="css/style.css?v=20260623c">
 
     <script type="application/ld+json">
     {
@@ -279,6 +279,74 @@
         </aside>
 
         <!-- Sub-block: what holds drawdown under 10% — engineered, not promised -->
+    </div>
+</section>
+
+<!-- ============ 1b-chart. HOW THE ARCHITECTURE STACKS OVER TIME — interactive equity curve (moved from run-the-math.html; the decomposition above, compounded over decades) ============ -->
+<section class="section section--white" id="stacks-over-time">
+    <div class="container">
+        <header class="section__header section__header--center">
+            <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The architecture over time</p>
+            <h2 class="section__h section__h--lg">How the architecture stacks over time</h2>
+            <p class="section__sub">The decomposition above, compounded. Two layers on top of the 20% cash buffer: the <strong>synthetic-passive foundation</strong> (80% S&amp;P 500, with the overlay applying capture asymmetry — set the dials) and the <strong>Booster Engine</strong> — drawn live from the protocol-bound trading record. Toggle the Booster on to see the engine layer as an illustration extrapolated from the live record — <em>an illustration, not an expectation</em>.</p>
+        </header>
+
+        <!-- #arithCalc is the JS guard for setupArithmetic() in script.js. On this
+             page it ships with the compact capture sliders + the chart only; the
+             window-comparison cards, NLV chips, plain-English block and trade-off
+             calculator stay on run-the-math.html. The shared render() null-guards
+             every element that isn't present here. -->
+        <div class="arith-calc arith-calc--chartonly" id="arithCalc">
+            <div class="arith-controls">
+                <label class="arith-control">
+                    <span class="arith-control__label">Upside capture</span>
+                    <span class="arith-control__val"><span id="arithUpVal">100</span>%</span>
+                    <input type="range" id="arithUp" min="50" max="150" step="5" value="100" aria-label="Upside capture percent">
+                    <span class="arith-control__hint">% of index return captured in up years</span>
+                </label>
+                <label class="arith-control">
+                    <span class="arith-control__label">Downside participation</span>
+                    <span class="arith-control__val"><span id="arithDownVal">100</span>%</span>
+                    <input type="range" id="arithDown" min="0" max="150" step="5" value="100" aria-label="Downside participation percent">
+                    <span class="arith-control__hint">% of index drawdown taken in down years</span>
+                </label>
+            </div>
+
+            <!-- Stacked equity curve: 80% SPY foundation + capture asymmetry + optional Booster Engine, plotted against the S&P 500 -->
+            <div class="arith-chart">
+                <header class="arith-chart__head">
+                    <div class="arith-chart__tabs" role="radiogroup" aria-label="Window presets">
+                        <button class="arith-tab is-active" data-window="full" type="button">Full 20-year</button>
+                        <button class="arith-tab" data-window="calm" type="button">Calm (2013–2019)</button>
+                        <button class="arith-tab" data-window="crash" type="button">Crash (2007–2010)</button>
+                    </div>
+                    <div class="arith-chart__range">
+                        <span class="arith-chart__range-label">Or pick any period — last 50 years:</span>
+                        <label class="arith-chart__range-field">From <select id="arithFrom" aria-label="Start year"></select></label>
+                        <span class="arith-chart__range-arrow" aria-hidden="true">→</span>
+                        <label class="arith-chart__range-field">To <select id="arithTo" aria-label="End year"></select></label>
+                    </div>
+                    <div class="arith-chart__contracts" role="radiogroup" aria-label="Booster Engine toggle" id="arithBoosterToggle">
+                        <span class="arith-chart__contracts-label">Booster Engine</span>
+                        <button class="arith-contract is-active" data-risk="0" type="button">Off</button>
+                        <button class="arith-contract" data-risk="0.5" type="button" disabled aria-disabled="true">On · live record</button>
+                        <span class="arith-chart__contracts-caption" id="arithBoosterCaption">Live-record illustration — an extrapolated shape, not an expectation.</span>
+                    </div>
+                    <div class="arith-chart__baseline" id="arithBaselineIndicator"><p class="arith-baseline__headline"><span class="diamond">◆</span> Toggle the Booster on to overlay the live-record illustration. Numeric throughput figures stay gated off pending separate countersignature.</p></div>
+                </header>
+                <canvas id="arithEquityCanvas" width="1100" height="360" aria-label="Historical equity curve: S&P 500 vs 80% SPY foundation, plus capture-asymmetry band, plus optional Booster Engine layer extrapolated from the live record."></canvas>
+                <div class="arith-chart__legend">
+                    <span class="arith-chart__legend-item"><span class="arith-chart__swatch" style="background:rgba(13,148,136,0.45);border:1px solid #0D9488"></span> 80% S&amp;P foundation · capture-modified by overlay rules</span>
+                    <span class="arith-chart__legend-item"><span class="arith-chart__swatch" style="background:#94A3B8"></span> + 20% cash buffer (flat)</span>
+                    <span class="arith-chart__legend-item" id="arithLegendThrough" hidden><span class="arith-chart__swatch" style="background:#d4af37"></span> + Booster Engine (live record extrapolated)</span>
+                    <span class="arith-chart__legend-item"><span class="arith-chart__swatch arith-chart__swatch--line" style="background:#b8962e"></span> Strategy total · solid gold line</span>
+                    <span class="arith-chart__legend-item"><span class="arith-chart__swatch arith-chart__swatch--line arith-chart__swatch--dashed" style="background:#12264a"></span> S&amp;P 500 (100% benchmark) · dashed</span>
+                </div>
+                <p class="arith-chart__reading" id="arithChartReading" aria-live="polite"><!-- dynamic interpretation rendered by JS --></p>
+            </div>
+
+            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns (incl. dividends), 1975–2024 — selectable as a 20-year, 50-year, calm, or crash window. <strong>Benchmark for Outperformance:</strong> 100% S&amp;P 500 — the conservative comparison. <strong>Foundation layer (overlay model v1.3):</strong> 80% × (capture × index), where capture is the modeled output of the synthetic-passive overlay's published rules — upside slider in up years, downside slider in down years. <strong>Cash buffer:</strong> the remaining 20% is operational cash (flat, no exposure) — it carries a real ~17% drag vs 100%-S&amp;P over a 20-year window, which the overlay's downside protection must overcome to clear the bar. <strong>Booster Engine layer:</strong> the layer's <em>shape</em> is extrapolated <em>live</em> from <code>/data/trades.json</code> at the 0.5% per-trade architectural risk anchor (the level the actual record was generated at); it updates automatically with every admin publish. <strong>Per-trade throughput figures (% NLV/yr, $/yr, $/mo) remain gated off pending separate countersignature.</strong> Engine throughput is shown as <em>independent</em> of the year's S&amp;P return — the operator's intraday /ES trading isn't tied to the index's annual direction. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy. The synthetic-passive overlay carries no verdict yet (its gate is measured over a full market cycle); the rule set is published as design intent under armed-but-unfired falsifiability gates. Past performance does not guarantee future results.</strong> Dataset: protocol-bound Period 2 trades only. The Period 1 Telegram record is displayed on the dashboard for transparency and is excluded from every figure on this page. <a href="/run-the-math.html" data-cta="run-the-math-from-chart">Run the full math — windows, dollars, trade-off explorer →</a></p>
+        </div>
     </div>
 </section>
 
@@ -1201,6 +1269,6 @@
 
 <!-- Calculator scripts (calc-core / calc-repair / calc-voltax / calc-bounds / calc-tradeoff)
      have moved to /run-the-math.html where the calculator DOM lives. -->
-<script src="js/script.js?v=20260618e"></script>
+<script src="js/script.js?v=20260623c"></script>
 </body>
 </html>

@@ -5657,3 +5657,22 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .decomp-strip--standalone {
     margin-top: 0;
 }
+
+/* Chart-only Arithmetic block — the "How the architecture stacks over time"
+   equity curve lifted onto the homepage (index.html §stacks-over-time).
+   Ships with the compact capture sliders + chart only; no window cards. The
+   white section already frames it, so drop the ivory inset and center it. */
+.arith-calc--chartonly {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.arith-calc--chartonly .arith-controls {
+    max-width: 620px;
+    margin: 0 auto;
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+.arith-calc--chartonly .arith-chart { margin-top: var(--s-6); }
