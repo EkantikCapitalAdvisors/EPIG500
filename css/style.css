@@ -5644,6 +5644,14 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
     color: var(--navy);
     line-height: 1.1;
 }
+.decomp-strip__term-note {
+    margin: 6px 0 0;
+    font-size: 10.5px;
+    line-height: 1.35;
+    color: var(--slate);
+    letter-spacing: 0.01em;
+}
+.decomp-strip__term-note strong { color: var(--gold-deep); }
 .decomp-strip__term--total .decomp-strip__term-val { color: var(--gold-deep); font-size: 24px; }
 .decomp-strip__term--total .decomp-strip__term-label { color: var(--navy); }
 .decomp-strip__op {
