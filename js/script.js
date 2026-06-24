@@ -1791,7 +1791,10 @@
         // the plain-English summary, and the Booster baseline indicator.
         // Contract count scales linearly: 1 /ES per $100K NLV at the 0.5%
         // per-trade architectural risk anchor.
-        let activeNLV = 1000000;
+        // Homepage chart (chart-only) anchors the example to $100K = exactly
+        // 1 /ES contract — the unit the live record was actually generated at —
+        // instead of the $1M default used by the Run-the-Math calculators.
+        let activeNLV = calc.classList.contains('arith-calc--chartonly') ? 100000 : 1000000;
         function nlvUnits() { return activeNLV / 100000; }   // contracts under base sizing
         function fmtNLV(n) {
             if (n >= 1e6) return '$' + (n / 1e6).toFixed(n % 1e6 === 0 ? 0 : 1) + 'M';
