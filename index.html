@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260624f">
+    <link rel="stylesheet" href="css/style.css?v=20260624g">
 
     <script type="application/ld+json">
     {
@@ -226,74 +226,13 @@
     </div>
 </section>
 
-<!-- ============ 1c-mid. ENGINE LIVE RECORD vs. KILL BOUNDARIES (moved up from Arithmetic; sits adjacent to Overlay) ============ -->
-<section class="section section--ivory" id="engine-live-bounded">
-    <div class="container">
-        <!-- Live record vs. kill boundaries — approved mockup (Manish Dharod countersignature,
-             2026-06-12). Draws only closed, protocol-bound Period 2 trades plus the armed ED-05
-             drawdown thresholds from FP-MOPS-V1.6. No projection, no extrapolation; claim gates
-             (CLAIMS_THROUGHPUT_ENABLED / BOOSTER_TOGGLE_ENABLED) remain OFF. Hidden until the
-             live data loads; stays hidden on fetch failure. -->
-        <div class="live-bounded" id="liveBounded" hidden>
-            <header class="live-bounded__head">
-                <h3 class="live-bounded__h">The live record, drawn against its kill boundaries.</h3>
-                <p class="live-bounded__sub">Every point below is a closed, protocol-bound Period 2 trade, published within 24 hours of close. The red lines are not annotations — they are armed kill conditions from the locked protocol: the <strong>ED-05a drawdown warning (peak − 45 /ES pts)</strong> and the <strong>ED-05b hard kill (peak − 100 /ES pts · $5,000 per contract)</strong>, both measured peak-to-trough, so both floors ratchet up with every new equity high. The upside is witnessed, never promised; the downside is engineered.</p>
-            </header>
-            <canvas id="liveBoundedCanvas" width="1100" height="340" aria-label="Cumulative /ES points of the protocol-bound live record, plotted against the ED-05a warning floor and the ED-05b hard-kill floor, which ratchet up with each new equity high."></canvas>
-            <div class="live-bounded__legend">
-                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--earned"></span> Protocol-bound live record (Period 2) · cumulative /ES points</span>
-                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--hard"></span> ED-05b hard kill floor · peak − 100 pts</span>
-                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--warn"></span> ED-05a warning · peak − 45 pts</span>
-            </div>
-            <p class="live-bounded__stat" id="liveBoundedStat"></p>
-            <p class="compliance">Past performance does not guarantee future results. The 8-test battery is now active on the protocol-bound record (binding at 100+ closed trades). Kill thresholds describe operating commitments by the firm, not guarantees against loss; a gate-fire does not guarantee preservation of capital. Chart shows realized, published trades only — no extrapolation.</p>
-        </div>
-    </div>
-</section>
-
-<!-- ============ 1b. HOW THE TARGET ADDS UP — decomposition strip (moved from §1a; now its own beat after the live proof) ============ -->
-<section class="section section--ivory" id="how-the-target-adds-up">
-    <div class="container">
-        <!-- Decomposition strip — where the 17–26%/yr target comes from. Mirrors
-             the operator deck slide "How the architecture stacks over time" stripe.
-             Foundation range from the modeled synthetic-passive overlay; Engine range
-             from the live dashboard's protocol-bound R-expectancy × trades/yr at the
-             0.5% NLV anchor, haircut to 30R per the operator's conservative pacing. -->
-        <aside class="decomp-strip decomp-strip--standalone" aria-label="How the 17–26% per year target adds up">
-            <p class="decomp-strip__eyebrow"><span class="diamond">◆</span> How the target adds up</p>
-            <div class="decomp-strip__grid">
-                <div class="decomp-strip__term">
-                    <p class="decomp-strip__term-label">Foundation <span class="decomp-strip__term-sub">~80% SPY</span></p>
-                    <p class="decomp-strip__term-val num">+6–11%/yr</p>
-                </div>
-                <p class="decomp-strip__op" aria-hidden="true">+</p>
-                <div class="decomp-strip__term">
-                    <p class="decomp-strip__term-label">Engine <span class="decomp-strip__term-sub"><span class="num">30R × 0.5% NLV</span></span></p>
-                    <p class="decomp-strip__term-val num">+11–15%/yr</p>
-                    <p class="decomp-strip__term-note">we <em>target</em> this · blended record to date <strong class="num">~17%/yr</strong></p>
-                </div>
-                <p class="decomp-strip__op" aria-hidden="true">=</p>
-                <div class="decomp-strip__term decomp-strip__term--total">
-                    <p class="decomp-strip__term-label">Stack target <span class="decomp-strip__term-sub">drawdown standard <span class="num">&lt;10%</span></span></p>
-                    <p class="decomp-strip__term-val num">≈ 17–26%/yr</p>
-                </div>
-            </div>
-            <p class="decomp-strip__basis">
-                <em>Engine basis</em> — we <strong>target</strong> <span class="num">+11–15%/yr</span> (Annual R = R-expectancy × trades/yr at the <span class="num">0.5%</span> anchor, with <span class="num">30R</span> a deliberately conservative haircut). The actual <strong>blended record to date runs ~<span class="num">17%/yr</span></strong> — above the target — across the full engine record (the ~18-month Telegram period plus the protocol-bound period; <a href="#stacks-over-time">see the chart</a>). We publish the target as the conservative number and the record as what it actually is. <strong><span class="num">30R</span> is a haircut, not a promise</strong>, and the <strong>gate that would <em>stop</em> the engine</strong> is published separately as a hard kill (<a href="#falsifiability">Falsifiability · ED-05b</a>). Foundation range is the modeled overlay (no live verdict yet). <strong>Past performance does not guarantee future results.</strong>
-            </p>
-        </aside>
-
-        <!-- Sub-block: what holds drawdown under 10% — engineered, not promised -->
-    </div>
-</section>
-
-<!-- ============ 1b-chart. HOW THE ARCHITECTURE STACKS OVER TIME — interactive equity curve (moved from run-the-math.html; the decomposition above, compounded over decades) ============ -->
+<!-- ============ 1b-chart. HOW THE ARCHITECTURE STACKS OVER TIME — interactive equity curve · result-first: shows the compounded outcome, then the kill chart + decomposition below explain what produces it ============ -->
 <section class="section section--white" id="stacks-over-time">
     <div class="container">
         <header class="section__header section__header--center">
             <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The architecture over time</p>
             <h2 class="section__h section__h--lg">How the architecture stacks over time</h2>
-            <p class="section__sub">The decomposition above, compounded. Two layers on top of the 20% cash buffer: the <strong>synthetic-passive foundation</strong> (80% S&amp;P 500, with the overlay applying capture asymmetry — set the dials) and the <strong>Booster Engine</strong> — drawn live from the protocol-bound trading record. Toggle the Booster on to see the engine layer as an illustration extrapolated from the live record — <em>an illustration, not an expectation</em>.</p>
+            <p class="section__sub">Here's what this architecture compounds to over decades — and below, the kill criteria and the math that produce it. Two layers on top of the 20% cash buffer: the <strong>synthetic-passive foundation</strong> (80% S&amp;P 500, with the overlay applying capture asymmetry — set the dials) and the <strong>Booster Engine</strong> — drawn live from the protocol-bound trading record. Toggle the Booster on to see the engine layer as an illustration extrapolated from the live record — <em>an illustration, not an expectation</em>.</p>
         </header>
 
         <!-- #arithCalc is the JS guard for setupArithmetic() in script.js. On this
@@ -372,6 +311,67 @@
 
             <p class="arith-source">◆ Source: S&amp;P 500 annual total returns (incl. dividends), 1975–2024 — selectable as a 20-year, 50-year, calm, or crash window. <strong>Benchmark for Outperformance:</strong> 100% S&amp;P 500 — the conservative comparison. <strong>Foundation layer (overlay model v1.3):</strong> 80% × (capture × index), where capture is the modeled output of the synthetic-passive overlay's published rules — upside slider in up years, downside slider in down years. <strong>Cash buffer:</strong> the remaining 20% is operational cash (flat, no exposure) — it carries a real ~17% drag vs 100%-S&amp;P over a 20-year window, which the overlay's downside protection must overcome to clear the bar. <strong>Booster Engine layer:</strong> the layer's <em>shape</em> and the <strong>$/yr estimate</strong> are computed <em>live</em> from <code>/data/trades.json</code> at the 0.5% per-trade architectural risk anchor (the level the actual record was generated at); they update automatically with every admin publish. <strong>The Booster $/yr figure is a blended estimate over the full /ES engine record — both the ~18-month Telegram period (Apr 2023 – Oct 2024, pre-protocol: no in-advance witness or formal gates) and the protocol-bound pre-registration period (Feb 2026 forward).</strong> Blending raises the sample size at the cost of mixing a witnessed record with an unwitnessed one; it is an estimate from past throughput, <strong>not</strong> a witnessed sustainability claim. Engine throughput is shown as <em>independent</em> of the year's S&amp;P return — the operator's intraday /ES trading isn't tied to the index's annual direction. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy. The synthetic-passive overlay carries no verdict yet (its gate is measured over a full market cycle); the rule set is published as design intent under armed-but-unfired falsifiability gates. Past performance does not guarantee future results.</strong> Every per-trade count and the sustainability battery elsewhere on the site remain protocol-bound (Period 2) only; only this Booster $/yr estimate uses the blended basis. <a href="/run-the-math.html" data-cta="run-the-math-from-chart">Run the full math — windows, dollars, trade-off explorer →</a></p>
         </div>
+    </div>
+</section>
+
+<!-- ============ 1c-mid. ENGINE LIVE RECORD vs. KILL BOUNDARIES (moved up from Arithmetic; sits adjacent to Overlay) ============ -->
+<section class="section section--ivory" id="engine-live-bounded">
+    <div class="container">
+        <!-- Live record vs. kill boundaries — approved mockup (Manish Dharod countersignature,
+             2026-06-12). Draws only closed, protocol-bound Period 2 trades plus the armed ED-05
+             drawdown thresholds from FP-MOPS-V1.6. No projection, no extrapolation; claim gates
+             (CLAIMS_THROUGHPUT_ENABLED / BOOSTER_TOGGLE_ENABLED) remain OFF. Hidden until the
+             live data loads; stays hidden on fetch failure. -->
+        <div class="live-bounded" id="liveBounded" hidden>
+            <header class="live-bounded__head">
+                <h3 class="live-bounded__h">The live record, drawn against its kill boundaries.</h3>
+                <p class="live-bounded__sub">Every point below is a closed, protocol-bound Period 2 trade, published within 24 hours of close. The red lines are not annotations — they are armed kill conditions from the locked protocol: the <strong>ED-05a drawdown warning (peak − 45 /ES pts)</strong> and the <strong>ED-05b hard kill (peak − 100 /ES pts · $5,000 per contract)</strong>, both measured peak-to-trough, so both floors ratchet up with every new equity high. The upside is witnessed, never promised; the downside is engineered.</p>
+            </header>
+            <canvas id="liveBoundedCanvas" width="1100" height="340" aria-label="Cumulative /ES points of the protocol-bound live record, plotted against the ED-05a warning floor and the ED-05b hard-kill floor, which ratchet up with each new equity high."></canvas>
+            <div class="live-bounded__legend">
+                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--earned"></span> Protocol-bound live record (Period 2) · cumulative /ES points</span>
+                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--hard"></span> ED-05b hard kill floor · peak − 100 pts</span>
+                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--warn"></span> ED-05a warning · peak − 45 pts</span>
+            </div>
+            <p class="live-bounded__stat" id="liveBoundedStat"></p>
+            <p class="compliance">Past performance does not guarantee future results. The 8-test battery is now active on the protocol-bound record (binding at 100+ closed trades). Kill thresholds describe operating commitments by the firm, not guarantees against loss; a gate-fire does not guarantee preservation of capital. Chart shows realized, published trades only — no extrapolation.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 1b. HOW THE TARGET ADDS UP — decomposition strip · the annual math that produces the compounded curve above ============ -->
+<section class="section section--ivory" id="how-the-target-adds-up">
+    <div class="container">
+        <!-- Decomposition strip — where the 17–26%/yr target comes from. Mirrors
+             the operator deck slide "How the architecture stacks over time" stripe.
+             Foundation range from the modeled synthetic-passive overlay; Engine range
+             from the live dashboard's protocol-bound R-expectancy × trades/yr at the
+             0.5% NLV anchor, haircut to 30R per the operator's conservative pacing. -->
+        <aside class="decomp-strip decomp-strip--standalone" aria-label="How the 17–26% per year target adds up">
+            <p class="decomp-strip__eyebrow"><span class="diamond">◆</span> How the target adds up</p>
+            <div class="decomp-strip__grid">
+                <div class="decomp-strip__term">
+                    <p class="decomp-strip__term-label">Foundation <span class="decomp-strip__term-sub">~80% SPY</span></p>
+                    <p class="decomp-strip__term-val num">+6–11%/yr</p>
+                </div>
+                <p class="decomp-strip__op" aria-hidden="true">+</p>
+                <div class="decomp-strip__term">
+                    <p class="decomp-strip__term-label">Engine <span class="decomp-strip__term-sub"><span class="num">30R × 0.5% NLV</span></span></p>
+                    <p class="decomp-strip__term-val num">+11–15%/yr</p>
+                    <p class="decomp-strip__term-note">we <em>target</em> this · blended record to date <strong class="num">~17%/yr</strong></p>
+                </div>
+                <p class="decomp-strip__op" aria-hidden="true">=</p>
+                <div class="decomp-strip__term decomp-strip__term--total">
+                    <p class="decomp-strip__term-label">Stack target <span class="decomp-strip__term-sub">drawdown standard <span class="num">&lt;10%</span></span></p>
+                    <p class="decomp-strip__term-val num">≈ 17–26%/yr</p>
+                </div>
+            </div>
+            <p class="decomp-strip__basis">
+                <em>Engine basis</em> — we <strong>target</strong> <span class="num">+11–15%/yr</span> (Annual R = R-expectancy × trades/yr at the <span class="num">0.5%</span> anchor, with <span class="num">30R</span> a deliberately conservative haircut). The actual <strong>blended record to date runs ~<span class="num">17%/yr</span></strong> — above the target — across the full engine record (the ~18-month Telegram period plus the protocol-bound period; <a href="#stacks-over-time">see the chart above</a>). We publish the target as the conservative number and the record as what it actually is. <strong><span class="num">30R</span> is a haircut, not a promise</strong>, and the <strong>gate that would <em>stop</em> the engine</strong> is published separately as a hard kill (<a href="#falsifiability">Falsifiability · ED-05b</a>). Foundation range is the modeled overlay (no live verdict yet). <strong>Past performance does not guarantee future results.</strong>
+            </p>
+        </aside>
+
+        <!-- Sub-block: what holds drawdown under 10% — engineered, not promised -->
     </div>
 </section>
 
@@ -1294,6 +1294,6 @@
 
 <!-- Calculator scripts (calc-core / calc-repair / calc-voltax / calc-bounds / calc-tradeoff)
      have moved to /run-the-math.html where the calculator DOM lives. -->
-<script src="js/script.js?v=20260624f"></script>
+<script src="js/script.js?v=20260624g"></script>
 </body>
 </html>
