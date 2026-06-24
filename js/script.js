@@ -7,12 +7,20 @@
     'use strict';
 
     /* ------------------------------------------------
-       CLAIM GATES (CEG) — ship OFF. Flip only after written
+       CLAIM GATES (CEG) — flip only after written
        countersignature per spec §5 (Manish Dharod).
+         · BOOSTER_TOGGLE_ENABLED — countersigned ON: the Booster
+           Engine layer renders on the homepage equity chart as a
+           live-record illustration (an extrapolated shape, not a
+           promise). Drawn live from the protocol-bound record in
+           data/trades.json.
+         · CLAIMS_THROUGHPUT_ENABLED — remains OFF: no numeric
+           throughput figure (% NLV/yr, $/yr, $/mo) may render
+           anywhere until separately countersigned.
        ------------------------------------------------ */
     const EPIG_FLAGS = window.EPIG_FLAGS = {
         CLAIMS_THROUGHPUT_ENABLED: false,
-        BOOSTER_TOGGLE_ENABLED: false
+        BOOSTER_TOGGLE_ENABLED: true
     };
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -286,7 +294,9 @@
         }
         const baseline = document.getElementById('arithBaselineIndicator');
         if (baseline && !EPIG_FLAGS.CLAIMS_THROUGHPUT_ENABLED) {
-            baseline.innerHTML = '<p class="arith-baseline__headline"><span class="diamond">◆</span> Engine throughput will be reported here from the protocol-bound live record (' + n + ' closed trades' + (n >= 30 ? '; battery active' : '') + '). The throughput projection is gated off until the operator enables it — until then, we publish the trades, not an extrapolation.</p>';
+            baseline.innerHTML = EPIG_FLAGS.BOOSTER_TOGGLE_ENABLED
+                ? '<p class="arith-baseline__headline"><span class="diamond">◆</span> The Booster layer above is a live-record <em>illustration</em> — the shape of the protocol-bound record (' + n + ' closed trades' + (n >= 30 ? '; battery active' : '') + ') extrapolated forward, not an expectation. Numeric throughput figures (% NLV/yr, $/yr) stay gated off pending separate countersignature.</p>'
+                : '<p class="arith-baseline__headline"><span class="diamond">◆</span> Engine throughput will be reported here from the protocol-bound live record (' + n + ' closed trades' + (n >= 30 ? '; battery active' : '') + '). The throughput projection is gated off until the operator enables it — until then, we publish the trades, not an extrapolation.</p>';
         }
 
         // Phase 1 — Synthetic-Passive (SPY) overlay self-activation.
@@ -1656,7 +1666,9 @@
             const stratLabel = activeRiskPct > 0
                 ? 'Strategy (incl. Booster from live record)'
                 : 'Strategy (capture only)';
-            wrap.innerHTML = windows.filter(function (w) { return w.card !== false; }).map(function (w) {
+            // The window-comparison cards live on the Run-the-Math page only. On the
+            // homepage the chart ships with sliders but no cards, so skip when absent.
+            if (wrap) wrap.innerHTML = windows.filter(function (w) { return w.card !== false; }).map(function (w) {
                 const r = compound(w.years, up, down, activeRiskPct);
                 const idxPct = r.idx - 1;
                 const stratPct = r.strat - 1;
@@ -1868,8 +1880,9 @@
             // removed permanently even after the gate opens.
             if (!EPIG_FLAGS.CLAIMS_THROUGHPUT_ENABLED) {
                 const n = REFERENCE_TRADES.length;
-                el.innerHTML =
-                      '<p class="arith-baseline__headline"><span class="diamond">◆</span> Engine throughput will be reported here from the protocol-bound live record once the battery activates at 30 closed trades (currently ' + n + '). Until then, we publish the trades — not an extrapolation.</p>';
+                el.innerHTML = EPIG_FLAGS.BOOSTER_TOGGLE_ENABLED
+                    ? '<p class="arith-baseline__headline"><span class="diamond">◆</span> The Booster layer above is a live-record <em>illustration</em> — the shape of the protocol-bound record (' + n + ' closed trades) extrapolated forward, not an expectation. Numeric throughput figures (% NLV/yr, $/yr) stay gated off pending separate countersignature.</p>'
+                    : '<p class="arith-baseline__headline"><span class="diamond">◆</span> Engine throughput will be reported here from the protocol-bound live record once the battery activates at 30 closed trades (currently ' + n + '). Until then, we publish the trades — not an extrapolation.</p>';
                 return;
             }
 
