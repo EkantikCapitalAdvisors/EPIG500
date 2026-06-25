@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260624i">
+    <link rel="stylesheet" href="css/style.css?v=20260624j">
 
     <script type="application/ld+json">
     {
@@ -202,7 +202,7 @@
             <p class="dd-standard__lede">The sub-<span class="num">10%</span> standard is engineered, not promised — it rests on stacked, pre-published constraints:</p>
             <ul class="dd-standard__list">
                 <li>the <strong class="num">0.5%</strong>-per-trade risk anchor, fixed at every step, never escalated;</li>
-                <li>the <strong>ED-05b hard kill</strong> (<span class="num">−100 /ES pts</span> = <span class="num">5%</span> of NLV at standard sizing);</li>
+                <li>the <strong>ED-05b hard kill</strong> (<span class="num">−100 /ES pts</span> = <span class="num">5%</span> of NLV <em>at full Standard sizing</em> — intermediate earned-scale steps can transiently exceed, e.g. <span class="num">5 /MES + 1 /ES</span> on a $100K account = <span class="num">7.5%</span>);</li>
                 <li>the <strong>one-loss daily rule</strong>, the <strong>weekly sit-down</strong>, and the <strong>bi-weekly size-reduction</strong> cadence;</li>
                 <li>the <strong>synthetic-passive overlay</strong> stepping SPY exposure down in genuine corrections <em>(design intent — no verdict yet)</em>.</li>
             </ul>
@@ -612,7 +612,7 @@
         <div class="three-col">
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Disciplined Risk</p>
-                <p>The architectural anchor is <strong>0.5% of NLV per /ES contract</strong> — fixed, never escalated — and <strong>Standard sizing</strong> is 1 /ES per $100K NLV (v1.6, uncapped). That's the <em>cap</em>. Forward execution starts conservatively inside it: at $100K, baseline is <strong>2 /MES + 5 /MES</strong> blend, stepping to <strong>5 /MES + 1 /ES</strong> after the first <span class="num">$5K</span> of realized profit at baseline, then approaching full Standard sizing as NLV grows. Each step is earned by accumulated profit buffer, never assumed. The per-/ES anchor and the ED-05b hard kill (5% NLV at Standard) never change.</p>
+                <p>The architectural anchor is <strong>0.5% of NLV per /ES contract</strong> — fixed, never escalated — and <strong>Standard sizing</strong> is 1 /ES per $100K NLV (v1.6, uncapped). That's the <em>cap</em>. Forward execution starts conservatively inside it: at $100K, baseline is <strong>2 /MES + 5 /MES</strong> blend, stepping to <strong>5 /MES + 1 /ES</strong> after the first <span class="num">$5K</span> of realized profit at baseline, then approaching full Standard sizing as NLV grows. Each step is earned by accumulated profit buffer, never assumed. The per-/ES anchor (<span class="num">0.5%</span>) never changes. The hard-kill <span class="num">5%</span> NLV figure is the cap <em>at full Standard sizing</em>: intermediate scale-up steps can momentarily exceed it (e.g. <span class="num">5 /MES + 1 /ES</span> at $100K = <span class="num">7.5%</span>) before NLV growth restores the 5% margin — an explicit feature of earned scaling, not a violation.</p>
             </article>
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Earned Leverage</p>
@@ -912,7 +912,7 @@
         <div class="protocol-card">
             <div class="protocol-card__meta">
                 <p class="protocol-card__doc">Doc Ref: <code>FP-MOPS-V1.6-2026-06</code></p>
-                <p class="protocol-card__version">v1.6 · Fixed 2-contract ceiling removed; Standard sizing scales 1 /ES per $100K NLV · Hard kill scales to 5% of NLV at Standard · Locked operational charter</p>
+                <p class="protocol-card__version">v1.6 · Fixed 2-contract ceiling removed; Standard sizing scales 1 /ES per $100K NLV · Hard kill = 5% of NLV at full Standard (intermediate earned-scale steps can exceed transiently) · Locked operational charter</p>
             </div>
             <div class="protocol-card__body">
                 <p class="protocol-card__h"><span class="diamond">◆</span> The Falsifiability Protocol</p>
@@ -1294,6 +1294,6 @@
 
 <!-- Calculator scripts (calc-core / calc-repair / calc-voltax / calc-bounds / calc-tradeoff)
      have moved to /run-the-math.html where the calculator DOM lives. -->
-<script src="js/script.js?v=20260624i"></script>
+<script src="js/script.js?v=20260624j"></script>
 </body>
 </html>
