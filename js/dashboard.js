@@ -323,14 +323,15 @@
     function render() {
         const tfSlice = tfFilter(TRADES, currentTf);
         const sTf = compute(tfSlice);
-        // Battery dataset = protocol-bound subset only. Matches landing's
-        // semantics and the site-wide "Telegram excluded from every figure"
-        // promise. Previously this was `compute(TRADES)`, which silently
-        // floated the verdict on the 196 pre-protocol Telegram trades —
-        // producing a false 8/8 PASS on the dashboard while the landing
-        // (correctly running on the protocol-bound record only) showed FAIL.
-        const protocolBound = TRADES.filter(function (t) { return t.period === 'pre_reg'; });
-        const sBattery = compute(protocolBound);
+        // Battery follows the active timeframe slice so chip changes
+        // (especially "Pre-reg only" vs "Historical only") actually update
+        // the verdict. Earlier this was hardcoded to t.period==='pre_reg'
+        // regardless of chip, which silently kept the same failures showing
+        // when a user switched to "Historical only" — a UI bug that looked
+        // like the historical record was also failing. renderBattery()
+        // carries the "binding only on protocol-bound, n≥100" framing so
+        // a sub-binding window doesn't read as a sustainability claim.
+        const sBattery = sTf;
         renderMeta();
         renderTimeframeMeta(sTf, tfSlice.length);
         if (sTf) {
@@ -344,7 +345,7 @@
             document.getElementById('dashChartSub').textContent = '—';
             clearMonthly();
         }
-        if (sBattery) renderBattery(sBattery);
+        if (sBattery) renderBattery(sBattery, currentTf, tfSlice);
         applyFilters();   // re-applies search/result/side over the current timeframe slice
     }
 
@@ -702,16 +703,36 @@
         }).join('');
     }
 
-    function renderBattery(s) {
+    function renderBattery(s, tfKey, tfSlice) {
         const wrap = document.querySelector('.dash-battery');
         const verdict = document.getElementById('dashBatteryVerdict');
         const grid = document.getElementById('dashBatteryGrid');
         const BATTERY_MIN_N = 30;
+        const BATTERY_BINDING_N = 100;
+
+        // Diagnostic-only contexts: pre-protocol record OR mixed timeframe
+        // (anything that isn't "Pre-reg only"). On those, any verdict here is
+        // raw stats, NOT the sustainability claim — the claim lives only on
+        // the protocol-bound (period==='pre_reg') record at n≥100.
+        const tfArr = tfSlice || [];
+        const allProtocol = tfArr.length > 0 && tfArr.every(function (t) { return t && t.period === 'pre_reg'; });
+        const isHistoricalOnly = tfKey === 'historical';
+        let caption;
+        if (isHistoricalOnly) {
+            caption = 'Diagnostic only — Period 1 (pre-protocol Telegram record) is published for transparency, not as a sustainability claim. Any battery verdict here is raw stats on that subset.';
+        } else if (!allProtocol) {
+            caption = 'Battery runs on the current timeframe slice. Sustainability claim is binding only on <strong>Pre-reg only</strong> at n ≥ ' + BATTERY_BINDING_N + ' trades — switch the timeframe chip to scope.';
+        } else if (s && s.n < BATTERY_BINDING_N) {
+            caption = 'Sample n = <strong>' + s.n + '</strong> — battery is <em>activated</em> but <em>not binding</em> (binding at n ≥ ' + BATTERY_BINDING_N + '). Early failures at small samples are expected; the verdict tightens as the record grows.';
+        } else {
+            caption = 'Binding sustainability verdict — protocol-bound record, n = <strong>' + s.n + '</strong> ≥ ' + BATTERY_BINDING_N + '.';
+        }
+
         if (!s || s.n < BATTERY_MIN_N) {
             wrap.classList.add('is-pending');
             wrap.classList.remove('is-fail');
             verdict.textContent = 'Activates at ' + BATTERY_MIN_N + '+ trades';
-            grid.innerHTML = '<p style="font-size:13px;color:var(--slate);grid-column:1/-1;margin:0">The 8-test sustainability battery is a statistical claim about the entire dataset. With <strong>n = ' + (s ? s.n : 0) + '</strong> trades the sample is too small for meaningful inference. The battery returns when the live record reaches ' + BATTERY_MIN_N + '+ closed trades.</p>';
+            grid.innerHTML = '<p style="font-size:13px;color:var(--slate);grid-column:1/-1;margin:0">The 8-test sustainability battery is a statistical claim about the entire dataset. With <strong>n = ' + (s ? s.n : 0) + '</strong> trades the sample is too small for meaningful inference. The battery returns when the slice reaches ' + BATTERY_MIN_N + '+ closed trades.</p>';
             return;
         }
         wrap.classList.remove('is-pending');
@@ -725,7 +746,7 @@
                  + '<span class="tpill__name">' + r.name + '</span>'
                  + '<span class="tpill__val">' + r.val + '</span>'
                  + '</div>';
-        }).join('');
+        }).join('') + '<p class="dash-battery__caption" style="grid-column:1/-1;margin:8px 0 0;font-size:12px;color:var(--slate);line-height:1.5">' + caption + '</p>';
     }
 
     function drawEquityCurve(s) {
