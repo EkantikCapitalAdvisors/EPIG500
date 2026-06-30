@@ -1251,9 +1251,22 @@
             pubStatus(
                 '✓ Committed to <code>main</code> @ <code>' + commitSha + '</code>' + deltaStr
                 + (commitUrl ? ' · <a href="' + commitUrl + '" target="_blank" rel="noopener">view commit ↗</a>' : '')
-                + '<br><span style="font-size:12px;color:var(--slate)">GitHub Pages typically redeploys within ~30 seconds. Refresh the dashboard then.</span>',
+                + '<br><span style="font-size:12px;color:var(--slate)">Admin view updated below. The public dashboard reflects it once GitHub Pages redeploys (~30s).</span>',
                 'success'
             );
+
+            // Reflect the just-published state in the admin IMMEDIATELY from the
+            // in-memory output — no re-fetch, so it can't show a stale base while
+            // GitHub Pages redeploys / the CDN purges. The staged list is now
+            // published, so clear it. (Previously the "Current dataset" header
+            // kept showing the pre-publish count until a manual reload, which
+            // read stale data and looked like the new trade "didn't reflect".)
+            CURRENT = { meta: outputJson.meta || {}, trades: (outputJson.trades || []).slice() };
+            STAGED = [];
+            renderMeta();
+            renderKpis();
+            renderCurrent();
+            renderPreview();
         } catch (e) {
             const msg = String(e.message || e);
             let hint = '';
