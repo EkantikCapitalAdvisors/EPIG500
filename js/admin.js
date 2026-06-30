@@ -14,7 +14,13 @@
 
     /* ---------- Load current dataset ---------- */
     function loadCurrent() {
-        fetch('data/trades.json', { cache: 'no-store' })
+        // Cache-bust with a per-load query param (matches dashboard.js /
+        // script.js). `cache: 'no-store'` only governs the browser cache; a
+        // CDN/edge in front of the static file keys on the URL, so without the
+        // ?t= param the admin can load a STALE trades.json right after a
+        // publish — which risks the operator staging on an old base and
+        // clobbering just-published trades on the next publish.
+        fetch('data/trades.json?t=' + Date.now(), { cache: 'no-store' })
             .then(function (r) { return r.json(); })
             .then(function (json) {
                 CURRENT = { meta: json.meta || {}, trades: (json.trades || []).slice() };
