@@ -1,8 +1,8 @@
 {
   "meta": {
-    "version": 13,
+    "version": 14,
     "dataset_label": "Ekantik 500 trade record",
-    "dataset_range": "Apr 2023 – Jun 2026",
+    "dataset_range": "Apr 2023 \u2013 Jun 2026",
     "last_updated": "2026-06-30T15:55:32.588Z",
     "description": "Operator live trading record on the Majority Opinion Predisposal Strategy. Historical block (Apr 2023 - Oct 2024) reconciled trade-by-trade from the operator's Telegram alerts channel export. Pre-registration block (February 2026 -> launch) is the post-restart, witnessed, protocol-bound live record. See /falsifiability-protocol.html."
   },
@@ -3785,7 +3785,10 @@
       "entry": 7486,
       "sl": 7496,
       "tp": null,
-      "id": 239
+      "id": 239,
+      "book": "engine",
+      "source": "discord_journal",
+      "label": "M44"
     },
     {
       "timestamp": "2026-06-25T14:30:01.000Z",
@@ -3803,7 +3806,10 @@
       "entry": 7442.5,
       "sl": null,
       "tp": null,
-      "id": 240
+      "id": 240,
+      "book": "engine",
+      "source": "discord_journal",
+      "label": "M45"
     },
     {
       "timestamp": "2026-06-26T13:29:02.000Z",
@@ -3821,7 +3827,10 @@
       "entry": 7380,
       "sl": 7386,
       "tp": null,
-      "id": 241
+      "id": 241,
+      "book": "engine",
+      "source": "discord_journal",
+      "label": "M46"
     },
     {
       "timestamp": "2026-06-29T13:43:03.000Z",
@@ -3839,7 +3848,10 @@
       "entry": 7457,
       "sl": null,
       "tp": null,
-      "id": 242
+      "id": 242,
+      "book": "engine",
+      "source": "discord_journal",
+      "label": "M47"
     },
     {
       "timestamp": "2026-06-30T14:27:04.000Z",
@@ -3857,7 +3869,10 @@
       "entry": 7497,
       "sl": null,
       "tp": null,
-      "id": 243
+      "id": 243,
+      "book": "engine",
+      "source": "discord_journal",
+      "label": "M48"
     }
   ]
 }

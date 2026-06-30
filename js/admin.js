@@ -836,6 +836,13 @@
                     tag: tag,
                     period: 'pre_reg',
                     strategy: currentStrategy(),
+                    // /ES + /MES futures journal trades belong to the engine book.
+                    // (The SPY synthetic-passive overlay is imported via IB-flex,
+                    // which stamps book='synthetic_passive' separately.) Without
+                    // this, dashboard/landing filters that key on book==='engine'
+                    // silently drop journal-published trades.
+                    book: 'engine',
+                    source: 'discord_journal',
                     entry: pendingEntry ? pendingEntry.entry : null,
                     sl: pendingSl,
                     tp: pendingTp,
@@ -1030,6 +1037,20 @@
             t.id = i + 1;
             // Strip UI-only flags so they don't leak into the published JSON.
             if ('_sizeFromFallback' in t) delete t._sizeFromFallback;
+            // Safety net: any futures/engine trade missing a book lands in the
+            // engine book (prevents the journal-publish gap that dropped
+            // book-less trades from book==='engine' filters).
+            if (!t.book && typeof t.pts === 'number') t.book = 'engine';
+        });
+        // Backfill missing M-labels on pre-reg engine trades, continuing the
+        // sequence after the highest existing M-number (never relabels).
+        var maxM = 0;
+        merged.forEach(function (t) {
+            var m = typeof t.label === 'string' && t.label.match(/^M(\d+)$/);
+            if (m) maxM = Math.max(maxM, parseInt(m[1], 10));
+        });
+        merged.forEach(function (t) {
+            if (t.period === 'pre_reg' && !t.label) { maxM += 1; t.label = 'M' + maxM; }
         });
 
         const output = {
