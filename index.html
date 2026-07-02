@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260701f">
+    <link rel="stylesheet" href="css/style.css?v=20260701g">
 
     <script type="application/ld+json">
     {
@@ -166,14 +166,14 @@
              share one 820px wrapper so their left/right edges can never drift. -->
         <div class="how-stack">
         <!-- Barbell stack diagram — mobile-stackable -->
-        <div class="barbell" role="img" aria-label="Architecture: the intraday-strategy engine (currently /ES futures) on top of an 80% SPY foundation and a 20% intraday-strategy allocation held in cash as margin.">
+        <div class="barbell" role="img" aria-label="Architecture: the intraday-strategy engine (currently /ES futures) on top of an 80% SPY foundation and a 20% cash allocation that margins the intraday strategy.">
             <div class="barbell__row barbell__row--engine">
                 <div class="barbell__label">
                     <p class="barbell__tag"><span class="diamond">◆</span> LIVE · PROVEN</p>
                     <p class="barbell__head">Intraday-Strategy Engine <span class="barbell__top">· currently /ES futures</span></p>
                     <p class="barbell__sub"><span class="num">0.5%</span> NLV per trade · earned scaling · hard-killed at ED-05b</p>
                 </div>
-                <div class="barbell__pct barbell__pct--overlay"><span class="barbell__overlay-pill">Runs on the 20%</span><span class="barbell__pct-label">cash-collateralized</span></div>
+                <div class="barbell__pct barbell__pct--overlay"><span class="barbell__overlay-pill">Overlay</span><span class="barbell__pct-label">no capital slice</span></div>
             </div>
             <div class="barbell__row barbell__row--foundation">
                 <div class="barbell__label">
@@ -185,16 +185,16 @@
             </div>
             <div class="barbell__row barbell__row--cash">
                 <div class="barbell__label">
-                    <p class="barbell__tag"><span class="diamond">◆</span> INTRADAY STRATEGY · MARGIN</p>
-                    <p class="barbell__head">Intraday-Strategy Allocation</p>
-                    <p class="barbell__sub">held in cash, deployed as the engine's intraday margin · doesn't disturb the foundation</p>
+                    <p class="barbell__tag"><span class="diamond">◆</span> CASH · INTRADAY-STRATEGY MARGIN</p>
+                    <p class="barbell__head">Cash Buffer</p>
+                    <p class="barbell__sub">held in cash, no market exposure · margins the intraday strategy without disturbing the foundation</p>
                 </div>
                 <div class="barbell__pct"><span class="num">20%</span><span class="barbell__pct-label">of capital</span></div>
             </div>
         </div>
 
         <div class="barbell__prose">
-            <p>The architecture is a barbell. <strong>80% SPY</strong> carries market exposure and dividends, and serves as the engine's collateral. The other <strong>20%</strong> is the <strong>intraday-strategy allocation</strong> — held in cash and deployed as the engine's intraday margin, so it runs without disturbing the foundation. That engine is our <strong>intraday strategy</strong> — a disciplined, hard-killed intraday system designed to span <strong>stocks, options, and futures</strong>, sized to a fixed <strong class="num">0.5%</strong>-per-trade risk, scaled only on realized profit, and <strong>hard-killed in advance</strong>; <em>EPIG's live engine record is its /ES-futures implementation to date</em>. Its <em>futures-only</em> expression, run standalone, is <strong>ECFS</strong> on the <a href="https://accelerator.ekantikcapital.com/" target="_blank" rel="noopener">Ekantik Accelerator ↗</a>. Put plainly: <strong>EPIG = the intraday strategy (~20%) + a synthetic-passive SPY foundation (~80%).</strong></p>
+            <p>The architecture is a barbell. <strong>80% SPY</strong> carries market exposure and dividends, and serves as the engine's collateral. The other <strong>20%</strong> is held in <strong>cash</strong> (no market exposure) — the intraday strategy's margin, backing the engine without disturbing the foundation. That engine is our <strong>intraday strategy</strong> — a disciplined, hard-killed intraday system designed to span <strong>stocks, options, and futures</strong>, sized to a fixed <strong class="num">0.5%</strong>-per-trade risk, scaled only on realized profit, and <strong>hard-killed in advance</strong>; <em>EPIG's live engine record is its /ES-futures implementation to date</em>. Its <em>futures-only</em> expression, run standalone, is <strong>ECFS</strong> on the <a href="https://accelerator.ekantikcapital.com/" target="_blank" rel="noopener">Ekantik Accelerator ↗</a>. Put plainly: <strong>EPIG = the intraday strategy (~20%) + a synthetic-passive SPY foundation (~80%).</strong></p>
         </div>
 
         <aside class="dd-standard" aria-label="What holds drawdown under 10%">
@@ -1294,6 +1294,6 @@
 
 <!-- Calculator scripts (calc-core / calc-repair / calc-voltax / calc-bounds / calc-tradeoff)
      have moved to /run-the-math.html where the calculator DOM lives. -->
-<script src="js/script.js?v=20260701f"></script>
+<script src="js/script.js?v=20260701g"></script>
 </body>
 </html>
