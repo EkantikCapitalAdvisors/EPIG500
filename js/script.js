@@ -2288,3 +2288,83 @@
         render();
     })();
 })();
+
+/* ============================================================
+   ANATOMY LAYER — 253-dot year grid + honest posture toggle
+   (ported from the countersigned source-of-truth artifact;
+   deterministic/illustrative — NOT market data). Guarded on #dotGrid.
+   ============================================================ */
+(function () {
+    var grid = document.getElementById('dotGrid');
+    if (!grid) return;
+    var N = 253;
+    var days = new Array(N).fill('drift');
+
+    // Volatility clusters (deterministic): stress + crisis in packs.
+    var clusters = [
+        { members: [56, 57, 58, 59] },              // spring squall
+        { members: [128, 129, 130, 131, 132, 133] },// summer shock
+        { members: [205, 206, 208] }                // autumn tremor
+    ];
+    clusters.forEach(function (cl) { cl.members.forEach(function (i) { days[i] = 'stress'; }); });
+    days[131] = 'crisis';   // the one crisis day sits at a cluster core
+    days[23]  = 'stress';   // a lone loud day that never broadens — held, not dodged
+
+    // Honest posture: exits lag the top (first loud day held), aside while selling
+    // is broad, re-entry lags the calm (quiet days missed at the rungs).
+    var posture = new Array(N).fill('in');
+    clusters.forEach(function (cl) {
+        cl.members.forEach(function (idx, j) { posture[idx] = (j === 0 ? 'held' : 'aside'); });
+        var last = cl.members[cl.members.length - 1];
+        var lag = (cl.members.length >= 5 ? 3 : 2); // deeper storm → later rung → longer lag
+        for (var k = 1; k <= lag; k++) {
+            var d = last + k;
+            if (d < N && (days[d] === 'drift' || days[d] === 'normal')) posture[d] = 'missed';
+        }
+    });
+    posture[23] = 'held';   // selling never broadened — the rule never fired
+
+    // ~40 normal days: scattered (deterministic LCG, seed 42).
+    var seed = 42;
+    function rnd() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
+    var normals = 0;
+    while (normals < 40) {
+        var i = Math.floor(rnd() * N);
+        if (days[i] === 'drift') { days[i] = 'normal'; normals++; }
+    }
+
+    var tips = { drift: 'Drift day · |Δ| < 1%', normal: 'Normal day · |Δ| 1–2%', stress: 'Stress day · |Δ| ≥ 2%', crisis: 'Crisis day · |Δ| ≥ 5%' };
+    var ptips = {
+        'in': 'foundation: invested',
+        held: 'foundation: HELD — exit lags the top / selling never broadened',
+        aside: 'foundation: ASIDE — selling broadened, exposure stepped down',
+        missed: 'foundation: MISSED — quiet day sat out awaiting rung / breakout re-entry'
+    };
+    var frag = document.createDocumentFragment();
+    days.forEach(function (d, i) {
+        var el = document.createElement('div');
+        el.className = 'dot d-' + d;
+        el.dataset.p = posture[i];
+        el.title = 'Day ' + (i + 1) + ' — ' + tips[d] + ' · ' + ptips[posture[i]];
+        frag.appendChild(el);
+    });
+    grid.appendChild(frag);
+
+    var toggle = document.getElementById('postureToggle');
+    var note = document.getElementById('postureNote');
+    var plegend = document.getElementById('postureLegend');
+    if (!toggle) return;
+    function setPosture(on) {
+        toggle.classList.toggle('on', on);
+        toggle.setAttribute('aria-checked', on ? 'true' : 'false');
+        grid.classList.toggle('posture', on);
+        if (plegend) plegend.classList.toggle('on', on);
+        if (note) note.textContent = on
+            ? 'HONEST TALLY (illustrative) → invested ~236 of 253 · aside 10 loud days · held 4 loud days (lagged exits, lone spikes) · missed 7 quiet days at re-entry — the aside window is wider and blunter than the storm, by design'
+            : '';
+    }
+    toggle.addEventListener('click', function () { setPosture(!toggle.classList.contains('on')); });
+    toggle.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setPosture(!toggle.classList.contains('on')); }
+    });
+})();
