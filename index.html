@@ -17,7 +17,7 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20260701g">
+    <link rel="stylesheet" href="css/style.css?v=20260710a">
 
     <script type="application/ld+json">
     {
@@ -53,6 +53,7 @@
             </span>
         </a>
         <nav class="nav__links" aria-label="Primary">
+            <a href="#anatomy">The Anatomy</a>
             <a href="#how">How It Works</a>
             <a href="#proven-engine">The Engine</a>
             <a href="#falsifiability">Falsifiability</a>
@@ -70,6 +71,8 @@
         </button>
     </div>
     <div class="nav__mobile" id="navMobile">
+        <a href="#anatomy">The Anatomy</a>
+
         <a href="#how">How It Works</a>
         <a href="#proven-engine">The Engine</a>
         <a href="#falsifiability">Falsifiability</a>
@@ -89,20 +92,18 @@
     <div class="container hero__inner hero__inner--single">
         <div class="hero__copy">
             <p class="eyebrow"><span class="diamond">◆</span> Educational research · Pre-registration open</p>
+            <p class="hero__adage">&ldquo;Time in the market beats timing the market.&rdquo;</p>
             <h1 class="hero__headline">
-                Built to outperform the S&amp;P 500 — with less of its drawdown. Not by leverage; by asymmetric capture.
+                <span class="answer">True — for <span class="mono">239</span> days a year.</span><br>
+                It's the other <span class="mono">fourteen</span> that take the decade back.
             </h1>
             <p class="hero__sub">
-                An <strong>80/20 barbell</strong> — <strong>80% SPY, 20% cash</strong> — with a disciplined, hard-killed <strong>/ES engine</strong> compounding on top, engineered to hold drawdown <strong>under 10%</strong>. Outperformance over the index comes from two engineered sources, neither of them leverage: an overlay that keeps the market's upside and steps aside from its drawdowns, and an engine that adds return independent of which way the year went. We don't promise a number — we publish the live record against <strong>100% S&amp;P 500</strong>, trade by trade, and every condition under which we'd stop.
+                Across seventy-five years of the S&amp;P 500, roughly <strong>239 trading days a year</strong> move less than two percent and carry the market's entire upward drift — and about <strong>fourteen</strong> do nearly all of the damage. Ekantik 500 agrees with the adage: an <strong>80% S&amp;P foundation, invested by default</strong>. And here is the honest part: <strong>it cannot dodge those fourteen days surgically — no one can.</strong> Exits lag the top. Re-entries wait for printed rungs. Overnight gaps don't ask permission. The strategy will absorb the first hit of many declines and miss some quiet days around every storm — and accepts both, by design, as the price of being absent when selling broadens. <strong style="color:var(--gold)">This isn't market timing. It's an attendance policy.</strong>
             </p>
-
-            <aside class="hero__compliance" role="note" aria-label="Hero compliance">
-                <p><strong>Design intent — not a forecast, projection, or guarantee of relative or absolute performance.</strong> Outperformance is measured against a <strong>100% S&amp;P 500 total-return benchmark</strong>. The target that supports this objective: a <strong>foundation range of <span class="num">+6–11%/yr</span></strong> (modeled synthetic-passive overlay, model v1.3, S&amp;P total-return 1975–2024) plus an <strong>engine range of <span class="num">+11–15%/yr</span></strong> (<span class="num">30R × 0.5% NLV</span>, where R-expectancy and trades/yr come from the live dashboard's protocol-bound record at the <span class="num">0.5%</span> per-trade anchor; <strong>30R is a conservative haircut, not a promise</strong>) — a <strong>modeled <span class="num">~17–26%/yr</span> stack</strong>, <strong>gross of advisory fees</strong> (net would be lower; fee schedule not yet finalized). The synthetic-passive overlay has not completed a market cycle and <strong>carries no verdict yet</strong>. <strong>Past performance does not guarantee future results.</strong> We publish the live record, not a projected number.</p>
-            </aside>
 
             <div class="hero__cta">
                 <a href="#prereg" class="btn btn--primary btn--lg" data-cta="prereg-hero">Pre-Register for the Founding Cohort</a>
-                <a href="#talk" class="btn btn--ghost btn--lg" data-cta="founder-call-hero">Request a Founder Conversation</a>
+                <a href="/dashboard.html" class="btn btn--ghost btn--lg" data-cta="dashboard-hero">Open the Live Dashboard ↗</a>
                 <p class="hero__discord-link"><a href="https://discord.gg/cSQFunvNRx" target="_blank" rel="noopener" data-cta="discord-hero">Follow the live build on Discord ↗</a></p>
             </div>
 
@@ -113,7 +114,66 @@
                 <li>Proposed custody: Interactive Brokers</li>
             </ul>
 
-            <p class="hero__cta-sub">Educational only. Not investment advice. No solicitation. Pre-registration creates no obligation on either side.</p>
+            <p class="hero__cta-sub">Approximate S&amp;P 500 daily statistics, 1951–2025 · illustrative · educational only · not an offer or solicitation · not yet open for investment</p>
+        </div>
+    </div>
+</section>
+
+<!-- ============ I. THE ANATOMY OF A MARKET YEAR (ENH-02 + ENH-03) ============ -->
+<section class="section section--anatomy" id="anatomy">
+    <div class="container">
+        <p class="eyebrow eyebrow--gold"><span class="diamond">◆</span> I · The Anatomy of a Market Year</p>
+        <div class="an-rule" aria-hidden="true"></div>
+        <h2 class="section__h">A year has 253 trading days. Fourteen of them do the damage.</h2>
+        <p class="section__sub">The market's up-day edge is real but thin — 53 up days for every 47 down. Too thin to be the source of anyone's wealth. The real story sits one level deeper: the average up day gains about <span class="mono" style="color:var(--regime-drift)">+0.82%</span>, the average down day loses about <span class="mono" style="color:var(--regime-stress)">−0.87%</span> — and the two are not distributed evenly. The gentle bias lives almost entirely in the small-move days. The damage concentrates in the large-move days — the very days a purely passive portfolio is structurally required to attend.</p>
+
+        <!-- Stat ribbon -->
+        <div class="stat-ribbon">
+            <div><div class="n">253</div><div class="l">Trading days / yr</div></div>
+            <div><div class="n">53 : 47</div><div class="l">Up : down days</div></div>
+            <div><div class="n">+0.82%</div><div class="l">Avg up day</div></div>
+            <div><div class="n">−0.87%</div><div class="l">Avg down day</div></div>
+        </div>
+
+        <!-- 253-dot year grid (deterministic, illustrative — not market data) -->
+        <div class="grid-panel">
+            <div class="grid-head">
+                <div>
+                    <h3>One year. Every trading day. One decision each.</h3>
+                    <p>Each dot is a day, colored by regime. Hover any dot. Then flip the toggle for the honest version — the aside window is wider and blunter than the storm.</p>
+                </div>
+                <div class="dot-toggle" id="postureToggle" role="switch" aria-checked="false" tabindex="0" aria-label="Show foundation posture">
+                    <div class="track"><div class="knob"></div></div>
+                    <span>Show foundation posture</span>
+                </div>
+            </div>
+            <div class="dots" id="dotGrid" role="img" aria-label="253 trading days by volatility regime — illustrative"></div>
+            <div class="dot-legend">
+                <div><span class="sw" style="background:var(--regime-drift)"></span><b>~199</b> drift days · |Δ| &lt; 1%</div>
+                <div><span class="sw" style="background:var(--regime-normal)"></span><b>~40</b> normal days · |Δ| 1–2%</div>
+                <div><span class="sw" style="background:var(--regime-stress)"></span><b>~13</b> stress days · |Δ| ≥ 2%</div>
+                <div><span class="sw" style="background:var(--regime-crisis);box-shadow:0 0 6px rgba(228,87,79,.8)"></span><b>&lt;1</b> crisis day · |Δ| ≥ 5%</div>
+            </div>
+            <div class="posture-legend" id="postureLegend">
+                <div><span class="sw" style="background:var(--regime-stress);box-shadow:0 0 0 2px rgba(250,248,245,.75)"></span><b>Held</b> — loud day absorbed: exits lag the top; lone loud days that never broaden are simply held</div>
+                <div><span class="sw" style="box-shadow:inset 0 0 0 2px var(--gold)"></span><b>Aside</b> — selling broadened, exposure stepped down</div>
+                <div><span class="sw" style="box-shadow:inset 0 0 0 2px rgba(45,212,191,.8)"></span><b>Missed</b> — quiet day sat out at re-entry: rungs and breakout confirmation take time</div>
+            </div>
+            <div class="posture-note mono" id="postureNote" aria-live="polite"></div>
+        </div>
+
+        <!-- Regime cards -->
+        <div class="regimes">
+            <div class="regime r-drift"><div class="t">Drift Regime</div><div class="rn">~199</div><div class="d">days/yr · moves under 1% · up-share ~54–56%. This is where the compounding actually lives.</div><div class="o"><b>Posture:</b> fully invested by default. Let the drift work.</div></div>
+            <div class="regime r-normal"><div class="t">Normal Regime</div><div class="rn">~40</div><div class="d">days/yr · 1–2% moves · roughly balanced, slight down tilt.</div><div class="o"><b>Posture:</b> stay invested. Watch closely.</div></div>
+            <div class="regime r-stress"><div class="t">Stress Regime</div><div class="rn">~13</div><div class="d">days/yr · 2%+ moves · down-majority. The damage concentrates here.</div><div class="o"><b>Posture:</b> begin stepping aside as selling broadens.</div></div>
+            <div class="regime r-crisis"><div class="t">Crisis Regime</div><div class="rn">&lt;1</div><div class="d">day/yr · 5%+ moves · crisis-only. The days that write the histories.</div><div class="o"><b>Posture:</b> fully aside. Capital waits on the ladder.</div></div>
+        </div>
+
+        <p class="fine" style="margin-top:26px">Approximate S&amp;P 500 daily statistics, 1951–2025 · illustrative, deterministic model — not market data · regime-card postures are design intent at the regime level; the honest per-day picture is the toggle above · educational only.</p>
+
+        <div class="an-quote">
+            <span class="q1">The drift is quiet.</span> <span class="q2">The damage is loud.</span>
         </div>
     </div>
 </section>
@@ -122,11 +182,14 @@
 <section class="section section--ivory" id="problem">
     <div class="container container--narrow">
         <header class="section__header">
-            <p class="eyebrow"><span class="diamond">◆</span> The Honest Problem — why outperformance has to be earned, not leveraged</p>
-            <h2 class="section__h">Passive indexing has one honest limit: it returns the market.</h2>
+            <p class="eyebrow"><span class="diamond">◆</span> The Claim — and its basis</p>
+            <h2 class="section__h">Built to outperform the S&amp;P 500 — with less of its drawdown. Not by leverage; by asymmetric capture.</h2>
         </header>
 
+        <p class="compliance" style="margin-bottom:var(--s-8)"><strong>Design intent — not a forecast, projection, or guarantee of relative or absolute performance.</strong> Outperformance is measured against a <strong>100% S&amp;P 500 total-return benchmark</strong>. The target that supports this objective: a <strong>foundation range of <span class="num">+6–11%/yr</span></strong> (modeled synthetic-passive overlay, model v1.3, S&amp;P total-return 1975–2024) plus an <strong>engine range of <span class="num">+11–15%/yr</span></strong> (<span class="num">30R × 0.5% NLV</span>, where R-expectancy and trades/yr come from the live dashboard's protocol-bound record at the <span class="num">0.5%</span> per-trade anchor; <strong>30R is a conservative haircut, not a promise</strong>) — a <strong>modeled <span class="num">~17–26%/yr</span> stack</strong>, <strong>gross of advisory fees</strong> (net would be lower; fee schedule not yet finalized). The synthetic-passive overlay has not completed a market cycle and <strong>carries no verdict yet</strong>. <strong>Past performance does not guarantee future results.</strong> We publish the live record, not a projected number.</p>
+
         <div class="prose">
+            <h3 class="prose__subh">Passive indexing has one honest limit: it returns the market.</h3>
             <p>On the 80% of the book that sits in the S&amp;P 500, passive <em>is</em> the market — pure beta. And beta cannot beat itself. So there are only two ways to make that allocation outperform.</p>
 
             <p>You can <strong>leverage</strong> it — and double the drawdown in precisely the years that matter. That isn't outperformance; it's the same bet, louder.</p>
@@ -151,6 +214,36 @@
         </figure>
 
         <p class="compliance" style="text-align:center;margin-top:var(--s-5)"><em>Design intent. The synthetic-passive overlay carries no verdict yet — its beat-or-protect gate is measured over a full market cycle; any live record is early and published trade by trade for transparency. Nothing here is a forecast or a guarantee.</em></p>
+    </div>
+</section>
+
+<!-- ============ II. THE PRINCIPLE — analogy tri-card (ENH-06) ============ -->
+<section class="section ivory-beat" id="principle">
+    <div class="container">
+        <p class="eyebrow eyebrow--gold"><span class="diamond">◆</span> II · The Principle</p>
+        <div class="an-rule" aria-hidden="true"></div>
+        <h2 class="section__h">You don't have to predict storms. You have to refuse to be at sea for them.</h2>
+        <p class="section__sub">Every rule in Ekantik 500 already exists somewhere in the physical world — in shipping, in fire codes, in the wiring of your own home. We didn't invent the discipline. We applied it to the one place people still improvise: their capital.</p>
+        <div class="analogies">
+            <div class="analogy">
+                <div class="icon" aria-hidden="true">⚓</div>
+                <h3>The Harbor Rule</h3>
+                <p>A century of shipping was not built by captains who out-sailed hurricanes. It was built by captains who read the barometer and were in harbor before the storm had a name.</p>
+                <div class="map"><b>In the architecture</b>The foundation's overlay steps exposure down only when the market's largest pools of capital actually begin to sell — a measurable condition, not a forecast. It doesn't argue with the weather. It reads the barometer and docks.</div>
+            </div>
+            <div class="analogy">
+                <div class="icon" aria-hidden="true">🚪</div>
+                <h3>The Fire Drill</h3>
+                <p>No building decides its exits during the fire. The routes are printed on the wall in advance, while everyone is calm — and everyone follows them precisely because they were written before the smoke.</p>
+                <div class="map"><b>In the architecture</b>Every exit rule, re-entry rung, and kill condition is written, witnessed, and published <em>before capital</em>. Two engines, four falsifiability gates. Nothing is decided in the smoke.</div>
+            </div>
+            <div class="analogy">
+                <div class="icon" aria-hidden="true">⚡</div>
+                <h3>The Circuit Breaker</h3>
+                <p>Your home does not negotiate with a power surge. The breaker trips at a set load, the house stands, and you reset in the morning. It is boring by design. Boring is the point.</p>
+                <div class="map"><b>In the architecture</b>The intraday engine risks a fixed 0.5% of account value per trade — and after any closed losing trade, the day is over. One loss, one session. A hard kill bounds the worst case in advance.</div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -372,6 +465,24 @@
         </aside>
 
         <!-- Sub-block: what holds drawdown under 10% — engineered, not promised -->
+    </div>
+</section>
+
+<!-- ============ VI. THE CONTRAST — conventional vs Ekantik 500 (ENH-08) ============ -->
+<section class="section ivory-beat" id="contrast">
+    <div class="container">
+        <p class="eyebrow eyebrow--gold"><span class="diamond">◆</span> VI · The Contrast</p>
+        <div class="an-rule" aria-hidden="true"></div>
+        <h2 class="section__h">Two portfolios can hold the same index — and live in entirely different worlds.</h2>
+        <div class="contrast">
+            <div class="c-head"><div class="l">The conventional approach</div><div class="r">Ekantik 500</div></div>
+            <div class="c-row"><div class="l">Attends all 253 days — including the fourteen it shouldn't.</div><div class="r">Present for the drift by default. <b>Aside as selling broadens, by rule</b> — accepting a few missed quiet days as the fee.</div></div>
+            <div class="c-row"><div class="l">Chases outperformance with leverage — the same bet, louder, with double the drawdown in the years that matter.</div><div class="r"><b>Asymmetric capture, not leverage:</b> keep the upside, take less of the declines. The gap is the alpha.</div></div>
+            <div class="c-row"><div class="l">Decides its exits in the smoke, live, under stress.</div><div class="r">Exits, re-entry rungs, and kill conditions <b>written and witnessed before capital.</b></div></div>
+            <div class="c-row"><div class="l">Averages down on instinct — or freezes entirely.</div><div class="r">Re-enters on <b>published rungs</b> mapped to a century of correction depths.</div></div>
+            <div class="c-row"><div class="l">A bad trade can become a bad day, then a bad year.</div><div class="r">Engine risk fixed at <b>0.5% per trade</b> — one loss ends the day, two losing weeks halve the size, a hard kill prices the worst case.</div></div>
+            <div class="c-row"><div class="l">Asks you to trust the manager's judgment.</div><div class="r">Asks you to <b>watch the published record</b> — every trade on a live dashboard within 24 hours, under a witnessed protocol.</div></div>
+        </div>
     </div>
 </section>
 
@@ -624,6 +735,57 @@
             </article>
         </div>
 
+    </div>
+</section>
+
+<!-- ============ V. THE RE-ENTRY LADDER (ENH-07) ============ -->
+<section class="section section--white" id="reentry">
+    <div class="container">
+        <header class="section__header">
+            <p class="eyebrow"><span class="diamond">◆</span> The Re-Entry Ladder — governs the foundation</p>
+            <h2 class="section__h">We don't predict the bottom. We publish the ladder.</h2>
+            <p class="section__sub">Every correction in a century of market history has had a depth and a catalyst class. The ladder assigns the foundation's re-entry to depths <em>in advance</em> — so when fear is loudest and everyone else is deciding, our orders are already written.</p>
+        </header>
+        <div class="reentry-ladder">
+            <div class="re-rung"><div class="depth">−2–3%</div><div class="cat"><b>Routine turbulence</b>Profit-taking · polarizing nominations · oil shocks · shutdowns · headline scares</div><div class="order">→ staged re-entry · rung 1</div></div>
+            <div class="re-rung"><div class="depth">−3–5%</div><div class="cat"><b>Policy noise</b>Tariff talk · contested elections · rate spikes · single-country credit stress · regional conflict</div><div class="order">→ staged re-entry · rung 2</div></div>
+            <div class="re-rung"><div class="depth">−5–15%</div><div class="cat"><b>Corroborated slowdown</b>Hike cycles · multi-nation conflict · tariff war · sovereign downgrade · stagflation scare</div><div class="order">→ staged re-entry · rungs 3–4</div></div>
+            <div class="re-rung"><div class="depth">−15–30%</div><div class="cat"><b>Recessionary repricing</b>Genuine earnings recession — the kind that takes quarters, not headlines</div><div class="order">→ staged re-entry · rung 5</div></div>
+            <div class="re-rung"><div class="depth">&gt;−30%</div><div class="cat"><b>Systemic events</b>Credit crisis · full pandemic shutdown — once-a-generation resets</div><div class="order">→ deepest rungs · maximum patience</div></div>
+        </div>
+        <p class="fine" style="margin-top:26px;color:var(--slate-dark)">Historical catalyst taxonomy, ~100 years of S&amp;P corrections — approximate, illustrative · design intent, not a record of signals, a backtest, or a prediction · the synthetic-passive overlay carries no verdict yet.</p>
+        <div class="an-quote"><span class="q1">We don't call bottoms.</span> <span class="q2">We buy rungs.</span></div>
+    </div>
+</section>
+
+<!-- ============ VII. WHAT WE WILL NOT PRETEND — honesty ledger (ENH-05) ============ -->
+<section class="section section--anatomy" id="honesty">
+    <div class="container">
+        <div class="honesty">
+            <p class="eyebrow eyebrow--gold"><span class="diamond">◆</span> Radical Transparency</p>
+            <h2 class="section__h" style="margin-top:10px">What we will not pretend.</h2>
+            <p class="section__sub" style="margin-top:14px">Most pitches hide the cost of the design. We lead with it — because an experiment without a falsifiability condition is not an experiment. It is faith.</p>
+            <ul>
+                <li><b>It cannot dodge the fourteen loud days surgically — and doesn't claim to.</b> Exits fire as selling broadens, not at the top: the foundation will absorb the first hit of many declines, and a lone loud day that never broadens is simply held. What the rules refuse is full presence through <em>broad</em> selling — not exposure to every bad print.</li>
+                <li><b>It will miss quiet days around every storm.</b> Re-entries wait for printed rungs or breakout confirmation, and overnight gaps don't ask permission — the market can reopen above the exit and run without us. Missing some drift is the premium on the policy, and the 20% cash buffer adds its own drag the overlay must overcome to clear the bar.</li>
+                <li><b>The foundation's overlay is unproven — and labeled unproven.</b> It has not completed a market cycle; its gates are armed but unfired. And it carries its own published kill condition: if, across a full cycle, it neither beats the index nor takes less of its drawdown, it is declared falsified — and the foundation reverts to pure passive, in public, on the dashboard.</li>
+                <li><b>The engine is flat every night by design.</b> It never carries overnight risk — which also means it never captures overnight gains. And its early record is disclosed as exactly what it is: a 196-trade pre-protocol period published for transparency, not evidence. The witnessed, protocol-bound record is the only one we ask you to judge.</li>
+            </ul>
+            <div class="close">Judge the rulebook by its published record — never by our conviction.</div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ MID-PAGE CTA (ENH-11) — highest-trust moment ============ -->
+<section class="section cta-band" id="join-mid">
+    <div class="container container--narrow">
+        <h2 class="cta-band__h">You're invited to watch before you're ever invited to invest.</h2>
+        <p class="cta-band__sub">Pre-registration is the one window when every gate is armed and unfired, the record is building from zero, and every rule is visible before a dollar moves.</p>
+        <div class="cta-band__actions">
+            <a href="#prereg" class="btn btn--primary btn--lg" data-cta="prereg-mid">Pre-Register</a>
+            <a href="#talk" class="btn btn--ghost btn--lg" data-cta="founder-call-mid">Request a Founder Conversation</a>
+        </div>
+        <p class="cta-band__micro">Pre-registration creates no obligation on either side.</p>
     </div>
 </section>
 
@@ -1294,6 +1456,6 @@
 
 <!-- Calculator scripts (calc-core / calc-repair / calc-voltax / calc-bounds / calc-tradeoff)
      have moved to /run-the-math.html where the calculator DOM lives. -->
-<script src="js/script.js?v=20260701g"></script>
+<script src="js/script.js?v=20260710a"></script>
 </body>
 </html>
