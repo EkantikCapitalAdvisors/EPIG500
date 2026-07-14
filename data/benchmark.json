@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "benchmark_id": "SP500TR",
+  "label": "S&P 500 Total Return (SP500TR)",
+  "source": "sample",
+  "last_sync_utc": null,
+  "series": [
+    {
+      "date": "2026-05-19",
+      "level": 13872.41,
+      "index": 100.0
+    }
+  ]
+}
