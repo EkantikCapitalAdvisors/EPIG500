@@ -1,0 +1,52 @@
+name: charter-sync
+# EPIG 500 Charter Ledger nightly sync (CL-SPEC-V1.0 §6).
+# Dormant until the operator sets the IBKR + benchmark secrets below.
+on:
+  schedule:
+    - cron: "30 3 * * 2-6"   # Tue–Sat 03:30 UTC ≈ post-settlement ET
+  workflow_dispatch: {}
+
+permissions:
+  contents: write            # commit data/ back to main
+  issues: write              # open an issue on failure (§6.4)
+
+concurrency:
+  group: charter-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install requests lxml
+      - name: Sync charter data
+        id: sync
+        run: python scripts/charter_sync.py
+        env:
+          IBKR_FLEX_TOKEN:    ${{ secrets.IBKR_FLEX_TOKEN }}
+          IBKR_FLEX_QUERY_ID: ${{ secrets.IBKR_FLEX_QUERY_ID }}
+          BENCHMARK_PROVIDER: ${{ vars.BENCHMARK_PROVIDER }}
+          BENCHMARK_API_KEY:  ${{ secrets.BENCHMARK_API_KEY }}
+      - name: Validate (fixtures + contracts + determinism)
+        run: python scripts/validate_charter.py
+      - name: Commit
+        run: |
+          git config user.name "charter-bot"
+          git config user.email "bot@ekantikcapital.com"
+          git add data/
+          git diff --cached --quiet || \
+            git commit -m "charter: sync $(date -u +%F) · $(python scripts/commit_summary.py)"
+          git push
+      - name: Open issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner, repo: context.repo.repo,
+              title: `charter-sync failed ${new Date().toISOString().slice(0,10)}`,
+              body: 'Nightly charter sync failed. The dashboard shows the honest state (STALE/ERROR); no partial data was written. See the run log.'
+            })

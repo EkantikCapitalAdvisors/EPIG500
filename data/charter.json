@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "as_of": "2026-05-19",
+  "trading_days": 0,
+  "min_days": 21,
+  "account_mode": "ENGINE_ONLY",
+  "state": "ENGINE_ONLY",
+  "strategy": null,
+  "benchmark": null,
+  "excess_return_pct": null,
+  "dd_delta_pct": null,
+  "verdicts": null,
+  "benchmark_label": "S&P 500 Total Return (SP500TR)",
+  "inception_date": "2026-05-19",
+  "provenance": {
+    "custodian": "Interactive Brokers",
+    "raw_sha256_short": null,
+    "raw_commit_url": null,
+    "last_sync_utc": null
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "account_label": "U****",
+  "account_mode": "ENGINE_ONLY",
+  "base_currency": "USD",
+  "inception_date": "2026-05-19",
+  "last_sync_utc": null,
+  "source": "IBKR_FLEX",
+  "raw_file": null,
+  "raw_sha256": null,
+  "fee_drag_annual": null,
+  "net_series": null,
+  "series": [
+    {
+      "date": "2026-05-19",
+      "nav": 100000.0,
+      "flow": 0.0,
+      "twr_daily": 0.0,
+      "index": 100.0
+    }
+  ]
+}
