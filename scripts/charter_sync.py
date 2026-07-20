@@ -306,6 +306,16 @@ def main():
 
         account_mode = os.environ.get("CHARTER_ACCOUNT_MODE", "ENGINE_ONLY")
         full = account_mode == "FULL_ARCHITECTURE"
+        # Safety degrade: if measuring mode is set but the benchmark key isn't
+        # wired yet, stay ENGINE_ONLY instead of failing to ERROR. This keeps
+        # the dashboard on the clean "armed · not measuring" state during setup
+        # rather than flashing a sync error. Once BENCHMARK_API_KEY exists, the
+        # next run promotes to ACCUMULATING/LIVE automatically. (A key that IS
+        # present but fails mid-record still raises → honest ERROR/STALE.)
+        if full and not api_key:
+            print("NOTE FULL_ARCHITECTURE set but BENCHMARK_API_KEY unwired — "
+                  "holding ENGINE_ONLY until the benchmark is available.", file=sys.stderr)
+            full = False
         trading_days = len(idx_rows)
         _, strat_maxdd = drawdown_series([r["index"] for r in idx_rows])
 
