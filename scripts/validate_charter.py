@@ -38,6 +38,25 @@ check("maxDD == -2.9412%", round(maxdd * 100, 4) == -2.9412, str(round(maxdd * 1
 v = cs.verdicts(101.83, 102.10, -0.0094, -0.0312)
 check("verdict BEHIND + SHALLOWER", v == {"return_gate": "BEHIND", "drawdown_gate": "SHALLOWER"}, str(v))
 
+# ---- periodic returns + capture fixture ----------------------------------
+print("periodic:")
+_pairs = [{"date": "2026-07-01", "s": 100.0, "b": 100.0},
+          {"date": "2026-07-03", "s": 101.5, "b": 100.8},
+          {"date": "2026-07-06", "s": 101.0, "b": 100.2},
+          {"date": "2026-07-10", "s": 100.9, "b": 99.6},
+          {"date": "2026-07-17", "s": 103.0, "b": 101.2}]
+_w = cs.periodic_summary(_pairs, "W", 8)
+check("weekly period count == 3", _w["total"] == 3, str(_w["total"]))
+check("week1 strat +1.5% / bench +0.8%",
+      _w["periods"][0]["strat_ret_pct"] == 1.5 and _w["periods"][0]["bench_ret_pct"] == 0.8)
+check("beat 3 of 3", _w["beat_count"] == 3 and all(p["beat"] for p in _w["periods"]))
+check("upside cap 148.5 / downside cap 49.6",
+      _w["upside_capture_pct"] == 148.5 and _w["downside_capture_pct"] == 49.6,
+      "%s / %s" % (_w["upside_capture_pct"], _w["downside_capture_pct"]))
+check("capture gated (<8 weeks -> not ready)", _w["capture_ready"] is False)
+_cap0 = cs.capture_ratios([{"strat_ret_pct": 1.0, "bench_ret_pct": 1.0}])
+check("empty down bucket -> downside None", _cap0["downside_capture_pct"] is None)
+
 # ---- JSON contracts (§11.2) ----------------------------------------------
 print("JSON contracts:")
 def load(f):
@@ -65,6 +84,15 @@ try:
         if os.path.exists(p):
             h = hashlib.sha256(open(p, "rb").read()).hexdigest()
             check("sha256(raw) == nav.raw_sha256", h == nav.get("raw_sha256"))
+    # periodic.json contract
+    periodic = load("periodic.json")
+    for freq in ("weekly", "monthly"):
+        blk = periodic[freq]
+        check("periodic.%s has required keys" % freq,
+              all(k in blk for k in ("periods", "beat_count", "total", "capture_ready",
+                                     "upside_capture_pct", "downside_capture_pct")))
+        check("periodic.%s beat_count <= total" % freq, blk["beat_count"] <= blk["total"])
+        check("periodic.%s total == len(periods)" % freq, blk["total"] == len(blk["periods"]))
 except Exception as e:
     check("JSON contracts loadable", False, str(e))
 

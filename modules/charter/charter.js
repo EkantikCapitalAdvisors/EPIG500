@@ -49,33 +49,32 @@
         '</div>';
       return;
     }
-    if (st === "ACCUMULATING") {
-      board.innerHTML =
-        '<div class="charter-gate" style="grid-column:1/-1">' +
-          '<div class="charter-gate__head"><span class="charter-gate__title">The Charter Standard</span>' +
-            chip("ACCUMULATING · " + esc(c.trading_days) + " of " + esc(c.min_days), "armed") + '</div>' +
-          '<p class="charter-note">Verdicts render at ' + esc(c.min_days) + ' trading days of custodian-reported NAV. Until then: numbers, no verdict.</p>' +
-        '</div>';
-      return;
-    }
-    // LIVE
+    // ACCUMULATING and LIVE share the two-gate stat layout. The only
+    // difference: LIVE shows the AHEAD/BEHIND · SHALLOWER/DEEPER verdict chip;
+    // ACCUMULATING shows numbers with an "ACCUMULATING · N of 21" chip and
+    // NO verdict (§7.3 "numbers, no verdict"). Excess/DD are shown as numbers.
+    var accumulating = st === "ACCUMULATING";
     var s = c.strategy || {}, b = c.benchmark || {}, v = c.verdicts || {};
     var rg = v.return_gate, dg = v.drawdown_gate;
-    var rgKind = rg === "AHEAD" ? "pos" : "neu";     // BEHIND rendered identical prominence, never red
-    var dgKind = dg === "SHALLOWER" ? "pos" : "neu";
+    var accChip = chip("ACCUMULATING · " + esc(c.trading_days) + " of " + esc(c.min_days), "armed");
+    var rgChip = accumulating ? accChip : chip(rg, rg === "AHEAD" ? "pos" : "neu"); // BEHIND: identical prominence, never red
+    var dgChip = accumulating ? accChip : chip(dg, dg === "SHALLOWER" ? "pos" : "neu");
     board.innerHTML =
       '<div class="charter-gate">' +
-        '<div class="charter-gate__head"><span class="charter-gate__title">Return Gate</span>' + chip(rg, rgKind) + '</div>' +
+        '<div class="charter-gate__head"><span class="charter-gate__title">Return Gate</span>' + rgChip + '</div>' +
         '<div class="charter-row"><span class="lbl">Strategy</span><span class="val">' + pct(s.cum_return_pct) + '</span></div>' +
         '<div class="charter-row"><span class="lbl">S&amp;P 500 TR</span><span class="val">' + pct(b.cum_return_pct) + '</span></div>' +
         '<div class="charter-row charter-row--excess"><span class="lbl">Excess</span><span class="val">' + pct(c.excess_return_pct) + '</span></div>' +
       '</div>' +
       '<div class="charter-gate">' +
-        '<div class="charter-gate__head"><span class="charter-gate__title">Drawdown Gate</span>' + chip(dg, dgKind) + '</div>' +
+        '<div class="charter-gate__head"><span class="charter-gate__title">Drawdown Gate</span>' + dgChip + '</div>' +
         '<div class="charter-row"><span class="lbl">Strategy</span><span class="val">' + pct(s.max_dd_pct) + '</span></div>' +
         '<div class="charter-row"><span class="lbl">S&amp;P 500 TR</span><span class="val">' + pct(b.max_dd_pct) + '</span></div>' +
         '<div class="charter-gate__foot">peak-to-trough, since inception</div>' +
-      '</div>';
+      '</div>' +
+      (accumulating
+        ? '<p class="charter-note" style="grid-column:1/-1">Verdicts render at ' + esc(c.min_days) + ' trading days of custodian-reported NAV. Until then: numbers, no verdict.</p>'
+        : '');
   }
 
   function renderProvenance(c, benchLabel) {
@@ -93,7 +92,11 @@
     if (!curves) return;
     var st = effectiveState(charter);
     var ns = (nav && nav.series) || [];
-    if (st !== "LIVE" || ns.length < 5) {
+    // Curves render once the full architecture is measuring (LIVE or
+    // ACCUMULATING) and there are >=5 points (§8.4). ENGINE_ONLY/STALE/ERROR
+    // stay dark — no benchmark series to mirror against.
+    var measuring = st === "LIVE" || st === "ACCUMULATING";
+    if (!measuring || ns.length < 5) {
       curves.innerHTML = '<div class="charter-empty">Record accumulating — chart renders at 5 trading days of the full architecture.</div>';
       return;
     }

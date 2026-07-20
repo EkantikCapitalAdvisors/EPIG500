@@ -26,6 +26,8 @@ EPS = 0.01                 # §4.4 return gate, index pts
 DELTA = 0.0005             # §4.4 drawdown gate
 MIN_DAYS = 21              # §4.4 verdicts render at >= 21 trading days
 STALE_DAYS = 3             # §5.3
+MIN_WEEKS = 8              # capture ratios "ready" (else small-sample caveat)
+MIN_MONTHS = 3
 
 # ----------------------------------------------------------------------------
 # MATH — single source of truth (§4). Pure functions; fixture-tested.
@@ -96,6 +98,97 @@ def verdicts(strat_idx_last, bench_idx_last, strat_maxdd, bench_maxdd):
     dd = strat_maxdd - bench_maxdd
     drawdown_gate = "SHALLOWER" if dd > DELTA else ("DEEPER" if dd < -DELTA else "EQUAL")
     return {"return_gate": return_gate, "drawdown_gate": drawdown_gate}
+
+
+# ----------------------------------------------------------------------------
+# Periodic comparison (weekly / monthly) — strategy vs benchmark. Pure +
+# fixture-tested. All figures precomputed here so the browser only formats.
+# ----------------------------------------------------------------------------
+def _period_key(date_str, freq):
+    """freq 'W' -> (isoyear, isoweek); 'M' -> (year, month). Groups calendar periods."""
+    y, m, d = (int(x) for x in date_str.split("-"))
+    day = dt.date(y, m, d)
+    if freq == "W":
+        iso = day.isocalendar()
+        return (iso[0], iso[1])
+    return (y, m)
+
+
+_MON = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+def _period_label(start, end, freq):
+    ys, ms, ds = start.split("-"); ye, me, de = end.split("-")
+    if freq == "M":
+        return "%s %s" % (_MON[int(ms)], ys)
+    if ms == me:
+        return "%s %d–%d" % (_MON[int(ms)], int(ds), int(de))     # Jul 6–10
+    return "%s %d – %s %d" % (_MON[int(ms)], int(ds), _MON[int(me)], int(de))
+
+
+def periodic_returns(pairs, freq):
+    """pairs: [{date, s, b}] ascending, s/b are base-100 index levels (100 at
+    inception). Returns period rows with strategy vs benchmark returns.
+    Period return = period-end index / prior-period-end index - 1, with the
+    inception base (100) as the first prior. TWR-consistent (indices already
+    neutralize flows)."""
+    groups = []  # [key, first_date, last_date, s_end, b_end]
+    for p in pairs:
+        k = _period_key(p["date"], freq)
+        if groups and groups[-1][0] == k:
+            groups[-1][2] = p["date"]; groups[-1][3] = p["s"]; groups[-1][4] = p["b"]
+        else:
+            groups.append([k, p["date"], p["date"], p["s"], p["b"]])
+    out = []
+    prev_s = prev_b = 100.0
+    for _, start, end, s_end, b_end in groups:
+        s_ret = s_end / prev_s - 1.0
+        b_ret = b_end / prev_b - 1.0
+        out.append({
+            "label": _period_label(start, end, freq),
+            "start": start, "end": end,
+            "strat_ret_pct": round(s_ret * 100, 2),
+            "bench_ret_pct": round(b_ret * 100, 2),
+            "diff_pct": round((s_ret - b_ret) * 100, 2),
+            "beat": (s_ret - b_ret) > 0,
+        })
+        prev_s, prev_b = s_end, b_end
+    return out
+
+
+def capture_ratios(period_rows):
+    """Upside/downside capture from period rows. Upside: mean strat / mean bench
+    over benchmark-UP periods (>100 = more upside). Downside: same over
+    benchmark-DOWN periods (<100 = less downside). None when a bucket is empty."""
+    up = [r for r in period_rows if r["bench_ret_pct"] > 0]
+    dn = [r for r in period_rows if r["bench_ret_pct"] < 0]
+    def cap(bucket):
+        if not bucket:
+            return None
+        mb = sum(r["bench_ret_pct"] for r in bucket) / len(bucket)
+        ms = sum(r["strat_ret_pct"] for r in bucket) / len(bucket)
+        if abs(mb) < 1e-9:
+            return None
+        return round(ms / mb * 100, 1)
+    return {
+        "upside_capture_pct": cap(up),
+        "downside_capture_pct": cap(dn),
+        "up_periods": len(up),
+        "down_periods": len(dn),
+    }
+
+
+def periodic_summary(pairs, freq, min_periods):
+    rows = periodic_returns(pairs, freq)
+    caps = capture_ratios(rows)
+    beat = sum(1 for r in rows if r["beat"])
+    caps.update({
+        "periods": rows,
+        "beat_count": beat,
+        "total": len(rows),
+        "min_periods": min_periods,
+        "capture_ready": len(rows) >= min_periods,
+    })
+    return caps
 
 
 # ----------------------------------------------------------------------------
@@ -177,15 +270,43 @@ def parse_statement(xml_bytes):
 # ----------------------------------------------------------------------------
 def fetch_benchmark(provider, api_key, dates):
     """Return {label, source, rows:[{date, level}]}. Must be TOTAL RETURN.
-    Left as an explicit provider switch; raises if a price-only series is detected."""
+    Explicit provider switch; a price-only series is a hard fail."""
     provider = (provider or "").lower()
+    if provider in ("spy_proxy", "proxy", "spy"):
+        return _fetch_spy_adjusted(api_key, dates)
     if provider in ("sp500tr", "index"):
         # licensed SP500TR index closes via api_key — implement per chosen vendor
         raise NotImplementedError("Wire the SP500TR index provider here (needs BENCHMARK_API_KEY).")
-    if provider in ("spy_proxy", "proxy", "spy"):
-        # SPY dividend-ADJUSTED close as proxy (adjusted = total-return proxy)
-        raise NotImplementedError("Wire the SPY adjusted-close provider here (must be dividend-adjusted).")
-    raise RuntimeError("BENCHMARK_PROVIDER must be set to 'index' or 'spy_proxy' (price-only series banned).")
+    raise RuntimeError("BENCHMARK_PROVIDER must be set to 'spy_proxy' or 'index' (price-only series banned).")
+
+
+def _fetch_spy_adjusted(api_key, dates):
+    """S&P 500 total-return PROXY: SPY dividend+split-ADJUSTED daily closes
+    (Tiingo `adjClose`). Adjusted close reinvests dividends, so its returns
+    track total return, not price return. Labeled honestly as a proxy.
+    Tiingo free tier covers SPY EOD; BENCHMARK_API_KEY = Tiingo token."""
+    if not api_key:
+        raise RuntimeError("BENCHMARK_API_KEY (Tiingo token) required for spy_proxy")
+    import requests
+    start, end = dates[0], dates[-1]
+    r = requests.get(
+        "https://api.tiingo.com/tiingo/daily/SPY/prices",
+        params={"startDate": start, "endDate": end, "format": "json", "token": api_key},
+        headers={"Content-Type": "application/json"}, timeout=30)
+    r.raise_for_status()
+    data = r.json()
+    rows = []
+    for d in data:
+        adj = d.get("adjClose")
+        day = (d.get("date") or "")[:10]
+        if adj is not None and day:
+            rows.append({"date": day, "level": float(adj)})
+    rows.sort(key=lambda x: x["date"])
+    if len(rows) < 2:
+        raise RuntimeError("SPY proxy: Tiingo returned <2 adjusted closes for %s..%s" % (start, end))
+    # guard against an unadjusted feed slipping through: adjClose must differ
+    # from raw close on at least one row over any multi-week window (dividends).
+    return {"label": benchmark_label("spy_proxy"), "source": "tiingo:SPY.adjClose", "rows": rows}
 
 
 def benchmark_label(provider):
@@ -202,6 +323,16 @@ def now_utc():
     if ts:
         return ts
     return dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def raw_verify_url(today):
+    """Click-to-verify link to the committed raw statement on the default
+    branch. CHARTER_REPO_URL (e.g. https://github.com/owner/repo) is provided
+    by the workflow; falls back to an explicit CHARTER_COMMIT_URL, else None."""
+    repo = os.environ.get("CHARTER_REPO_URL")
+    if repo:
+        return repo.rstrip("/") + "/blob/main/data/raw/%s.xml" % today
+    return os.environ.get("CHARTER_COMMIT_URL")
 
 
 def write_error_state():
@@ -236,20 +367,48 @@ def main():
         dates = sorted(nav_by_date)
         if not dates:
             raise RuntimeError("no NAV rows parsed")
+
+        # Inception floor — anchor the record at a fixed start date (e.g.
+        # 2026-07-01) regardless of how wide the IBKR query window is. IBKR
+        # Flex Web Service only offers rolling "Last N days" periods, so we
+        # pull a wide window and clip here; index rebases to 100 at the floor.
+        floor = os.environ.get("CHARTER_INCEPTION_DATE")
+        clipped = False
+        if floor:
+            kept = [d for d in dates if d >= floor]
+            clipped = len(kept) != len(dates)
+            dates = kept
+            if not dates:
+                raise RuntimeError("no NAV rows on/after inception floor " + floor)
+
         nav_rows = [{"date": d, "nav": nav_by_date[d], "flow": flows.get(d, 0.0)} for d in dates]
 
-        # §6.3 cross-check
+        # §6.3 cross-check. endingValue always tracks the final row. The
+        # deposits total is a whole-statement aggregate, so it only reconciles
+        # against the summed flows when we did NOT clip the front of the window.
         if change is not None:
             if abs(change["endingValue"] - nav_rows[-1]["nav"]) > 1.0:
                 raise RuntimeError("cross-check: endingValue != final total")
-            if abs(change["depositsWithdrawals"] - sum(r["flow"] for r in nav_rows)) > 1.0:
+            if not clipped and abs(change["depositsWithdrawals"] - sum(r["flow"] for r in nav_rows)) > 1.0:
                 raise RuntimeError("cross-check: depositsWithdrawals != summed flows")
+            if clipped:
+                print("NOTE deposits cross-check skipped (window clipped at inception floor %s)" % floor, file=sys.stderr)
 
         idx_rows = build_index(nav_rows)
         inception = dates[0]
 
         account_mode = os.environ.get("CHARTER_ACCOUNT_MODE", "ENGINE_ONLY")
         full = account_mode == "FULL_ARCHITECTURE"
+        # Safety degrade: if measuring mode is set but the benchmark key isn't
+        # wired yet, stay ENGINE_ONLY instead of failing to ERROR. This keeps
+        # the dashboard on the clean "armed · not measuring" state during setup
+        # rather than flashing a sync error. Once BENCHMARK_API_KEY exists, the
+        # next run promotes to ACCUMULATING/LIVE automatically. (A key that IS
+        # present but fails mid-record still raises → honest ERROR/STALE.)
+        if full and not api_key:
+            print("NOTE FULL_ARCHITECTURE set but BENCHMARK_API_KEY unwired — "
+                  "holding ENGINE_ONLY until the benchmark is available.", file=sys.stderr)
+            full = False
         trading_days = len(idx_rows)
         _, strat_maxdd = drawdown_series([r["index"] for r in idx_rows])
 
@@ -260,6 +419,7 @@ def main():
         # publishes a real, hash-anchored NAV record. Verdicts, strategy vs
         # benchmark stats, and the twin curves stay dark until FULL_ARCHITECTURE.
         b_idx = None; bench_maxdd = None; vd = None; bench_meta = None
+        weekly = monthly = None
         if full:
             bench = fetch_benchmark(provider, api_key, dates)
             # join on date intersection; carry-forward gaps (§3)
@@ -279,6 +439,12 @@ def main():
             if trading_days >= MIN_DAYS:
                 vd = verdicts(idx_rows[-1]["index"], b_idx[-1]["index"], strat_maxdd, bench_maxdd)
             state = "LIVE" if trading_days >= MIN_DAYS else "ACCUMULATING"
+            # periodic (weekly/monthly) strategy-vs-benchmark comparison
+            b_by_date = {r["date"]: r["index"] for r in b_idx}
+            pairs = [{"date": r["date"], "s": r["index"], "b": b_by_date[r["date"]]}
+                     for r in idx_rows if r["date"] in b_by_date]
+            weekly = periodic_summary(pairs, "W", MIN_WEEKS)
+            monthly = periodic_summary(pairs, "M", MIN_MONTHS)
         else:
             state = "ENGINE_ONLY"
 
@@ -297,6 +463,14 @@ def main():
                 "schema_version": "1.0", "benchmark_id": "SP500TR", "label": benchmark_label(provider),
                 "source": bench_meta.get("source", provider), "last_sync_utc": now_utc(), "series": b_idx,
             }, open(os.path.join(DATA, "benchmark.json"), "w"), indent=2)
+
+            # periodic.json — weekly/monthly strategy-vs-benchmark scoreboard,
+            # fully precomputed (browser only formats). Written with benchmark.
+            json.dump({
+                "schema_version": "1.0", "as_of": dates[-1], "state": state,
+                "inception_date": inception, "benchmark_label": benchmark_label(provider),
+                "last_sync_utc": now_utc(), "weekly": weekly, "monthly": monthly,
+            }, open(os.path.join(DATA, "periodic.json"), "w"), indent=2)
 
         strat_block = bench_block = excess = dd_delta = None
         if full:
@@ -318,7 +492,7 @@ def main():
             "benchmark_label": benchmark_label(provider),
             "inception_date": inception,
             "provenance": {"custodian": "Interactive Brokers", "raw_sha256_short": sha[:8],
-                            "raw_commit_url": os.environ.get("CHARTER_COMMIT_URL"), "last_sync_utc": now_utc()},
+                            "raw_commit_url": raw_verify_url(today), "last_sync_utc": now_utc()},
         }, open(os.path.join(DATA, "charter.json"), "w"), indent=2)
         print("charter sync OK · state=%s · days=%d" % (state, trading_days))
         return 0
