@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Trades Dashboard · Ekantik 500</title>
-    <meta name="description" content="Live trades dashboard for the Ekantik 500 Majority Opinion Predisposal Strategy — real-time KPIs, equity curve, 8-test sustainability battery, and trade table.">
+    <title>The Charter · Ekantik 500 vs S&amp;P 500</title>
+    <meta name="description" content="One question, measured weekly on custodian-reported NAV: does the Ekantik 500 beat the S&P 500 total return — capturing the upside with less of the downside?">
     <meta name="robots" content="noindex">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css?v=20260617e">
     <link rel="stylesheet" href="css/dashboard.css?v=20260618c">
     <link rel="stylesheet" href="modules/charter/charter.css?v=20260714a">
+    <link rel="stylesheet" href="modules/charter/scoreboard.css?v=20260720a">
 </head>
 <body class="dash-body">
 
@@ -21,7 +22,7 @@
         <a href="/" class="logo">
             <span class="logo__mark">E</span>
             <span class="logo__wordmark">EKANTIK CAPITAL</span>
-            <span class="logo__sublabel">DASHBOARD</span>
+            <span class="logo__sublabel">THE CHARTER</span>
         </a>
         <nav class="dash-nav__links">
             <a href="/">← Landing page</a>
@@ -32,42 +33,17 @@
 
 <main class="container dash-main">
     <header class="dash-header">
-        <p class="eyebrow" id="dashEyebrow"><span class="diamond">◆</span> Live Trades · Majority Opinion Predisposal Strategy</p>
-        <h1 class="dash-title" id="dashTitle">Operator record — live execution</h1>
-        <p class="dash-sub" id="dashMeta">Loading dataset…</p>
+        <p class="eyebrow"><span class="diamond">◆</span> The Charter · live custodian record vs the S&amp;P 500</p>
+        <h1 class="dash-title">Does it beat the S&amp;P 500 — with less of the downside?</h1>
+        <p class="dash-sub" id="scoreSub">One question, measured period by period on custodian-reported NAV against the S&amp;P 500 total return. No other scorecard.</p>
     </header>
 
-    <!-- Book switcher — engine (ES points) vs synthetic-passive overlay (SPY $).
-         Self-hides when there are 0 synthetic_passive trades; the dashboard stays
-         engine-only and looks unchanged. Reveals the moment SPY trades publish. -->
-    <section class="dash-bookbar" id="dashBookbar" hidden aria-label="Book">
-        <div class="dash-bookbar__row">
-            <p class="dash-bookbar__label"><span class="diamond">◆</span> Book</p>
-            <div class="dash-bookbar__tabs" role="tablist">
-                <button class="book-tab is-active" data-book="engine" type="button" role="tab" aria-selected="true">
-                    Booster Engine
-                    <span class="book-tab__sub">/ES · /MES · points</span>
-                </button>
-                <button class="book-tab book-tab--testing" data-book="synthetic_passive" type="button" role="tab" aria-selected="false">
-                    Synthetic-Passive Overlay
-                    <span class="book-tab__sub">SPY · $ · IN TESTING</span>
-                </button>
-            </div>
-        </div>
-        <!-- SPY-view "verdict pending" notice (only renders while the SPY tab is active) -->
-        <aside class="dash-bookbar__notice" id="dashSpyNotice" hidden role="note">
-            <p><span class="diamond">◆</span> <strong>SYNTHETIC-PASSIVE OVERLAY — IN TESTING.</strong> Accumulating record only — <strong>not a verdict</strong>. The overlay's beat-or-protect gate (<a href="/falsifiability-protocol.html" target="_blank" rel="noopener">Article VIII.B</a>) is evaluated over a <strong>full market cycle</strong>; the 8-test sustainability battery is engine-specific and does not apply here. Per-trade P&amp;L shown in dollars (no ES-equivalent point for this book).</p>
-        </aside>
-    </section>
-
-    <!-- ═══ Charter Ledger · Module 1 — Charter Scoreboard (CL-SPEC-V1.0 §7) ═══
-         Placed above the Timeframe block per §7.1. #charterBoard / #charterProv
-         are rendered by modules/charter/charter.js from precomputed
-         data/charter.json — zero financial math in the browser beyond
-         formatting. The static markup below is the required-string layer
-         (§10.1) and the no-JS graceful fallback (ENGINE_ONLY copy). -->
+    <!-- ═══ 1 · Since-inception verdict (Charter Module 1, §7) ══════════════
+         #charterBoard / #charterProv rendered by modules/charter/charter.js
+         from precomputed data/charter.json. Static markup is the required-
+         string layer (§10.1) and the no-JS ENGINE_ONLY fallback. -->
     <section class="charter" id="charterModule" aria-label="The Charter Standard">
-        <p class="charter__eyebrow"><span class="diamond">◆</span> The Charter <span class="sub">· measured on custodian-reported NAV</span></p>
+        <p class="charter__eyebrow"><span class="diamond">◆</span> Since inception <span class="sub">· cumulative, custodian-reported NAV</span></p>
         <div class="charter-board" id="charterBoard">
             <div class="charter-gate" style="grid-column:1/-1">
                 <div class="charter-gate__head"><span class="charter-gate__title">The Charter Standard</span><span class="charter-chip charter-chip--armed">ARMED · NOT MEASURING</span></div>
@@ -80,133 +56,53 @@
         </div>
     </section>
 
-    <!-- Timeframe selector -->
-    <section class="dash-timeframe" id="dashTimeframe" aria-label="KPI timeframe">
-        <p class="dash-timeframe__label"><span class="diamond">◆</span> Timeframe</p>
-        <div class="dash-timeframe__chips" role="radiogroup" aria-label="Select timeframe">
-            <button class="tf-chip is-active" data-tf="all" type="button">All time</button>
-            <button class="tf-chip" data-tf="ytd" type="button">YTD</button>
-            <button class="tf-chip" data-tf="mtd" type="button">MTD</button>
-            <button class="tf-chip" data-tf="90d" type="button">Last 90 days</button>
-            <button class="tf-chip" data-tf="30d" type="button">Last 30 days</button>
-            <button class="tf-chip" data-tf="7d"  type="button">Last 7 days</button>
-            <button class="tf-chip tf-chip--divider" data-tf="prereg" type="button">Pre-reg only</button>
-            <button class="tf-chip" data-tf="historical" type="button">Historical only</button>
+    <!-- ═══ Periodicity toggle ═══════════════════════════════════════════ -->
+    <section class="score-toggle" aria-label="Comparison period">
+        <p class="score-toggle__label"><span class="diamond">◆</span> Period</p>
+        <div class="score-toggle__chips" role="radiogroup" aria-label="Select comparison period">
+            <button class="score-chip is-active" data-freq="weekly" type="button" role="radio" aria-checked="true">Weekly</button>
+            <button class="score-chip" data-freq="monthly" type="button" role="radio" aria-checked="false">Monthly</button>
         </div>
-        <p class="dash-timeframe__meta" id="dashTimeframeMeta">—</p>
+        <p class="score-toggle__meta" id="scoreToggleMeta">—</p>
     </section>
 
-    <!-- KPI strip -->
-    <section class="dash-kpis" id="dashKpis" aria-label="Key performance indicators">
-        <!-- rendered by JS -->
+    <!-- ═══ 2 · Period-by-period vs S&P + beat tally ═════════════════════
+         Rendered by modules/charter/scoreboard.js from data/periodic.json. -->
+    <section class="score-block" aria-label="Period-by-period return vs the S&amp;P 500">
+        <header class="score-block__head">
+            <h2 class="score-block__h">Every period vs the S&amp;P 500 total return</h2>
+            <p class="score-block__sub" id="scoreBeatTally">—</p>
+        </header>
+        <div id="scorePeriods">
+            <div class="score-empty">Accumulating — the period-by-period record renders once the full architecture is measuring.</div>
+        </div>
     </section>
 
-    <!-- Battery verdict band (engine-only; hidden when the SPY book is active) -->
-    <section class="dash-battery" id="dashBatterySection" aria-label="8-Test Sustainability Battery">
-        <div class="dash-battery__verdict">
-            <p class="dash-battery__label">8-Test Sustainability Battery</p>
-            <p class="dash-battery__value" id="dashBatteryVerdict">—</p>
+    <!-- ═══ 3 · Upside capture / downside participation ══════════════════ -->
+    <section class="score-block" aria-label="Upside capture and downside participation">
+        <header class="score-block__head">
+            <h2 class="score-block__h">Upside captured · downside avoided</h2>
+            <p class="score-block__sub">In up periods, how much of the S&amp;P's gain did the strategy capture — and in down periods, how much of its loss did it take?</p>
+        </header>
+        <div id="scoreCapture">
+            <div class="score-empty">Accumulating — capture figures render as the record builds.</div>
         </div>
-        <div class="dash-battery__grid" id="dashBatteryGrid">
-            <!-- 8 compact test pills rendered by JS -->
-        </div>
-        <a href="/#battery" class="dash-battery__more">See the full battery →</a>
     </section>
 
-    <!-- ═══ Charter Ledger · Module 2 — Twin Curves + Underwater Mirror (§8) ═══
-         Placed above the existing "Cumulative P&L" chart per §8.1. #charterCurves
-         is rendered by charter.js as a twin SVG stack (growth-of-100 + underwater
-         drawdown) from precomputed data/nav.json + data/benchmark.json. Static
-         eyebrow below carries required strings and the <5-point empty state. -->
-    <section class="charter charter-curves" id="charterCurvesModule" aria-label="Charter twin curves — growth of 100 and drawdown">
+    <!-- ═══ 4 · Drawdown mirror (Charter Module 2, §8) ═══════════════════ -->
+    <section class="charter charter-curves" id="charterCurvesModule" aria-label="Growth of 100 and peak-to-trough drawdown vs the S&amp;P 500">
         <p class="charter__eyebrow"><span class="diamond">◆</span> Growth of 100 <span class="sub">· strategy vs S&amp;P 500 total return · peak-to-trough drawdown mirror · custodian-reported NAV</span></p>
         <div id="charterCurves">
             <div class="charter-empty">Record accumulating — chart renders at 5 trading days.</div>
         </div>
     </section>
 
-    <!-- Equity curve -->
-    <section class="dash-chart" aria-label="Equity curve">
-        <header class="dash-chart__head">
-            <h2 class="dash-chart__h" id="dashChartTitle">Cumulative P&amp;L · /ES points <span style="color:var(--gold-deep);font-weight:400">+ $ per contract</span></h2>
-            <p class="dash-chart__sub" id="dashChartSub">—</p>
-        </header>
-        <canvas id="dashEquityCurve" width="1100" height="320"></canvas>
-    </section>
-
-    <!-- Monthly P&L breakdown -->
-    <section class="dash-monthly" aria-label="Monthly P&amp;L breakdown">
-        <header class="dash-chart__head">
-            <h2 class="dash-chart__h">Monthly P&amp;L breakdown</h2>
-            <p class="dash-chart__sub" id="dashMonthlySub">—</p>
-        </header>
-        <canvas id="dashMonthlyChart" width="1100" height="220" aria-label="Monthly net P&amp;L bar chart — gold bars are positive months, red bars are negative months."></canvas>
-        <div class="dash-monthly__table-wrap">
-            <table class="dash-monthly__table">
-                <thead id="dashMonthlyHead">
-                    <tr>
-                        <th>Month</th>
-                        <th class="num">Trades</th>
-                        <th class="num">W / L</th>
-                        <th class="num">WR</th>
-                        <th class="num">Net pts</th>
-                        <th class="num">Net $ / ctr</th>
-                        <th class="num">Best</th>
-                        <th class="num">Worst</th>
-                    </tr>
-                </thead>
-                <tbody id="dashMonthlyBody"><!-- rendered by JS --></tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- Filters + trades table -->
-    <section class="dash-table" aria-label="Trade record">
-        <header class="dash-table__head">
-            <h2 class="dash-chart__h">Trade record</h2>
-            <div class="dash-table__filters">
-                <select id="dashFilterResult">
-                    <option value="">All trades</option>
-                    <option value="W">Winners only</option>
-                    <option value="L">Losers only</option>
-                </select>
-                <select id="dashFilterSide">
-                    <option value="">All sides</option>
-                    <option value="LONG">Long</option>
-                    <option value="SHORT">Short</option>
-                </select>
-                <input type="search" id="dashSearch" placeholder="Search ID, symbol…">
-                <button class="btn btn--secondary btn--sm" id="dashExportCsv">Export CSV</button>
-            </div>
-        </header>
-        <div class="dash-table__wrap">
-            <table class="dash-table__table">
-                <thead id="dashTableHead">
-                    <tr>
-                        <th>#</th>
-                        <th>Date</th>
-                        <th>Symbol</th>
-                        <th>Side</th>
-                        <th>Result</th>
-                        <th class="num">Points</th>
-                        <th class="num">$ / contract</th>
-                        <th>Tag</th>
-                    </tr>
-                </thead>
-                <tbody id="dashTableBody">
-                    <!-- rendered by JS -->
-                </tbody>
-            </table>
-        </div>
-        <p class="dash-table__count" id="dashTableCount">—</p>
-    </section>
-
     <footer class="dash-footer">
-        <p>Educational only. Operator live record. Past performance does not guarantee future results. Dataset committed to <code>/data/trades.json</code> — see <a href="falsifiability-protocol.html">Falsifiability Protocol v1.0</a>.</p>
+        <p><strong>Educational only.</strong> Operator live record on Interactive Brokers–reported NAV, measured against the S&amp;P 500 total return. Figures are <strong>gross of fees</strong>; net-of-fee figures will be published alongside when a fee schedule exists. Upside/downside capture is a statistical summary of past periods, not a forecast. Past performance does not guarantee future results. Benchmark data via a dividend-adjusted SPY total-return proxy — see the <a href="falsifiability-protocol.html">Falsifiability Protocol v1.0</a>.</p>
     </footer>
 </main>
 
-<script src="js/dashboard.js?v=20260625c"></script>
 <script src="modules/charter/charter.js?v=20260720a"></script>
+<script src="modules/charter/scoreboard.js?v=20260720a"></script>
 </body>
 </html>

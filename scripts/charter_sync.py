@@ -26,6 +26,8 @@ EPS = 0.01                 # §4.4 return gate, index pts
 DELTA = 0.0005             # §4.4 drawdown gate
 MIN_DAYS = 21              # §4.4 verdicts render at >= 21 trading days
 STALE_DAYS = 3             # §5.3
+MIN_WEEKS = 8              # capture ratios "ready" (else small-sample caveat)
+MIN_MONTHS = 3
 
 # ----------------------------------------------------------------------------
 # MATH — single source of truth (§4). Pure functions; fixture-tested.
@@ -96,6 +98,97 @@ def verdicts(strat_idx_last, bench_idx_last, strat_maxdd, bench_maxdd):
     dd = strat_maxdd - bench_maxdd
     drawdown_gate = "SHALLOWER" if dd > DELTA else ("DEEPER" if dd < -DELTA else "EQUAL")
     return {"return_gate": return_gate, "drawdown_gate": drawdown_gate}
+
+
+# ----------------------------------------------------------------------------
+# Periodic comparison (weekly / monthly) — strategy vs benchmark. Pure +
+# fixture-tested. All figures precomputed here so the browser only formats.
+# ----------------------------------------------------------------------------
+def _period_key(date_str, freq):
+    """freq 'W' -> (isoyear, isoweek); 'M' -> (year, month). Groups calendar periods."""
+    y, m, d = (int(x) for x in date_str.split("-"))
+    day = dt.date(y, m, d)
+    if freq == "W":
+        iso = day.isocalendar()
+        return (iso[0], iso[1])
+    return (y, m)
+
+
+_MON = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+def _period_label(start, end, freq):
+    ys, ms, ds = start.split("-"); ye, me, de = end.split("-")
+    if freq == "M":
+        return "%s %s" % (_MON[int(ms)], ys)
+    if ms == me:
+        return "%s %d–%d" % (_MON[int(ms)], int(ds), int(de))     # Jul 6–10
+    return "%s %d – %s %d" % (_MON[int(ms)], int(ds), _MON[int(me)], int(de))
+
+
+def periodic_returns(pairs, freq):
+    """pairs: [{date, s, b}] ascending, s/b are base-100 index levels (100 at
+    inception). Returns period rows with strategy vs benchmark returns.
+    Period return = period-end index / prior-period-end index - 1, with the
+    inception base (100) as the first prior. TWR-consistent (indices already
+    neutralize flows)."""
+    groups = []  # [key, first_date, last_date, s_end, b_end]
+    for p in pairs:
+        k = _period_key(p["date"], freq)
+        if groups and groups[-1][0] == k:
+            groups[-1][2] = p["date"]; groups[-1][3] = p["s"]; groups[-1][4] = p["b"]
+        else:
+            groups.append([k, p["date"], p["date"], p["s"], p["b"]])
+    out = []
+    prev_s = prev_b = 100.0
+    for _, start, end, s_end, b_end in groups:
+        s_ret = s_end / prev_s - 1.0
+        b_ret = b_end / prev_b - 1.0
+        out.append({
+            "label": _period_label(start, end, freq),
+            "start": start, "end": end,
+            "strat_ret_pct": round(s_ret * 100, 2),
+            "bench_ret_pct": round(b_ret * 100, 2),
+            "diff_pct": round((s_ret - b_ret) * 100, 2),
+            "beat": (s_ret - b_ret) > 0,
+        })
+        prev_s, prev_b = s_end, b_end
+    return out
+
+
+def capture_ratios(period_rows):
+    """Upside/downside capture from period rows. Upside: mean strat / mean bench
+    over benchmark-UP periods (>100 = more upside). Downside: same over
+    benchmark-DOWN periods (<100 = less downside). None when a bucket is empty."""
+    up = [r for r in period_rows if r["bench_ret_pct"] > 0]
+    dn = [r for r in period_rows if r["bench_ret_pct"] < 0]
+    def cap(bucket):
+        if not bucket:
+            return None
+        mb = sum(r["bench_ret_pct"] for r in bucket) / len(bucket)
+        ms = sum(r["strat_ret_pct"] for r in bucket) / len(bucket)
+        if abs(mb) < 1e-9:
+            return None
+        return round(ms / mb * 100, 1)
+    return {
+        "upside_capture_pct": cap(up),
+        "downside_capture_pct": cap(dn),
+        "up_periods": len(up),
+        "down_periods": len(dn),
+    }
+
+
+def periodic_summary(pairs, freq, min_periods):
+    rows = periodic_returns(pairs, freq)
+    caps = capture_ratios(rows)
+    beat = sum(1 for r in rows if r["beat"])
+    caps.update({
+        "periods": rows,
+        "beat_count": beat,
+        "total": len(rows),
+        "min_periods": min_periods,
+        "capture_ready": len(rows) >= min_periods,
+    })
+    return caps
 
 
 # ----------------------------------------------------------------------------
@@ -326,6 +419,7 @@ def main():
         # publishes a real, hash-anchored NAV record. Verdicts, strategy vs
         # benchmark stats, and the twin curves stay dark until FULL_ARCHITECTURE.
         b_idx = None; bench_maxdd = None; vd = None; bench_meta = None
+        weekly = monthly = None
         if full:
             bench = fetch_benchmark(provider, api_key, dates)
             # join on date intersection; carry-forward gaps (§3)
@@ -345,6 +439,12 @@ def main():
             if trading_days >= MIN_DAYS:
                 vd = verdicts(idx_rows[-1]["index"], b_idx[-1]["index"], strat_maxdd, bench_maxdd)
             state = "LIVE" if trading_days >= MIN_DAYS else "ACCUMULATING"
+            # periodic (weekly/monthly) strategy-vs-benchmark comparison
+            b_by_date = {r["date"]: r["index"] for r in b_idx}
+            pairs = [{"date": r["date"], "s": r["index"], "b": b_by_date[r["date"]]}
+                     for r in idx_rows if r["date"] in b_by_date]
+            weekly = periodic_summary(pairs, "W", MIN_WEEKS)
+            monthly = periodic_summary(pairs, "M", MIN_MONTHS)
         else:
             state = "ENGINE_ONLY"
 
@@ -363,6 +463,14 @@ def main():
                 "schema_version": "1.0", "benchmark_id": "SP500TR", "label": benchmark_label(provider),
                 "source": bench_meta.get("source", provider), "last_sync_utc": now_utc(), "series": b_idx,
             }, open(os.path.join(DATA, "benchmark.json"), "w"), indent=2)
+
+            # periodic.json — weekly/monthly strategy-vs-benchmark scoreboard,
+            # fully precomputed (browser only formats). Written with benchmark.
+            json.dump({
+                "schema_version": "1.0", "as_of": dates[-1], "state": state,
+                "inception_date": inception, "benchmark_label": benchmark_label(provider),
+                "last_sync_utc": now_utc(), "weekly": weekly, "monthly": monthly,
+            }, open(os.path.join(DATA, "periodic.json"), "w"), indent=2)
 
         strat_block = bench_block = excess = dd_delta = None
         if full:
