@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "as_of": "2026-05-19",
-  "trading_days": 0,
+  "as_of": "2026-07-17",
+  "trading_days": 2,
   "min_days": 21,
   "account_mode": "ENGINE_ONLY",
   "state": "ENGINE_ONLY",
@@ -10,12 +10,12 @@
   "excess_return_pct": null,
   "dd_delta_pct": null,
   "verdicts": null,
-  "benchmark_label": "S&P 500 Total Return (SP500TR)",
-  "inception_date": "2026-05-19",
+  "benchmark_label": "S&P 500 TR (SPY adj. close proxy)",
+  "inception_date": "2026-07-16",
   "provenance": {
     "custodian": "Interactive Brokers",
-    "raw_sha256_short": null,
+    "raw_sha256_short": "b71f5dfc",
     "raw_commit_url": null,
-    "last_sync_utc": null
+    "last_sync_utc": "2026-07-20T21:34:33Z"
   }
 }
