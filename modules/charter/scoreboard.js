@@ -11,10 +11,42 @@
   var tallyEl = document.getElementById("scoreBeatTally");
   var metaEl = document.getElementById("scoreToggleMeta");
   var chips = Array.prototype.slice.call(document.querySelectorAll(".score-chip"));
+  var winChips = Array.prototype.slice.call(document.querySelectorAll(".score-win"));
+  var datesEl = document.getElementById("scoreDates");
+  var fromEl = document.getElementById("scoreFrom");
+  var toEl = document.getElementById("scoreTo");
 
   var GOLD = "#C8A951", GOLD_DK = "#b8962e", SLATE = "#64748B", SLATE2 = "#8CA0BE", NAVY = "#1B2A4A";
   var bust = "?t=" + Date.now();
-  var DATA = null, freq = "weekly";
+  var DATA = null, freq = "weekly", win = "all";
+
+  // ---- windowing: filter precomputed period returns, re-aggregate tally +
+  // capture (period returns themselves are pipeline-computed; this only slices
+  // and averages them — the capture formula mirrors charter_sync.capture_ratios). --
+  function inWindow(r) {
+    if (win === "all") return true;
+    var d = r.end;
+    if (win === "ytd") { return d >= (new Date().getFullYear()) + "-01-01"; }
+    if (win === "custom") {
+      var f = fromEl && fromEl.value, t = toEl && toEl.value;
+      return (!f || d >= f) && (!t || d <= t);
+    }
+    return true;
+  }
+  function windowBlock(blk) {
+    if (win === "all") return blk;
+    var rows = (blk.periods || []).filter(inWindow);
+    function avg(b, k) { return b.reduce(function (a, r) { return a + r[k]; }, 0) / b.length; }
+    function cap(b) { if (!b.length) return null; var mb = avg(b, "bench_ret_pct"); if (Math.abs(mb) < 1e-9) return null; return Math.round(avg(b, "strat_ret_pct") / mb * 1000) / 10; }
+    var up = rows.filter(function (r) { return r.bench_ret_pct > 0; });
+    var dn = rows.filter(function (r) { return r.bench_ret_pct < 0; });
+    return {
+      periods: rows, beat_count: rows.filter(function (r) { return r.beat; }).length, total: rows.length,
+      upside_capture_pct: cap(up), downside_capture_pct: cap(dn),
+      up_periods: up.length, down_periods: dn.length,
+      min_periods: blk.min_periods, capture_ready: rows.length >= blk.min_periods
+    };
+  }
 
   function pct(n, dp) { if (n == null || isNaN(n)) return "—"; dp = dp == null ? 2 : dp; return (n >= 0 ? "+" : "") + Number(n).toFixed(dp) + "%"; }
   function noun(n) { return freq === "weekly" ? (n === 1 ? "week" : "weeks") : (n === 1 ? "month" : "months"); }
@@ -37,9 +69,9 @@
     if (tallyEl) {
       tallyEl.innerHTML = '<span class="score-tally">Beat the S&amp;P 500 in <b>' + blk.beat_count + '</b> of <b>' + blk.total + '</b> ' + noun(blk.total) + '.</span>';
     }
-    if (metaEl) metaEl.textContent = blk.total + " measured " + noun(blk.total);
+    if (metaEl) metaEl.textContent = blk.total + " " + noun(blk.total) + " · " + winLabel();
     if (!rows.length) {
-      periodsEl.innerHTML = '<div class="score-empty">No measured ' + noun(0) + ' yet.</div>';
+      periodsEl.innerHTML = '<div class="score-empty">No measured ' + noun(0) + ' in this window.</div>';
       return;
     }
     periodsEl.innerHTML = barsSvg(rows) + tableHtml(rows);
@@ -180,25 +212,49 @@
   }
 
   // ---- render + toggle ----------------------------------------------------
+  function winLabel() {
+    if (win === "ytd") return "year to date";
+    if (win === "custom") {
+      var f = fromEl && fromEl.value, t = toEl && toEl.value;
+      if (!f && !t) return "custom range";
+      return (f || "start") + " → " + (t || "now");
+    }
+    return "since inception";
+  }
+
   function render() {
     if (!DATA) return;
     var st = DATA.state;
     if (st === "ENGINE_ONLY" || st === "STALE" || st === "ERROR" || !DATA[freq]) { emptyStates(); return; }
-    renderPeriods(DATA[freq]);
-    renderCapture(DATA[freq]);
+    var blk = windowBlock(DATA[freq]);
+    renderPeriods(blk);
+    renderCapture(blk);
+  }
+
+  function selectChip(list, el, attr, setter) {
+    list.forEach(function (x) {
+      var on = x === el;
+      x.classList.toggle("is-active", on);
+      x.setAttribute("aria-checked", on ? "true" : "false");
+    });
+    setter(el.getAttribute(attr));
   }
 
   chips.forEach(function (c) {
     c.addEventListener("click", function () {
-      freq = c.getAttribute("data-freq");
-      chips.forEach(function (x) {
-        var on = x === c;
-        x.classList.toggle("is-active", on);
-        x.setAttribute("aria-checked", on ? "true" : "false");
-      });
+      selectChip(chips, c, "data-freq", function (v) { freq = v; });
       render();
     });
   });
+
+  winChips.forEach(function (c) {
+    c.addEventListener("click", function () {
+      selectChip(winChips, c, "data-win", function (v) { win = v; });
+      if (datesEl) datesEl.hidden = (win !== "custom");
+      render();
+    });
+  });
+  [fromEl, toEl].forEach(function (el) { if (el) el.addEventListener("change", function () { if (win === "custom") render(); }); });
 
   fetch("data/periodic.json" + bust, { cache: "no-store" })
     .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
