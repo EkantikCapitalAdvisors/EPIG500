@@ -120,9 +120,9 @@
         const eyebrow = document.getElementById('dashEyebrow');
         if (eyebrow) eyebrow.innerHTML = isSpy
             ? '<span class="diamond">◆</span> Synthetic-Passive Overlay · accumulating record · <em>in testing</em>'
-            : '<span class="diamond">◆</span> Live Trades · Majority Opinion Predisposal Strategy';
+            : '<span class="diamond">◆</span> The Alerts Record · Majority Opinion Predisposal Strategy';
         const title = document.getElementById('dashTitle');
-        if (title) title.textContent = isSpy ? 'Overlay record — early, accumulating' : 'Operator record — live execution';
+        if (title) title.textContent = isSpy ? 'Overlay record — early, accumulating' : 'Every trade we called — published';
         const notice = document.getElementById('dashSpyNotice');
         if (notice) notice.hidden = !isSpy;
         const battery = document.getElementById('dashBatterySection');

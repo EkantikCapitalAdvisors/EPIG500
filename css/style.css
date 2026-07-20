@@ -5906,3 +5906,19 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .fine{ font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--slate);letter-spacing:.03em;line-height:1.8; }
 .section--anatomy .fine{ color:var(--slate); }
 .ivory-beat .fine, .section--white .fine{ color:var(--slate-dark); }
+
+/* ── Two records, one test (landing: alerts vs custodian) ── */
+.two-records { background: var(--navy); border-radius: var(--radius-lg); padding: 28px 30px; margin: 0 0 var(--s-8); border: 1px solid rgba(212,175,55,0.35); }
+.two-records__k { font-size: 12px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin: 0 0 18px; }
+.two-records__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px; }
+@media (max-width: 680px) { .two-records__grid { grid-template-columns: 1fr; } }
+.two-records__card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius); padding: 20px 22px; }
+.two-records__card--live { border-color: rgba(212,175,55,0.45); }
+.two-records__title { font-family: var(--font-serif); font-size: 19px; font-weight: 600; color: #fff; margin: 0 0 8px; }
+.two-records__body { font-size: 14px; line-height: 1.6; color: var(--text-on-dark); margin: 0 0 12px; }
+.two-records__body em { color: var(--gold-bright); font-style: italic; }
+.two-records__link { font-size: 13.5px; font-weight: 600; color: var(--gold); text-decoration: none; }
+.two-records__link:hover { color: var(--gold-bright); }
+.two-records__bridge { font-size: 14.5px; line-height: 1.65; color: var(--text-on-dark); margin: 0; max-width: 82ch; }
+.two-records__bridge strong { color: #fff; }
+.two-records__bridge em { color: var(--slate); font-style: italic; font-size: 13px; }

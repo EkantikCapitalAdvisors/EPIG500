@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=20260617e">
-    <link rel="stylesheet" href="css/dashboard.css?v=20260618c">
+    <link rel="stylesheet" href="css/style.css?v=20260720a">
+    <link rel="stylesheet" href="css/dashboard.css?v=20260720a">
     <link rel="stylesheet" href="modules/charter/charter.css?v=20260714a">
     <link rel="stylesheet" href="modules/charter/scoreboard.css?v=20260720b">
 </head>
@@ -37,6 +37,13 @@
         <h1 class="dash-title">Does it beat the S&amp;P 500 — with less of the downside?</h1>
         <p class="dash-sub" id="scoreSub">One question, measured period by period on custodian-reported NAV against the S&amp;P 500 total return. No other scorecard.</p>
     </header>
+
+    <!-- Bridge banner: this is the custodian proof behind the alerts record. -->
+    <aside class="alerts-bridge" role="note">
+        <p class="alerts-bridge__k"><span class="diamond">◆</span> Custodian proof</p>
+        <p class="alerts-bridge__body">This is the <strong>third-party-verified account</strong> behind the <a href="alerts.html" style="color:var(--gold-bright)">alerts record ↗</a>. Those alerts are what we called; NAV here is reported by <strong>Interactive&nbsp;Brokers</strong>, not by us. <strong>The live record is expected to track the alerts record.</strong> If it diverges — slippage, timing, calls that weren't cleanly tradeable — that gap is shown right here, in public, not explained away. Operator-reported alerts are the claim; this is the proof.</p>
+        <p class="alerts-bridge__cta"><a href="alerts.html" class="btn btn--secondary btn--sm">See the alerts record it must track ↗</a></p>
+    </aside>
 
     <!-- ═══ 1 · Since-inception verdict (Charter Module 1, §7) ══════════════
          #charterBoard / #charterProv rendered by modules/charter/charter.js
