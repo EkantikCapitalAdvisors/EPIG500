@@ -248,32 +248,41 @@ def main():
         idx_rows = build_index(nav_rows)
         inception = dates[0]
 
-        bench = fetch_benchmark(provider, api_key, dates)
-        # join on date intersection; carry-forward gaps (§3)
-        blevel = {r["date"]: r["level"] for r in bench["rows"]}
-        joined, last = [], None
-        for d in dates:
-            if d in blevel:
-                last = blevel[d]
-            elif last is None:
-                continue
-            else:
-                print(f"WARN benchmark_gap {d}", file=sys.stderr)
-            joined.append({"date": d, "level": last})
-        b_idx = benchmark_index(joined, joined[0]["level"])
-
-        # drawdowns + verdicts
-        _, strat_maxdd = drawdown_series([r["index"] for r in idx_rows])
-        _, bench_maxdd = drawdown_series([r["index"] for r in b_idx])
         account_mode = os.environ.get("CHARTER_ACCOUNT_MODE", "ENGINE_ONLY")
+        full = account_mode == "FULL_ARCHITECTURE"
         trading_days = len(idx_rows)
-        vd = None
-        if trading_days >= MIN_DAYS and account_mode == "FULL_ARCHITECTURE":
-            vd = verdicts(idx_rows[-1]["index"], b_idx[-1]["index"], strat_maxdd, bench_maxdd)
-        state = ("ENGINE_ONLY" if account_mode != "FULL_ARCHITECTURE"
-                 else ("LIVE" if trading_days >= MIN_DAYS else "ACCUMULATING"))
+        _, strat_maxdd = drawdown_series([r["index"] for r in idx_rows])
 
-        # write nav.json
+        # Benchmark is only REQUIRED once the account runs the full 80/20
+        # architecture (§7.3). In the ENGINE_ONLY sleeve the dashboard shows
+        # "armed · not measuring" and renders no verdict/curve, so the S&P 500
+        # total-return fetch is skipped — the pipe stays green and still
+        # publishes a real, hash-anchored NAV record. Verdicts, strategy vs
+        # benchmark stats, and the twin curves stay dark until FULL_ARCHITECTURE.
+        b_idx = None; bench_maxdd = None; vd = None; bench_meta = None
+        if full:
+            bench = fetch_benchmark(provider, api_key, dates)
+            # join on date intersection; carry-forward gaps (§3)
+            blevel = {r["date"]: r["level"] for r in bench["rows"]}
+            joined, last = [], None
+            for d in dates:
+                if d in blevel:
+                    last = blevel[d]
+                elif last is None:
+                    continue
+                else:
+                    print(f"WARN benchmark_gap {d}", file=sys.stderr)
+                joined.append({"date": d, "level": last})
+            b_idx = benchmark_index(joined, joined[0]["level"])
+            _, bench_maxdd = drawdown_series([r["index"] for r in b_idx])
+            bench_meta = bench
+            if trading_days >= MIN_DAYS:
+                vd = verdicts(idx_rows[-1]["index"], b_idx[-1]["index"], strat_maxdd, bench_maxdd)
+            state = "LIVE" if trading_days >= MIN_DAYS else "ACCUMULATING"
+        else:
+            state = "ENGINE_ONLY"
+
+        # write nav.json (always — real, hash-anchored NAV series)
         json.dump({
             "schema_version": "1.0", "account_label": "U****", "account_mode": account_mode,
             "base_currency": "USD", "inception_date": inception, "last_sync_utc": now_utc(),
@@ -281,20 +290,30 @@ def main():
             "fee_drag_annual": None, "net_series": None, "series": idx_rows,
         }, open(os.path.join(DATA, "nav.json"), "w"), indent=2)
 
-        json.dump({
-            "schema_version": "1.0", "benchmark_id": "SP500TR", "label": benchmark_label(provider),
-            "source": bench.get("source", provider), "last_sync_utc": now_utc(), "series": b_idx,
-        }, open(os.path.join(DATA, "benchmark.json"), "w"), indent=2)
+        # benchmark.json only when we actually fetched a TR series; otherwise the
+        # committed ENGINE_ONLY sample is left untouched (never a stale real one).
+        if full:
+            json.dump({
+                "schema_version": "1.0", "benchmark_id": "SP500TR", "label": benchmark_label(provider),
+                "source": bench_meta.get("source", provider), "last_sync_utc": now_utc(), "series": b_idx,
+            }, open(os.path.join(DATA, "benchmark.json"), "w"), indent=2)
+
+        strat_block = bench_block = excess = dd_delta = None
+        if full:
+            strat_block = {"cum_return_pct": round(idx_rows[-1]["index"] - 100, 2),
+                           "max_dd_pct": round(strat_maxdd * 100, 2), "index_last": idx_rows[-1]["index"]}
+            bench_block = {"cum_return_pct": round(b_idx[-1]["index"] - 100, 2),
+                           "max_dd_pct": round(bench_maxdd * 100, 2), "index_last": b_idx[-1]["index"]}
+            excess = round(idx_rows[-1]["index"] - b_idx[-1]["index"], 2)
+            dd_delta = round((strat_maxdd - bench_maxdd) * 100, 2)
 
         json.dump({
             "schema_version": "1.0", "as_of": dates[-1], "trading_days": trading_days,
             "min_days": MIN_DAYS, "account_mode": account_mode, "state": state,
-            "strategy": {"cum_return_pct": round(idx_rows[-1]["index"] - 100, 2),
-                          "max_dd_pct": round(strat_maxdd * 100, 2), "index_last": idx_rows[-1]["index"]},
-            "benchmark": {"cum_return_pct": round(b_idx[-1]["index"] - 100, 2),
-                           "max_dd_pct": round(bench_maxdd * 100, 2), "index_last": b_idx[-1]["index"]},
-            "excess_return_pct": round(idx_rows[-1]["index"] - b_idx[-1]["index"], 2),
-            "dd_delta_pct": round((strat_maxdd - bench_maxdd) * 100, 2),
+            "strategy": strat_block,
+            "benchmark": bench_block,
+            "excess_return_pct": excess,
+            "dd_delta_pct": dd_delta,
             "verdicts": vd,
             "benchmark_label": benchmark_label(provider),
             "inception_date": inception,
