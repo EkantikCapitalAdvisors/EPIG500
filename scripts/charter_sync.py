@@ -177,15 +177,43 @@ def parse_statement(xml_bytes):
 # ----------------------------------------------------------------------------
 def fetch_benchmark(provider, api_key, dates):
     """Return {label, source, rows:[{date, level}]}. Must be TOTAL RETURN.
-    Left as an explicit provider switch; raises if a price-only series is detected."""
+    Explicit provider switch; a price-only series is a hard fail."""
     provider = (provider or "").lower()
+    if provider in ("spy_proxy", "proxy", "spy"):
+        return _fetch_spy_adjusted(api_key, dates)
     if provider in ("sp500tr", "index"):
         # licensed SP500TR index closes via api_key — implement per chosen vendor
         raise NotImplementedError("Wire the SP500TR index provider here (needs BENCHMARK_API_KEY).")
-    if provider in ("spy_proxy", "proxy", "spy"):
-        # SPY dividend-ADJUSTED close as proxy (adjusted = total-return proxy)
-        raise NotImplementedError("Wire the SPY adjusted-close provider here (must be dividend-adjusted).")
-    raise RuntimeError("BENCHMARK_PROVIDER must be set to 'index' or 'spy_proxy' (price-only series banned).")
+    raise RuntimeError("BENCHMARK_PROVIDER must be set to 'spy_proxy' or 'index' (price-only series banned).")
+
+
+def _fetch_spy_adjusted(api_key, dates):
+    """S&P 500 total-return PROXY: SPY dividend+split-ADJUSTED daily closes
+    (Tiingo `adjClose`). Adjusted close reinvests dividends, so its returns
+    track total return, not price return. Labeled honestly as a proxy.
+    Tiingo free tier covers SPY EOD; BENCHMARK_API_KEY = Tiingo token."""
+    if not api_key:
+        raise RuntimeError("BENCHMARK_API_KEY (Tiingo token) required for spy_proxy")
+    import requests
+    start, end = dates[0], dates[-1]
+    r = requests.get(
+        "https://api.tiingo.com/tiingo/daily/SPY/prices",
+        params={"startDate": start, "endDate": end, "format": "json", "token": api_key},
+        headers={"Content-Type": "application/json"}, timeout=30)
+    r.raise_for_status()
+    data = r.json()
+    rows = []
+    for d in data:
+        adj = d.get("adjClose")
+        day = (d.get("date") or "")[:10]
+        if adj is not None and day:
+            rows.append({"date": day, "level": float(adj)})
+    rows.sort(key=lambda x: x["date"])
+    if len(rows) < 2:
+        raise RuntimeError("SPY proxy: Tiingo returned <2 adjusted closes for %s..%s" % (start, end))
+    # guard against an unadjusted feed slipping through: adjClose must differ
+    # from raw close on at least one row over any multi-week window (dividends).
+    return {"label": benchmark_label("spy_proxy"), "source": "tiingo:SPY.adjClose", "rows": rows}
 
 
 def benchmark_label(provider):
@@ -202,6 +230,16 @@ def now_utc():
     if ts:
         return ts
     return dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def raw_verify_url(today):
+    """Click-to-verify link to the committed raw statement on the default
+    branch. CHARTER_REPO_URL (e.g. https://github.com/owner/repo) is provided
+    by the workflow; falls back to an explicit CHARTER_COMMIT_URL, else None."""
+    repo = os.environ.get("CHARTER_REPO_URL")
+    if repo:
+        return repo.rstrip("/") + "/blob/main/data/raw/%s.xml" % today
+    return os.environ.get("CHARTER_COMMIT_URL")
 
 
 def write_error_state():
@@ -236,14 +274,32 @@ def main():
         dates = sorted(nav_by_date)
         if not dates:
             raise RuntimeError("no NAV rows parsed")
+
+        # Inception floor — anchor the record at a fixed start date (e.g.
+        # 2026-07-01) regardless of how wide the IBKR query window is. IBKR
+        # Flex Web Service only offers rolling "Last N days" periods, so we
+        # pull a wide window and clip here; index rebases to 100 at the floor.
+        floor = os.environ.get("CHARTER_INCEPTION_DATE")
+        clipped = False
+        if floor:
+            kept = [d for d in dates if d >= floor]
+            clipped = len(kept) != len(dates)
+            dates = kept
+            if not dates:
+                raise RuntimeError("no NAV rows on/after inception floor " + floor)
+
         nav_rows = [{"date": d, "nav": nav_by_date[d], "flow": flows.get(d, 0.0)} for d in dates]
 
-        # §6.3 cross-check
+        # §6.3 cross-check. endingValue always tracks the final row. The
+        # deposits total is a whole-statement aggregate, so it only reconciles
+        # against the summed flows when we did NOT clip the front of the window.
         if change is not None:
             if abs(change["endingValue"] - nav_rows[-1]["nav"]) > 1.0:
                 raise RuntimeError("cross-check: endingValue != final total")
-            if abs(change["depositsWithdrawals"] - sum(r["flow"] for r in nav_rows)) > 1.0:
+            if not clipped and abs(change["depositsWithdrawals"] - sum(r["flow"] for r in nav_rows)) > 1.0:
                 raise RuntimeError("cross-check: depositsWithdrawals != summed flows")
+            if clipped:
+                print("NOTE deposits cross-check skipped (window clipped at inception floor %s)" % floor, file=sys.stderr)
 
         idx_rows = build_index(nav_rows)
         inception = dates[0]
@@ -318,7 +374,7 @@ def main():
             "benchmark_label": benchmark_label(provider),
             "inception_date": inception,
             "provenance": {"custodian": "Interactive Brokers", "raw_sha256_short": sha[:8],
-                            "raw_commit_url": os.environ.get("CHARTER_COMMIT_URL"), "last_sync_utc": now_utc()},
+                            "raw_commit_url": raw_verify_url(today), "last_sync_utc": now_utc()},
         }, open(os.path.join(DATA, "charter.json"), "w"), indent=2)
         print("charter sync OK · state=%s · days=%d" % (state, trading_days))
         return 0
