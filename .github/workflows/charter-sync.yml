@@ -31,7 +31,7 @@ jobs:
           BENCHMARK_PROVIDER:    spy_proxy               # S&P 500 TR via SPY dividend-adjusted close
           BENCHMARK_API_KEY:     ${{ secrets.BENCHMARK_API_KEY }}   # Tiingo token
           CHARTER_ACCOUNT_MODE:  FULL_ARCHITECTURE       # account runs the full 80/20 (operator-confirmed)
-          CHARTER_INCEPTION_DATE: "2026-07-01"           # hard floor: record anchors at July 1
+          CHARTER_INCEPTION_DATE: "2026-07-27"           # hard floor: account funded July 27 (custodian inception)
           CHARTER_REPO_URL:      ${{ github.server_url }}/${{ github.repository }}
       - name: Validate (fixtures + contracts + determinism)
         run: python scripts/validate_charter.py
