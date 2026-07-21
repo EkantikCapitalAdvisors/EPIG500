@@ -409,6 +409,8 @@ def main():
             print("NOTE FULL_ARCHITECTURE set but BENCHMARK_API_KEY unwired — "
                   "holding ENGINE_ONLY until the benchmark is available.", file=sys.stderr)
             full = False
+            account_mode = "ENGINE_ONLY"   # keep written state consistent (§7.3):
+                                           # degrading state without the mode fails validation.
         trading_days = len(idx_rows)
         _, strat_maxdd = drawdown_series([r["index"] for r in idx_rows])
 
