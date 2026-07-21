@@ -913,3 +913,22 @@
 
 .dash-meta-period--engine { background: rgba(184,150,46,0.15); color: var(--gold-deep); }
 .dash-meta-period--testing { background: rgba(100,116,139,0.15); color: #475569; }
+
+/* ── Alerts ↔ Live custodian bridge banner (alerts.html + dashboard.html) ── */
+.alerts-bridge {
+    background: var(--navy);
+    border: 1px solid var(--gold);
+    border-radius: var(--radius-lg);
+    padding: 22px 26px;
+    margin: 0 0 var(--s-8);
+}
+.alerts-bridge__k {
+    font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--gold); margin: 0 0 10px;
+}
+.alerts-bridge__body {
+    color: var(--text-on-dark); font-size: 15px; line-height: 1.65; margin: 0 0 16px; max-width: 78ch;
+}
+.alerts-bridge__body strong { color: #fff; }
+.alerts-bridge__body em { color: var(--gold-bright); font-style: italic; }
+.alerts-bridge__cta { margin: 0; }
