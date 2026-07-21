@@ -347,6 +347,21 @@ def write_error_state():
     json.dump(cur, open(path, "w"), indent=2)
 
 
+def write_pre_inception_state(floor, sha, today):
+    """Funding date reached in config but no custodian NAV on/after it yet.
+    Write an honest ENGINE_ONLY charter.json (armed · not measuring) anchored to
+    the published inception, with real provenance. Consistent with §7.3."""
+    json.dump({
+        "schema_version": "1.0", "as_of": now_utc()[:10], "trading_days": 0,
+        "min_days": MIN_DAYS, "account_mode": "ENGINE_ONLY", "state": "ENGINE_ONLY",
+        "strategy": None, "benchmark": None, "excess_return_pct": None, "dd_delta_pct": None,
+        "verdicts": None, "benchmark_label": benchmark_label(os.environ.get("BENCHMARK_PROVIDER")),
+        "inception_date": floor,
+        "provenance": {"custodian": "Interactive Brokers", "raw_sha256_short": sha[:8],
+                       "raw_commit_url": raw_verify_url(today), "last_sync_utc": now_utc()},
+    }, open(os.path.join(DATA, "charter.json"), "w"), indent=2)
+
+
 def main():
     token = os.environ.get("IBKR_FLEX_TOKEN")
     query = os.environ.get("IBKR_FLEX_QUERY_ID")
@@ -377,9 +392,16 @@ def main():
         if floor:
             kept = [d for d in dates if d >= floor]
             clipped = len(kept) != len(dates)
+            if not kept:
+                # No custodian NAV on/after the published funding date yet — the
+                # account hasn't started reporting under the charter. Not an
+                # error: hold the honest ENGINE_ONLY "armed · not measuring"
+                # state (with real provenance) until NAV appears on/after it.
+                print("NOTE no custodian NAV on/after inception floor %s — "
+                      "holding ENGINE_ONLY (not yet funded)." % floor, file=sys.stderr)
+                write_pre_inception_state(floor, sha, today)
+                return 0
             dates = kept
-            if not dates:
-                raise RuntimeError("no NAV rows on/after inception floor " + floor)
 
         nav_rows = [{"date": d, "nav": nav_by_date[d], "flow": flows.get(d, 0.0)} for d in dates]
 
