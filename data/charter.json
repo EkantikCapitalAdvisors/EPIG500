@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "as_of": "2026-07-17",
-  "trading_days": 2,
+  "as_of": "2026-07-23",
+  "trading_days": 0,
   "min_days": 21,
   "account_mode": "ENGINE_ONLY",
   "state": "ENGINE_ONLY",
@@ -11,11 +11,11 @@
   "dd_delta_pct": null,
   "verdicts": null,
   "benchmark_label": "S&P 500 TR (SPY adj. close proxy)",
-  "inception_date": "2026-07-16",
+  "inception_date": "2026-07-27",
   "provenance": {
     "custodian": "Interactive Brokers",
-    "raw_sha256_short": "b71f5dfc",
-    "raw_commit_url": null,
-    "last_sync_utc": "2026-07-20T21:34:33Z"
+    "raw_sha256_short": "8f561074",
+    "raw_commit_url": "https://github.com/EkantikCapitalAdvisors/EPIG500/blob/main/data/raw/2026-07-23.xml",
+    "last_sync_utc": "2026-07-23T06:20:39Z"
   }
 }
