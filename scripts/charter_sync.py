@@ -207,23 +207,28 @@ def flex_fetch(token, query_id):
     ref = (root.findtext(".//ReferenceCode") or "").strip()
     if status.lower() != "success" or not ref:
         raise RuntimeError("Flex SendRequest failed: " + (root.findtext(".//ErrorMessage") or status))
-    # poll GetStatement every 10s, max 5 min
-    deadline = time.time() + 300
+    # poll GetStatement until ready. Large Activity queries (a year of data +
+    # an active account) can take several minutes to generate on IBKR's side,
+    # so the window is generous and env-tunable. Poll gently to avoid Flex
+    # rate limits.
+    timeout_s = int(os.environ.get("CHARTER_FLEX_TIMEOUT", "900"))   # 15 min default
+    poll_s = int(os.environ.get("CHARTER_FLEX_POLL", "15"))
+    deadline = time.time() + timeout_s
     while time.time() < deadline:
         g = requests.get(f"{FLEX_BASE}/GetStatement",
-                         params={"t": token, "q": ref, "v": 3}, timeout=60)
+                         params={"t": token, "q": ref, "v": 3}, timeout=90)
         g.raise_for_status()
         body = g.content
         low = body[:400].lower()
         if b"generation" in low and b"progress" in low:
-            time.sleep(10); continue
+            time.sleep(poll_s); continue
         # a FlexStatement present => done
         rroot = etree.fromstring(body)
         if rroot.findall(".//FlexStatement"):
             return body
         # any other error
         raise RuntimeError("Flex GetStatement error: " + (rroot.findtext(".//ErrorMessage") or "unknown"))
-    raise RuntimeError("Flex GetStatement timed out after 5 min")
+    raise RuntimeError("Flex GetStatement did not finish within %d s" % timeout_s)
 
 
 # ----------------------------------------------------------------------------
