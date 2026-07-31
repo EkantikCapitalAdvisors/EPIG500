@@ -4,10 +4,10 @@
   "account_mode": "FULL_ARCHITECTURE",
   "base_currency": "USD",
   "inception_date": "2026-07-27",
-  "last_sync_utc": "2026-07-30T06:13:03Z",
+  "last_sync_utc": "2026-07-31T06:30:12Z",
   "source": "IBKR_FLEX",
-  "raw_file": "data/raw/2026-07-30.xml",
-  "raw_sha256": "9308ff0a7bf1b2530a0aa4f904858c09cf6acd0db64b4f4a97c374dce9c80d12",
+  "raw_file": "data/raw/2026-07-31.xml",
+  "raw_sha256": "e3707c15738c63e7e91e226f51c46d3d084ac785e2d5f54b9f7007f41634fd4c",
   "fee_drag_annual": null,
   "net_series": null,
   "series": [
@@ -31,6 +31,13 @@
       "flow": 0.0,
       "twr_daily": 6.2e-05,
       "index": 99.5966
+    },
+    {
+      "date": "2026-07-30",
+      "nav": 98523.0,
+      "flow": 0.0,
+      "twr_daily": 0.002468,
+      "index": 99.8424
     }
   ]
 }
