@@ -932,3 +932,20 @@
 .alerts-bridge__body strong { color: #fff; }
 .alerts-bridge__body em { color: var(--gold-bright); font-style: italic; }
 .alerts-bridge__cta { margin: 0; }
+
+/* ── Portfolio-context note (alerts.html — frames engine record in $100K/20-80) ── */
+.dash-context {
+    background: rgba(212,175,55,0.08);
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    margin: 0 0 var(--s-4);
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--slate-dark);
+    max-width: 100%;
+}
+.dash-context p { margin: 0; }
+.dash-context .diamond { color: var(--gold-deep); }
+.dash-context strong { color: var(--navy); }
+.dash-context a { color: var(--gold-deep); font-weight: 600; }
