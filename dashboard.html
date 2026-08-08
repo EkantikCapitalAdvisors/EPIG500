@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/style.css?v=20260720a">
     <link rel="stylesheet" href="css/dashboard.css?v=20260720a">
     <link rel="stylesheet" href="modules/charter/charter.css?v=20260714a">
-    <link rel="stylesheet" href="modules/charter/scoreboard.css?v=20260720b">
+    <link rel="stylesheet" href="modules/charter/scoreboard.css?v=20260720c">
 </head>
 <body class="dash-body">
 
@@ -123,12 +123,26 @@
         </div>
     </section>
 
+    <!-- ═══ 5 · Where the return came from — Intraday Engine vs Foundational (SPY) ═══
+         Rendered by modules/charter/sleeves.js from data/sleeves.json (per-symbol
+         MTM contribution to return; SPY = Foundational, everything else = Engine). -->
+    <section class="score-block" aria-label="Return by sleeve: Intraday Engine vs Foundational (SPY)">
+        <header class="score-block__head">
+            <h2 class="score-block__h">Where the return came from</h2>
+            <p class="score-block__sub">The account's two sleeves, split by holding — the <strong>Intraday Engine</strong> (futures, options, non-SPY trades) and the <strong>Foundational (SPY)</strong> holding. Each shown as its contribution to the account's total return; the two add up to the whole.</p>
+        </header>
+        <div id="sleeveBreakdown">
+            <div class="score-empty">Accumulating — the sleeve breakdown renders once the account is funded and reporting per-symbol P&amp;L.</div>
+        </div>
+    </section>
+
     <footer class="dash-footer">
-        <p><strong>Educational only.</strong> Operator live record on Interactive Brokers–reported NAV, measured against the S&amp;P 500 total return. Figures are <strong>gross of fees</strong>; net-of-fee figures will be published alongside when a fee schedule exists. Upside/downside capture is a statistical summary of past periods, not a forecast. Past performance does not guarantee future results. Benchmark data via a dividend-adjusted SPY total-return proxy — see the <a href="falsifiability-protocol.html">Falsifiability Protocol v1.0</a>.</p>
+        <p><strong>Educational only.</strong> Operator live record on Interactive Brokers–reported NAV, measured against the S&amp;P 500 total return. Figures are <strong>gross of fees</strong>; net-of-fee figures will be published alongside when a fee schedule exists. Upside/downside capture and the sleeve breakdown are statistical summaries of past periods, not a forecast. Past performance does not guarantee future results. Benchmark data via a dividend-adjusted SPY total-return proxy — see the <a href="falsifiability-protocol.html">Falsifiability Protocol v1.0</a>.</p>
     </footer>
 </main>
 
 <script src="modules/charter/charter.js?v=20260720a"></script>
 <script src="modules/charter/scoreboard.js?v=20260720b"></script>
+<script src="modules/charter/sleeves.js?v=20260720a"></script>
 </body>
 </html>

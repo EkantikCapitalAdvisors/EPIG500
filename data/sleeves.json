@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "as_of": "2026-05-19",
+  "state": "ENGINE_ONLY",
+  "inception_date": "2026-07-27",
+  "last_sync_utc": null,
+  "engine_label": "Intraday Engine",
+  "foundation_label": "Foundational (SPY)",
+  "engine_cum_pnl": 0,
+  "foundation_cum_pnl": 0,
+  "total_cum_pnl": 0,
+  "engine_pct_of_pnl": null,
+  "foundation_pct_of_pnl": null,
+  "series": []
+}

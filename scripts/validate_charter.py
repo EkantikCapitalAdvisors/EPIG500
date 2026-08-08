@@ -57,6 +57,20 @@ check("capture gated (<8 weeks -> not ready)", _w["capture_ready"] is False)
 _cap0 = cs.capture_ratios([{"strat_ret_pct": 1.0, "bench_ret_pct": 1.0}])
 check("empty down bucket -> downside None", _cap0["downside_capture_pct"] is None)
 
+# ---- sleeve breakdown fixture --------------------------------------------
+print("sleeves:")
+_nr = [{"date": "2026-07-27", "nav": 100000.0}, {"date": "2026-07-28", "nav": 101200.0},
+       {"date": "2026-07-29", "nav": 101000.0}]
+_mtm = {"2026-07-28": {"foundation": 800.0, "engine": 400.0},
+        "2026-07-29": {"foundation": -300.0, "engine": 100.0}}
+_sl = cs.sleeve_breakdown(_nr, _mtm)
+check("engine cum $500 / foundation cum $500",
+      _sl["engine_cum_pnl"] == 500.0 and _sl["foundation_cum_pnl"] == 500.0,
+      "%s / %s" % (_sl["engine_cum_pnl"], _sl["foundation_cum_pnl"]))
+check("day2 foundation contrib +0.8% (800/100000)", _sl["series"][1]["foundation_contrib_pct"] == 0.8)
+check("engine + foundation == total", round(_sl["engine_cum_pnl"] + _sl["foundation_cum_pnl"], 2) == _sl["total_cum_pnl"])
+check("no MTM -> None", cs.sleeve_breakdown(_nr, {}) is None)
+
 # ---- JSON contracts (§11.2) ----------------------------------------------
 print("JSON contracts:")
 def load(f):
@@ -93,6 +107,13 @@ try:
                                      "upside_capture_pct", "downside_capture_pct")))
         check("periodic.%s beat_count <= total" % freq, blk["beat_count"] <= blk["total"])
         check("periodic.%s total == len(periods)" % freq, blk["total"] == len(blk["periods"]))
+    # sleeves.json contract
+    sleeves = load("sleeves.json")
+    check("sleeves has required keys",
+          all(k in sleeves for k in ("engine_label", "foundation_label", "engine_cum_pnl",
+                                     "foundation_cum_pnl", "series")))
+    check("sleeves labels correct",
+          sleeves["engine_label"] == "Intraday Engine" and sleeves["foundation_label"] == "Foundational (SPY)")
 except Exception as e:
     check("JSON contracts loadable", False, str(e))
 
