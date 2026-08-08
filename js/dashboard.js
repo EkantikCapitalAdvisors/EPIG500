@@ -240,6 +240,12 @@
         const firstTs = chrono.length ? new Date(chrono[0].timestamp) : null;
         const lastTs  = chrono.length ? new Date(chrono[chrono.length-1].timestamp) : null;
 
+        // Average monthly P&L — total ÷ number of calendar months traded (same
+        // YYYY-MM buckets the monthly chart uses), so it's the typical month.
+        const _months = groupByMonth(trades);
+        const monthsCount = _months.length;
+        const avgMonthly = monthsCount ? total / monthsCount : 0;
+
         return {
             n: n, wins: wins.length, losses: losses.length, be: be.length,
             winRate: winRate, evMean: evMean, total: total, pf: pf,
@@ -249,7 +255,7 @@
             best: best, worst: worst, wlRatio: wlRatio, recovery: recovery,
             rExp: rExp, recoveryTrades: recoveryTrades, recoveryInProgress: recoveryInProgress,
             totalR: totalR, annualR: annualR, annualRDaysCovered: annualRDaysCovered,
-            yearsElapsed: yearsElapsed,
+            yearsElapsed: yearsElapsed, avgMonthly: avgMonthly, monthsCount: monthsCount,
             firstTs: firstTs, lastTs: lastTs
         };
     }
@@ -678,6 +684,9 @@
             { label: 'Total P&L',     val: fmtUnitInt(s.total, unit),
                                       sub: isSpy ? 'realized · synthetic-passive' : '$' + totalDollars + ' / ctr',
                                       mood: s.total>=0?'pos':'neg' },
+            { label: 'Avg monthly P&L', val: fmtUnit(s.avgMonthly, unit),
+                                      sub: (isSpy ? '' : '$' + Math.round(s.avgMonthly*50).toLocaleString() + ' / ctr · ') + 'over ' + s.monthsCount + ' mo',
+                                      mood: s.avgMonthly>=0?'pos':'neg' },
             { label: 'Max DD',        val: fmtUnit(s.maxDD, unit),
                                       sub: 'cur: ' + fmtUnit(s.curDD, unit), mood: 'neg' },
             // Row 2 — distribution / quality
