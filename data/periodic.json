@@ -1,68 +1,10 @@
 {
   "schema_version": "1.0",
-  "as_of": "2026-08-07",
-  "state": "ACCUMULATING",
-  "inception_date": "2026-07-27",
+  "as_of": "2026-09-01",
+  "state": "ENGINE_ONLY",
+  "inception_date": "2026-09-01",
   "benchmark_label": "S&P 500 TR (SPY adj. close proxy)",
-  "last_sync_utc": "2026-08-08T04:47:51Z",
-  "weekly": {
-    "upside_capture_pct": -11.8,
-    "downside_capture_pct": null,
-    "up_periods": 2,
-    "down_periods": 0,
-    "periods": [
-      {
-        "label": "Jul 27\u201331",
-        "start": "2026-07-27",
-        "end": "2026-07-31",
-        "strat_ret_pct": -0.25,
-        "bench_ret_pct": 1.07,
-        "diff_pct": -1.32,
-        "beat": false
-      },
-      {
-        "label": "Aug 3\u20137",
-        "start": "2026-08-03",
-        "end": "2026-08-07",
-        "strat_ret_pct": -0.29,
-        "bench_ret_pct": 3.51,
-        "diff_pct": -3.8,
-        "beat": false
-      }
-    ],
-    "beat_count": 0,
-    "total": 2,
-    "min_periods": 8,
-    "capture_ready": false
-  },
-  "monthly": {
-    "upside_capture_pct": -11.8,
-    "downside_capture_pct": null,
-    "up_periods": 2,
-    "down_periods": 0,
-    "periods": [
-      {
-        "label": "Jul 2026",
-        "start": "2026-07-27",
-        "end": "2026-07-31",
-        "strat_ret_pct": -0.25,
-        "bench_ret_pct": 1.07,
-        "diff_pct": -1.32,
-        "beat": false
-      },
-      {
-        "label": "Aug 2026",
-        "start": "2026-08-03",
-        "end": "2026-08-07",
-        "strat_ret_pct": -0.29,
-        "bench_ret_pct": 3.51,
-        "diff_pct": -3.8,
-        "beat": false
-      }
-    ],
-    "beat_count": 0,
-    "total": 2,
-    "min_periods": 3,
-    "capture_ready": false
-  }
+  "last_sync_utc": null,
+  "weekly": { "periods": [], "beat_count": 0, "total": 0, "upside_capture_pct": null, "downside_capture_pct": null, "up_periods": 0, "down_periods": 0, "min_periods": 8, "capture_ready": false },
+  "monthly": { "periods": [], "beat_count": 0, "total": 0, "upside_capture_pct": null, "downside_capture_pct": null, "up_periods": 0, "down_periods": 0, "min_periods": 3, "capture_ready": false }
 }

@@ -2,58 +2,9 @@
   "schema_version": "1.0",
   "benchmark_id": "SP500TR",
   "label": "S&P 500 TR (SPY adj. close proxy)",
-  "source": "tiingo:SPY.adjClose",
-  "last_sync_utc": "2026-08-08T04:47:51Z",
+  "source": "sample",
+  "last_sync_utc": null,
   "series": [
-    {
-      "date": "2026-07-27",
-      "level": 739.09,
-      "index": 100.0
-    },
-    {
-      "date": "2026-07-28",
-      "level": 740.86,
-      "index": 100.2395
-    },
-    {
-      "date": "2026-07-29",
-      "level": 729.46,
-      "index": 98.697
-    },
-    {
-      "date": "2026-07-30",
-      "level": 741.69,
-      "index": 100.3518
-    },
-    {
-      "date": "2026-07-31",
-      "level": 747.03,
-      "index": 101.0743
-    },
-    {
-      "date": "2026-08-03",
-      "level": 757.67,
-      "index": 102.5139
-    },
-    {
-      "date": "2026-08-04",
-      "level": 771.33,
-      "index": 104.3621
-    },
-    {
-      "date": "2026-08-05",
-      "level": 769.79,
-      "index": 104.1538
-    },
-    {
-      "date": "2026-08-06",
-      "level": 768.56,
-      "index": 103.9873
-    },
-    {
-      "date": "2026-08-07",
-      "level": 773.26,
-      "index": 104.6233
-    }
+    { "date": "2026-09-01", "level": 100.0, "index": 100.0 }
   ]
 }
