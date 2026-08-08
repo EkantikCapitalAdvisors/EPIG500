@@ -177,6 +177,41 @@ def capture_ratios(period_rows):
     }
 
 
+def sleeve_breakdown(nav_rows, mtm_by_date):
+    """Attribute each day's P&L to Intraday Engine vs Foundational (SPY) as a
+    contribution to the account's return: contribution_t = sleeve_pnl_t / NAV_{t-1}.
+    Additive — engine + foundation ≈ total account P&L. Cumulative $ is the
+    unambiguous figure; % of total return can exceed 100 / go negative when the
+    sleeves have opposite signs (surfaced honestly in the UI). Returns None when
+    no MTM data is present. Pure; fixture-tested."""
+    if not mtm_by_date:
+        return None
+    series = []
+    cum_f = cum_e = 0.0
+    prev_nav = None
+    for r in nav_rows:
+        d = r["date"]; nav = r["nav"]
+        mt = mtm_by_date.get(d) or {"foundation": 0.0, "engine": 0.0}
+        f = mt.get("foundation", 0.0); e = mt.get("engine", 0.0)
+        cum_f += f; cum_e += e
+        series.append({
+            "date": d,
+            "engine_pnl": round(e, 2), "foundation_pnl": round(f, 2),
+            "engine_contrib_pct": round((e / prev_nav * 100) if prev_nav else 0.0, 4),
+            "foundation_contrib_pct": round((f / prev_nav * 100) if prev_nav else 0.0, 4),
+            "engine_cum_pnl": round(cum_e, 2), "foundation_cum_pnl": round(cum_f, 2),
+        })
+        prev_nav = nav
+    total = cum_e + cum_f
+    return {
+        "engine_cum_pnl": round(cum_e, 2), "foundation_cum_pnl": round(cum_f, 2),
+        "total_cum_pnl": round(total, 2),
+        "engine_pct_of_pnl": round(cum_e / total * 100, 1) if abs(total) > 1e-9 else None,
+        "foundation_pct_of_pnl": round(cum_f / total * 100, 1) if abs(total) > 1e-9 else None,
+        "series": series,
+    }
+
+
 def periodic_summary(pairs, freq, min_periods):
     rows = periodic_returns(pairs, freq)
     caps = capture_ratios(rows)
@@ -267,7 +302,28 @@ def parse_statement(xml_bytes):
             "endingValue": float(cn.get("endingValue") or 0.0),
             "depositsWithdrawals": float(cn.get("depositsWithdrawals") or 0.0),
         }
-    return nav_by_date, flows, change
+    # Mark-to-Market Performance Summary in Base -> per-symbol daily P&L, bucketed
+    # into Foundational (SPY ETF) vs Intraday Engine (everything else). Requires
+    # the "Mark-to-Market Performance Summary in Base" section with Breakdown by
+    # Day enabled; absent -> {} and the sleeve breakdown is simply not published.
+    mtm_by_date = {}
+    for m in root.findall(".//MTMPerformanceSummaryInBase"):
+        d = m.get("reportDate")
+        tot = m.get("total")
+        if not d or tot in (None, ""):
+            continue
+        try:
+            pnl = float(tot)
+        except (TypeError, ValueError):
+            continue
+        sym = (m.get("symbol") or "").upper()
+        cat = (m.get("assetCategory") or "").upper()
+        # Foundational = the SPY ETF holding only; SPY options / futures / any
+        # other symbol are Intraday Engine.
+        bucket = "foundation" if (sym == "SPY" and cat in ("STK", "ETF", "")) else "engine"
+        slot = mtm_by_date.setdefault(d, {"foundation": 0.0, "engine": 0.0})
+        slot[bucket] += pnl
+    return nav_by_date, flows, change, mtm_by_date
 
 
 # ----------------------------------------------------------------------------
@@ -383,7 +439,7 @@ def main():
         open(raw_path, "wb").write(red)
         sha = hashlib.sha256(red).hexdigest()
 
-        nav_by_date, flows, change = parse_statement(red)
+        nav_by_date, flows, change, mtm_by_date = parse_statement(red)
         dates = sorted(nav_by_date)
         if not dates:
             raise RuntimeError("no NAV rows parsed")
@@ -448,7 +504,7 @@ def main():
         # publishes a real, hash-anchored NAV record. Verdicts, strategy vs
         # benchmark stats, and the twin curves stay dark until FULL_ARCHITECTURE.
         b_idx = None; bench_maxdd = None; vd = None; bench_meta = None
-        weekly = monthly = None
+        weekly = monthly = None; sleeves = None
         if full:
             bench = fetch_benchmark(provider, api_key, dates)
             # join on date intersection; carry-forward gaps (§3)
@@ -474,6 +530,11 @@ def main():
                      for r in idx_rows if r["date"] in b_by_date]
             weekly = periodic_summary(pairs, "W", MIN_WEEKS)
             monthly = periodic_summary(pairs, "M", MIN_MONTHS)
+            # sleeve attribution — Intraday Engine vs Foundational (SPY) as
+            # contribution to the account's return (per-symbol MTM P&L / prior
+            # NAV). Additive: engine + foundation ≈ total account P&L. Only when
+            # the MTM section is present in the statement.
+            sleeves = sleeve_breakdown(nav_rows, mtm_by_date)
         else:
             state = "ENGINE_ONLY"
 
@@ -500,6 +561,17 @@ def main():
                 "inception_date": inception, "benchmark_label": benchmark_label(provider),
                 "last_sync_utc": now_utc(), "weekly": weekly, "monthly": monthly,
             }, open(os.path.join(DATA, "periodic.json"), "w"), indent=2)
+
+            # sleeves.json — Intraday Engine vs Foundational (SPY) contribution.
+            # Only when the MTM section produced data; otherwise the committed
+            # sample (empty) is left untouched.
+            if sleeves is not None:
+                json.dump({
+                    "schema_version": "1.0", "as_of": dates[-1], "state": state,
+                    "inception_date": inception, "last_sync_utc": now_utc(),
+                    "engine_label": "Intraday Engine", "foundation_label": "Foundational (SPY)",
+                    **sleeves,
+                }, open(os.path.join(DATA, "sleeves.json"), "w"), indent=2)
 
         strat_block = bench_block = excess = dd_delta = None
         if full:
