@@ -4187,7 +4187,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .ladder-stair__block--base   { background: var(--navy); }
 .ladder-stair__block--earned { background: linear-gradient(180deg, var(--gold-bright), var(--gold)); }
 .ladder-stair__block--mini   { width: 22px; height: 10px; vertical-align: middle; }
-.ladder-stair__contracts {
+.ladder-stair__tier {
     font-family: var(--font-serif);
     font-weight: 700;
     font-size: 22px;
@@ -5922,3 +5922,14 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .two-records__bridge { font-size: 14.5px; line-height: 1.65; color: var(--text-on-dark); margin: 0; max-width: 82ch; }
 .two-records__bridge strong { color: #fff; }
 .two-records__bridge em { color: var(--slate); font-style: italic; font-size: 13px; }
+
+/* ── V3.1 §2.1 proof-posture objectives ── */
+.prose--center { text-align: center; max-width: 72ch; margin-left: auto; margin-right: auto; }
+.objectives { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-6); margin: var(--s-8) 0 var(--s-6); }
+@media (max-width: 720px) { .objectives { grid-template-columns: 1fr; } }
+.objective { background: var(--navy); border-radius: var(--radius-lg); padding: 28px 30px; border: 1px solid rgba(212,175,55,0.3); }
+.objective__tag { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin: 0 0 12px; }
+.objective__body { color: var(--text-on-dark); font-size: 15.5px; line-height: 1.65; margin: 0; }
+.objective__body strong { color: #fff; }
+.objectives__close { text-align: center; max-width: 74ch; margin: 0 auto; font-size: 16px; line-height: 1.6; color: var(--navy); }
+.objectives__close em { display: block; margin-top: 10px; font-size: 13px; color: var(--slate); font-style: italic; }

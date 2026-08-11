@@ -71,6 +71,18 @@ check("day2 foundation contrib +0.8% (800/100000)", _sl["series"][1]["foundation
 check("engine + foundation == total", round(_sl["engine_cum_pnl"] + _sl["foundation_cum_pnl"], 2) == _sl["total_cum_pnl"])
 check("no MTM -> None", cs.sleeve_breakdown(_nr, {}) is None)
 
+# ---- engine yield gauge fixture ------------------------------------------
+print("yield:")
+_ny = [{"date": "2026-09-01", "nav": 100000.0}, {"date": "2026-09-30", "nav": 101200.0},
+       {"date": "2026-10-01", "nav": 101200.0}, {"date": "2026-10-30", "nav": 101600.0}]
+_ym = {"2026-09-30": {"engine": 1200.0}, "2026-10-30": {"engine": 400.0}}
+_y = cs.engine_yield(_ny, _ym)
+check("Sep yield +1.2% (1200/100000)", _y["months"][0]["engine_yield_pct"] == 1.2, str(_y["months"][0]))
+check("target 1.0 / floor 0.5 / floor_months 6",
+      _y["target_pct"] == 1.0 and _y["floor_pct"] == 0.5 and _y["floor_months"] == 6)
+check("rolling avg above floor -> on_track", _y["gate_status"] == "on_track", str(_y["gate_status"]))
+check("no MTM -> yield None", cs.engine_yield(_ny, {}) is None)
+
 # ---- JSON contracts (§11.2) ----------------------------------------------
 print("JSON contracts:")
 def load(f):
@@ -113,7 +125,11 @@ try:
           all(k in sleeves for k in ("engine_label", "foundation_label", "engine_cum_pnl",
                                      "foundation_cum_pnl", "series")))
     check("sleeves labels correct",
-          sleeves["engine_label"] == "Intraday Engine" and sleeves["foundation_label"] == "Foundational (SPY)")
+          sleeves["engine_label"] == "Overlay Engine" and sleeves["foundation_label"] == "Foundational (SPY)")
+    yieldj = load("yield.json")
+    check("yield has gate keys",
+          all(k in yieldj for k in ("target_pct", "floor_pct", "floor_months", "gate_status", "months")))
+    check("yield target 1.0 / floor 0.5", yieldj["target_pct"] == 1.0 and yieldj["floor_pct"] == 0.5)
 except Exception as e:
     check("JSON contracts loadable", False, str(e))
 

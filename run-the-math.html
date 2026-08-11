@@ -143,7 +143,7 @@
                 <button class="arith-nlv__chip is-active" data-nlv="1000000" type="button">$1M</button>
                 <button class="arith-nlv__chip" data-nlv="2500000" type="button">$2.5M</button>
                 <button class="arith-nlv__chip" data-nlv="5000000" type="button">$5M</button>
-                <span class="arith-nlv__hint">All dollar amounts below scale with this. Contract count scales linearly: <strong>1 /ES per $100K NLV</strong> at the 0.5% per-trade architectural risk anchor.</span>
+                <span class="arith-nlv__hint">All dollar amounts below scale with this, at the <strong>0.5% per-trade architectural risk anchor</strong>.</span>
             </div>
 
             <div class="arith-controls">
@@ -189,136 +189,18 @@
 
             <!-- The "How the architecture stacks over time" equity-curve chart moved to
                  the homepage (index.html §stacks-over-time). The capture sliders above
-                 drive the window-comparison cards here; the interactive chart (with the
-                 Booster Engine overlay) now lives on the landing page. -->
-            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns (incl. dividends), 1975–2024 — shown across a calm window, a crash window, and the full 20-year span. <strong>Benchmark for Outperformance:</strong> 100% S&amp;P 500 — the conservative comparison (the natural alternative an investor would consider is "just put it all in SPY"). <strong>Foundation layer (overlay model v1.3):</strong> 80% × (capture × index), where capture is the modeled output of the synthetic-passive overlay's published rules — upside slider in up years, downside slider in down years. The overlay drives the foundation itself, not a 20% token slice; this is the meaningful change from the prior model. <strong>Cash buffer:</strong> the remaining 20% is operational cash (flat, no exposure) — this is the literal architecture; it carries a real ~17% drag vs 100%-S&amp;P over a 20-year window, which the overlay's downside protection must overcome to clear the bar. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy. The synthetic-passive overlay carries no verdict yet (its gate is measured over a full market cycle); the rule set is published as design intent under armed-but-unfired falsifiability gates. Past performance does not guarantee future results.</strong> Dataset: protocol-bound Period 2 trades only. The Period 1 Telegram record is displayed on the dashboard for transparency and is excluded from every figure on this page. <a href="/#stacks-over-time" data-cta="stacks-chart-from-math">See the architecture compound over time — the interactive equity curve →</a></p>
+                 drive the window-comparison cards here; the interactive chart now lives on the landing page. -->
+            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns (incl. dividends), 1975–2024 — shown across a calm window, a crash window, and the full 20-year span. <strong>Benchmark for Outperformance:</strong> 100% S&amp;P 500 — the conservative comparison (the natural alternative an investor would consider is "just put it all in SPY"). <strong>Foundation layer (overlay model v1.3):</strong> 80% × (capture × index), where capture is the modeled output of the synthetic-passive overlay's published rules — upside slider in up years, downside slider in down years. The overlay drives the foundation itself, not a 20% token slice; this is the meaningful change from the prior model. <strong>Cash buffer:</strong> the remaining 20% is operational cash (flat, no exposure) — this is the literal architecture; it carries a real ~17% drag vs 100%-S&amp;P over a 20-year window, which the overlay's downside protection must overcome to clear the bar. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy. The synthetic-passive overlay carries no verdict yet (its gate is measured over a full market cycle); the rule set is published as design intent under armed-but-unfired falsifiability gates. Past performance does not guarantee future results.</strong> <a href="/#stacks-over-time" data-cta="stacks-chart-from-math">See the architecture compound over time — the interactive equity curve →</a></p>
         </div>
     </div>
 </section>
 
-<!-- ============ 3. THE WORST CASE, PRICED — Calc Bounds (spec §3.3.4) ============ -->
+<!-- ============ 3. ENGINE RECORD REPUBLISHING (Worst-Case + battery gated per V3.1) ============ -->
 <section class="section section--ivory" id="worst-case">
     <div class="container">
-        <!-- Calculator 4 — The Worst Case, Priced (bounded-loss architecture) · Calculator Spec v1.0 §4.
-             LOSS-SIDE ONLY: no gain, throughput, or expectancy figure may render here. -->
-        <div class="calc" id="calcBoundsWrap">
-            <header class="calc__head">
-                <p class="eyebrow"><span class="diamond">◆</span> The Worst Case, Priced</p>
-                <h3 class="calc__h">A risk with a number can be financed. An unbounded risk can only be feared.</h3>
-                <p class="calc__sub">The engine's published loss bounds — per trade, per day, per week, and the hard kill — at a hypothetical account size. Loss-side only, by construction.</p>
-            </header>
-            <div id="calcBounds">
-                <!-- static default state (NLV $100K, 1 contract) — replaced on hydration -->
-                <div class="cb-ladder">
-                    <div class="cb-rung"><span class="cb-rung__id">OP-02</span><div class="cb-rung__body"><p class="cb-rung__title">Per trade</p><p class="cb-rung__fig">−$500 (0.5% of NLV)</p><p class="cb-rung__text">Per-contract risk fixed at 0.5% of NLV. After any closed losing trade, the day is over (one-loss daily rule).</p></div></div>
-                    <div class="cb-rung"><span class="cb-rung__id">OP-03</span><div class="cb-rung__body"><p class="cb-rung__title">Daily floor</p><p class="cb-rung__fig">−$500 (starting)</p><p class="cb-rung__text">Trailing high-water-mark floor — ratchets up with every new equity peak, never down.</p></div></div>
-                    <div class="cb-rung"><span class="cb-rung__id">OP-05</span><div class="cb-rung__body"><p class="cb-rung__title">Weekly stand-down</p><p class="cb-rung__fig cb-rung__fig--rule">2–3 consecutive losing days halts the week (OP-05)</p><p class="cb-rung__text">A rule, not a dollar figure: consecutive losing days halt the week pending witness review.</p></div></div>
-                    <div class="cb-rung cb-rung--kill"><span class="cb-rung__id">ED-05b</span><div class="cb-rung__body"><p class="cb-rung__title">Hard kill</p><p class="cb-rung__fig">−$5,000 / /ES</p><p class="cb-rung__text">100 /ES pts × $50/pt = <strong>$5,000 per contract</strong>. Scales linearly with portfolio: at the 1 /ES per $100K NLV base sizing, hard kill = <strong>$50,000 on a $1M portfolio · $250,000 on $5M</strong>. Budgeted in advance whatever the size.</p></div></div>
-                </div>
-            </div>
-            <p class="calc__caption"><em>These figures compute the published Falsifiability Protocol v1.6 loss bounds at a hypothetical account size. Caps and the hard kill are sizing and exit rules enforced by rule — fast markets can gap beyond them. Not a guarantee, not an offer, and not a statement of expected results. Past performance does not guarantee future results.</em></p>
-        </div>
-    </div>
-</section>
-
-<!-- ============ 4. 8-TEST SUSTAINABILITY BATTERY + UPLOADER (spec §3.4) ============ -->
-<section class="section section--ivory" id="battery">
-    <div class="container">
-        <header class="section__header">
-            <p class="eyebrow"><span class="diamond">◆</span> The Live Battery</p>
-            <h2 class="section__h">Eight tests. Computed live, in your browser, against the published record.</h2>
-            <p class="section__sub">The same eight tests that define the Stage 2 kill conditions are computed client-side on the protocol-bound live record. Threshold: activates at 30+ closed trades; binding at 100+ — both crossed. Drop your own trade record below and the battery runs on your data instead. Your data never leaves the browser.</p>
-        </header>
-
-        <!-- Trade countdown — auto-binds to .js-trade-countdown -->
-        <div class="trade-countdown js-trade-countdown" data-variant="full"></div>
-
-        <!-- Methodology Provenance — discovered 2023, stress-tested against itself, then live publication -->
-        <div class="provenance">
-            <p class="provenance__h">Methodology Provenance</p>
-            <div class="provenance__timeline">
-                <div class="provenance__phase">
-                    <p class="provenance__phase-num">01</p>
-                    <p class="provenance__phase-h">Discovered, then stress-tested</p>
-                    <p class="provenance__phase-body">The edge crystallized in 2023 after years of work on entry criteria, risk anchoring, regime behaviour, and operator discipline. Between 2023 and 2026 the operator tried to enhance it — variants on entry triggers, risk anchoring, sizing rules. None beat the original baseline once carry and slippage were honest. The frozen process now executed live is the reverted-to baseline.</p>
-                </div>
-                <div class="provenance__phase">
-                    <p class="provenance__phase-num">02</p>
-                    <p class="provenance__phase-h">Live pre-registration record</p>
-                    <p class="provenance__phase-body">Every trade from the February 2026 restart published to the live dashboard within 24 hours of close. Tagged per-trade, witnessed, and held to the published Stage 1 fidelity criteria from day one.</p>
-                </div>
-                <div class="provenance__phase">
-                    <p class="provenance__phase-num">03</p>
-                    <p class="provenance__phase-h">Battery, computed live</p>
-                    <p class="provenance__phase-body">The same eight tests that define the Stage 2 kill conditions are computed in your browser as the live record accumulates. The battery activates at 30+ closed trades and is binding at 100+ — both thresholds now crossed on the protocol-bound record.</p>
-                </div>
-            </div>
-            <p class="compliance">Past performance does not guarantee future results. The 8-test battery is a statistical claim about the entire trade record and requires a meaningful sample to produce a verdict — the threshold is 30+ closed trades, with a binding determination at 100+. Until then the dashboard shows individual KPIs and the equity curve, but no battery verdict.</p>
-        </div>
-
-        <!-- Transition rule -->
-        <div class="gold-rule">
-            <div class="gold-rule__bar"></div>
-            <p class="gold-rule__text">The eight tests below are computed live, in your browser, against the published live record.</p>
-            <div class="gold-rule__bar"></div>
-        </div>
-
-        <!-- Live battery -->
-        <div class="battery">
-            <div class="battery__verdict">
-                <div class="battery__verdict-main">
-                    <p class="battery__verdict-label">8-Test Sustainability Battery · Live Record</p>
-                    <p class="battery__verdict-value" id="batteryVerdict">Activates at 30+ trades</p>
-                    <p class="battery__verdict-meta">Last recomputed: <span id="batteryTimestamp">pending first compute</span> · Dataset: <span id="batteryDataset">live pre-registration record</span></p>
-                </div>
-                <div class="battery__verdict-actions">
-                    <button class="btn btn--secondary btn--sm" id="batteryResetBtn">Reset to live record</button>
-                </div>
-            </div>
-
-            <p class="battery__intro">Each test measures one attribute of a sustainable edge. The bar shows the dataset's actual reading against the pass threshold — the gold fill is the headroom above it.</p>
-            <div class="battery__rows" id="batteryGrid"><!-- 8 rows rendered by JS --></div>
-
-            <!-- Upload module -->
-            <div class="upload-module">
-                <div class="upload-module__h">
-                    <p class="eyebrow"><span class="diamond">◆</span> Run the battery on your own data</p>
-                    <h3>Three input modes — all processed client-side.</h3>
-                    <p class="upload-module__privacy">All file handling is client-side. Your data never leaves the browser. Format auto-detection supports Tradovate CSV, TradeZella CSV, Interactive Brokers Orders CSV, and Discord JSON exports.</p>
-                </div>
-
-                <div class="upload-module__tabs" role="tablist">
-                    <button class="upload-tab is-active" data-mode="file" role="tab" aria-selected="true">File upload</button>
-                    <button class="upload-tab" data-mode="paste" role="tab" aria-selected="false">Paste text</button>
-                    <button class="upload-tab" data-mode="reset" role="tab" aria-selected="false">Reset to sample</button>
-                </div>
-
-                <div class="upload-module__panel" data-panel="file">
-                    <label class="upload-drop" for="uploadFile">
-                        <input type="file" id="uploadFile" accept=".csv,.json,.txt" hidden>
-                        <div class="upload-drop__inner">
-                            <p class="upload-drop__icon">↑</p>
-                            <p class="upload-drop__primary">Drop a CSV or JSON file here, or click to browse</p>
-                            <p class="upload-drop__secondary">Supports Tradovate, TradeZella, IB Orders, Discord exports</p>
-                        </div>
-                    </label>
-                </div>
-                <div class="upload-module__panel" data-panel="paste" hidden>
-                    <textarea id="uploadPaste" rows="6" placeholder="Paste raw CSV rows or Discord/alert text here…"></textarea>
-                    <button class="btn btn--secondary btn--sm" id="uploadPasteBtn">Run battery on pasted data</button>
-                </div>
-                <div class="upload-module__panel" data-panel="reset" hidden>
-                    <p>Reset the battery to the live pre-registration record.</p>
-                    <button class="btn btn--primary btn--sm" id="uploadResetBtn">Reset now</button>
-                </div>
-
-                <div class="upload-module__status" id="uploadStatus" hidden></div>
-            </div>
-
-            <p class="battery__source">
-                ◆ Battery implementation is open-source. <a href="https://github.com/EkantikCapitalAdvisors/EPIG500" target="_blank" rel="noopener">View on GitHub →</a>
-            </p>
-            <p class="compliance">Battery activates at 30+ closed trades and is binding at 100+. Below 30 the sample is too small for statistical inference and the battery returns no verdict. Past performance is not indicative of future results. You can upload your own trade record above and the battery runs against it instead.</p>
+        <div class="theoretical-banner">
+            <p class="theoretical-banner__h"><span class="diamond">◆</span> Engine specification republishing</p>
+            <p class="theoretical-banner__body">The <strong>Worst Case, Priced</strong> interactive and the <strong>8-test sustainability battery</strong> are being republished under the witnessed modification protocol for the stocks and options engine. Both restart from a record that <strong>begins at zero</strong> at launch — the battery activates at 30+ closed trades and is binding at 100+, computed live from the custodian feed. The instrument-agnostic calculators above (recovery convexity, the volatility tax, and the capture explorer) are unaffected. Past performance does not guarantee future results.</p>
         </div>
     </div>
 </section>
