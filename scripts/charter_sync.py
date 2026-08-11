@@ -569,7 +569,7 @@ def main():
                 json.dump({
                     "schema_version": "1.0", "as_of": dates[-1], "state": state,
                     "inception_date": inception, "last_sync_utc": now_utc(),
-                    "engine_label": "Intraday Engine", "foundation_label": "Foundational (SPY)",
+                    "engine_label": "Overlay Engine", "foundation_label": "Foundational (SPY)",
                     **sleeves,
                 }, open(os.path.join(DATA, "sleeves.json"), "w"), indent=2)
 

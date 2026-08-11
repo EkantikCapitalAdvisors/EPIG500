@@ -4187,7 +4187,7 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .ladder-stair__block--base   { background: var(--navy); }
 .ladder-stair__block--earned { background: linear-gradient(180deg, var(--gold-bright), var(--gold)); }
 .ladder-stair__block--mini   { width: 22px; height: 10px; vertical-align: middle; }
-.ladder-stair__contracts {
+.ladder-stair__tier {
     font-family: var(--font-serif);
     font-weight: 700;
     font-size: 22px;

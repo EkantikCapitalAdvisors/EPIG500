@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ekantik 500 — Your SPY, made asymmetric. Then the engine.</title>
-    <meta name="description" content="Built to outperform the S&P 500 with less of its drawdown — not by leverage, but by asymmetric capture. A rules-based overlay plus a hard-killed intraday engine (stocks, options, and/or futures), every rule and kill condition published before capital. Design intent, not a guarantee. Custodied at Interactive Brokers.">
+    <meta name="description" content="Built to outperform the S&P 500 with less of its drawdown — not by leverage, but by asymmetric capture. A rules-based overlay plus a hard-killed engine (stocks and options), every rule and kill condition published before capital. Design intent, not a guarantee. Custodied at Interactive Brokers.">
 
     <link rel="canonical" href="https://epig500.ekantikcapital.com">
     <meta property="og:title" content="Ekantik 500 — Your SPY, made asymmetric. Then the engine.">
-    <meta property="og:description" content="Built to outperform the S&P 500 with less of its drawdown — not by leverage, but by asymmetric capture. A rules-based overlay plus a hard-killed intraday engine (stocks, options, and/or futures), every rule and kill condition published before capital. Design intent, not a guarantee. Custodied at Interactive Brokers.">
+    <meta property="og:description" content="Built to outperform the S&P 500 with less of its drawdown — not by leverage, but by asymmetric capture. A rules-based overlay plus a hard-killed engine (stocks and options), every rule and kill condition published before capital. Design intent, not a guarantee. Custodied at Interactive Brokers.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://epig500.ekantikcapital.com">
 
@@ -27,7 +27,7 @@
       "provider": {"@type": "Organization", "name": "Ekantik Capital Advisors LLC"},
       "url": "https://epig500.ekantikcapital.com",
       "areaServed": "US",
-      "description": "A synthetic-passive S&P 500 foundation (~80%) governed by a published, rules-based overlay that reduces exposure in genuine corrections and restores it as buyers return, plus an operational cash buffer (~20%) and an intraday booster engine (stocks, options, and/or futures) that compounds disciplined risk on top. Custodied at Interactive Brokers."
+      "description": "A synthetic-passive S&P 500 foundation (~80%) governed by a published, rules-based overlay that reduces exposure in genuine corrections and restores it as buyers return, plus an operational cash buffer (~20%) and an engine (stocks and options) that compounds disciplined risk on top. Custodied at Interactive Brokers."
     }
     </script>
 </head>
@@ -186,7 +186,7 @@
             <h2 class="section__h">Built to outperform the S&amp;P 500 — with less of its drawdown. Not by leverage; by asymmetric capture.</h2>
         </header>
 
-        <p class="compliance" style="margin-bottom:var(--s-8)"><strong>Design intent — not a forecast, projection, or guarantee of relative or absolute performance.</strong> Outperformance is measured against a <strong>100% S&amp;P 500 total-return benchmark</strong>. The target that supports this objective: a <strong>foundation range of <span class="num">+6–11%/yr</span></strong> (modeled synthetic-passive overlay, model v1.3, S&amp;P total-return 1975–2024) plus an <strong>engine range of <span class="num">+11–15%/yr</span></strong> (<span class="num">30R × 0.5% NLV</span>, where R-expectancy and trades/yr come from the live dashboard's protocol-bound record at the <span class="num">0.5%</span> per-trade anchor; <strong>30R is a conservative haircut, not a promise</strong>) — a <strong>modeled <span class="num">~17–26%/yr</span> stack</strong>, <strong>gross of advisory fees</strong> (net would be lower; fee schedule not yet finalized). The synthetic-passive overlay has not completed a market cycle and <strong>carries no verdict yet</strong>. <strong>Past performance does not guarantee future results.</strong> We publish the live record, not a projected number.</p>
+        <p class="compliance" style="margin-bottom:var(--s-8)"><strong>Design intent — not a forecast, projection, or guarantee of relative or absolute performance.</strong> Outperformance is measured against a <strong>100% S&amp;P 500 total-return benchmark</strong>. The foundation that supports this objective carries a <strong>modeled range of <span class="num">+6–11%/yr</span></strong> (synthetic-passive overlay, model v1.3, S&amp;P total-return 1975–2024), <strong>gross of advisory fees</strong> (net would be lower; fee schedule not yet finalized). The engine (a stocks and options strategy) adds to this, but its <strong>record begins at zero</strong> — we publish its objective in advance and no stack figure is projected. The synthetic-passive overlay has not completed a market cycle and <strong>carries no verdict yet</strong>. <strong>Past performance does not guarantee future results.</strong> We publish the live record, not a projected number.</p>
 
         <div class="prose">
             <h3 class="prose__subh">Passive indexing has one honest limit: it returns the market.</h3>
@@ -259,11 +259,11 @@
              share one 820px wrapper so their left/right edges can never drift. -->
         <div class="how-stack">
         <!-- Barbell stack diagram — mobile-stackable -->
-        <div class="barbell" role="img" aria-label="Architecture: the intraday-strategy engine (currently /ES futures) on top of an 80% SPY foundation and a 20% cash allocation that margins the intraday strategy.">
+        <div class="barbell" role="img" aria-label="Architecture: the Overlay Engine (stocks and options) on top of an 80% SPY foundation and a 20% cash allocation that collateralizes the engine.">
             <div class="barbell__row barbell__row--engine">
                 <div class="barbell__label">
-                    <p class="barbell__tag"><span class="diamond">◆</span> LIVE · PROVEN</p>
-                    <p class="barbell__head">Intraday-Strategy Engine <span class="barbell__top">· currently /ES futures</span></p>
+                    <p class="barbell__tag"><span class="diamond">◆</span> THE ENGINE</p>
+                    <p class="barbell__head">Overlay Engine <span class="barbell__top">· stocks &amp; options</span></p>
                     <p class="barbell__sub"><span class="num">0.5%</span> NLV per trade · earned scaling · hard-killed at ED-05b</p>
                 </div>
                 <div class="barbell__pct barbell__pct--overlay"><span class="barbell__overlay-pill">Overlay</span><span class="barbell__pct-label">no capital slice</span></div>
@@ -278,16 +278,16 @@
             </div>
             <div class="barbell__row barbell__row--cash">
                 <div class="barbell__label">
-                    <p class="barbell__tag"><span class="diamond">◆</span> CASH · INTRADAY-STRATEGY MARGIN</p>
+                    <p class="barbell__tag"><span class="diamond">◆</span> CASH · ENGINE COLLATERAL</p>
                     <p class="barbell__head">Cash Buffer</p>
-                    <p class="barbell__sub">held in cash, no market exposure · margins the intraday strategy without disturbing the foundation</p>
+                    <p class="barbell__sub">held in cash, no market exposure · collateralizes the stocks and options engine without disturbing the foundation</p>
                 </div>
                 <div class="barbell__pct"><span class="num">20%</span><span class="barbell__pct-label">of capital</span></div>
             </div>
         </div>
 
         <div class="barbell__prose">
-            <p>The architecture is a barbell. <strong>80% SPY</strong> carries market exposure and dividends, and serves as the engine's collateral. The other <strong>20%</strong> is held in <strong>cash</strong> (no market exposure) — the intraday strategy's margin, backing the engine without disturbing the foundation. That engine is our <strong>intraday strategy</strong> — a disciplined, hard-killed intraday system designed to span <strong>stocks, options, and futures</strong>, sized to a fixed <strong class="num">0.5%</strong>-per-trade risk, scaled only on realized profit, and <strong>hard-killed in advance</strong>; <em>EPIG's live engine record is its /ES-futures implementation to date</em>. Its <em>futures-only</em> expression, run standalone, is <strong>ECFS</strong> on the <a href="https://accelerator.ekantikcapital.com/" target="_blank" rel="noopener">Ekantik Accelerator ↗</a>. Put plainly: <strong>EPIG = the intraday strategy (~20%) + a synthetic-passive SPY foundation (~80%).</strong></p>
+            <p>The architecture is a barbell. <strong>80% SPY</strong> carries market exposure and dividends, and serves as the engine's collateral. The other <strong>20%</strong> is held in <strong>cash</strong> (no market exposure) — collateral for the engine, backing it without disturbing the foundation. That engine is a <strong>stocks and options strategy</strong> — a disciplined, hard-killed intraday system, sized to a fixed <strong class="num">0.5%</strong>-per-trade risk, scaled only on realized profit, and <strong>hard-killed in advance</strong>. Put plainly: <strong>EPIG = the engine (~20%) + a synthetic-passive SPY foundation (~80%).</strong></p>
         </div>
 
         <aside class="dd-standard" aria-label="What holds drawdown under 10%">
@@ -295,7 +295,7 @@
             <p class="dd-standard__lede">The sub-<span class="num">10%</span> standard is engineered, not promised — it rests on stacked, pre-published constraints:</p>
             <ul class="dd-standard__list">
                 <li>the <strong class="num">0.5%</strong>-per-trade risk anchor, fixed at every step, never escalated;</li>
-                <li>the <strong>ED-05b hard kill</strong> (<span class="num">−100 /ES pts</span> = <span class="num">5%</span> of NLV <em>at full Standard sizing</em> — intermediate earned-scale steps can transiently exceed, e.g. <span class="num">5 /MES + 1 /ES</span> on a $100K account = <span class="num">7.5%</span>);</li>
+                <li>the <strong>ED-05b hard kill</strong> — a pre-published maximum loss on the engine sleeve, written before capital moves <em>(the figure is republishing under the witnessed modification protocol)</em>;</li>
                 <li>the <strong>one-loss daily rule</strong>, the <strong>weekly sit-down</strong>, and the <strong>bi-weekly size-reduction</strong> cadence;</li>
                 <li>the <strong>synthetic-passive overlay</strong> stepping SPY exposure down in genuine corrections <em>(design intent — no verdict yet)</em>.</li>
             </ul>
@@ -305,17 +305,13 @@
     </div>
 </section>
 
-<!-- ============ 1c. THE PROVEN ENGINE (v2.1 §5 — elevated) ============ -->
+<!-- ============ 1c. ENGINE — specification republishing (V3.1: prior engine record retired) ============ -->
 <section class="section section--white" id="proven-engine">
     <div class="container">
-        <header class="section__header section__header--center proven-engine__head">
-            <p class="eyebrow"><span class="diamond">◆</span> The Proven Engine</p>
-            <h2 class="section__h">The engine is the part with a track record. So we lead with it.</h2>
-        </header>
-        <aside class="proven-engine__callout" role="note">
-            <p>This engine pursues return, not a fixed income schedule. Results are variable and realized as positions close. We do not project a number — we publish the record, trade by trade, and the exact conditions under which we'd declare the edge dead and stop.</p>
-            <p class="proven-engine__callout-cta"><a href="/alerts.html" data-cta="alerts-proven-engine">Open the alerts record →</a></p>
-        </aside>
+        <div class="theoretical-banner">
+            <p class="theoretical-banner__h"><span class="diamond">◆</span> Engine specification republishing</p>
+            <p class="theoretical-banner__body">The engine's implementation specification is being republished under the witnessed modification protocol as a <strong>stocks and options strategy</strong>. The record for this engine <strong>begins at zero</strong> at launch of the amended protocol — built live, in public, from the custodian feed. We state the objective in advance and let the custodian's numbers grade it.</p>
+        </div>
     </div>
 </section>
 
@@ -325,7 +321,7 @@
         <header class="section__header section__header--center">
             <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The architecture over time</p>
             <h2 class="section__h section__h--lg">How the architecture stacks over time</h2>
-            <p class="section__sub">Here's what this architecture compounds to over decades — and below, the kill criteria and the math that produce it. Two layers on top of the 20% cash buffer: the <strong>synthetic-passive foundation</strong> (80% S&amp;P 500, with the overlay applying capture asymmetry — set the dials) and the <strong>Booster Engine</strong> — drawn live from the protocol-bound trading record. Toggle the Booster on to see the engine layer as an illustration extrapolated from the live record — <em>an illustration, not an expectation</em>.</p>
+            <p class="section__sub">Here's what the foundation architecture compounds to over decades — and below, the kill criteria and the math that produce it. On top of the 20% cash buffer sits the <strong>synthetic-passive foundation</strong> (80% S&amp;P 500, with the overlay applying capture asymmetry — set the dials). The engine layer is not shown here: its record begins at zero and will be added from the custodian feed once it exists.</p>
         </header>
 
         <!-- #arithCalc is the JS guard for setupArithmetic() in script.js. On this
@@ -363,19 +359,11 @@
                         <span class="arith-chart__range-arrow" aria-hidden="true">→</span>
                         <label class="arith-chart__range-field">To <select id="arithTo" aria-label="End year"></select></label>
                     </div>
-                    <div class="arith-chart__contracts" role="radiogroup" aria-label="Booster Engine toggle" id="arithBoosterToggle">
-                        <span class="arith-chart__contracts-label">Booster Engine</span>
-                        <button class="arith-contract is-active" data-risk="0" type="button">Off</button>
-                        <button class="arith-contract" data-risk="0.5" type="button" disabled aria-disabled="true">On · live record</button>
-                        <span class="arith-chart__contracts-caption" id="arithBoosterCaption">Blended-record estimate · ~18-mo Telegram + protocol-bound · an estimate, not an expectation.</span>
-                    </div>
-                    <div class="arith-chart__baseline" id="arithBaselineIndicator"><p class="arith-baseline__headline"><span class="diamond">◆</span> Toggle the Booster on to overlay the blended-record estimate. The displayed $/yr is the historical record at <strong>1 /ES per $100K</strong> (the sizing the record was generated at). <strong>Forward execution at a $100K account starts smaller</strong> — typically <span class="num">2 /MES (~80% of setups) + 5 /MES (~20%)</span>, i.e. ~26% of /ES dollar throughput — and steps to <span class="num">5 /MES + 1 /ES</span> after the first profit-buffer milestone.</p></div>
                 </header>
-                <canvas id="arithEquityCanvas" width="1100" height="360" aria-label="Historical equity curve: S&P 500 vs 80% SPY foundation, plus capture-asymmetry band, plus optional Booster Engine layer extrapolated from the live record."></canvas>
+                <canvas id="arithEquityCanvas" width="1100" height="360" aria-label="Historical equity curve: S&P 500 vs 80% SPY foundation, with capture-asymmetry band."></canvas>
                 <div class="arith-chart__legend">
                     <span class="arith-chart__legend-item"><span class="arith-chart__swatch" style="background:rgba(13,148,136,0.45);border:1px solid #0D9488"></span> 80% S&amp;P foundation · capture-modified by overlay rules</span>
                     <span class="arith-chart__legend-item"><span class="arith-chart__swatch" style="background:#94A3B8"></span> + 20% cash buffer (flat)</span>
-                    <span class="arith-chart__legend-item" id="arithLegendThrough" hidden><span class="arith-chart__swatch" style="background:#d4af37"></span> + Booster Engine (live record extrapolated)</span>
                     <span class="arith-chart__legend-item"><span class="arith-chart__swatch arith-chart__swatch--line" style="background:#b8962e"></span> Strategy total · solid gold line</span>
                     <span class="arith-chart__legend-item"><span class="arith-chart__swatch arith-chart__swatch--line arith-chart__swatch--dashed" style="background:#12264a"></span> S&amp;P 500 (100% benchmark) · dashed</span>
                 </div>
@@ -386,48 +374,21 @@
                      foundation terms are fixed history; the Booster term tracks the
                      live blended rate, so the total moves as the record grows. -->
                 <details class="arith-chart__howbuilt">
-                    <summary><span class="diamond">◆</span> How the strategy multiple is built <span class="arith-chart__howbuilt-eg">(e.g. ≈ 9.2× on the Full 20-year view)</span></summary>
+                    <summary><span class="diamond">◆</span> How the strategy multiple is built <span class="arith-chart__howbuilt-eg">(e.g. ≈ 5.9× on the Full 20-year view)</span></summary>
                     <div class="arith-chart__howbuilt-body">
-                        <p>The gold strategy line is <strong>three layers stacked</strong> over the selected window (default: 2005–2024, real S&amp;P 500 total returns). For the full 20-year view, with the Booster on:</p>
+                        <p>The gold strategy line is the <strong>foundation stacked on the cash buffer</strong> over the selected window (default: 2005–2024, real S&amp;P 500 total returns):</p>
                         <table class="arith-howbuilt-table">
                             <tr><td>S&amp;P 500 (benchmark)</td><td class="num">7.17×</td><td>product of (1 + annual total return), 2005–2024</td></tr>
                             <tr><td>Foundation — 80% SPY</td><td class="num">5.74×</td><td>0.80 × 7.17 (capture sliders at 100/100)</td></tr>
                             <tr><td>+ Cash buffer — 20%, flat</td><td class="num">+0.20</td><td>held in cash, no exposure</td></tr>
-                            <tr class="arith-howbuilt-table__sub"><td>= Foundation + cash, Booster <em>off</em></td><td class="num">5.94×</td><td>the strategy line with the engine toggled off</td></tr>
-                            <tr><td>+ Booster Engine</td><td class="num">+3.22</td><td>blended rate <span class="num">~16.1%/yr</span> × 20 yr, <strong>linear</strong> (constant 1 /ES per $100K — engine gains are <em>not</em> compounded). <em>This row models the architectural cap; forward execution at $100K under /MES baseline is ~28% of this contribution, stepping to ~150% after the first $5K-profit milestone (5 /MES + 1 /ES).</em></td></tr>
-                            <tr class="arith-howbuilt-table__total"><td>= Strategy total, Booster <em>on</em></td><td class="num">≈ 9.16×</td><td>5.74 + 0.20 + 3.22</td></tr>
+                            <tr class="arith-howbuilt-table__total"><td>= Strategy total (foundation + cash)</td><td class="num">≈ 5.94×</td><td>5.74 + 0.20</td></tr>
                         </table>
-                        <p class="arith-chart__howbuilt-note">The S&amp;P and foundation terms are fixed history; the Booster term tracks the live blended throughput rate, so the total shifts as the record grows and with the capture sliders, the window, and the Booster toggle. The Booster is added <strong>linearly at constant contract count</strong> — a deliberately conservative choice (no compounding of engine gains). <em>Historical illustration, hypothetical inputs — not a projection of any Ekantik strategy. Past performance does not guarantee future results.</em></p>
+                        <p class="arith-chart__howbuilt-note">The S&amp;P and foundation terms are fixed history; the total shifts with the capture sliders and the window. The engine layer is not included — its record begins at zero and will be added from the custodian feed once it exists. <em>Historical illustration, hypothetical inputs — not a projection of any Ekantik strategy. Past performance does not guarantee future results.</em></p>
                     </div>
                 </details>
             </div>
 
-            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns (incl. dividends), 1975–2024 — selectable as a 20-year, 50-year, calm, or crash window. <strong>Benchmark for Outperformance:</strong> 100% S&amp;P 500 — the conservative comparison. <strong>Foundation layer (overlay model v1.3):</strong> 80% × (capture × index), where capture is the modeled output of the synthetic-passive overlay's published rules — upside slider in up years, downside slider in down years. <strong>Cash buffer:</strong> the remaining 20% is operational cash (flat, no exposure) — it carries a real ~17% drag vs 100%-S&amp;P over a 20-year window, which the overlay's downside protection must overcome to clear the bar. <strong>Booster Engine layer:</strong> the layer's <em>shape</em> and the <strong>$/yr estimate</strong> are computed <em>live</em> from <code>/data/trades.json</code> at the 0.5% per-trade architectural risk anchor (the level the actual record was generated at); they update automatically with every admin publish. <strong>The Booster $/yr figure is a blended estimate over the full engine record — both the ~18-month Telegram period (Apr 2023 – Oct 2024, pre-protocol: no in-advance witness or formal gates, traded at 1 /ES sizing) and the protocol-bound pre-registration period (May 19, 2026 forward, traded at /MES baseline sizing on a $100K-equivalent account).</strong> Blending raises the sample size at the cost of mixing a witnessed record with an unwitnessed one; it is an estimate from past throughput, <strong>not</strong> a witnessed sustainability claim. <strong>Forward sizing policy at a $100K account</strong> is the conservative baseline used throughout the recent (Period 2) record: <span class="num">2 /MES (~80% of setups)</span> + <span class="num">5 /MES (~20%)</span>, blended <span class="num">~$13/pt</span> versus <span class="num">$50/pt</span> at 1 /ES. The displayed blended $/yr extrapolates Period 1 to the /ES architectural cap; if the entire blended history is replayed at /MES baseline throughout, per-$100K throughput is ≈ <span class="num">$4,500/yr</span> (28% of /ES). After the first <span class="num">$5K</span>-realized-profit milestone the engine steps to <span class="num">5 /MES + 1 /ES</span> (~150% of /ES throughput), and at full Standard sizing scales to <span class="num">1 /ES per $100K</span> as NLV grows. Engine throughput is shown as <em>independent</em> of the year's S&amp;P return — the operator's intraday /ES trading isn't tied to the index's annual direction. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy. The synthetic-passive overlay carries no verdict yet (its gate is measured over a full market cycle); the rule set is published as design intent under armed-but-unfired falsifiability gates. Past performance does not guarantee future results.</strong> Every per-trade count and the sustainability battery elsewhere on the site remain protocol-bound (Period 2) only; only this Booster $/yr estimate uses the blended basis. <a href="/run-the-math.html" data-cta="run-the-math-from-chart">Run the full math — windows, dollars, trade-off explorer →</a></p>
-        </div>
-    </div>
-</section>
-
-<!-- ============ 1c-mid. ENGINE LIVE RECORD vs. KILL BOUNDARIES (moved up from Arithmetic; sits adjacent to Overlay) ============ -->
-<section class="section section--ivory" id="engine-live-bounded">
-    <div class="container">
-        <!-- Live record vs. kill boundaries — approved mockup (Manish Dharod countersignature,
-             2026-06-12). Draws only closed, protocol-bound Period 2 trades plus the armed ED-05
-             drawdown thresholds from FP-MOPS-V1.6. No projection, no extrapolation; claim gates
-             (CLAIMS_THROUGHPUT_ENABLED / BOOSTER_TOGGLE_ENABLED) remain OFF. Hidden until the
-             live data loads; stays hidden on fetch failure. -->
-        <div class="live-bounded" id="liveBounded" hidden>
-            <header class="live-bounded__head">
-                <h3 class="live-bounded__h">The live record, drawn against its kill boundaries.</h3>
-                <p class="live-bounded__sub">Every point below is a closed, protocol-bound Period 2 trade, published within 24 hours of close. The red lines are not annotations — they are armed kill conditions from the locked protocol: the <strong>ED-05a drawdown warning (peak − 45 /ES pts)</strong> and the <strong>ED-05b hard kill (peak − 100 /ES pts · $5,000 per contract)</strong>, both measured peak-to-trough, so both floors ratchet up with every new equity high. The upside is witnessed, never promised; the downside is engineered.</p>
-            </header>
-            <canvas id="liveBoundedCanvas" width="1100" height="340" aria-label="Cumulative /ES points of the protocol-bound live record, plotted against the ED-05a warning floor and the ED-05b hard-kill floor, which ratchet up with each new equity high."></canvas>
-            <div class="live-bounded__legend">
-                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--earned"></span> Protocol-bound live record (Period 2) · cumulative /ES points</span>
-                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--hard"></span> ED-05b hard kill floor · peak − 100 pts</span>
-                <span class="live-bounded__legend-item"><span class="live-bounded__swatch live-bounded__swatch--warn"></span> ED-05a warning · peak − 45 pts</span>
-            </div>
-            <p class="live-bounded__stat" id="liveBoundedStat"></p>
-            <p class="compliance">Past performance does not guarantee future results. The 8-test battery is now active on the protocol-bound record (binding at 100+ closed trades). Kill thresholds describe operating commitments by the firm, not guarantees against loss; a gate-fire does not guarantee preservation of capital. Chart shows realized, published trades only — no extrapolation.</p>
+            <p class="arith-source">◆ Source: S&amp;P 500 annual total returns (incl. dividends), 1975–2024 — selectable as a 20-year, 50-year, calm, or crash window. <strong>Benchmark for Outperformance:</strong> 100% S&amp;P 500 — the conservative comparison. <strong>Foundation layer (overlay model v1.3):</strong> 80% × (capture × index), where capture is the modeled output of the synthetic-passive overlay's published rules — upside slider in up years, downside slider in down years. <strong>Cash buffer:</strong> the remaining 20% is operational cash (flat, no exposure) — it carries a real ~17% drag vs 100%-S&amp;P over a 20-year window, which the overlay's downside protection must overcome to clear the bar. <strong>The engine layer is not shown here</strong> — its record begins at zero and will be added from the custodian feed once it exists; nothing on this chart depends on it. <strong>Historical illustration, hypothetical inputs, not a projection of any Ekantik strategy. The synthetic-passive overlay carries no verdict yet (its gate is measured over a full market cycle); the rule set is published as design intent under armed-but-unfired falsifiability gates. Past performance does not guarantee future results.</strong> <a href="/run-the-math.html" data-cta="run-the-math-from-chart">Run the full math — windows, dollars, trade-off explorer →</a></p>
         </div>
     </div>
 </section>
@@ -435,32 +396,27 @@
 <!-- ============ 1b. HOW THE TARGET ADDS UP — decomposition strip · the annual math that produces the compounded curve above ============ -->
 <section class="section section--ivory" id="how-the-target-adds-up">
     <div class="container">
-        <!-- Decomposition strip — where the 17–26%/yr target comes from. Mirrors
-             the operator deck slide "How the architecture stacks over time" stripe.
-             Foundation range from the modeled synthetic-passive overlay; Engine range
-             from the live dashboard's protocol-bound R-expectancy × trades/yr at the
-             0.5% NLV anchor, haircut to 30R per the operator's conservative pacing. -->
+        <!-- Decomposition strip — where the foundation's outperformance comes from.
+             Foundation range from the modeled synthetic-passive overlay (v1.3). The
+             engine range/stack figure was prior-engine-derived and is removed per V3.1;
+             the engine record begins at zero and no stack number is projected. -->
         <aside class="decomp-strip decomp-strip--standalone" aria-label="Where the outperformance over the S&P 500 comes from">
             <p class="decomp-strip__eyebrow"><span class="diamond">◆</span> Where the outperformance comes from</p>
             <div class="decomp-strip__grid">
                 <div class="decomp-strip__term">
                     <p class="decomp-strip__term-label">Foundation <span class="decomp-strip__term-sub">~80% SPY</span></p>
                     <p class="decomp-strip__term-val num">+6–11%/yr</p>
+                    <p class="decomp-strip__term-note">modeled synthetic-passive overlay (v1.3) — design intent, no verdict yet</p>
                 </div>
                 <p class="decomp-strip__op" aria-hidden="true">+</p>
                 <div class="decomp-strip__term">
-                    <p class="decomp-strip__term-label">Engine <span class="decomp-strip__term-sub"><span class="num">30R × 0.5% NLV</span></span></p>
-                    <p class="decomp-strip__term-val num">+11–15%/yr</p>
-                    <p class="decomp-strip__term-note">modeled target — the record is what we publish (<strong class="num">~16–17%/yr</strong> to date)</p>
-                </div>
-                <p class="decomp-strip__op" aria-hidden="true">=</p>
-                <div class="decomp-strip__term decomp-strip__term--total">
-                    <p class="decomp-strip__term-label">Stack target <span class="decomp-strip__term-sub">drawdown standard <span class="num">&lt;10%</span></span></p>
-                    <p class="decomp-strip__term-val num">≈ 17–26%/yr</p>
+                    <p class="decomp-strip__term-label">Engine <span class="decomp-strip__term-sub">stocks &amp; options</span></p>
+                    <p class="decomp-strip__term-val num">record from zero</p>
+                    <p class="decomp-strip__term-note">objective published in advance; graded on the custodian feed</p>
                 </div>
             </div>
             <p class="decomp-strip__basis">
-                Outperformance over <strong>100% S&amp;P 500</strong> has exactly two engineered sources — <strong>neither is leverage</strong>. <strong>1 · Asymmetric capture</strong> <em>(the foundation)</em> — 80% SPY held fully invested by default, stepping exposure down only as real sellers appear: full participation up, less of the drawdown down. The gap is manufactured by discipline, not borrowing. <em>(Design intent — overlay carries no verdict yet.)</em> <strong>2 · The engine</strong> <em>(on top)</em> — a hard-killed /ES sleeve at the <span class="num">0.5%</span>-NLV anchor, adding return <strong>independent of the index's direction</strong>. Modeled, these two sources sum to a <span class="num">~17–26%/yr</span> stack (foundation <span class="num">+6–11%</span>, engine <span class="num">+11–15%</span>), against an S&amp;P 500 that compounded near <span class="num">11%/yr</span> over 2006–2025 <em>(historical, not a forward assumption)</em> — a <strong>target outperformance</strong>, not a promise, drawdown-bounded under <span class="num">10%</span> by pre-published caps and kills. We target the conservative number and publish the record as what it is: <strong>blended engine record to date <span class="num">~16–17%/yr</span></strong> (<a href="#stacks-over-time">see the chart above</a>). <span class="num">30R</span> is a haircut, not a promise, and the <strong>gate that would <em>stop</em> the engine</strong> is published separately as a hard kill (<a href="#falsifiability">Falsifiability · ED-05b</a>). All return and outperformance figures here are <strong>gross of advisory fees</strong> — net-of-fee results would be lower, and the fee schedule is not yet finalized. <strong>Past performance does not guarantee future results.</strong>
+                Outperformance over <strong>100% S&amp;P 500</strong> is engineered, not borrowed — <strong>and it is not leverage</strong>. <strong>Asymmetric capture</strong> <em>(the foundation)</em> — 80% SPY held fully invested by default, stepping exposure down only as real sellers appear: full participation up, less of the drawdown down. The gap is manufactured by discipline, not borrowing. <em>(Design intent — the overlay carries no verdict yet.)</em> The foundation's modeled range is <span class="num">+6–11%/yr</span> (overlay model v1.3). <strong>The engine</strong> <em>(on top)</em> — a stocks and options strategy at the <span class="num">0.5%</span>-NLV per-trade anchor, adding return <strong>independent of the index's direction</strong>. Its record <strong>begins at zero</strong>; we publish its objective in advance and let the custodian's numbers grade it — <strong>no stack figure is projected here</strong>. All figures are <strong>gross of advisory fees</strong> — net-of-fee results would be lower, and the fee schedule is not yet finalized. <strong>Past performance does not guarantee future results.</strong>
             </p>
         </aside>
 
@@ -491,38 +447,19 @@
     <div class="container">
         <header class="section__header">
             <p class="eyebrow"><span class="diamond">◆</span> The Proof</p>
-            <h2 class="section__h">The methodology — discovered, tested against itself, now verified in public.</h2>
+            <h2 class="section__h">The methodology — and how it gets graded in public.</h2>
         </header>
 
-        <!-- Methodology Provenance — discovered 2023, stress-tested against itself, then live publication -->
-        <div class="provenance">
-            <p class="provenance__h">Methodology Provenance</p>
-            <div class="provenance__timeline">
-                <div class="provenance__phase">
-                    <p class="provenance__phase-num">01</p>
-                    <p class="provenance__phase-h">Discovered, then stress-tested</p>
-                    <p class="provenance__phase-body">The edge crystallized in 2023 after years of work on entry criteria, risk anchoring, regime behaviour, and operator discipline. Between 2023 and 2026 the operator continued refining this strategy alongside developing a separate strategy — the <a href="https://accelerator.ekantikcapital.com/" target="_blank" rel="noopener">Ekantik Accelerator ↗</a>. The frozen process now executed live is the refined EPIG 500 engine.</p>
-                </div>
-                <div class="provenance__phase">
-                    <p class="provenance__phase-num">02</p>
-                    <p class="provenance__phase-h">Live pre-registration record</p>
-                    <p class="provenance__phase-body">Every trade from the May 19, 2026 restart published to the live dashboard within 24 hours of close. Tagged per-trade, witnessed, and held to the published Stage 1 fidelity criteria from day one.</p>
-                </div>
-                <div class="provenance__phase">
-                    <p class="provenance__phase-num">03</p>
-                    <p class="provenance__phase-h">Battery, computed live</p>
-                    <p class="provenance__phase-body">The same eight tests that define the Stage 2 kill conditions are computed in your browser as the live record accumulates. Activates at 30+ closed trades and is binding at 100+ — both thresholds now crossed on the protocol-bound record.</p>
-                </div>
-            </div>
-            <p class="compliance">Past performance does not guarantee future results.</p>
+        <div class="theoretical-banner">
+            <p class="theoretical-banner__h"><span class="diamond">◆</span> Engine specification republishing</p>
+            <p class="theoretical-banner__body">The engine's implementation specification is being republished under the witnessed modification protocol as a <strong>stocks and options strategy</strong>. Its record — and the eight-test sustainability battery that grades it — <strong>begin at zero</strong> at launch of the amended protocol, computed live from the custodian feed as the record accumulates. Past performance does not guarantee future results.</p>
         </div>
 
-        <!-- Bridge to Run the Math — the interactive battery + uploader live there -->
+        <!-- Bridge to Run the Math — the instrument-agnostic calculators live there -->
         <div class="proof-bridge" role="note">
-            <p class="proof-bridge__lede"><span class="diamond">◆</span> The live battery, the uploader, and the four arithmetic calculators have moved to their own page so this one stays focused on the architecture.</p>
+            <p class="proof-bridge__lede"><span class="diamond">◆</span> The arithmetic calculators — recovery convexity, the volatility tax, and the capture explorer — are instrument-agnostic and live on their own page.</p>
             <p class="proof-bridge__ctas">
-                <a class="btn btn--primary btn--sm" href="/run-the-math.html#battery" data-cta="runmath-battery-from-proof">Run the battery on the live record →</a>
-                <a class="btn btn--ghost btn--sm" href="/alerts.html" data-cta="alerts-from-proof">Open the alerts record ↗</a>
+                <a class="btn btn--primary btn--sm" href="/run-the-math.html" data-cta="runmath-from-proof">Run the math →</a>
             </p>
         </div>
     </div>
@@ -540,66 +477,6 @@
     </div>
 </section>
 
-<!-- ============ 6. SIGNAL CONTINUITY ============ -->
-<section class="section section--ivory" id="continuity">
-    <div class="container">
-        <header class="section__header">
-            <p class="eyebrow"><span class="diamond">◆</span> Signal Continuity</p>
-            <h2 class="section__h">Discovered in 2023. Tested against itself for three years. Reverted to baseline for the live record.</h2>
-            <p class="section__sub">The methodology was discovered in 2023. Between 2023 and 2026 the operator continued refining this strategy while developing a separate strategy — the <a href="https://accelerator.ekantikcapital.com/" target="_blank" rel="noopener">Ekantik Accelerator ↗</a>. The protocol-bound live record runs the refined EPIG 500 engine, published trade-by-trade from the May 19, 2026 restart.</p>
-        </header>
-
-        <!-- Two records, one test: operator-reported alerts vs custodian-verified live -->
-        <aside class="two-records" role="note">
-            <p class="two-records__k"><span class="diamond">◆</span> Two records, one test</p>
-            <div class="two-records__grid">
-                <div class="two-records__card">
-                    <p class="two-records__title">The alerts record</p>
-                    <p class="two-records__body">Every trade we called, published within 24 hours of close — <strong>operator-reported</strong> and witnessed (Telegram 2023–24 → Discord 2026→). <em>What the strategy said to do.</em></p>
-                    <a href="/alerts.html" class="two-records__link" data-cta="tworecords-alerts">Open the alerts record →</a>
-                </div>
-                <div class="two-records__card two-records__card--live">
-                    <p class="two-records__title">The live custodian record</p>
-                    <p class="two-records__body">An Interactive&nbsp;Brokers account whose NAV is <strong>reported by the custodian</strong>, measured against the S&amp;P 500 total return. <em>What the real money did.</em></p>
-                    <a href="/dashboard.html" class="two-records__link" data-cta="tworecords-live">Open the live record →</a>
-                </div>
-            </div>
-            <p class="two-records__bridge"><strong>The live record is expected to track the alerts record.</strong> If it diverges — slippage, timing, calls that weren't cleanly tradeable — that gap is shown in public on the live record, not explained away. The alerts are the claim; the custodian account is the proof. <em>Gross of fees. Past performance does not guarantee future results.</em></p>
-        </aside>
-
-        <div class="continuity">
-            <article class="period period--gap">
-                <div class="period__head">
-                    <p class="period__num">Period 1 <span class="period-badge period-badge--slate">Transparency only — pre-protocol</span></p>
-                    <p class="period__range">Apr 2023 – Oct 2024</p>
-                </div>
-                <p class="period__h">Discovered, then tested against itself</p>
-                <p class="period__body">The edge crystallized in 2023 after years of work on entry criteria, risk anchoring, regime behaviour, and operator discipline. A subset of trades — <strong>196 calls, Apr 2023 – Oct 2024</strong> — was posted in real time to a private Telegram channel as the original edge was being executed. That record predates the locked Falsifiability Protocol (no witness, no Stage-1 / Stage-2 gates armed, no per-trade OP-04 tagging at the time) and is published for <em>transparency</em> only — not as evidence.</p>
-                <p class="period__body">Between 2023 and 2026 the operator continued working on this strategy — refining entry triggers, risk anchoring, and sizing rules — while also developing a separate strategy, the <a href="https://accelerator.ekantikcapital.com/" target="_blank" rel="noopener"><strong>Ekantik Accelerator</strong> ↗</a>. The Period 2 live record runs the refined EPIG 500 engine, published trade-by-trade under the locked protocol.</p>
-                <div class="period__actions">
-                    <a href="/alerts.html" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">View the historical record →</a>
-                    <a href="/alerts.html" target="_blank" rel="noopener" class="btn btn--secondary btn--sm">View the pre-registration record →</a>
-                </div>
-                <p class="period__stat"><strong>Pre-protocol record.</strong> The 196-trade block is published for transparency but is <em>not</em> the basis for any sustainability claim — the protocol-bound record begins in Period 2.</p>
-            </article>
-
-            <article class="period period--prereg">
-                <div class="period__head">
-                    <p class="period__num">Period 2 <span class="period-badge period-badge--gold">Protocol-bound · Witnessed</span></p>
-                    <p class="period__range">May 19, 2026 → product launch</p>
-                </div>
-                <p class="period__h">Pre-registration live publication</p>
-                <p class="period__body">Every trade on the strategy published to the live dashboard within 24 hours of close. Tagged as process breach (H2) or normal variance (H3) per OP-04. Witnessed per the locked Falsifiability Protocol v1.6. Pre-registration participants get a continuous live record from restart through product launch — built openly, in public, trade by trade.</p>
-                <div class="period__actions">
-                    <a href="/alerts.html" target="_blank" rel="noopener" class="btn btn--primary btn--sm">Open the alerts record ↗</a>
-                </div>
-                <p class="period__stat" id="continuityLiveCount"><strong>Every protocol-bound trade</strong> is published to the live dashboard within 24 hours of close.</p>
-            </article>
-        </div>
-
-        <p class="compliance">The 196-trade Period 1 Telegram record predates the locked Falsifiability Protocol (no witness, no gates armed, no per-trade OP-04 tagging in advance) and is published for transparency, not as a sustainability claim. The 8-test sustainability battery activates at 30+ closed trades on the protocol-bound Period 2 record and is binding at 100+ — both thresholds now crossed; the live dashboard surfaces the battery verdict alongside KPIs and the equity curve. Pre-registration participants are the first cohort with a continuous, witnessed live record from public restart through launch. Nothing on this page constitutes a forecast or guarantee.</p>
-    </div>
-</section>
 
 <!-- ============ 3. COMPOUNDING LADDER + RISK MANAGEMENT CADENCE ============ -->
 <section class="section section--white" id="ladder">
@@ -607,7 +484,7 @@
         <header class="section__header section__header--center">
             <p class="eyebrow eyebrow--center"><span class="diamond">◆</span> The Mechanism + The Discipline</p>
             <h2 class="section__h section__h--lg">The Compounding Ladder</h2>
-            <p class="section__sub">Starting at <strong>$100K NLV</strong>. <strong>80% allocated to SPY</strong> for baseline market exposure (the position also serves as portfolio-margin collateral). <strong>20% held in cash</strong> as an operational settlement buffer that backs the <strong>intraday engine</strong> — designed to span <strong>stocks, options, and/or futures</strong>; currently implemented as /ES futures. <strong>The 0.5% per-trade architectural risk anchor is the cap, not the starting size.</strong> At $100K the engine starts more conservatively in micros — <strong class="num">2 /MES</strong> on roughly <strong>80%</strong> of setups and <strong class="num">5 /MES</strong> on the remaining <strong>20%</strong> (higher-conviction) — and steps to <strong class="num">5 /MES + 1 /ES</strong> after the first earned profit buffer. Full Standard sizing (1 /ES per $100K NLV) is the architectural cap that scaling approaches as the account grows. The cadence rules below bound drawdown whichever way the year plays out.</p>
+            <p class="section__sub">Starting at <strong>$100K NLV</strong>. <strong>80% allocated to SPY</strong> for baseline market exposure (the position also serves as portfolio-margin collateral). <strong>20% held in cash</strong> as an operational settlement buffer that backs the <strong>engine</strong> — a stocks and options strategy. <strong>The 0.5% per-trade architectural risk anchor is the cap, not the starting size.</strong> The engine starts conservatively and scales its deployment in <strong>earned tiers</strong> as realized profit accumulates, never assumed. <em>(The specific deployment figures are republishing under the witnessed modification protocol.)</em> The cadence rules below bound drawdown whichever way the year plays out.</p>
         </header>
 
         <!-- Theoretical disclaimer banner — leading so investors can't miss it -->
@@ -617,31 +494,31 @@
         </div>
 
         <!-- Earned-scale staircase — structural rules from the locked protocol only.
-             Contract counts, the fixed 0.5% per-contract anchor, unlock and de-scale
+             Deployment tiers, the fixed 0.5% per-trade anchor, unlock and de-scale
              conditions are documented architecture; no dollars, no timeline, no
              projection (forward equity curve removed per compliance redline T1-A). -->
-        <div class="ladder-stairs" role="img" aria-label="The earned-scale staircase: contracts scale with NLV at Standard sizing (1 /ES per $100K NLV), each one paid for by a realized profit buffer. The per-contract risk anchor of 0.5% NLV never changes. v1.6 removes the prior 2-contract ceiling — the engine scales with the account. The ladder also de-scales: OP-06 cuts size to half after a second consecutive losing week.">
+        <div class="ladder-stairs" role="img" aria-label="The earned-scale staircase: deployment scales with NLV in earned tiers, each paid for by a realized profit buffer. The per-trade risk anchor of 0.5% NLV never changes. The ladder also de-scales: OP-06 cuts size to half after a second consecutive losing week.">
             <div class="ladder-stairs__track">
                 <div class="ladder-stair">
                     <div class="ladder-stair__stack"><span class="ladder-stair__block ladder-stair__block--base"></span></div>
-                    <p class="ladder-stair__contracts">1 /ES</p>
+                    <p class="ladder-stair__tier">Base tier</p>
                     <p class="ladder-stair__risk">0.5% NLV per trade</p>
-                    <p class="ladder-stair__gate">The architectural base — where every account at $100K NLV starts</p>
+                    <p class="ladder-stair__gate">The architectural base — where every account starts</p>
                 </div>
-                <div class="ladder-stairs__arrow" aria-hidden="true"><span class="diamond">◆</span><span class="ladder-stairs__arrow-label">+1 contract per +$100K NLV at Standard sizing, each earned by realized profit buffer</span>→</div>
+                <div class="ladder-stairs__arrow" aria-hidden="true"><span class="diamond">◆</span><span class="ladder-stairs__arrow-label">+one earned deployment tier per realized profit buffer, never assumed</span>→</div>
                 <div class="ladder-stair ladder-stair--ceiling">
                     <div class="ladder-stair__stack"><span class="ladder-stair__block ladder-stair__block--base"></span><span class="ladder-stair__block ladder-stair__block--earned"></span></div>
-                    <p class="ladder-stair__contracts">N /ES</p>
-                    <p class="ladder-stair__risk">0.5% × N per trade</p>
-                    <p class="ladder-stair__gate"><strong>Standard sizing</strong> at NLV/$100K contracts. v1.6 removed the prior 2-contract ceiling — contract count scales with the account, each new contract earned through realized profit buffer, never assumed. The 0.5% per-contract anchor never escalates.</p>
+                    <p class="ladder-stair__tier">Full deployment</p>
+                    <p class="ladder-stair__risk">0.5% NLV per trade</p>
+                    <p class="ladder-stair__gate"><strong>Full deployment.</strong> Deployment scales with the account in earned tiers, each tier earned through realized profit buffer, never assumed. The 0.5% per-trade anchor never escalates.</p>
                 </div>
             </div>
             <div class="ladder-stairs__legend">
-                <span class="ladder-stairs__legend-item"><span class="ladder-stair__block ladder-stair__block--base ladder-stair__block--mini"></span> base contract</span>
-                <span class="ladder-stairs__legend-item"><span class="ladder-stair__block ladder-stair__block--earned ladder-stair__block--mini"></span> earned contract — paid for by realized profit</span>
+                <span class="ladder-stairs__legend-item"><span class="ladder-stair__block ladder-stair__block--base ladder-stair__block--mini"></span> base tier</span>
+                <span class="ladder-stairs__legend-item"><span class="ladder-stair__block ladder-stair__block--earned ladder-stair__block--mini"></span> earned tier — paid for by realized profit</span>
             </div>
             <div class="ladder-stairs__notes">
-                <p class="ladder-stairs__note"><span class="diamond">◆</span> <strong>The per-contract anchor never moves.</strong> Risk per contract is fixed at 0.5% of NLV at every step; only the contract count scales — and only when the realized profit buffer has paid for it.</p>
+                <p class="ladder-stairs__note"><span class="diamond">◆</span> <strong>The per-trade anchor never moves.</strong> Risk per trade is fixed at 0.5% of NLV at every step; only the deployment tier scales — and only when the realized profit buffer has paid for it.</p>
                 <p class="ladder-stairs__note ladder-stairs__note--kill"><strong>And the ladder moves both ways.</strong> A second consecutive losing week (OP-06) cuts size to half until five clean trades reinstate it (OP-07). All eight ED kill conditions stay armed at every step — see the rail below.</p>
             </div>
         </div>
@@ -662,7 +539,7 @@
                 </div>
                 <div class="rm-rule">
                     <p class="rm-rule__h"><span class="op">OP-03</span> Trailing daily cap <em class="rm-new">v1.2</em></p>
-                    <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. <strong>The 0.5% NLV per-trade is the architectural cap, not the starting size.</strong> At a $100K account, baseline execution is <strong>2 /MES (≈80% of setups) + 5 /MES (≈20%)</strong> — well inside the 0.5% envelope — stepping to <strong>5 /MES + 1 /ES</strong> after the first <span class="num">$5K</span> of realized profit at baseline sizing. The daily floor ratchets up with every new peak. Replaces the v1.0 fixed −12 ES pts cap.</p>
+                    <p class="rm-rule__body">Daily P&amp;L floor anchored to a <strong>trailing high-water mark</strong>. <strong>The 0.5% NLV per-trade is the architectural cap, not the starting size</strong> — the engine starts conservatively, well inside the 0.5% envelope, and scales in earned tiers as realized profit accumulates. The daily floor ratchets up with every new peak.</p>
                 </div>
                 <div class="rm-rule">
                     <p class="rm-rule__h"><span class="op">·</span> Auto-resume</p>
@@ -692,7 +569,7 @@
                 <h3 class="rm-card__h">Two losing weeks → reduce</h3>
                 <div class="rm-rule">
                     <p class="rm-rule__h"><span class="op">OP-06</span> Size reduction <em class="rm-new">v1.4</em></p>
-                    <p class="rm-rule__body"><strong>2nd consecutive losing week</strong> → engine sizing cuts to <strong>half of normal</strong> (e.g. 5 /MES in place of 1 /ES — equivalent dollar exposure cut by 50%). Daily filing under witness oversight for the duration.</p>
+                    <p class="rm-rule__body"><strong>2nd consecutive losing week</strong> → engine sizing cuts to <strong>half of normal</strong> (dollar exposure cut by 50%). Daily filing under witness oversight for the duration.</p>
                 </div>
                 <div class="rm-rule">
                     <p class="rm-rule__h"><span class="op">OP-07</span> Reinstatement <em class="rm-new">v1.2</em></p>
@@ -713,13 +590,13 @@
             <header class="calc__head">
                 <p class="eyebrow"><span class="diamond">◆</span> The Worst Case, Priced</p>
                 <h3 class="calc__h">A risk with a number can be financed. An unbounded risk can only be feared.</h3>
-                <p class="calc__sub">The engine's published loss bounds — per trade, per day, per week, and the hard kill — shown at the <strong>architectural cap</strong> (1 /ES per <span class="num">$100K</span> NLV). Forward execution at $100K starts in /MES baseline (~26% of these dollar figures); the numbers below are the ceiling these never exceed. Loss-side only, by construction.</p>
+                <p class="calc__sub">The engine's published loss bounds — per trade, per day, per week, and the hard kill — expressed as <strong>% of NLV</strong>. The engine starts conservatively and scales in earned tiers; these are the loss rules it operates inside. Loss-side only, by construction.</p>
             </header>
             <div class="cb-ladder">
-                <div class="cb-rung"><span class="cb-rung__id">OP-02</span><div class="cb-rung__body"><p class="cb-rung__title">Per trade</p><p class="cb-rung__fig num">−$500 (0.5% of NLV)</p><p class="cb-rung__text">Per-contract risk fixed at <span class="num">0.5%</span> of NLV. After any closed losing trade, the day is over (one-loss daily rule).</p></div></div>
+                <div class="cb-rung"><span class="cb-rung__id">OP-02</span><div class="cb-rung__body"><p class="cb-rung__title">Per trade</p><p class="cb-rung__fig num">−$500 (0.5% of NLV)</p><p class="cb-rung__text">Per-trade risk fixed at <span class="num">0.5%</span> of NLV. After any closed losing trade, the day is over (one-loss daily rule).</p></div></div>
                 <div class="cb-rung"><span class="cb-rung__id">OP-03</span><div class="cb-rung__body"><p class="cb-rung__title">Daily floor</p><p class="cb-rung__fig num">−$500 (starting)</p><p class="cb-rung__text">Trailing high-water-mark floor — ratchets up with every new equity peak, never down.</p></div></div>
                 <div class="cb-rung"><span class="cb-rung__id">OP-05</span><div class="cb-rung__body"><p class="cb-rung__title">Weekly stand-down</p><p class="cb-rung__fig cb-rung__fig--rule">2–3 consecutive losing days halts the week (OP-05)</p><p class="cb-rung__text">A rule, not a dollar figure: consecutive losing days halt the week pending witness review.</p></div></div>
-                <div class="cb-rung cb-rung--kill"><span class="cb-rung__id">ED-05b</span><div class="cb-rung__body"><p class="cb-rung__title">Hard kill</p><p class="cb-rung__fig num">−$5,000 / /ES</p><p class="cb-rung__text"><span class="num">100 /ES pts × $50/pt</span> = <strong class="num">$5,000 per /ES contract</strong>. At baseline /MES execution the dollar kill is proportionally smaller (≈<span class="num">$1,000</span> at 2 /MES; ≈<span class="num">$2,500</span> at 5 /MES). At full Standard sizing (1 /ES per $100K NLV), hard kill = <strong class="num">$50,000 on a $1M portfolio · $250,000 on $5M</strong>. Budgeted in advance whatever the size.</p></div></div>
+                <div class="cb-rung cb-rung--kill"><span class="cb-rung__id">ED-05b</span><div class="cb-rung__body"><p class="cb-rung__title">Hard kill</p><p class="cb-rung__fig cb-rung__fig--rule">pre-published max loss on the engine sleeve</p><p class="cb-rung__text">A hard loss limit written before capital moves — scaling with the account and budgeted in advance whatever the size. <em>The figure is republishing in % of NLV under the witnessed modification protocol.</em></p></div></div>
             </div>
             <p class="calc__caption"><em>Static summary at $100K base. Run it at your own portfolio size on the <a href="/run-the-math.html#calcBoundsWrap" data-cta="runmath-bounds-from-worst-case">Worst Case, Priced interactive →</a>. These figures compute the published Falsifiability Protocol v1.6 loss bounds. Caps and the hard kill are sizing and exit rules enforced by rule — fast markets can gap beyond them. Not a guarantee, not an offer, and not a statement of expected results. Past performance does not guarantee future results.</em></p>
         </div>
@@ -741,15 +618,15 @@
         <div class="three-col">
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Disciplined Risk</p>
-                <p>The architectural anchor is <strong>0.5% of NLV per /ES contract</strong> — fixed, never escalated — and <strong>Standard sizing</strong> is 1 /ES per $100K NLV (v1.6, uncapped). That's the <em>cap</em>. Forward execution starts conservatively inside it: at $100K, baseline is <strong>2 /MES + 5 /MES</strong> blend, stepping to <strong>5 /MES + 1 /ES</strong> after the first <span class="num">$5K</span> of realized profit at baseline, then approaching full Standard sizing as NLV grows. Each step is earned by accumulated profit buffer, never assumed. The per-/ES anchor (<span class="num">0.5%</span>) never changes. The hard-kill <span class="num">5%</span> NLV figure is the cap <em>at full Standard sizing</em>: intermediate scale-up steps can momentarily exceed it (e.g. <span class="num">5 /MES + 1 /ES</span> at $100K = <span class="num">7.5%</span>) before NLV growth restores the 5% margin — an explicit feature of earned scaling, not a violation.</p>
+                <p>The architectural anchor is <strong>0.5% of NLV per trade</strong> — fixed, never escalated. That's the <em>cap</em>. Forward execution starts conservatively inside it and scales its deployment in <strong>earned tiers</strong> as realized profit accumulates, never assumed. The per-trade anchor (<span class="num">0.5%</span>) never changes, whatever the deployment tier. <em>(The specific deployment tiers and the hard-kill figure are republishing in % of NLV under the witnessed modification protocol.)</em></p>
             </article>
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Earned Leverage</p>
-                <p>Position size increases only when verified profits compound the base. The second contract is paid for by the first. Scale is <em>earned</em> — never borrowed, never assumed.</p>
+                <p>Position size increases only when verified profits compound the base. The second unit is paid for by the first. Scale is <em>earned</em> — never borrowed, never assumed.</p>
             </article>
             <article class="explainer">
                 <p class="eyebrow"><span class="diamond">◆</span> Velocity Compounds</p>
-                <p>Each step shortens the time to the next as throughput grows with contract count. From baseline /MES to <strong>5 /MES + 1 /ES</strong> is a ~5.8× jump in dollar throughput; from there toward full Standard sizing, the engine does the heavy lifting and dollar outcomes climb non-linearly with NLV.</p>
+                <p>Each step shortens the time to the next as throughput grows with the deployment tier. As earned tiers unlock, the engine does the heavy lifting and dollar outcomes climb non-linearly with NLV.</p>
             </article>
         </div>
 
@@ -787,7 +664,7 @@
                 <li><b>It cannot dodge the fourteen loud days surgically — and doesn't claim to.</b> Exits fire as selling broadens, not at the top: the foundation will absorb the first hit of many declines, and a lone loud day that never broadens is simply held. What the rules refuse is full presence through <em>broad</em> selling — not exposure to every bad print.</li>
                 <li><b>It will miss quiet days around every storm.</b> Re-entries wait for printed rungs or breakout confirmation, and overnight gaps don't ask permission — the market can reopen above the exit and run without us. Missing some drift is the premium on the policy, and the 20% cash buffer adds its own drag the overlay must overcome to clear the bar.</li>
                 <li><b>The foundation's overlay is unproven — and labeled unproven.</b> It has not completed a market cycle; its gates are armed but unfired. And it carries its own published kill condition: if, across a full cycle, it neither beats the index nor takes less of its drawdown, it is declared falsified — and the foundation reverts to pure passive, in public, on the dashboard.</li>
-                <li><b>The engine is flat every night by design.</b> It never carries overnight risk — which also means it never captures overnight gains. And its early record is disclosed as exactly what it is: a 196-trade pre-protocol period published for transparency, not evidence. The witnessed, protocol-bound record is the only one we ask you to judge.</li>
+                <li><b>The engine is flat every night by design.</b> It never carries overnight risk — which also means it never captures overnight gains. And its record is disclosed as exactly what it is: a stocks and options record that <strong>begins at zero</strong>, published trade by trade from launch. We ask you to judge only that — the custodian-fed record, from trade one.</li>
             </ul>
             <div class="close">Judge the rulebook by its published record — never by our conviction.</div>
         </div>
@@ -824,13 +701,13 @@
         </header>
 
         <p class="overlay__lede">
-            At this tier you are not handing us your wealth. You are buying a service: the intraday engine (stocks, options, and/or futures), run as an overlay on capital you already own. The underlying is your domain — your allocation, your advisor, your convictions. The engine is ours. We touch nothing but the overlay.
+            At this tier you are not handing us your wealth. You are buying a service: the engine (stocks and options), run as an overlay on capital you already own. The underlying is your domain — your allocation, your advisor, your convictions. The engine is ours. We touch nothing but the overlay.
         </p>
 
         <div class="overlay__body">
             <article class="overlay__block">
                 <h3 class="overlay__h">6.1 — How the overlay sits on your capital</h3>
-                <p>The engine trades /ES futures, which require collateral. In the overlay configuration, your existing portfolio — held in your own name at Interactive Brokers — serves as that collateral. You keep your positions; they back the engine. A small cash buffer covers daily futures settlement. No fresh investment capital is required beyond that buffer.</p>
+                <p>The engine is a stocks and options strategy, which uses collateral. In the overlay configuration, your existing portfolio — held in your own name at Interactive Brokers — serves as that collateral. You keep your positions; they back the engine. A small cash buffer covers settlement and assignment. No fresh investment capital is required beyond that buffer.</p>
             </article>
 
             <article class="overlay__block">
@@ -854,12 +731,12 @@
 
             <article class="overlay__block">
                 <h3 class="overlay__h">6.5 — Our authority is bounded to the overlay</h3>
-                <p>A one-page Letter of Direction grants trading authority strictly over futures and options activity — never your underlying positions. Read-only broker access exposes every trade. Authority is revocable at any time.</p>
+                <p>A one-page Letter of Direction grants trading authority strictly over the engine’s stocks and options activity — never your underlying positions. Read-only broker access exposes every trade. Authority is revocable at any time.</p>
             </article>
 
             <article class="overlay__block">
                 <h3 class="overlay__h">6.6 — Who the overlay is for (QEP gate)</h3>
-                <p>A standalone futures overlay is offered only to Qualified Eligible Persons (QEP) — a regulatory standard higher than "accredited." This is a deliberate constraint, not a marketing one: it is the basis on which the overlay is offered. If you're unsure whether you qualify, the founder conversation is where to find out.</p>
+                <p>The standalone overlay is offered only to eligible investors under the standard documented at launch — a deliberate constraint, not a marketing one. Regulatory eligibility standards apply. If you're unsure whether you qualify, the founder conversation is where to find out.</p>
             </article>
         </div>
 
@@ -883,7 +760,7 @@
         </p>
 
         <!-- Full Stack architecture diagram — engine sits on top, collateralized by the 80/20 base -->
-        <figure class="stack-diagram" aria-label="Full Stack capital architecture: the intraday engine (stocks, options, and/or futures; currently /ES) sits as an overlay on top of an 80% synthetic-passive S&amp;P 500 foundation and a 20% cash buffer. The engine uses the base as collateral and does not consume a capital slice.">
+        <figure class="stack-diagram" aria-label="Full Stack capital architecture: the Overlay Engine (stocks and options) sits as an overlay on top of an 80% synthetic-passive S&amp;P 500 foundation and a 20% cash buffer. The engine uses the base as collateral and does not consume a capital slice.">
             <svg class="stack-diagram__svg" viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img">
                 <title>Full Stack capital architecture</title>
                 <!-- Engine band (gold = LIVE) -->
@@ -892,7 +769,7 @@
                     <rect x="0" y="0" width="4" height="78" fill="#C4A571"/>
                     <text x="20" y="26" font-family="'Source Sans 3', sans-serif" font-size="11" font-weight="700" letter-spacing="1.5" fill="#C4A571">◆ LIVE · PROVEN ENGINE</text>
                     <text x="20" y="50" font-family="'Playfair Display', serif" font-size="20" font-weight="600" fill="#12264A">Intraday Engine</text>
-                    <text x="20" y="68" font-family="'Source Sans 3', sans-serif" font-size="13" fill="#475569">/ES · 0.5% NLV per trade · hard-killed at ED-05b</text>
+                    <text x="20" y="68" font-family="'Source Sans 3', sans-serif" font-size="13" fill="#475569">Stocks &amp; options · 0.5% NLV per trade · hard-killed at ED-05b</text>
                     <text x="660" y="50" text-anchor="end" font-family="'Playfair Display', serif" font-style="italic" font-size="13" fill="#475569">overlay on top</text>
                 </g>
                 <!-- Collateralization arrow + label -->
@@ -967,7 +844,7 @@
                     <p class="pillar-card__letter">P</p>
                     <h3 class="pillar-card__h">Principal Preservation</h3>
                     <p class="pillar-card__sub">Engineered to preserve capital first</p>
-                    <p class="pillar-card__body">80% of capital sits in the <strong>synthetic-passive</strong> S&amp;P 500 foundation — passive by default, reduced by published overlay rules in genuine corrections. 20% is held in cash as an operational settlement buffer. On the intraday engine — currently /ES futures — the architectural per-contract anchor is <strong>0.5% NLV</strong> — the cap, not the starting size. Forward execution at $100K starts in /MES baseline (2 /MES + 5 /MES blend), well inside that envelope. A trailing daily cap, a HWM−5% NLV floor, and a hard kill at −100 cumulative /ES points ($5,000 per /ES) bound the worst case.</p>
+                    <p class="pillar-card__body">80% of capital sits in the <strong>synthetic-passive</strong> S&amp;P 500 foundation — passive by default, reduced by published overlay rules in genuine corrections. 20% is held in cash as an operational settlement buffer. On the engine — a <strong>stocks and options strategy</strong> — the architectural per-trade anchor is <strong>0.5% NLV</strong> — the cap, not the starting size. The engine starts conservatively, well inside that envelope, and scales in earned tiers. A trailing daily cap, a high-water-mark NLV floor, and a pre-published hard kill bound the worst case <em>(figures republishing under the amended protocol)</em>.</p>
                     <p class="pillar-card__anchor"><a href="#ladder">See the risk cadence →</a></p>
                 </article>
 
@@ -976,14 +853,14 @@
                     <h3 class="pillar-card__h">Income</h3>
                     <p class="pillar-card__sub">Realized return from the engine</p>
                     <p class="pillar-card__body">Income — realized return from the engine as positions close: variable and return-seeking, reported from the live record in the engine's own units. This is not a fixed monthly schedule — a predictable, principal-protected income product is a separate strategy. The engine's role here is earned return on top of the foundation, capped per trade and hard-killed.</p>
-                    <p class="pillar-card__anchor"><a href="/alerts.html">See the alerts record →</a></p>
+                    <p class="pillar-card__anchor"><a href="/dashboard.html">See the live custodian record →</a></p>
                 </article>
 
                 <article class="pillar-card">
                     <p class="pillar-card__letter">G</p>
                     <h3 class="pillar-card__h">Growth</h3>
                     <p class="pillar-card__sub">Compounding on a passive foundation</p>
-                    <p class="pillar-card__body">A synthetic-passive S&amp;P 500 foundation carries baseline market exposure — held fully invested by default, with the published overlay reducing exposure only in genuine corrections. The intraday engine (stocks, options, and/or futures) layers disciplined, <em>earned</em> scaling on top — currently in /ES futures, starting at /MES baseline (2 /MES + 5 /MES blend at $100K), stepping to 5 /MES + 1 /ES after the first $5K-realized-profit buffer, and approaching Standard sizing (1 /ES per $100K NLV; v1.6 — uncapped) as NLV grows. Each step is earned, never assumed. How much that compounds is not projected here; it is reported from the live record as it accumulates.</p>
+                    <p class="pillar-card__body">A synthetic-passive S&amp;P 500 foundation carries baseline market exposure — held fully invested by default, with the published overlay reducing exposure only in genuine corrections. The engine (a <strong>stocks and options strategy</strong>) layers disciplined, <em>earned</em> scaling on top — starting conservatively and scaling its deployment in earned tiers at the 0.5% NLV per-trade anchor, never assumed. How much that compounds is not projected here; it is reported from the live record as it accumulates.</p>
                     <p class="pillar-card__anchor"><a href="#ladder">See the compounding ladder →</a></p>
                 </article>
             </div>
@@ -1077,14 +954,14 @@
 
         <!-- Gate status chips — armed = slate; a fired gate (future state) renders .is-fired (red) -->
         <div class="gate-chips" aria-label="Gate status">
-            <span class="gate-chip">Futures · Fidelity — <strong>ARMED</strong></span>
-            <span class="gate-chip">Futures · Expression — <strong>ARMED</strong></span>
+            <span class="gate-chip">Engine · Fidelity — <strong>ARMED</strong></span>
+            <span class="gate-chip">Engine · Expression — <strong>ARMED</strong></span>
             <span class="gate-chip">Overlay · Fidelity — <strong>ARMED</strong></span>
             <span class="gate-chip">Overlay · Expression — <strong>ARMED</strong></span>
         </div>
 
         <div class="falsi-intro">
-            <p>The futures engine has always carried its <strong>Fidelity</strong> gate (is the published method what's actually running?) and its <strong>Expression</strong> gate (is the edge still expressing?). The synthetic-passive overlay now carries its own pair: an overlay <strong>Fidelity Layer</strong> — the exact rules for stepping exposure down and back up, executed without discretion — and an overlay <strong>Expression Layer</strong> — beat-or-protect versus simply holding, measured over a full market cycle. <strong>Two engines. Four gates.</strong> Every one written before capital, witnessed, and disclosed.</p>
+            <p>The engine has always carried its <strong>Fidelity</strong> gate (is the published method what's actually running?) and its <strong>Expression</strong> gate (is the edge still expressing?). The synthetic-passive overlay now carries its own pair: an overlay <strong>Fidelity Layer</strong> — the exact rules for stepping exposure down and back up, executed without discretion — and an overlay <strong>Expression Layer</strong> — beat-or-protect versus simply holding, measured over a full market cycle. <strong>Two engines. Four gates.</strong> Every one written before capital, witnessed, and disclosed.</p>
             <p class="falsi-intro__engineering">The same engineering culture that turned aviation from heroics into a checklist drives Ekantik 500: <em>rules before talent · proof before scale · fail-safe before flight, never bravery in the moment.</em></p>
         </div>
 
@@ -1092,7 +969,7 @@
         <div class="protocol-card">
             <div class="protocol-card__meta">
                 <p class="protocol-card__doc">Doc Ref: <code>FP-MOPS-V1.6-2026-06</code></p>
-                <p class="protocol-card__version">v1.6 · Fixed 2-contract ceiling removed; Standard sizing scales 1 /ES per $100K NLV · Hard kill = 5% of NLV at full Standard (intermediate earned-scale steps can exceed transiently) · Locked operational charter</p>
+                <p class="protocol-card__version">v1.6 · Fixed 2-unit ceiling removed; deployment scales in earned tiers at the 0.5% NLV per-trade anchor · Hard kill = a pre-published % of NLV (figure republishing under the amended protocol) · Locked operational charter</p>
             </div>
             <div class="protocol-card__body">
                 <p class="protocol-card__h"><span class="diamond">◆</span> The Falsifiability Protocol</p>
@@ -1193,8 +1070,8 @@
                         <tr><td>ED-02</td><td>Rolling-50 win rate</td><td>&lt; 52%</td><td>Test 6</td></tr>
                         <tr><td>ED-03</td><td>Rolling-50 profit factor</td><td>&lt; 1.30</td><td>Test 3</td></tr>
                         <tr><td>ED-04</td><td>Rolling-50 W:L ratio</td><td>&lt; 1.10</td><td>Test 5</td></tr>
-                        <tr><td>ED-05a</td><td>Realized peak-to-trough DD · <strong>warning</strong></td><td>&gt; −45 /ES pts (25th-pct bootstrap)</td><td>Architecture-linked</td></tr>
-                        <tr><td>ED-05b</td><td>Realized peak-to-trough DD · <strong>hard kill</strong></td><td>&gt; −100 /ES pts ($5,000 per contract)</td><td>Architecture-linked</td></tr>
+                        <tr><td>ED-05a</td><td>Realized peak-to-trough DD · <strong>warning</strong></td><td>pre-published NLV drawdown warning <em>(republishing under the amended protocol)</em></td><td>Architecture-linked</td></tr>
+                        <tr><td>ED-05b</td><td>Realized peak-to-trough DD · <strong>hard kill</strong></td><td>pre-published NLV drawdown hard kill <em>(republishing under the amended protocol)</em></td><td>Architecture-linked</td></tr>
                         <tr><td>ED-06</td><td>Top-3 winner removal</td><td>P&amp;L &lt; 0 without top-3</td><td>Test 4</td></tr>
                         <tr><td>ED-07</td><td>Consecutive loss streak</td><td>Single streak ≥ 7</td><td>Test 7</td></tr>
                         <tr><td>ED-08</td><td>P-value floor</td><td>p &gt; 0.10 past trade 100</td><td>Test 1</td></tr>
@@ -1393,15 +1270,14 @@
             <details class="faq__item" open><summary>Is Ekantik 500 open for investment today?</summary><div class="faq__body"><p>No. Ekantik 500 is currently in <strong>pre-registration</strong> as an educational research project. Nothing on this page constitutes an offer to sell or a solicitation of an offer to buy any security or interest in any investment product. The page documents the methodology and operator track record so that a sophisticated investor can evaluate the architecture before any product opens.</p></div></details>
             <details class="faq__item"><summary>What does "pre-registration" actually do?</summary><div class="faq__body"><p>Pre-registration adds you to the early-access list. You receive executed launch materials, falsifiability dashboard updates during the educational window, and a private invitation when the product is opened for investment. It creates no obligation on either side and is not an application or expression of intent to invest.</p></div></details>
             <details class="faq__item"><summary>Will I need to sell my existing portfolio at launch?</summary><div class="faq__body"><p>No. When the product opens, Ekantik 500 will be funded with new capital deposited into a dedicated sub-account at Interactive Brokers. Existing holdings at other brokerages stay where they are.</p></div></details>
-            <details class="faq__item"><summary>What does E·P·I·G actually solve for?</summary><div class="faq__body"><p>EPIG is organized around four investor concerns, each addressed by a specific piece of architecture — not by a return promise.</p><p><strong>E — Enduring.</strong> Whether the strategy survives. The witnessed Falsifiability Protocol, the seven-criteria operator Fidelity Layer, the eight-condition Expression Layer, and the synthetic-passive overlay's beat-or-protect gate are the architecture's commitments to being honest about when it stops working. Designed for a multi-decade horizon, with kill conditions published in advance — not after.</p><p><strong>P — Principal Preservation.</strong> The synthetic-passive overlay on the SPY foundation. By default the foundation holds fully invested; it reduces exposure only when the published rules fire (price exhausted at the highs and a confirmed real seller present). This is engineering, not insurance — the overlay has not completed a market cycle, so it carries no verdict yet, and its kill condition (revert to pure passive if it fails to either beat the index or protect against its drawdown over a full cycle) is published in Article VIII.B.</p><p><strong>I — Income.</strong> The Booster Engine — the active futures sleeve sized at the fixed 0.5% per-trade architectural risk anchor. Its throughput is derived <em>live</em> from the actual trading record, not projected. The investor sees what the engine has produced in the same units it actually trades in.</p><p><strong>G — Growth.</strong> The SPY foundation itself — index compounding as the base layer of long-term return, with the overlay reducing drawdown participation when the rules fire.</p><p>Together the four address the classic portfolio concerns — protection, income, and growth — on a single durable architecture. They are <strong>design objectives, not return guarantees</strong>. The live record is what will eventually tell us whether the architecture delivers what it's engineered to do.</p></div></details>
-            <details class="faq__item"><summary>How does EPIG relate to ECFS / the Ekantik Accelerator?</summary><div class="faq__body"><p><strong>EPIG = the intraday strategy (~20%) + a synthetic-passive S&amp;P 500 foundation (~80%).</strong> EPIG's engine — the "Booster Engine" — is our <strong>intraday strategy</strong>: a disciplined, hard-killed intraday system designed to span <strong>stocks, options, and futures</strong>, on pre-committed rules at the 0.5%-per-trade anchor. <em>Its live record to date is the /ES-futures implementation.</em></p><p><strong>ECFS is the futures-only expression of that same intraday discipline</strong>, published standalone on the <a href="https://accelerator.ekantikcapital.com/" target="_blank" rel="noopener">Ekantik Accelerator ↗</a> — intraday-only, going flat every night, solving for <em>intraday cash flow</em> from a small, capacity-capped book (real edges have finite capacity by construction).</p><p>So EPIG's engine is the <strong>broad, multi-asset</strong> intraday strategy; <strong>ECFS / the Accelerator is its futures-only sibling</strong>. Inside EPIG, the intraday strategy is the compounding layer on top of the synthetic-passive S&amp;P 500 foundation (designed to take less of the market's drawdown), solving for <em>enduring, protected growth</em> on the bulk of a portfolio over decades.</p><p>They share the firm fingerprint by construction: <strong>pre-committed rules, capped per-trade risk, kill conditions written before any capital is deployed, witness-locked protocol, glass-box dashboards</strong>. An investor can hold both, each on its own sub-account at the same broker, and watch each on its own live dashboard.</p><p>Both are presented under design-intent framing. The standalone strategy's record is limited and single-regime; EPIG's synthetic-passive overlay has not completed a full market cycle, so it carries no verdict yet. Both publish their kill conditions before scale, and both scale only when the evidence supports it.</p></div></details>
+            <details class="faq__item"><summary>What does E·P·I·G actually solve for?</summary><div class="faq__body"><p>EPIG is organized around four investor concerns, each addressed by a specific piece of architecture — not by a return promise.</p><p><strong>E — Enduring.</strong> Whether the strategy survives. The witnessed Falsifiability Protocol, the seven-criteria operator Fidelity Layer, the eight-condition Expression Layer, and the synthetic-passive overlay's beat-or-protect gate are the architecture's commitments to being honest about when it stops working. Designed for a multi-decade horizon, with kill conditions published in advance — not after.</p><p><strong>P — Principal Preservation.</strong> The synthetic-passive overlay on the SPY foundation. By default the foundation holds fully invested; it reduces exposure only when the published rules fire (price exhausted at the highs and a confirmed real seller present). This is engineering, not insurance — the overlay has not completed a market cycle, so it carries no verdict yet, and its kill condition (revert to pure passive if it fails to either beat the index or protect against its drawdown over a full cycle) is published in Article VIII.B.</p><p><strong>I — Income.</strong> The engine — a stocks and options strategy at the fixed 0.5% per-trade architectural risk anchor, realized as positions close. Its record <strong>begins at zero</strong> and publishes live from the custodian feed; the investor sees what the engine has actually produced, not a projected number.</p><p><strong>G — Growth.</strong> The SPY foundation itself — index compounding as the base layer of long-term return, with the overlay reducing drawdown participation when the rules fire.</p><p>Together the four address the classic portfolio concerns — protection, income, and growth — on a single durable architecture. They are <strong>design objectives, not return guarantees</strong>. The live record is what will eventually tell us whether the architecture delivers what it's engineered to do.</p></div></details>
+            <details class="faq__item"><summary>How does EPIG relate to ECFS / the Ekantik Accelerator?</summary><div class="faq__body"><p>ECFS is a separate, standalone futures strategy published on the <a href="https://accelerator.ekantikcapital.com/" target="_blank" rel="noopener">Ekantik Accelerator ↗</a>, with its own record and its own dashboard. EPIG 500's engine is a distinct stocks and options strategy. The two share the firm's fingerprint — pre-committed rules, fixed per-trade risk, kill conditions written before capital — and nothing else: separate strategies, separate records, separate proof surfaces.</p></div></details>
             <details class="faq__item"><summary>How does the methodology treat an investor's SPY position?</summary><div class="faq__body"><p>The S&amp;P 500 foundation is <strong>synthetic-passive</strong>. It sits passive by default — collecting market exposure and dividends, and serving as collateral — but it runs under a published overlay that reduces exposure in genuine corrections and restores it as buyers return. The rule is public, witnessed, and falsifiable. The foundation is not actively traded for short-term gain; it is governed to take less of the market's drawdown.</p></div></details>
             <details class="faq__item"><summary>If 80% sits in the S&amp;P 500, how can it outperform?</summary><div class="faq__body"><p>It can't, if it's purely passive — passive returns the market. Outperformance on that allocation can only come from <strong>leverage</strong> (which we refuse — it doubles the drawdown) or from <strong>asymmetric capture</strong> (full upside, less downside). The overlay is the second. And if it stops delivering that asymmetry over a full market cycle, we publish that it failed and revert to pure passive.</p></div></details>
             <details class="faq__item"><summary>Does the synthetic-passive overlay have a track record?</summary><div class="faq__body"><p>Not yet — and we won't pretend otherwise. The overlay is published as <strong>design intent</strong> under armed-but-unfired falsifiability gates (the overlay's Fidelity Layer and Expression Layer, both in the v1.6 protocol), and it accumulates a live record the same way everything else on this page does: trade by trade, in public, on the dashboard. The historical equity-curve illustration in §The Arithmetic models the overlay's logic on past S&amp;P data; it is not a record of overlay performance.</p></div></details>
             <!-- <details class="faq__item"><summary>What is the proposed fee structure?</summary><div class="faq__body"><p>The structure documented for launch: 6% high-watermark hurdle plus 25% of profits above that hurdle. In any period where the strategy delivers less than 6%, no performance fee would be charged. The hurdle resets annually to the peak.</p></div></details> -->
-            <details class="faq__item"><summary>How would an investor know if the strategy has stopped working?</summary><div class="faq__body"><p>Ekantik 500 publishes <strong>four</strong> falsifiability gates — two engines, four gates, all binding, all observable in real time. The futures engine carries its Fidelity Layer (OP-01–07, operator-discipline criteria) and its Expression Layer (ED-01–08, statistical kill conditions). The synthetic-passive overlay carries its own pair: an overlay Fidelity Layer (the exact exposure-step rules, executed without discretion) and an overlay Expression Layer (beat-or-protect versus simply holding, measured over a full market cycle). If any gate fires, participants receive notification within 24 hours, the implicated layer immediately reduces to zero new exposure, and the trigger condition is published.</p></div></details>
-            <details class="faq__item"><summary>Can I see the underlying trade record?</summary><div class="faq__body"><p>Yes. Every protocol-bound trade since the May 19, 2026 pre-registration restart is published to the <a href="/alerts.html">alerts record</a> within 24 hours of close, and exportable as CSV from there. The alerts record also displays the 196-trade Period 1 Telegram record (April 2023 – October 2024) for transparency; it predates the locked Falsifiability Protocol and is not the basis of any standalone claim — the page's blended Booster $/yr estimate combines both periods with explicit disclosure. The same 8-test battery you can run on the live record, you can run on your own data.</p></div></details>
-            <details class="faq__item"><summary>What is the historical Telegram record, and why isn't it the basis for the sustainability claim?</summary><div class="faq__body"><p>196 trades on Ekantik 500 were posted in real time to a private Telegram channel between April 2023 and October 2024. That record is viewable on the live dashboard for transparency, but it <strong>predates the locked Falsifiability Protocol</strong>: no third-party witness, no Stage-1 / Stage-2 gates armed in advance, no OP-04 per-trade tagging at the time of trade. The protocol-bound, witnessed record begins with the May 19, 2026 pre-registration restart. Pre-registration participants are the first cohort to see every trade captured under the full Falsifiability Protocol v1.6 from trade #1.</p></div></details>
+            <details class="faq__item"><summary>How would an investor know if the strategy has stopped working?</summary><div class="faq__body"><p>Ekantik 500 publishes <strong>four</strong> falsifiability gates — two engines, four gates, all binding, all observable in real time. The engine carries its Fidelity Layer (OP-01–07, operator-discipline criteria) and its Expression Layer (ED-01–08, statistical kill conditions). The synthetic-passive overlay carries its own pair: an overlay Fidelity Layer (the exact exposure-step rules, executed without discretion) and an overlay Expression Layer (beat-or-protect versus simply holding, measured over a full market cycle). If any gate fires, participants receive notification within 24 hours, the implicated layer immediately reduces to zero new exposure, and the trigger condition is published.</p></div></details>
+            <details class="faq__item"><summary>Can I see the underlying trade record?</summary><div class="faq__body"><p>The engine's record <strong>begins at zero</strong> at launch of the amended protocol and will publish trade by trade from the custodian feed, within 24 hours of close, exportable as CSV. The eight-test sustainability battery runs on that record as it accumulates — you can also run it on your own data.</p></div></details>
             <details class="faq__item"><summary>When does the 8-test sustainability battery activate?</summary><div class="faq__body"><p>At <strong>30+ closed trades</strong> the battery begins reporting; at <strong>100+ trades</strong> the verdict is binding. Below 30 the sample is too small for the statistical tests to produce meaningful inference, so the dashboard surfaces individual KPIs (win rate, EV, profit factor, drawdown, R-expectancy, etc.) and the equity curve without a battery verdict. The pre-registration window is exactly the period in which the record accumulates to the threshold.</p></div></details>
             <details class="faq__item"><summary>Will there be a lock-up at launch?</summary><div class="faq__body"><p>The proposed structure: no lock-up. Capital would be withdrawable at any time subject to ordinary settlement timelines at the custodian.</p></div></details>
             <details class="faq__item"><summary>What is Ekantik Capital Advisors LLC?</summary><div class="faq__body"><p>Ekantik Capital Advisors LLC is the firm developing the methodology. At product launch, it will operate as a Registered Investment Advisor. During the pre-registration phase, this site is operated as an educational research property — no advisory services are being offered.</p></div></details>
@@ -1445,13 +1321,12 @@
                 <h4 class="footer__h"><span class="diamond">◆</span> Products &amp; Properties</h4>
                 <ul class="footer__list">
                     <li><a href="https://epig500.ekantikcapital.com">Ekantik 500 (EPIG)</a></li>
-                    <li><a href="https://accelerator.ekantikcapital.com" target="_blank" rel="noopener">Ekantik Accelerator (ECFS) — futures-only intraday ↗</a></li>
+                    <li><a href="https://accelerator.ekantikcapital.com" target="_blank" rel="noopener">Ekantik Accelerator (ECFS) ↗</a></li>
                     <li><a href="https://doubles.ekantikcapital.com">The Doctrine</a></li>
                     <li><a href="https://10x.ekantikcapital.com">The Proof</a></li>
                     <li><a href="https://alpha.ekantikcapital.com">The Research</a></li>
                     <li><a href="https://founding.ekantikcapital.com">Founding Members</a></li>
                     <li><a href="https://discord.gg/cSQFunvNRx" target="_blank" rel="noopener">Discord Community</a></li>
-                    <li><a href="/alerts.html">Alerts Record (published trades)</a></li>
                     <li><a href="/dashboard.html">The Charter (live custodian record)</a></li>
                     <li><a href="/run-the-math.html">Run the Math (calculators + live battery)</a></li>
                 </ul>
@@ -1468,7 +1343,7 @@
             </div>
         </div>
         <p class="footer__legal">
-            <strong>Educational only.</strong> Ekantik 500 is <strong>built to outperform</strong> a 100% S&amp;P 500 total-return benchmark with less of its drawdown; this is a <strong>design objective, not a forecast, projection, or guarantee</strong> of relative or absolute performance. The <span class="num">~17–26%/yr</span> stack target and the sub-<span class="num">10%</span> drawdown standard are <strong>design targets, not forecasts, projections, or guarantees</strong>. Foundation range (<span class="num">+6–11%/yr</span>) is the modeled synthetic-passive S&amp;P 500 overlay (model v1.3, 1975–2024 total-return window). Engine range (<span class="num">+11–15%/yr</span>) is computed as <span class="num">30R × 0.5% NLV</span> where R-expectancy and trades/yr come from the live dashboard's protocol-bound record at the <span class="num">0.5%</span> per-trade architectural risk anchor; <strong>30R is a conservative haircut, not a promise</strong>. All return and outperformance figures shown are <strong>gross of advisory fees</strong>; net-of-fee results would be lower, and the fee schedule has not been finalized. Hypothetical and design-intent performance figures have inherent limitations and do not reflect actual trading; results may differ materially. The synthetic-passive overlay has not completed a market cycle and carries no verdict yet. <strong>Past performance does not guarantee future results.</strong> This site is operated as an educational research property during the pre-registration phase of Ekantik 500. Nothing on this page constitutes investment advice, an offer to sell, or a solicitation to buy any security or interest in any investment product. Ekantik 500 is not yet open for investment. Performance data shown on the dashboard consists of (i) a 196-trade Telegram-channel record from April 2023 – October 2024 that predates the locked Falsifiability Protocol (no in-advance witness or formal gates) and is published for transparency rather than as a sustainability claim, and (ii) the operator's protocol-bound live pre-registration futures record from May 19, 2026 forward (traded at /MES baseline sizing on a $100K-equivalent account). The combined record is the operator's own futures trading and does not represent actual trading results for any other person; in particular, it is <em>not</em> a record of overlay performance. The historical equity-curve illustration (now on the <a href="/run-the-math.html">Run the Math</a> page) uses real S&amp;P 500 total returns with hypothetical capture inputs to model the overlay's logic; it is not a projection of any Ekantik strategy. Any investment, when offered, would involve risk including potential loss of principal. © 2026 Ekantik Capital Advisors LLC. All rights reserved.
+            <strong>Educational only.</strong> Ekantik 500 is <strong>built to outperform</strong> a 100% S&amp;P 500 total-return benchmark with less of its drawdown; this is a <strong>design objective, not a forecast, projection, or guarantee</strong> of relative or absolute performance. The sub-<span class="num">10%</span> drawdown standard is a <strong>design target, not a forecast, projection, or guarantee</strong>. Foundation range (<span class="num">+6–11%/yr</span>) is the modeled synthetic-passive S&amp;P 500 overlay (model v1.3, 1975–2024 total-return window). The engine (a stocks and options strategy) adds to this, but its <strong>record begins at zero</strong> and no stack figure is projected. All return and outperformance figures shown are <strong>gross of advisory fees</strong>; net-of-fee results would be lower, and the fee schedule has not been finalized. Hypothetical and design-intent performance figures have inherent limitations and do not reflect actual trading; results may differ materially. The synthetic-passive overlay has not completed a market cycle and carries no verdict yet. <strong>Past performance does not guarantee future results.</strong> This site is operated as an educational research property during the pre-registration phase of Ekantik 500. Nothing on this page constitutes investment advice, an offer to sell, or a solicitation to buy any security or interest in any investment product. Ekantik 500 is not yet open for investment. The engine's record begins at launch; <strong>no prior trading record of any other strategy is presented as evidence for this engine.</strong> The historical equity-curve illustration (now on the <a href="/run-the-math.html">Run the Math</a> page) uses real S&amp;P 500 total returns with hypothetical capture inputs to model the overlay's logic; it is not a projection of any Ekantik strategy. Any investment, when offered, would involve risk including potential loss of principal. © 2026 Ekantik Capital Advisors LLC. All rights reserved.
         </p>
     </div>
 </footer>

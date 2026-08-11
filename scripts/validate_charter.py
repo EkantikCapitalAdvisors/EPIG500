@@ -113,7 +113,7 @@ try:
           all(k in sleeves for k in ("engine_label", "foundation_label", "engine_cum_pnl",
                                      "foundation_cum_pnl", "series")))
     check("sleeves labels correct",
-          sleeves["engine_label"] == "Intraday Engine" and sleeves["foundation_label"] == "Foundational (SPY)")
+          sleeves["engine_label"] == "Overlay Engine" and sleeves["foundation_label"] == "Foundational (SPY)")
 except Exception as e:
     check("JSON contracts loadable", False, str(e))
 
