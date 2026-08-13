@@ -5922,3 +5922,54 @@ button { font: inherit; border: 0; background: transparent; cursor: pointer; col
 .two-records__bridge { font-size: 14.5px; line-height: 1.65; color: var(--text-on-dark); margin: 0; max-width: 82ch; }
 .two-records__bridge strong { color: #fff; }
 .two-records__bridge em { color: var(--slate); font-style: italic; font-size: 13px; }
+
+/* ============================================================
+   Selective-exposure + capital-allocation sections (adds the
+   "Why not 100% invested" comparison and the sleeve allocation).
+   Light theme, reuses brand tokens. Added 2026-08.
+   ============================================================ */
+.expo { display:grid; grid-template-columns:1fr 1fr; gap:var(--s-6); margin-top:var(--s-8); }
+@media (max-width:800px){ .expo{ grid-template-columns:1fr; } }
+.expo-card { position:relative; background:var(--white); border:1px solid var(--card-border); border-radius:var(--radius-lg); padding:var(--s-8) var(--s-6) var(--s-6); }
+.expo-card--default   { border-top:3px solid var(--signal); }
+.expo-card--framework { border-top:3px solid var(--teal); }
+.expo-badge { position:absolute; top:var(--s-4); right:var(--s-4); font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; padding:4px 9px; border-radius:3px; }
+.expo-badge--default   { color:var(--signal); background:rgba(220,38,38,.10); }
+.expo-badge--framework { color:var(--teal);   background:rgba(13,148,136,.12); }
+.expo-card__h { font-family:var(--font-serif); font-size:24px; font-weight:600; color:var(--navy); margin-bottom:4px; }
+.expo-card__sub { font-style:italic; color:var(--slate); font-size:15px; margin-bottom:var(--s-6); }
+.expo-list { list-style:none; padding:0; margin:0; display:grid; gap:var(--s-4); }
+.expo-list li { position:relative; padding-left:22px; font-size:15px; line-height:1.55; color:var(--navy); }
+.expo-list li::before { content:""; position:absolute; left:2px; top:8px; width:8px; height:8px; border-radius:50%; }
+.expo-card--default   .expo-list li::before { background:var(--signal); }
+.expo-card--framework .expo-list li::before { background:var(--teal); }
+.expo-meter { margin-top:var(--s-6); }
+.expo-meter__k { font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--slate); font-weight:700; margin-bottom:6px; }
+.expo-bar { height:26px; border-radius:4px; background:rgba(27,42,74,.08); overflow:hidden; display:flex; align-items:center; }
+.expo-bar__fill { height:100%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--white); white-space:nowrap; }
+.expo-bar__fill--full { width:100%; background:var(--signal); }
+.expo-bar__fill--var  { width:42%; background:var(--teal); }
+.expo-meter__note { font-size:12.5px; color:var(--slate); margin-top:6px; line-height:1.5; }
+.uoa-note { max-width:760px; margin:var(--s-8) auto 0; border-left:3px solid var(--gold); background:rgba(212,175,55,.05); padding:var(--s-6); font-size:15px; line-height:1.7; color:var(--navy); }
+.uoa-note em { color:var(--navy); font-style:italic; }
+
+/* --- allocation --- */
+.alloc { display:grid; grid-template-columns:320px 1fr; gap:var(--s-12); align-items:start; margin-top:var(--s-8); }
+@media (max-width:820px){ .alloc{ grid-template-columns:1fr; gap:var(--s-8); } }
+.alloc-donut { display:flex; flex-direction:column; align-items:center; gap:var(--s-6); }
+.alloc-donut svg { width:220px; height:220px; }
+.alloc-legend { list-style:none; padding:0; margin:0; display:grid; gap:var(--s-3); width:100%; }
+.alloc-legend li { display:flex; gap:10px; font-size:14px; line-height:1.45; color:var(--navy); }
+.alloc-legend .sw { flex:0 0 14px; width:14px; height:14px; border-radius:3px; margin-top:3px; }
+.alloc-legend .sw--core { background:var(--gold); }
+.alloc-legend .sw--blue { background:var(--teal); }
+.alloc-legend .sw--ecis { background:transparent; border:2px dashed var(--navy); }
+.alloc-atrest { font-size:14px; line-height:1.65; color:var(--slate); margin-top:var(--s-2); }
+.alloc-atrest strong { color:var(--navy); }
+.alloc-cards { display:grid; gap:var(--s-4); }
+.alloc-card { background:var(--white); border:1px solid var(--card-border); border-left:4px solid var(--gold); border-radius:var(--radius-lg); padding:var(--s-6); }
+.alloc-card--blue { border-left-color:var(--teal); }
+.alloc-card--ecis { border-left-color:var(--navy); border-left-style:dashed; }
+.alloc-card__h { font-family:var(--font-serif); font-size:19px; font-weight:600; color:var(--navy); margin:0 0 2px; }
+.alloc-card__meta { font-size:12.5px; letter-spacing:.02em; color:var(--slate); font-weight:600; margin-bottom:8px; }
+.alloc-card__body { font-size:14.5px; line-height:1.6; color:var(--slate-dark); margin:0; }
