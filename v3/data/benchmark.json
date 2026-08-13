@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0",
+  "benchmark_id": "SP500TR",
+  "label": "S&P 500 TR (SPY adj. close proxy)",
+  "source": "sample",
+  "last_sync_utc": null,
+  "series": [
+    { "date": "2026-09-01", "level": 100.0, "index": 100.0 }
+  ]
+}

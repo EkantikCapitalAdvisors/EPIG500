@@ -63,6 +63,20 @@
         </div>
     </section>
 
+    <!-- ═══ Gauge 1 · Engine yield vs the 1%/month target (§2.3 Objective 1) ═══
+         Rendered by modules/charter/gauges.js from data/yield.json (monthly
+         engine yield, rolling-12-mo average, retire floor). Gauge 2 = the
+         Charter board + drawdown mirror above/below (foundation vs benchmark). -->
+    <section class="score-block" aria-label="Engine yield versus the 1% per month target">
+        <header class="score-block__head">
+            <h2 class="score-block__h">Engine yield vs the 1%/month target</h2>
+            <p class="score-block__sub">Objective 1, graded live: the engine's realized yield each month against its <strong>1%/month target</strong>, with the <strong>0.5% retire floor</strong> drawn on the chart. The claim retires in public if the rolling-12-month average stays below the floor for 6 consecutive months. Gross of fees.</p>
+        </header>
+        <div id="engineYieldGauge">
+            <div class="score-empty">Accumulating — the engine yield gauge renders once the record is live and reporting monthly.</div>
+        </div>
+    </section>
+
     <!-- ═══ Periodicity + window controls ════════════════════════════════
          Period = granularity (weekly/monthly). Window = which periods to show
          (since inception / YTD / custom range). The window filters the
@@ -123,13 +137,13 @@
         </div>
     </section>
 
-    <!-- ═══ 5 · Where the return came from — Intraday Engine vs Foundational (SPY) ═══
+    <!-- ═══ 5 · Where the return came from — Overlay Engine vs Foundational (SPY) ═══
          Rendered by modules/charter/sleeves.js from data/sleeves.json (per-symbol
          MTM contribution to return; SPY = Foundational, everything else = Engine). -->
-    <section class="score-block" aria-label="Return by sleeve: Intraday Engine vs Foundational (SPY)">
+    <section class="score-block" aria-label="Return by sleeve: Overlay Engine vs Foundational (SPY)">
         <header class="score-block__head">
             <h2 class="score-block__h">Where the return came from</h2>
-            <p class="score-block__sub">The account's two sleeves, split by holding — the <strong>Intraday Engine</strong> (futures, options, non-SPY trades) and the <strong>Foundational (SPY)</strong> holding. Each shown as its contribution to the account's total return; the two add up to the whole.</p>
+            <p class="score-block__sub">The account's two sleeves, split by holding — the <strong>Overlay Engine</strong> (stocks and options — non-SPY trades) and the <strong>Foundational (SPY)</strong> holding. Each shown as its contribution to the account's total return; the two add up to the whole.</p>
         </header>
         <div id="sleeveBreakdown">
             <div class="score-empty">Accumulating — the sleeve breakdown renders once the account is funded and reporting per-symbol P&amp;L.</div>
@@ -144,5 +158,6 @@
 <script src="modules/charter/charter.js?v=20260720a"></script>
 <script src="modules/charter/scoreboard.js?v=20260720b"></script>
 <script src="modules/charter/sleeves.js?v=20260720a"></script>
+<script src="modules/charter/gauges.js?v=20260901a"></script>
 </body>
 </html>
