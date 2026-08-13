@@ -4,7 +4,7 @@
   "state": "ENGINE_ONLY",
   "inception_date": "2026-09-01",
   "last_sync_utc": null,
-  "engine_label": "Overlay Engine",
+  "engine_label": "Intraday Engine",
   "foundation_label": "Foundational (SPY)",
   "engine_cum_pnl": 0,
   "foundation_cum_pnl": 0,

@@ -28,9 +28,6 @@ MIN_DAYS = 21              # §4.4 verdicts render at >= 21 trading days
 STALE_DAYS = 3             # §5.3
 MIN_WEEKS = 8              # capture ratios "ready" (else small-sample caveat)
 MIN_MONTHS = 3
-YIELD_TARGET = 1.0         # §2.4 engine yield target: 1%/month on NLV
-YIELD_FLOOR = 0.5          # retire floor: rolling-12mo avg < 0.5%/mo ...
-YIELD_FLOOR_MONTHS = 6     # ... for 6 consecutive months -> claim retires
 
 # ----------------------------------------------------------------------------
 # MATH — single source of truth (§4). Pure functions; fixture-tested.
@@ -212,56 +209,6 @@ def sleeve_breakdown(nav_rows, mtm_by_date):
         "engine_pct_of_pnl": round(cum_e / total * 100, 1) if abs(total) > 1e-9 else None,
         "foundation_pct_of_pnl": round(cum_f / total * 100, 1) if abs(total) > 1e-9 else None,
         "series": series,
-    }
-
-
-def engine_yield(nav_rows, mtm_by_date, target_pct=1.0, floor_pct=0.5, floor_months=6):
-    """§2.3/§2.4 engine yield gauge: monthly engine P&L as % of that month's
-    opening NAV, its rolling-12-month average, and the retire gate. The engine
-    is the non-SPY sleeve (from MTM). Returns None when no MTM data. Pure;
-    fixture-tested. Gate: if the trailing-12-month average has been below the
-    floor for `floor_months` consecutive monthly evaluations → 'retire'."""
-    if not mtm_by_date:
-        return None
-    # group engine P&L by month; opening NAV = first nav row of the month
-    months = []            # [key, opening_nav, engine_pnl]
-    for r in nav_rows:
-        key = _period_key(r["date"], "M")
-        e = (mtm_by_date.get(r["date"]) or {}).get("engine", 0.0)
-        if months and months[-1][0] == key:
-            months[-1][2] += e
-        else:
-            months.append([key, r["nav"], e])
-    rows = []
-    for key, opening_nav, e in months:
-        y = (e / opening_nav * 100.0) if opening_nav else 0.0
-        rows.append({"label": "%04d-%02d" % key, "engine_yield_pct": round(y, 3)})
-    # rolling-12-month trailing average, evaluated each month
-    def trailing_avg(i):
-        window = [r["engine_yield_pct"] for r in rows[max(0, i - 11):i + 1]]
-        return sum(window) / len(window)
-    trailing = [round(trailing_avg(i), 3) for i in range(len(rows))]
-    # consecutive months (most recent) with trailing avg below floor
-    below = 0
-    for v in reversed(trailing):
-        if v < floor_pct:
-            below += 1
-        else:
-            break
-    rolling_avg = trailing[-1] if trailing else None
-    if not rows:
-        status = "accumulating"
-    elif below >= floor_months:
-        status = "retire"
-    elif rolling_avg is not None and rolling_avg < floor_pct:
-        status = "below_floor"
-    else:
-        status = "on_track"
-    return {
-        "target_pct": target_pct, "floor_pct": floor_pct, "floor_months": floor_months,
-        "months_count": len(rows), "rolling_avg_pct": rolling_avg,
-        "months_below_floor": below, "gate_status": status,
-        "months": rows,
     }
 
 
@@ -557,7 +504,7 @@ def main():
         # publishes a real, hash-anchored NAV record. Verdicts, strategy vs
         # benchmark stats, and the twin curves stay dark until FULL_ARCHITECTURE.
         b_idx = None; bench_maxdd = None; vd = None; bench_meta = None
-        weekly = monthly = None; sleeves = None; yield_gauge = None
+        weekly = monthly = None; sleeves = None
         if full:
             bench = fetch_benchmark(provider, api_key, dates)
             # join on date intersection; carry-forward gaps (§3)
@@ -588,7 +535,6 @@ def main():
             # NAV). Additive: engine + foundation ≈ total account P&L. Only when
             # the MTM section is present in the statement.
             sleeves = sleeve_breakdown(nav_rows, mtm_by_date)
-            yield_gauge = engine_yield(nav_rows, mtm_by_date, YIELD_TARGET, YIELD_FLOOR, YIELD_FLOOR_MONTHS)
         else:
             state = "ENGINE_ONLY"
 
@@ -623,17 +569,9 @@ def main():
                 json.dump({
                     "schema_version": "1.0", "as_of": dates[-1], "state": state,
                     "inception_date": inception, "last_sync_utc": now_utc(),
-                    "engine_label": "Overlay Engine", "foundation_label": "Foundational (SPY)",
+                    "engine_label": "Intraday Engine", "foundation_label": "Foundational (SPY)",
                     **sleeves,
                 }, open(os.path.join(DATA, "sleeves.json"), "w"), indent=2)
-
-            # yield.json — engine yield gauge (rolling avg vs 1%/mo target, retire floor).
-            if yield_gauge is not None:
-                json.dump({
-                    "schema_version": "1.0", "as_of": dates[-1], "state": state,
-                    "inception_date": inception, "last_sync_utc": now_utc(),
-                    **yield_gauge,
-                }, open(os.path.join(DATA, "yield.json"), "w"), indent=2)
 
         strat_block = bench_block = excess = dd_delta = None
         if full:

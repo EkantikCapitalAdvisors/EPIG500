@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Overlay Engine (Stocks &amp; Options) + Synthetic-Passive Overlay — Falsifiability Protocol v1.7 · Ekantik Capital Advisors</title>
+<title>Majority Opinion Predisposal Strategy + Synthetic-Passive Overlay — Falsifiability Protocol v1.5 · Ekantik Capital Advisors</title>
 <style>
   :root {
     --navy: #1B2A4A;
@@ -254,20 +254,20 @@
   <div class="firm-tag">Ekantik Capital Advisors LLC</div>
 
   <h1 class="protocol-title">Falsifiability Protocol</h1>
-  <p class="protocol-subtitle">A pre-committed operational charter · v1.7 · Overlay Engine (stocks &amp; options) + Synthetic-Passive Overlay</p>
+  <p class="protocol-subtitle">A pre-committed operational charter · v1.5 · Majority Opinion Predisposal Strategy + Synthetic-Passive Overlay</p>
 
   <p class="lead">
-    Governing both engines of Ekantik 500: the active <strong>Overlay Engine</strong> on stocks &amp; options, and the <strong>synthetic-passive overlay</strong> on the SPY foundation (added v1.3). All risk figures are denominated in <strong>percent of net liquidation value (NLV)</strong> — instrument-agnostic, so the charter scales with the account and survives a change of instrument. Issued by the operator. Witness-locked. Publicly disclosed. Modification subject to a 48-hour cool-off and written justification.
+    Governing both engines of Ekantik 500: the <strong>Majority Opinion Predisposal Strategy</strong> on ES &amp; MES futures (the active engine), and the <strong>synthetic-passive overlay</strong> on the SPY foundation (new in v1.3). Issued by the operator. Witness-locked. Publicly disclosed. Modification subject to a 48-hour cool-off and written justification.
   </p>
 
   <table class="meta">
     <tr><td>Document</td><td>Falsifiability Protocol · Locked Operational Charter</td></tr>
-    <tr><td>Version</td><td>1.7 — Instrument migration and re-denomination. The active engine is now the <strong>Overlay Engine on stocks &amp; options</strong>; the prior ES-and-MES futures engine is <strong>retired to the archive</strong> (see the Retirement Annex). Two structural consequences: (1) the active engine's Expression-Layer edge-death test is now the <strong>yield gate</strong> — a 1%/month-of-NLV target, retired in public if the rolling-12-month average stays below <strong>0.5% of NLV per month for 6 consecutive months</strong>; and (2) every risk figure is re-expressed as a <strong>percent of NLV</strong> so the architecture is instrument-agnostic: per-trade risk anchor <strong>0.5% of NLV</strong>, drawdown warning <strong>ED-05a −2.25% of NLV</strong>, hard-kill <strong>ED-05b −5% of NLV</strong>, deployment scaled in <strong>earned tiers</strong> at the 0.5% anchor rather than a fixed instrument count. The universal doctrine (both gates, the Binding Interpretation Rule, the Fidelity-Layer cadence rules, the three-tier stand-down, the witness protocol) carries over verbatim in intent. The retired futures engine's eight-condition expectancy battery, bootstrap drawdown calibration, and position-sizing mechanics are preserved unchanged in <code class="inline">archive/futures-v1/</code> — archived, not destroyed. Reinstatement of any retired engine requires a new locked version under Article IV. Witness countersigned. <em>(Version history retained for audit: v1.6 uncapped the futures position ceiling with explicit Standard sizing; v1.5 made the ceiling explicit; v1.4 revised the hard kill and OP-06 factor; v1.3 added the synthetic-passive overlay, Article VIII. All superseded figures are archived with the retired engine.)</em></td></tr>
-    <tr><td>Reference</td><td>FP-MOPS-V1.7-2026-08</td></tr>
-    <tr><td>Strategy</td><td>Overlay Engine · Stocks &amp; Options</td></tr>
-    <tr><td>Vehicle</td><td>Ekantik 500 · Overlay Engine Layer</td></tr>
+    <tr><td>Version</td><td>1.6 — Revision to Article V (Fidelity Layer). The <strong>fixed 2-contract ceiling is removed</strong>; contract count now scales with NLV at <strong>Standard sizing of 1 /ES per $100K NLV</strong>, earned through accumulated profit buffer, with no upper cap. Rationale: the v1.5 ceiling assumed a portfolio-margin capacity tied to a specific account size; uncapping with explicit Standard sizing makes the architecture honestly scale with capital. The 0.5% per-contract risk anchor is preserved verbatim — total per-trade exposure now scales as <strong>0.5% × Standard contract count</strong>, and the ED-05b hard kill scales correspondingly to a consistent <strong>5% of NLV at Standard sizing</strong> regardless of account size. All ED thresholds and other articles preserved verbatim. Witness countersigned. <em>(v1.5 history: contract-count ceiling made explicit at 2 /ES, now superseded. v1.4 history: ED-05b hard kill revised from −75 ES pts → −100 ES pts ($5,000 per contract); OP-06 bi-weekly size reduction revised from 1/5 of normal → 1/2 of normal. ED-05a, the bootstrap rationale, and Article VIII (added v1.3) unchanged.)</em> Change log appended to each affected article.</td></tr>
+    <tr><td>Reference</td><td>FP-MOPS-V1.6-2026-06</td></tr>
+    <tr><td>Strategy</td><td>Majority Opinion Predisposal Strategy · ES / MES Futures</td></tr>
+    <tr><td>Vehicle</td><td>Ekantik 500 · Active /ES Engine Layer</td></tr>
     <tr><td>Issuing entity</td><td>Ekantik Capital Advisors LLC · Maple Grove, MN</td></tr>
-    <tr><td>Date locked</td><td>____ August 2026</td></tr>
+    <tr><td>Date locked</td><td>____ May 2026</td></tr>
     <tr><td>Distribution</td><td>Public · epig500.ekantikcapital.com</td></tr>
   </table>
 
@@ -279,7 +279,7 @@
   </p>
 
   <p>
-    The <strong>Expression Layer</strong> (Articles I–III) defines the precise threshold at which the operator agrees the Overlay Engine's edge is dead, the stand-down sequence, and the re-deployment gate. The <strong>Fidelity Layer</strong> (Articles V–VI) defines the criteria under which the operator admits the <em>published method is not what is actually running</em> — independent of whether the edge itself is sound.
+    The <strong>Expression Layer</strong> (Articles I–III) defines the precise statistical threshold at which the operator agrees the Majority Opinion Predisposal edge is dead, the stand-down sequence, and the re-deployment gate. The <strong>Fidelity Layer</strong> (Articles V–VI) defines the criteria under which the operator admits the <em>published method is not what is actually running</em> — independent of whether the edge itself is sound.
   </p>
 
   <p>
@@ -296,33 +296,48 @@
   <!-- ============== ARTICLE I — TRIGGER ============== -->
   <h2 class="article-h"><span class="article-label">Article I</span>The Expression Layer — Trigger Condition</h2>
 
-  <p>The operator agrees to declare the edge dead upon satisfaction of <strong>any one</strong> of the following conditions, evaluated continuously on custodian-reported NAV and the documented qualified-trade record:</p>
+  <p>The operator agrees to declare the edge statistically dead upon satisfaction of <strong>any one</strong> of the following conditions, evaluated continuously across the documented qualified-trade record:</p>
 
   <ul class="gate-conds">
-    <li><strong>ED-Y · The yield gate (primary edge-death test).</strong> The Overlay Engine's objective is a realized yield of <strong>1% of NLV per month</strong>. The edge is declared dead if the <strong>rolling-12-month average engine yield falls below 0.5% of NLV per month for 6 consecutive months</strong>. A single weak month is variance; a rolling-12-month average stuck below half the target for half a year is structural. This gate is graded live on the dashboard, gross of fees.</li>
-    <li><strong>ED-05a · Realized peak-to-trough drawdown &gt; −2.25% of NLV — warning tier.</strong> Triggers Stage-1 Tier-2 conditions-reduced response (minimum deployment, witness oversight) for the next 20 qualified trades. Anchored at roughly four-to-five trades' worth of the 0.5%-NLV per-trade risk anchor — the point at which a loss cluster is worse than ordinary variance but short of structural failure.</li>
-    <li><strong>ED-05b · Realized peak-to-trough drawdown &gt; −5% of NLV — hard kill.</strong> Architecture-linked ceiling, denominated in NLV so it scales with the account at any size. Roughly ten trades' worth of the per-trade anchor, and twice the ED-05a warning line: a tail deeper than the engine should produce under a sound edge. Crossing it is stronger evidence of edge failure than of variance, and triggers the full Stage-2 stand-down action protocol.</li>
+    <li><strong>ED-01 · Rolling-100 realized expectancy ≤ $0 / trade.</strong> The edge becomes net-negative across the most recent 100 qualified trades.</li>
+    <li><strong>ED-02 · Rolling-50 win rate &lt; 52%.</strong> Distribution shifts below the breakeven win-rate at the documented 1.31 win:loss ratio.</li>
+    <li><strong>ED-03 · Rolling-50 profit factor &lt; 1.30.</strong> Asymmetry of winners-to-losers collapses below the slippage-buffer floor.</li>
+    <li><strong>ED-04 · Rolling-50 win:loss ratio &lt; 1.10.</strong> Asymmetry decays even where win-rate holds.</li>
+    <li><strong>ED-05a · Realized peak-to-trough drawdown &gt; −45 ES points (portfolio) — warning tier.</strong> Triggers Stage-1 Tier-2 conditions-reduced response (minimum sizing, witness oversight) for next 20 qualified trades. Threshold derived from the 25th percentile of the reference-dataset bootstrap (50,000 random orderings); roughly the midpoint between median and 75th-pct max DD under the documented edge.</li>
+    <li><strong>ED-05b · Realized peak-to-trough drawdown &gt; −100 ES points per contract (portfolio) — hard kill.</strong> Architecture-linked ceiling, anchored per contract: $5,000 per /ES at $50/pt. At Standard sizing (1 /ES per $100K NLV, v1.6) this scales to a consistent <strong>5% of NLV</strong> regardless of account size. Sits beyond the 1st percentile of the bootstrap distribution: under the documented edge, well under 1% of random orderings of the reference dataset produce a max DD this deep. Crossing this threshold is therefore stronger evidence of edge failure than of variance, and triggers the full Stage-2 stand-down action protocol. (Per-contract threshold updated from the v1.1–v1.3 threshold of −75 pts; v1.6 removed the v1.5 fixed-dollar ceiling so the kill criterion scales with capital. See Article IV change log.)</li>
+    <li><strong>ED-06 · Top-3 winner removal turns the cumulative record negative.</strong> Edge survives only on outliers.</li>
+    <li><strong>ED-07 · Consecutive loss streak ≥ 7 in any rolling window.</strong> A 2-sigma deviation from the documented streak distribution.</li>
+    <li><strong>ED-08 · One-sided t-test p-value &gt; 0.10 past trade 100.</strong> Statistical signal can no longer be distinguished from noise.</li>
   </ul>
 
-  <p class="note">A qualified trade is one entered and exited under all operative documented rules, unaffected by execution error, platform malfunction, or extraordinary market event. The yield gate is evaluated at each month-end close; the drawdown gates are satisfied at the close of the trade that first brings the condition to its threshold.</p>
+  <p class="note">A qualified trade is one entered and exited under all operative documented rules, unaffected by execution error, platform malfunction, or extraordinary market event. The trigger is satisfied at the close of the trade that first brings any of the conditions to its threshold.</p>
 
   <div class="rationale">
-    <div class="label">Rationale — the yield gate</div>
+    <div class="label">Rationale — threshold ladder</div>
     <p>
-      The Overlay Engine states a concrete, observable objective: <em class="gold">1% of NLV per month</em>, realized as positions close, measured on the custodian's NAV — not a backtest, not a projection. The retire floor is set at <em class="gold">half the target</em> because a target under trial should be given room for ordinary monthly variance without being declared dead on a single soft patch. Requiring the <em>rolling-12-month average</em> to sit below the floor for <em>6 consecutive months</em> filters variance from structural decay: it takes a sustained, year-scale shortfall — not a bad month or a bad quarter — to fire the gate. When it fires, the 1%/month claim is retired from every public surface, exactly as this protocol commits.
+      The reference dataset shows documented per-trade EV of <em class="gold">+$117</em> with standard error over a 100-trade window of <em class="gold">~$43</em>. The $0 threshold (ED-01) sits roughly 2.7 standard errors below documented EV — statistical evidence of collapse, not noise. The remaining seven conditions probe different failure topologies (distributional shift, asymmetry decay, outlier dependence, tail-risk breach, ruin-line proximity). The edge is declared dead when any one of the eight fires.
     </p>
   </div>
 
   <div class="rationale">
     <div class="label">Rationale — drawdown ceiling (ED-05a / ED-05b)</div>
     <p>
-      The two drawdown gates are denominated in NLV so they mean the same thing at every account size and survive a change of instrument. Both are built up from the single architectural constant — the <strong>0.5%-of-NLV per-trade risk anchor</strong> (Article V):
+      The original v1 specification set a single −30 ES-point kill, calibrated to the worst observed max DD of the reference dataset (−29.14 pts in original order). That calibration was inappropriately tight. Bootstrapping the 227 trades with 50,000 random orderings — preserving the empirical edge but resampling the path — yields the distribution of max DDs that the same edge naturally produces:
     </p>
     <p style="margin-top: 6px;">
-      <strong>ED-05a (warning, −2.25% NLV)</strong> is roughly four-to-five anchored trades of peak-to-trough loss. Reaching it means the engine is running through a cluster worse than routine variance — worth a Tier-2 conditions-reduced response (minimum deployment, witness oversight), not a hard cessation. <strong>ED-05b (hard kill, −5% NLV)</strong> is roughly ten anchored trades, and exactly twice the warning line — a tail the engine should not reach under a sound edge. Crossing it triggers the full Stage-2 stand-down.
+      <em class="gold">1st pct: −75.6 pts</em> · <em class="gold">5th pct: −61.7</em> · <em class="gold">25th pct: −47.1</em> · <em class="gold">median: −39.6</em> · <em class="gold">75th pct: −33.8</em> · <em class="gold">95th pct: −27.8</em>
     </p>
     <p style="margin-top: 6px;">
-      Because both figures are percentages of current NLV, they self-scale: as the account grows or the overlay reduces exposure, the dollar lines move with it while the percentage discipline stays fixed. This is the v1.7 re-denomination of the drawdown ceiling — the intent of the prior instrument-specific thresholds preserved, the units made universal. The retired engine's original bootstrap-derived calibration is archived unchanged with that engine.
+      The observed −29 pt DD therefore sits at the ~93rd percentile of bootstrap orderings — the historical record happened to be on the lucky side of the distribution. A −30 pt kill would fire in approximately 95% of random orderings under the same healthy edge: a kill on noise, not signal. The split-tier replacement, anchored to bootstrap percentiles, preserves the gate's intent while passing the variance-of-the-same-edge test:
+    </p>
+    <p style="margin-top: 6px;">
+      <strong>ED-05a (warning, −45 pts)</strong> sits between the median (−40) and the 25th percentile (−47). Firing here means the operator is in the worse 75% of paths under a known-healthy edge — worth a Tier-2 conditions-reduced response, not a hard cessation. <strong>ED-05b (hard kill, −100 pts ≈ $5,000 per /ES contract)</strong> sits beyond the 1st percentile of the bootstrap (which was −75.6 pts). Crossing it is therefore even stronger evidence of edge failure than the prior v1.1–v1.3 −75 threshold — well under 1% of paths under the documented edge reach this line. The round-number, dollar-anchored ceiling preserves the architecture-linked intent while making the cap operationally intuitive for size-up decisions.
+    </p>
+    <p style="margin-top: 6px;">
+      <strong>Change log (v1.4):</strong> hard kill threshold revised from −75 pts → <strong>−100 pts ($5,000 per /ES)</strong>. The v1.1–v1.3 figure was bootstrap-derived (1st percentile of 50,000 reference-dataset orderings); the v1.4 figure sits deeper, accepting a fractionally lower false-positive rate in exchange for a round dollar-anchored cap. ED-05a (warning, −45 pts) unchanged. Bootstrap percentiles for reference: 1st −75.6 · 5th −61.7 · 25th −47.1 · median −39.6.
+    </p>
+    <p style="margin-top: 6px;">
+      Bootstrap script and result CSV will be published alongside this protocol as <code class="inline">bootstrap-ed05.csv</code> for independent verification. Investors at any account size can re-run the analysis using the public reference dataset.
     </p>
   </div>
 
@@ -335,7 +350,7 @@
     <li><strong>New entries</strong> drop to zero size from the next session, on any account, under any rule, until the Re-Deployment Gate is satisfied in full.</li>
     <li><strong>Open positions</strong> close at the next defined exit per the original trade plan. No discretionary acceleration or delay.</li>
     <li><strong>Strategy status</strong> moves to research-only (analysis, paper, prop-firm-funded virtual deployment permitted; no live capital).</li>
-    <li><strong>Public notification</strong> in the Discord journal within 24 hours: the trigger condition that satisfied (the yield gate ED-Y, or a drawdown gate ED-05a / ED-05b), the figure that satisfied it, the closing trade or month-end reference, and a statement of research-only status.</li>
+    <li><strong>Public notification</strong> in the Discord journal within 24 hours: the trigger condition that satisfied (ED-01 through ED-08), the figure that satisfied it, the closing trade ID, and a statement of research-only status.</li>
     <li><strong>Member notification</strong> within the same 24-hour window for all Ekantik 500 investors with capital deployed against the strategy.</li>
   </ul>
 
@@ -345,15 +360,15 @@
   <p>The strategy does not return to live deployment until <strong>all three</strong> conditions are satisfied:</p>
 
   <ul class="actions">
-    <li><strong>Out-of-sample demonstration</strong> — the engine must re-earn its objective on virtual / paper / prop-firm capital, never on member capital: a realized yield <strong>at or above the 1%/month-of-NLV target</strong> sustained across <strong>at least 3 consecutive months</strong> (or the equivalent qualified-trade window), with no ED-05a/b drawdown breach in that window.</li>
-    <li><strong>Written re-derivation</strong> — explaining the structural cause of decay, any logic changes proposed, and the rationale for believing the edge has returned. Must address which Expression-Layer condition fired (the yield gate or a drawdown gate) and why the proposed remediation closes that specific failure mode.</li>
+    <li><strong>Out-of-sample test</strong> — ≥ +$50 per trade across ≥ 50 qualified trades on virtual / paper / prop-firm capital. Never on member capital. Battery re-run on the out-of-sample record must return 6 of 8 PASS minimum, with no FAIL on Tests 1, 3, or 4.</li>
+    <li><strong>Written re-derivation</strong> — explaining the structural cause of decay, any logic changes proposed, and the rationale for believing the edge has returned. Must address which of the eight Expression-Layer conditions fired and why the proposed remediation closes that specific failure mode.</li>
     <li><strong>48-hour cool-off</strong> — between satisfaction of the above and any new live entry.</li>
   </ul>
 
   <div class="rationale">
     <div class="label">Rationale — asymmetric bar</div>
     <p>
-      Stand-down requires only evidence that one Expression-Layer threshold was crossed. Re-deployment requires evidence of <em class="gold">meaningfully restored</em> yield (at or above target, sustained) plus a written structural diagnosis. Quick to fail; slow to forgive. The asymmetry is deliberate: false positives on cessation are recoverable; false positives on resumption are not.
+      Stand-down requires only evidence that one of the eight Expression-Layer thresholds was crossed. Re-deployment requires evidence of <em class="gold">meaningfully positive</em> expectancy (+$50 per trade) plus a battery pass plus written structural diagnosis. Quick to fail; slow to forgive. The asymmetry is deliberate: false positives on cessation are recoverable; false positives on resumption are not.
     </p>
   </div>
 
@@ -374,16 +389,16 @@
 
   <p>Is the published method what is actually running? Each criterion is pre-committed, observable, binary-checkable, and time-bounded — mapping to a distinct layer of operator fidelity: substrate, intraday, structural, cognitive.</p>
 
-  <p><strong>Sizing anchor &amp; earned deployment (OP-anchor · re-denominated v1.7).</strong> Per-trade risk is fixed at <strong>0.5% of NLV</strong> — the architectural anchor; it never escalates. Deployment scales with capital in <strong>earned tiers</strong>: each increment of size is earned through accumulated profit buffer, never assumed, with <strong>no fixed ceiling</strong> — the engine scales with the account. Because both the anchor and the tiers are expressed as a fraction of NLV, the architecture is instrument-agnostic: the same discipline governs whatever instrument the engine expresses through. Scaling faster than the earned tier requires explicit witness sign-off per Article IV.</p>
+  <p><strong>Sizing anchor &amp; Standard sizing (OP-anchor · revised v1.6).</strong> Per-contract risk is fixed at <strong>0.5% of NLV</strong> — the architectural anchor; it never escalates. Contract count scales with capital at <strong>Standard sizing: 1 /ES per $100K NLV</strong>, with each contract earned through accumulated profit buffer, never assumed. There is no fixed ceiling — the engine scales with the account. At Standard sizing, total per-trade exposure therefore scales as <strong>0.5% × contract count</strong>, and the ED-05b hard kill scales correspondingly to a consistent <strong>5% of NLV</strong> regardless of account size. Scaling at a faster rate than Standard requires explicit witness sign-off per Article IV.</p>
 
   <div class="crit-meta">
-    <strong>Change log (v1.7):</strong> the sizing anchor is re-denominated to be instrument-agnostic. The 0.5%-of-NLV per-trade risk anchor is unchanged. What was previously an instrument-count ceiling (removed in v1.6 in favor of explicit per-instrument Standard sizing) is now stated purely as earned deployment tiers at the 0.5% NLV anchor, with no reference to any single instrument. Rationale: the active engine now expresses through stocks &amp; options rather than futures, and the discipline that matters — fixed fractional risk per trade, size earned not assumed — is the same regardless of instrument. Per-trade dollar exposure and the ED-05a / ED-05b drawdown lines all scale with NLV. Witness countersigned per Article IV. <em>(Superseded instrument-count history is archived with the retired futures engine.)</em>
+    <strong>Change log (v1.6):</strong> the fixed 2-contract ceiling from v1.5 is removed. Contract count now scales with NLV at Standard sizing (1 /ES per $100K), with no upper cap. Rationale: the v1.5 ceiling assumed a specific portfolio-margin capacity tied to a particular account size; uncapping with explicit Standard sizing makes the architecture honestly scale with capital. The 0.5% per-contract anchor is unchanged. Per-trade dollar exposure and hard-kill dollar figures now scale proportionally with NLV — hard kill is a constant 5% of NLV at Standard sizing, where v1.5 capped it at $10,000 regardless of NLV. Witness countersigned per Article IV. <em>(v1.5 history retained for audit: ceiling made explicit at 2 /ES, now superseded.)</em>
   </div>
 
   <!-- OP-01 -->
   <h3 class="crit-h"><span class="crit-label">OP-01</span>Frozen Process Adherence</h3>
 
-  <p>Every entry follows the published Overlay Engine rule set without modification. The frozen process is the experimental constant; any modification mid-flight resets the evidence window. The witness — not the operator — approves any rule change, subject to the Article IV protocol.</p>
+  <p>Every entry follows the published Majority Opinion Predisposal rule set without modification. The frozen process is the experimental constant; any modification mid-flight resets the evidence window. The witness — not the operator — approves any rule change, subject to the Article IV protocol.</p>
 
   <div class="crit-meta">
     <strong>Breach:</strong> any unannounced or witness-uncountersigned process modification, regardless of whether the resulting trade was profitable.<br>
@@ -408,7 +423,7 @@
   <h3 class="crit-h"><span class="crit-label">OP-03</span>Trailing Daily Cap <em class="gold" style="font-style: normal; font-size: 13px;">(v1.2)</em></h3>
 
   <p>
-    Cumulative same-day P&amp;L is bounded by a <strong>trailing high-water mark</strong> floor. The floor starts at <strong>−0.5% of NLV</strong> (one trade's worth of risk at the architectural anchor) and <strong>ratchets up automatically</strong> as accumulated profit creates buffer above the prior peak. Replaces the v1.0 fixed-point cap, which did not scale with account size or with realized profit.
+    Cumulative same-day P&amp;L is bounded by a <strong>trailing high-water mark</strong> floor. The floor starts at <strong>−0.5% of NLV</strong> (one trade's worth of risk at the architectural anchor) and <strong>ratchets up automatically</strong> as accumulated profit creates buffer above the prior peak. Replaces the v1.0 fixed −12 ES point cap, which did not scale with account size or with realized profit.
   </p>
 
   <div class="crit-meta">
@@ -434,7 +449,7 @@
   <h3 class="crit-h"><span class="crit-label">OP-05</span>Weekly Sit-Down Trigger <em class="gold" style="font-style: normal; font-size: 13px;">(v1.2)</em></h3>
 
   <p>
-    <strong>2–3 consecutive losing trading days within a single calendar week</strong> triggers a mandatory sit-down for the remainder of that week. The engine resumes on the following Monday at the earned deployment tier, pending witness review of the loss cluster. This is the bridge between the intraday discipline (OP-02 / OP-03) and the structural cessation rules (Tier 2 / Tier 3): it dampens variance clustering before it escalates.
+    <strong>2–3 consecutive losing trading days within a single calendar week</strong> triggers a mandatory sit-down for the remainder of that week. The engine resumes on the following Monday at standard sizing, pending witness review of the loss cluster. This is the bridge between the intraday discipline (OP-02 / OP-03) and the structural cessation rules (Tier 2 / Tier 3): it dampens variance clustering before it escalates.
   </p>
 
   <div class="crit-meta">
@@ -443,29 +458,29 @@
     <strong>Verification:</strong> witness audits the daily trade log weekly; flagged sit-down events disclosed to investors within 7 days.
   </div>
 
-  <!-- OP-06 (introduced v1.2; threshold updated v1.4; re-denominated v1.7) -->
-  <h3 class="crit-h"><span class="crit-label">OP-06</span>Bi-Weekly Size Reduction <em class="gold" style="font-style: normal; font-size: 13px;">(v1.2 · revised v1.4 · re-denominated v1.7)</em></h3>
+  <!-- OP-06 (introduced v1.2; threshold updated v1.4) -->
+  <h3 class="crit-h"><span class="crit-label">OP-06</span>Bi-Weekly Size Reduction <em class="gold" style="font-style: normal; font-size: 13px;">(v1.2 · revised v1.4)</em></h3>
 
   <p>
-    A <strong>second consecutive losing week</strong> (where "losing week" is any week ending net-negative on closed trades) triggers an immediate sizing reduction to <strong>half of normal</strong> — a 50% cut in dollar exposure per trade while preserving the same setup discipline. The reduction holds until OP-07 reinstatement conditions are met. Daily filings transition to witness oversight for the duration of the reduction window.
+    A <strong>second consecutive losing week</strong> (where "losing week" is any week ending net-negative on closed trades) triggers an immediate sizing reduction to <strong>half of normal</strong> — for example 5 /MES in place of 1 /ES, an equivalent 50% cut in dollar exposure per trade while preserving the same instrument's tick mechanics. The reduction holds until OP-07 reinstatement conditions are met. Daily filings transition to witness oversight for the duration of the reduction window.
   </p>
 
   <div class="crit-meta">
-    <strong>Breach:</strong> any entry sized above the one-half reduction during an active OP-06 window.<br>
+    <strong>Breach:</strong> any entry sized above the 1/2 reduction during an active OP-06 window.<br>
     <strong>Threshold:</strong> <span class="red">zero breaches, period.</span><br>
     <strong>Verification:</strong> witness countersigns each entry during the reduction window. Per-trade size logged against the OP-06 cap.<br>
-    <strong>Change log (v1.4):</strong> reduction factor revised from <em>1/5 of normal</em> → <em>1/2 of normal</em>. The v1.2 figure produced an aggressive recovery posture; the v1.4 figure preserves the size-reduction principle with a less severe cut, accepting modestly higher capital-at-risk during the OP-06 window in exchange for a more practical resumption ramp once OP-07 reinstatement criteria are met. <strong>Change log (v1.7):</strong> the reduction is re-stated instrument-agnostically as a one-half cut in per-trade dollar exposure at the earned tier; the prior instrument-specific illustration is archived with the retired engine.
+    <strong>Change log (v1.4):</strong> reduction factor revised from <em>1/5 of normal</em> → <em>1/2 of normal</em>. The v1.2 figure produced an aggressive recovery posture (a quarter-position bias toward stand-down); the v1.4 figure preserves the size-reduction principle with a less severe cut, accepting modestly higher capital-at-risk during the OP-06 window in exchange for a more practical resumption ramp once OP-07 reinstatement criteria are met.
   </div>
 
   <!-- OP-07 (new in v1.2) -->
   <h3 class="crit-h"><span class="crit-label">OP-07</span>Reinstatement Gate <em class="gold" style="font-style: normal; font-size: 13px;">(v1.2)</em></h3>
 
   <p>
-    The earned deployment tier reinstates only after <strong>5 good trades</strong> at the OP-06 reduced size. A "good trade" is a closed trade with: no OP-rule breach; correct H2/H3 attribution per OP-04; and contribution to a net-positive cumulative P&amp;L across the 5-trade window. Witness countersigns the reinstatement event. If the OP-06 window produces a third consecutive losing week, escalation to Stage-1 Tier-2 cessation is automatic.
+    Standard sizing reinstates only after <strong>5 good trades</strong> at the OP-06 reduced size. A "good trade" is a closed trade with: no OP-rule breach; correct H2/H3 attribution per OP-04; and contribution to a net-positive cumulative P&amp;L across the 5-trade window. Witness countersigns the reinstatement event. If the OP-06 window produces a third consecutive losing week, escalation to Stage-1 Tier-2 cessation is automatic.
   </p>
 
   <div class="crit-meta">
-    <strong>Breach:</strong> full sizing resumed before the 5-good-trade window is verifiably complete and countersigned.<br>
+    <strong>Breach:</strong> standard sizing resumed before the 5-good-trade window is verifiably complete and countersigned.<br>
     <strong>Threshold:</strong> <span class="red">zero breaches, period.</span><br>
     <strong>Verification:</strong> witness review of the 5-trade good-window, with the countersignature artifact retrievable from the public page.
   </div>
@@ -492,7 +507,7 @@
       <tr>
         <td><span class="tier">T2</span><span class="tier-label">Conditions reduced</span></td>
         <td>2+ breaches of OP-02 or OP-03 in rolling 30 trades. OP-04 H1 misapplication. OP-06 automatic trigger (2nd consecutive losing week). OP-07 reinstatement breach.</td>
-        <td>Deployment cut to <strong>minimum size</strong> — a single unit at the 0.5%-NLV anchor, no scaling — for next 20 qualified trades. Daily filing under witness oversight. Counter resets. Trading continues at reduced conditions.</td>
+        <td>Position cut to minimum sizing (1 MES, no scaling, no /ES) for next 20 qualified trades. Daily filing under witness oversight. Counter resets. Trading continues at reduced conditions.</td>
         <td>20 clean minimum-size trades + witness countersignature.</td>
       </tr>
       <tr>
@@ -516,7 +531,7 @@
   <ul class="actions">
     <li><strong>Countersignature</strong> required for: modifications, T2/T3 resumptions, monthly attribution audits, overlay-rule lockings. Artifact retrievable from the public page.</li>
     <li><strong>Classification disputes:</strong> 7-day cool-off from initial classification; witness reviews with written rationale; if unresolved, a neutral third-party adjudicator — mutually agreed and named at the time of dispute — decides; decision binding and published in the breach record.</li>
-    <li><strong>Monthly audit:</strong> findings across all seven Fidelity-Layer criteria, rolling Expression-Layer figures (including the live yield-gate reading), and (once locked) overlay-decision log + overlay-alpha rolling figure, published monthly to <code class="inline">witness-audits.json</code>. Without the monthly artifact, the "witness reviews monthly" claim is itself in breach.</li>
+    <li><strong>Monthly audit:</strong> findings across all seven Fidelity-Layer criteria, rolling Expression-Layer figures, and (once locked) overlay-decision log + overlay-alpha rolling figure, published monthly to <code class="inline">witness-audits.json</code>. Without the monthly artifact, the "witness reviews monthly" claim is itself in breach.</li>
   </ul>
 
   <!-- ============== ARTICLE VIII — SYNTHETIC-PASSIVE OVERLAY (v1.3) ============== -->
@@ -548,33 +563,19 @@
     <li><strong>Measurement window:</strong> rolling 5 calendar years (initial) → rolling full market cycle (binding from year 5 forward, with cycle defined as peak-to-peak through at least one ≥10% drawdown).</li>
     <li><strong>Pass condition (either / or):</strong> the overlaid foundation either (a) <strong>beats</strong> a pure-passive 100% S&amp;P 500 hold on total return over the window, <em>or</em> (b) <strong>protects</strong> — takes ≤ a published threshold of the index's maximum drawdown over the window (target range to be locked: 60–80% of index max DD). One of the two must hold.</li>
     <li><strong>Fail condition:</strong> both (a) and (b) fail. The overlay is declared falsified. The foundation reverts to <strong>pure passive 100% SPY hold</strong>, publicly, on the dashboard, within 24 hours of the determination. Participants are notified. The overlay rule set is retired; any future re-introduction requires a new locked protocol version under Article IV.</li>
-    <li><strong>Interpretation Rule:</strong> the overlay-alpha gate cannot be declared falsified from data generated during a known overlay Fidelity-Layer breach (analogous to Article VI's binding interpretation rule for the active engine). Discretionary deviations from the published exposure rules disqualify the trade record as evidence of expression-layer failure.</li>
+    <li><strong>Interpretation Rule:</strong> the overlay-alpha gate cannot be declared falsified from data generated during a known overlay Fidelity-Layer breach (analogous to Article VI's binding interpretation rule for the futures engine). Discretionary deviations from the published exposure rules disqualify the trade record as evidence of expression-layer failure.</li>
   </ul>
 
-  <h3 class="crit-h"><span class="crit-label">VIII.C</span>Coordination with the Overlay Engine</h3>
-  <p>The synthetic-passive overlay and the active Overlay Engine share one account. When the overlay reduces SPY exposure (State B or C), the collateral backing the engine's portfolio margin reduces with it. The two are coordinated by rule, not improvised:</p>
+  <h3 class="crit-h"><span class="crit-label">VIII.C</span>Coordination with the Futures Engine</h3>
+  <p>The synthetic-passive overlay and the futures engine share one account. When the overlay reduces SPY exposure (State B or C), the SPY collateral backing the futures engine's portfolio margin reduces with it. The two are coordinated by rule, not improvised:</p>
   <ul class="actions">
-    <li>The engine's per-trade risk anchor (0.5% NLV, fixed under Article V OP-anchor) is computed against <em>current</em> NLV — which reflects the overlay's current exposure state. As SPY is reduced, dollar-risk per trade shrinks proportionally.</li>
-    <li>The earned deployment tiers under the cadence rules (OP-05/06/07) are unaffected by the overlay state. Earned size remains earned.</li>
+    <li>The futures engine's per-contract risk anchor (0.5% NLV, fixed under Article V OP-anchor) is computed against <em>current</em> NLV — which reflects the overlay's current exposure state. As SPY is reduced, dollar-risk per contract shrinks proportionally.</li>
+    <li>Contract count ceilings under the cadence rules (OP-05/06/07) are unaffected by the overlay state. Earned contracts remain earned.</li>
     <li>The 20% cash buffer is preserved across all overlay states; it is operational settlement only, never tapped to fund either layer.</li>
   </ul>
 
   <h3 class="crit-h"><span class="crit-label">VIII.D</span>Disclosure Cadence</h3>
   <p>Every overlay decision — each State A → B step-down, each B → C deepening, each restoration — is published to the live dashboard within 24 hours, alongside the trigger conditions that fired. The rolling overlay-alpha figure (5-year then cycle-level) is computed live and visible. The overlay's Fidelity-Layer compliance is part of the monthly witness audit (Article VII).</p>
-
-  <!-- ============== RETIREMENT ANNEX (v1.7) ============== -->
-  <h2 class="article-h"><span class="article-label">Retirement Annex</span>The Futures Engine — Retired &amp; Archived (v1.7)</h2>
-
-  <p>Through v1.6, the active engine was the Majority Opinion Predisposal Strategy expressed on ES and MES futures. As of v1.7 that engine is <strong>retired</strong>. Its complete falsifiability apparatus is <strong>preserved unchanged in the archive — not destroyed</strong>:</p>
-
-  <ul class="actions">
-    <li>The <strong>eight-condition expectancy battery</strong> (rolling-expectancy, win-rate, profit-factor, win:loss, drawdown, outlier-dependence, loss-streak, and significance tests) and its bootstrap drawdown calibration are archived at <code class="inline">archive/futures-v1/</code>, together with the reference trade record and the prior version history (v1.1 through v1.6).</li>
-    <li>The archived record remains publicly retrievable so any prior claim about the retired engine can still be checked against it. Retirement removes the engine from live capital; it does not remove the evidence from public view.</li>
-    <li>This retirement is a <strong>disclosed protocol event</strong>, recorded under the Modification Protocol (Article IV) and reflected in the version block above.</li>
-    <li><strong>Reinstatement path.</strong> Returning any futures engine to live deployment is not a resumption under Article III — it requires a <strong>new locked protocol version</strong> under Article IV: 48-hour cool-off, written justification establishing the structural case, and witness countersignature. Until such a version is locked and published, no futures engine runs on member capital.</li>
-  </ul>
-
-  <p class="note">The universal doctrine in Articles I–VII governs whatever engine is active. The figures specific to a retired engine live with that engine in the archive; the figures specific to the active Overlay Engine — the 1%/month-of-NLV yield objective, the 0.5%-NLV per-trade anchor, the −2.25% / −5% NLV drawdown gates — are stated in the body above.</p>
 
   <!-- ============== SIGNATURE ============== -->
   <div class="sig-block">
@@ -594,12 +595,12 @@
     </div>
 
     <p class="attest">
-      By signature, the operator attests this protocol was derived prior to the deployment of member capital and is hereby locked as the governing operational charter for the Overlay Engine (stocks &amp; options) and the Synthetic-Passive Overlay. Witness signature attests only that the modification protocol was followed.
+      By signature, the operator attests this protocol was derived prior to the deployment of member capital and is hereby locked as the governing operational charter for the Majority Opinion Predisposal Strategy. Witness signature attests only that the modification protocol was followed.
     </p>
   </div>
 
   <footer>
-    Falsifiability Protocol · v1.7 · Doc Ref FP-MOPS-V1.7-2026-08<span class="dot">·</span>Ekantik Capital Advisors LLC · Maple Grove, MN<span class="dot">·</span>Public — epig500.ekantikcapital.com<span class="dot">·</span>© 2026 Ekantik Capital Advisors LLC. All rights reserved.
+    Falsifiability Protocol · v1.5 · Doc Ref FP-MOPS-V1.5-2026-06<span class="dot">·</span>Ekantik Capital Advisors LLC · Maple Grove, MN<span class="dot">·</span>Public — epig500.ekantikcapital.com<span class="dot">·</span>© 2026 Ekantik Capital Advisors LLC. All rights reserved.
   </footer>
 
 </div>
