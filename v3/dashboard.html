@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Charter · Ekantik 500 vs S&amp;P 500</title>
+    <meta name="description" content="One question, measured weekly on custodian-reported NAV: does the Ekantik 500 beat the S&P 500 total return — capturing the upside with less of the downside?">
+    <meta name="robots" content="noindex">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=20260720a">
+    <link rel="stylesheet" href="css/dashboard.css?v=20260720a">
+    <link rel="stylesheet" href="modules/charter/charter.css?v=20260714a">
+    <link rel="stylesheet" href="modules/charter/scoreboard.css?v=20260720c">
+</head>
+<body class="dash-body">
+
+<header class="dash-nav">
+    <div class="container dash-nav__inner">
+        <a href="/" class="logo">
+            <span class="logo__mark">E</span>
+            <span class="logo__wordmark">EKANTIK CAPITAL</span>
+            <span class="logo__sublabel">THE CHARTER</span>
+        </a>
+        <nav class="dash-nav__links">
+            <a href="/">← Landing page</a>
+            <a href="falsifiability-protocol.html">Protocol</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container dash-main">
+    <header class="dash-header">
+        <p class="eyebrow"><span class="diamond">◆</span> The Charter · live custodian record vs the S&amp;P 500</p>
+        <h1 class="dash-title">Does it beat the S&amp;P 500 — with less of the downside?</h1>
+        <p class="dash-sub" id="scoreSub">One question, measured period by period on custodian-reported NAV against the S&amp;P 500 total return. No other scorecard.</p>
+    </header>
+
+    <!-- Bridge banner: this is the custodian proof behind the alerts record. -->
+    <aside class="alerts-bridge" role="note">
+        <p class="alerts-bridge__k"><span class="diamond">◆</span> Custodian proof</p>
+        <p class="alerts-bridge__body">This is the <strong>third-party-verified account</strong> behind the <a href="alerts.html" style="color:var(--gold-bright)">alerts record ↗</a>. Those alerts are what we called; NAV here is reported by <strong>Interactive&nbsp;Brokers</strong>, not by us. <strong>The live record is expected to track the alerts record.</strong> If it diverges — slippage, timing, calls that weren't cleanly tradeable — that gap is shown right here, in public, not explained away. Operator-reported alerts are the claim; this is the proof.</p>
+        <p class="alerts-bridge__cta"><a href="alerts.html" class="btn btn--secondary btn--sm">See the alerts record it must track ↗</a></p>
+    </aside>
+
+    <!-- ═══ 1 · Since-inception verdict (Charter Module 1, §7) ══════════════
+         #charterBoard / #charterProv rendered by modules/charter/charter.js
+         from precomputed data/charter.json. Static markup is the required-
+         string layer (§10.1) and the no-JS ENGINE_ONLY fallback. -->
+    <section class="charter" id="charterModule" aria-label="The Charter Standard">
+        <p class="charter__eyebrow"><span class="diamond">◆</span> Since inception <span class="sub">· cumulative, custodian-reported NAV</span></p>
+        <div class="charter-board" id="charterBoard">
+            <div class="charter-gate" style="grid-column:1/-1">
+                <div class="charter-gate__head"><span class="charter-gate__title">The Charter Standard</span><span class="charter-chip charter-chip--armed">ARMED · NOT MEASURING</span></div>
+                <p class="charter-note">The Charter Standard measures the full 80/20 + engine architecture against the S&amp;P 500 total return. This account currently runs the engine sleeve only, so the gates are armed but not yet measuring. Measurement begins the day the account composition matches the published architecture — and that start date is published here.</p>
+            </div>
+        </div>
+        <p class="charter-prov" id="charterProv">Source: Interactive Brokers Flex Query · NAV as reported by custodian · benchmark: S&amp;P 500 Total Return · last sync — · raw file sha256 —</p>
+        <div class="charter-standard">
+            <b>The Charter Standard — two conditions, both binary, both custodian-fed:</b> (1) cumulative time-weighted return above the S&amp;P 500 total return, and (2) a shallower peak-to-trough drawdown than the S&amp;P 500, each measured from inception on Interactive Brokers–reported NAV. <b>Retire condition:</b> if, measured over a full market cycle, the record satisfies neither condition, the charter is declared unmet on this dashboard and the outperform-with-less-drawdown claim is retired from every public surface. Gross of fees — net-of-fee figures will be published alongside when a fee schedule exists. Past performance does not guarantee future results. Educational only.
+        </div>
+    </section>
+
+    <!-- ═══ Gauge 1 · Engine yield vs the 1%/month target (§2.3 Objective 1) ═══
+         Rendered by modules/charter/gauges.js from data/yield.json (monthly
+         engine yield, rolling-12-mo average, retire floor). Gauge 2 = the
+         Charter board + drawdown mirror above/below (foundation vs benchmark). -->
+    <section class="score-block" aria-label="Engine yield versus the 1% per month target">
+        <header class="score-block__head">
+            <h2 class="score-block__h">Engine yield vs the 1%/month target</h2>
+            <p class="score-block__sub">Objective 1, graded live: the engine's realized yield each month against its <strong>1%/month target</strong>, with the <strong>0.5% retire floor</strong> drawn on the chart. The claim retires in public if the rolling-12-month average stays below the floor for 6 consecutive months. Gross of fees.</p>
+        </header>
+        <div id="engineYieldGauge">
+            <div class="score-empty">Accumulating — the engine yield gauge renders once the record is live and reporting monthly.</div>
+        </div>
+    </section>
+
+    <!-- ═══ Periodicity + window controls ════════════════════════════════
+         Period = granularity (weekly/monthly). Window = which periods to show
+         (since inception / YTD / custom range). The window filters the
+         period-by-period scoreboard + capture only — the since-inception
+         Charter verdict above always computes since inception. -->
+    <section class="score-toggle" aria-label="Comparison controls">
+        <div class="score-toggle__group">
+            <p class="score-toggle__label"><span class="diamond">◆</span> Period</p>
+            <div class="score-toggle__chips" role="radiogroup" aria-label="Granularity">
+                <button class="score-chip is-active" data-freq="weekly" type="button" role="radio" aria-checked="true">Weekly</button>
+                <button class="score-chip" data-freq="monthly" type="button" role="radio" aria-checked="false">Monthly</button>
+            </div>
+        </div>
+        <div class="score-toggle__group">
+            <p class="score-toggle__label"><span class="diamond">◆</span> Window</p>
+            <div class="score-toggle__chips" role="radiogroup" aria-label="Date window">
+                <button class="score-win is-active" data-win="all" type="button" role="radio" aria-checked="true">Since inception</button>
+                <button class="score-win" data-win="ytd" type="button" role="radio" aria-checked="false">YTD</button>
+                <button class="score-win" data-win="custom" type="button" role="radio" aria-checked="false">Custom</button>
+            </div>
+            <div class="score-toggle__dates" id="scoreDates" hidden>
+                <input type="date" id="scoreFrom" aria-label="From date">
+                <span class="score-toggle__arrow">→</span>
+                <input type="date" id="scoreTo" aria-label="To date">
+            </div>
+        </div>
+        <p class="score-toggle__meta" id="scoreToggleMeta">—</p>
+    </section>
+
+    <!-- ═══ 2 · Period-by-period vs S&P + beat tally ═════════════════════
+         Rendered by modules/charter/scoreboard.js from data/periodic.json. -->
+    <section class="score-block" aria-label="Period-by-period return vs the S&amp;P 500">
+        <header class="score-block__head">
+            <h2 class="score-block__h">Every period vs the S&amp;P 500 total return</h2>
+            <p class="score-block__sub" id="scoreBeatTally">—</p>
+        </header>
+        <div id="scorePeriods">
+            <div class="score-empty">Accumulating — the period-by-period record renders once the full architecture is measuring.</div>
+        </div>
+    </section>
+
+    <!-- ═══ 3 · Upside capture / downside participation ══════════════════ -->
+    <section class="score-block" aria-label="Upside capture and downside participation">
+        <header class="score-block__head">
+            <h2 class="score-block__h">Upside captured · downside avoided</h2>
+            <p class="score-block__sub">In up periods, how much of the S&amp;P's gain did the strategy capture — and in down periods, how much of its loss did it take?</p>
+        </header>
+        <div id="scoreCapture">
+            <div class="score-empty">Accumulating — capture figures render as the record builds.</div>
+        </div>
+    </section>
+
+    <!-- ═══ 4 · Drawdown mirror (Charter Module 2, §8) ═══════════════════ -->
+    <section class="charter charter-curves" id="charterCurvesModule" aria-label="Growth of 100 and peak-to-trough drawdown vs the S&amp;P 500">
+        <p class="charter__eyebrow"><span class="diamond">◆</span> Growth of 100 <span class="sub">· strategy vs S&amp;P 500 total return · peak-to-trough drawdown mirror · custodian-reported NAV</span></p>
+        <div id="charterCurves">
+            <div class="charter-empty">Record accumulating — chart renders at 5 trading days.</div>
+        </div>
+    </section>
+
+    <!-- ═══ 5 · Where the return came from — Overlay Engine vs Foundational (SPY) ═══
+         Rendered by modules/charter/sleeves.js from data/sleeves.json (per-symbol
+         MTM contribution to return; SPY = Foundational, everything else = Engine). -->
+    <section class="score-block" aria-label="Return by sleeve: Overlay Engine vs Foundational (SPY)">
+        <header class="score-block__head">
+            <h2 class="score-block__h">Where the return came from</h2>
+            <p class="score-block__sub">The account's two sleeves, split by holding — the <strong>Overlay Engine</strong> (stocks and options — non-SPY trades) and the <strong>Foundational (SPY)</strong> holding. Each shown as its contribution to the account's total return; the two add up to the whole.</p>
+        </header>
+        <div id="sleeveBreakdown">
+            <div class="score-empty">Accumulating — the sleeve breakdown renders once the account is funded and reporting per-symbol P&amp;L.</div>
+        </div>
+    </section>
+
+    <footer class="dash-footer">
+        <p><strong>Educational only.</strong> Operator live record on Interactive Brokers–reported NAV, measured against the S&amp;P 500 total return. Figures are <strong>gross of fees</strong>; net-of-fee figures will be published alongside when a fee schedule exists. Upside/downside capture and the sleeve breakdown are statistical summaries of past periods, not a forecast. Past performance does not guarantee future results. Benchmark data via a dividend-adjusted SPY total-return proxy — see the <a href="falsifiability-protocol.html">Falsifiability Protocol v1.0</a>.</p>
+    </footer>
+</main>
+
+<script src="modules/charter/charter.js?v=20260720a"></script>
+<script src="modules/charter/scoreboard.js?v=20260720b"></script>
+<script src="modules/charter/sleeves.js?v=20260720a"></script>
+<script src="modules/charter/gauges.js?v=20260901a"></script>
+</body>
+</html>

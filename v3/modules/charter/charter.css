@@ -1,0 +1,43 @@
+/* EPIG 500 — Charter Ledger modules (CL-SPEC-V1.0 §7, §8).
+   Additive; prefixed .charter- to avoid collision with dashboard classes.
+   Accents: Warm Gold #C8A951 · Deep Navy #1B2A4A · Slate #64748B. */
+.charter{
+  --cl-gold:#C8A951; --cl-navy:#1B2A4A; --cl-navy-card:#22335A;
+  --cl-slate:#64748B; --cl-slate-2:#8CA0BE; --cl-ivory:#FAF8F5;
+  --cl-mono:'JetBrains Mono',ui-monospace,monospace;
+  margin:0 0 28px;
+}
+.charter__eyebrow{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--cl-gold);margin-bottom:14px}
+.charter__eyebrow .sub{color:var(--cl-slate-2);font-weight:500;letter-spacing:.04em;text-transform:none}
+
+/* scoreboard */
+.charter-board{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(200,169,81,.25);border:1px solid rgba(200,169,81,.25);border-radius:8px;overflow:hidden}
+@media(max-width:640px){.charter-board{grid-template-columns:1fr}}
+.charter-gate{background:var(--cl-navy);padding:24px 26px}
+.charter-gate__head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+.charter-gate__title{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--cl-slate-2)}
+.charter-chip{font-family:var(--cl-mono);font-size:12px;font-weight:700;letter-spacing:.08em;padding:6px 12px;border-radius:3px;white-space:nowrap}
+.charter-chip--pos{background:var(--cl-gold);color:var(--cl-navy)}         /* AHEAD / SHALLOWER */
+.charter-chip--neu{background:transparent;color:var(--cl-slate-2);border:1px solid rgba(140,160,190,.5)} /* BEHIND / DEEPER — same size, full opacity, never red */
+.charter-chip--armed{background:transparent;color:var(--cl-gold);border:1px solid rgba(200,169,81,.6)}
+.charter-row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;font-size:15px;color:var(--cl-ivory)}
+.charter-row .lbl{color:var(--cl-slate-2)}
+.charter-row .val{font-family:var(--cl-mono);font-weight:700}
+.charter-row--excess{border-top:1px solid rgba(255,255,255,.08);margin-top:4px;padding-top:10px}
+.charter-note{font-size:13.5px;color:var(--cl-slate-2);line-height:1.6;margin-top:12px}
+.charter-gate__foot{font-size:12px;color:var(--cl-slate);margin-top:10px}
+
+/* charter standard definition + provenance (static in dashboard.html) */
+.charter-standard{margin-top:16px;font-size:13px;color:var(--cl-slate-2);line-height:1.7;border-left:3px solid var(--cl-gold);padding:14px 18px;background:rgba(200,169,81,.05);border-radius:0 4px 4px 0}
+.charter-standard b{color:var(--cl-ivory);font-weight:600}
+.charter-prov{font-family:var(--cl-mono);font-size:11px;color:var(--cl-slate);letter-spacing:.02em;line-height:1.8;margin-top:14px}
+.charter-prov a{color:var(--cl-gold)}
+
+/* twin curves */
+.charter-curves{margin:0 0 20px}
+.charter-panel-title{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cl-slate-2);margin:0 0 8px}
+.charter-svg{width:100%;height:auto;display:block;background:var(--cl-navy);border:1px solid rgba(200,169,81,.18);border-radius:6px}
+.charter-legend{display:flex;gap:22px;flex-wrap:wrap;margin:10px 0 22px;font-size:12.5px;color:var(--cl-slate-2)}
+.charter-legend .sw{display:inline-block;width:22px;height:0;border-top-width:2px;border-top-style:solid;margin-right:8px;vertical-align:4px}
+.charter-empty{padding:36px;text-align:center;color:var(--cl-slate-2);font-size:14px;background:var(--cl-navy);border:1px solid rgba(200,169,81,.18);border-radius:6px}
+@media(max-width:640px){.charter-svg{min-height:120px}}
