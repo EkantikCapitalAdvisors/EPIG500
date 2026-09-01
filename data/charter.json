@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "as_of": "2026-08-29",
+  "as_of": "2026-09-01",
   "trading_days": 0,
   "min_days": 21,
   "account_mode": "ENGINE_ONLY",
@@ -14,8 +14,8 @@
   "inception_date": "2026-09-01",
   "provenance": {
     "custodian": "Interactive Brokers",
-    "raw_sha256_short": "8817a4b3",
-    "raw_commit_url": "https://github.com/EkantikCapitalAdvisors/EPIG500/blob/main/data/raw/2026-08-29.xml",
-    "last_sync_utc": "2026-08-29T10:20:55Z"
+    "raw_sha256_short": "3b263c35",
+    "raw_commit_url": "https://github.com/EkantikCapitalAdvisors/EPIG500/blob/main/data/raw/2026-09-01.xml",
+    "last_sync_utc": "2026-09-01T08:51:24Z"
   }
 }
