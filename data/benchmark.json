@@ -3,7 +3,7 @@
   "benchmark_id": "SP500TR",
   "label": "S&P 500 TR (SPY adj. close proxy)",
   "source": "tiingo:SPY.adjClose",
-  "last_sync_utc": "2026-09-03T08:16:03Z",
+  "last_sync_utc": "2026-09-04T08:12:34Z",
   "series": [
     {
       "date": "2026-09-01",
@@ -14,6 +14,11 @@
       "date": "2026-09-02",
       "level": 765.16,
       "index": 100.4437
+    },
+    {
+      "date": "2026-09-03",
+      "level": 773.17,
+      "index": 101.4952
     }
   ]
 }
