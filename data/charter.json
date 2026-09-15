@@ -1,29 +1,29 @@
 {
   "schema_version": "1.0",
-  "as_of": "2026-09-11",
-  "trading_days": 9,
+  "as_of": "2026-09-14",
+  "trading_days": 10,
   "min_days": 21,
   "account_mode": "FULL_ARCHITECTURE",
   "state": "ACCUMULATING",
   "strategy": {
-    "cum_return_pct": 0.22,
+    "cum_return_pct": 0.24,
     "max_dd_pct": -0.26,
-    "index_last": 100.2229
+    "index_last": 100.2412
   },
   "benchmark": {
-    "cum_return_pct": 0.33,
+    "cum_return_pct": -0.12,
     "max_dd_pct": -1.98,
-    "index_last": 100.3295
+    "index_last": 99.8819
   },
-  "excess_return_pct": -0.11,
+  "excess_return_pct": 0.36,
   "dd_delta_pct": 1.73,
   "verdicts": null,
   "benchmark_label": "S&P 500 TR (SPY adj. close proxy)",
   "inception_date": "2026-09-01",
   "provenance": {
     "custodian": "Interactive Brokers",
-    "raw_sha256_short": "b31615f1",
-    "raw_commit_url": "https://github.com/EkantikCapitalAdvisors/EPIG500/blob/main/data/raw/2026-09-12.xml",
-    "last_sync_utc": "2026-09-12T08:11:27Z"
+    "raw_sha256_short": "c48a55ea",
+    "raw_commit_url": "https://github.com/EkantikCapitalAdvisors/EPIG500/blob/main/data/raw/2026-09-15.xml",
+    "last_sync_utc": "2026-09-15T08:54:05Z"
   }
 }
