@@ -1,14 +1,14 @@
 {
   "schema_version": "1.0",
-  "as_of": "2026-09-18",
+  "as_of": "2026-09-21",
   "state": "ACCUMULATING",
   "inception_date": "2026-09-01",
   "benchmark_label": "S&P 500 TR (SPY adj. close proxy)",
-  "last_sync_utc": "2026-09-19T08:15:14Z",
+  "last_sync_utc": "2026-09-22T08:45:38Z",
   "weekly": {
-    "upside_capture_pct": -0.9,
+    "upside_capture_pct": 36.2,
     "downside_capture_pct": -111.6,
-    "up_periods": 1,
+    "up_periods": 2,
     "down_periods": 2,
     "periods": [
       {
@@ -37,15 +37,24 @@
         "bench_ret_pct": -0.09,
         "diff_pct": 0.83,
         "beat": true
+      },
+      {
+        "label": "Sep 21\u201321",
+        "start": "2026-09-21",
+        "end": "2026-09-21",
+        "strat_ret_pct": 0.97,
+        "bench_ret_pct": 1.55,
+        "diff_pct": -0.58,
+        "beat": false
       }
     ],
     "beat_count": 2,
-    "total": 3,
+    "total": 4,
     "min_periods": 8,
     "capture_ready": false
   },
   "monthly": {
-    "upside_capture_pct": 400.0,
+    "upside_capture_pct": 108.4,
     "downside_capture_pct": null,
     "up_periods": 1,
     "down_periods": 0,
@@ -53,10 +62,10 @@
       {
         "label": "Sep 2026",
         "start": "2026-09-01",
-        "end": "2026-09-18",
-        "strat_ret_pct": 0.96,
-        "bench_ret_pct": 0.24,
-        "diff_pct": 0.72,
+        "end": "2026-09-21",
+        "strat_ret_pct": 1.94,
+        "bench_ret_pct": 1.79,
+        "diff_pct": 0.15,
         "beat": true
       }
     ],
