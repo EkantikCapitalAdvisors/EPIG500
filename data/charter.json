@@ -1,21 +1,21 @@
 {
   "schema_version": "1.0",
-  "as_of": "2026-10-02",
-  "trading_days": 24,
+  "as_of": "2026-10-05",
+  "trading_days": 25,
   "min_days": 21,
   "account_mode": "FULL_ARCHITECTURE",
   "state": "LIVE",
   "strategy": {
-    "cum_return_pct": 1.82,
+    "cum_return_pct": 2.08,
     "max_dd_pct": -0.69,
-    "index_last": 101.8168
+    "index_last": 102.0804
   },
   "benchmark": {
-    "cum_return_pct": 1.28,
+    "cum_return_pct": 1.97,
     "max_dd_pct": -2.47,
-    "index_last": 101.2823
+    "index_last": 101.9653
   },
-  "excess_return_pct": 0.53,
+  "excess_return_pct": 0.12,
   "dd_delta_pct": 1.78,
   "verdicts": {
     "return_gate": "AHEAD",
@@ -25,8 +25,8 @@
   "inception_date": "2026-09-01",
   "provenance": {
     "custodian": "Interactive Brokers",
-    "raw_sha256_short": "3bd1e49e",
-    "raw_commit_url": "https://github.com/EkantikCapitalAdvisors/EPIG500/blob/main/data/raw/2026-10-03.xml",
-    "last_sync_utc": "2026-10-03T09:22:54Z"
+    "raw_sha256_short": "273cb0e7",
+    "raw_commit_url": "https://github.com/EkantikCapitalAdvisors/EPIG500/blob/main/data/raw/2026-10-06.xml",
+    "last_sync_utc": "2026-10-06T10:40:20Z"
   }
 }
